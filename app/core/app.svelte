@@ -4,3 +4,7 @@
 </script>
 
 <Router {routes} />
+
+<style lang="scss" global>
+  @import "../style/main.scss";
+</style>

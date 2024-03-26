@@ -1,24 +1,24 @@
 {
 	"name": "book-tracker",
 	"displayName": "Book Tracker",
-  "description": "App for tracking books",
+	"description": "App for tracking books",
 	"version": "0.0.1",
 	"main": "dist/electron/electron/main.js",
 	"publishConfig": {
 		"access": "public"
 	},
-  "license": "GPL-3.0-or-later",
-  "author": {
-    "name": "Emma Litwa-Vulcu",
-    "email": "80431903+reiniiriarios@users.noreply.github.com"
-  },
+	"license": "GPL-3.0-or-later",
+	"author": {
+		"name": "Emma Litwa-Vulcu",
+		"email": "80431903+reiniiriarios@users.noreply.github.com"
+	},
 	"homepage": "https://github.com/reiniiriarios/book-tracker-electron#readme",
 	"bugs": {
-	  "url": "https://github.com/reiniiriarios/book-tracker-electron/issues"
+		"url": "https://github.com/reiniiriarios/book-tracker-electron/issues"
 	},
 	"repository": {
-	  "type": "git",
-	  "url": "git+https://github.com/reiniiriarios/book-tracker-electron.git"
+		"type": "git",
+		"url": "git+https://github.com/reiniiriarios/book-tracker-electron.git"
 	},
 	"engines": {
 		"node": ">=14.0.0"

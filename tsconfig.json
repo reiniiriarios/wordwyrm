@@ -23,6 +23,7 @@
       "@components/*": ["./app/components/*"],
       "@pages/*": ["./app/pages/*"],
       "@core/*": ["./app/core/*"],
+      "@style/*": ["./app/style/*"],
       "@app/*": ["./app/*"]
     },
     "typeRoots": ["app/**/types", "node_modules/@types"],

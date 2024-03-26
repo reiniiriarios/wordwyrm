@@ -1,0 +1,42 @@
+@import 'variables';
+
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+}
+
+$tabSize: 42px;
+
+.tabs {
+  width: $tabSize;
+  background-color: $bgColorLight;
+  height: 100vh;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  .tabItem {
+    a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: $tabSize;
+      height: $tabSize;
+      color: $fgColorDark;
+      text-decoration: none;
+
+      &:hover {
+        color: $accentColor;
+      }
+    }
+
+    &--active a {
+      color: $fgColor;
+    }
+  }
+}
+
+.main {
+  width: calc(100vw - $tabSize);
+}

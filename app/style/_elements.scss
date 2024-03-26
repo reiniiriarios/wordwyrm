@@ -1,0 +1,32 @@
+@import 'variables';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  color: $fgColor;
+  height: 100vh;
+  background: $bgColor;
+  font-family: sans-serif;
+  overflow-y: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+}
+
+h2 {
+  padding: 0;
+  margin: 0.5rem 0;
+  font-size: 1.5rem;
+}
+
+h3 {
+  padding: 0;
+  margin: 0;
+  font-size: 1.25rem;
+}

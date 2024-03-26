@@ -1,0 +1,27 @@
+@import 'variables';
+
+.btn {
+  background-color: $bgColorLight;
+  color: $fgColorMuted;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+
+  svg {
+    margin-left: 0.25rem;
+    height: 1rem;
+    width: 1rem;
+  }
+
+  &:hover {
+    background-color: $bgColorLighter;
+    color: $fgColor;
+  }
+
+  &:active {
+    background-color: $bgColorLight;
+  }
+}

@@ -1,0 +1,50 @@
+@import 'variables';
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea {
+  border: 1px solid $bgColorLighter;
+  background-color: transparent;
+  color: $fgColor;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  font-family: sans-serif;
+  margin: 0;
+
+  &:focus {
+    outline: none;
+    border-color: $accentColor;
+  }
+}
+
+fieldset {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  border: 0;
+  padding: 0 0.5rem;
+  margin: 0;
+
+  label {
+    display: block;
+    font-size: 0.9rem;
+    color: $fgColorMuted;
+    margin-bottom: 0.1rem;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  textarea {
+    width: 100%;
+  }
+
+  .formField {
+    margin: 0.125rem 0 0.125rem;
+
+    &--fullwidth {
+      grid-column: 1 / 3;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+.pageNav {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 1rem;
+
+  &__header {
+    margin: 0;
+  }
+
+  &__actions {
+    text-align: right;
+  }
+}
