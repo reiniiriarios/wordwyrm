@@ -1,9 +1,3 @@
-<script lang="ts">
-  import Menu from "@components/menu.svelte";
-</script>
-
-<Menu />
-
 <div id="container">
   <section class="hero is-medium is-primary is-bold">
     <div class="hero-body">

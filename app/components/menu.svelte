@@ -1,28 +1,56 @@
-<nav class="navbar" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a href="#/" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar-basic">
-      <span aria-hidden="true" />
-      <span aria-hidden="true" />
-      <span aria-hidden="true" />
-    </a>
-  </div>
+<script lang="ts">
+  import { location } from "svelte-spa-router";
+</script>
 
-  <div id="navbar-basic" class="navbar-menu">
-    <div class="navbar-start">
-      <a href="#/" class="navbar-item"> Home </a>
-
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a href="#/wild" class="navbar-link"> Wild </a>
-
-        <div class="navbar-dropdown">
-          <a href="#/wild/about" class="navbar-item"> About </a>
-          <a href="#/wild/contacts" class="navbar-item"> Contacts </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="navbar-end">
-    <div class="navbar-item"></div>
-  </div>
+<nav>
+  <ul>
+    <li class:active={$location === "/"}>
+      <a href="#/">H</a>
+    </li>
+    <li class:active={$location === "/current"}>
+      <a href="#/current">C</a>
+    </li>
+    <li class:active={$location === "/list"}>
+      <a href="#/list">L</a>
+    </li>
+    <li class:active={$location === "/settings"}>
+      <a href="#/settings">S</a>
+    </li>
+  </ul>
 </nav>
+
+<style lang="scss">
+  @import "../style/variables";
+
+  nav {
+    width: $tabSize;
+    background-color: $bgColorLight;
+    height: 100vh;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: $tabSize;
+        height: $tabSize;
+        color: $fgColorDark;
+        text-decoration: none;
+
+        &:hover {
+          color: $accentColor;
+        }
+      }
+
+      &.active a {
+        color: $fgColor;
+      }
+    }
+  }
+</style>

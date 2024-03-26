@@ -1,10 +1,6 @@
 <script lang="ts">
-  import Menu from "@components/menu.svelte";
-
   export let params = { wild: "" };
 </script>
-
-<Menu />
 
 <div id="container">
   <section class="hero is-medium is-primary is-bold">
