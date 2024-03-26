@@ -23,6 +23,7 @@
       "@components/*": ["./app/components/*"],
       "@pages/*": ["./app/pages/*"],
       "@core/*": ["./app/core/*"],
+      "@data/*": ["./app/data/*"],
       "@style/*": ["./app/style/*"],
       "@app/*": ["./app/*"]
     },

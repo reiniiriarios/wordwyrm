@@ -1,4 +1,4 @@
-@import 'variables';
+@import "variables";
 
 input[type="text"],
 input[type="number"],
@@ -40,7 +40,7 @@ fieldset {
     width: 100%;
   }
 
-  .formField {
+  .field {
     margin: 0.125rem 0 0.125rem;
 
     &--fullwidth {
