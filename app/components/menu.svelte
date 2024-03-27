@@ -1,20 +1,24 @@
 <script lang="ts">
   import { location } from "svelte-spa-router";
+  import Books from "phosphor-svelte/lib/Books";
+  import BookOpen from "phosphor-svelte/lib/BookOpen";
+  import ListDashes from "phosphor-svelte/lib/ListDashes";
+  import Gear from "phosphor-svelte/lib/Gear";
 </script>
 
 <nav>
   <ul>
     <li class:active={$location === "/"}>
-      <a href="#/">H</a>
+      <a href="#/"><Books size={32} /></a>
     </li>
     <li class:active={$location === "/current"}>
-      <a href="#/current">C</a>
+      <a href="#/current"><BookOpen size={32} /></a>
     </li>
     <li class:active={$location === "/list"}>
-      <a href="#/list">L</a>
+      <a href="#/list"><ListDashes size={32} /></a>
     </li>
     <li class:active={$location === "/settings"}>
-      <a href="#/settings">S</a>
+      <a href="#/settings"><Gear size={32} /></a>
     </li>
   </ul>
 </nav>

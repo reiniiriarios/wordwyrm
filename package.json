@@ -64,6 +64,7 @@
 		"eslint": "^8.57.0",
 		"eslint-plugin-svelte": "",
 		"json": "^11.0.0",
+		"phosphor-svelte": "^1.4.2",
 		"pm2": "^5.3.1",
 		"postcss": "^8.4.38",
 		"postcss-load-config": "^5.0.3",
