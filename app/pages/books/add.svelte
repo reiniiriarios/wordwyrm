@@ -18,7 +18,7 @@
 </script>
 
 <button type="button" class="btn" on:click={() => (addBookOpen = true)}> Add Book + </button>
-<Modal open={addBookOpen} heading="Add Book" confirmWord="Add" confirm={addBook}>
+<Modal bind:open={addBookOpen} heading="Add Book" confirmWord="Add" confirm={addBook}>
   <fieldset>
     <label class="field field--fullwidth">
       Title
