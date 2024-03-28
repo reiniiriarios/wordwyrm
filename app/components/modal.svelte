@@ -1,6 +1,7 @@
 <script lang="ts">
   export let open: boolean = false;
   export let canCancel: boolean = true;
+  export let canAccept: boolean = true;
   export let confirm: () => boolean;
   export let confirmWord: string = "Okay";
   export let heading: string;
@@ -14,7 +15,7 @@
   window.addEventListener("keydown", function (e: KeyboardEvent) {
     if (canCancel && ["Escape"].includes(e.key)) {
       open = false;
-    } else if (["\n", "Enter"].includes(e.key)) {
+    } else if (["\n", "Enter"].includes(e.key) && canAccept) {
       confirmClose();
     }
   });
@@ -30,7 +31,7 @@
       {#if canCancel}
         <button type="button" class="btn modal__button" on:click={() => (open = false)}>Cancel</button>
       {/if}
-      <button type="button" class="btn modal__button" on:click={confirmClose}>
+      <button type="button" class="btn modal__button" disabled={canAccept} on:click={confirmClose}>
         {confirmWord}
       </button>
     </div>
@@ -74,7 +75,8 @@
 
     &__body {
       font-size: 1rem;
-      padding: 0.5rem;
+      padding: 0.75rem 0.5rem;
+      height: 100%;
     }
 
     &__actions {

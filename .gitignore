@@ -62,6 +62,8 @@ npm-debug.log
 # App #
 #######
 .env
+.env.js
+.env.ts
 /extra
 /dist
 /build

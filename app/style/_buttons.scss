@@ -1,4 +1,4 @@
-@import 'variables';
+@import "variables";
 
 .btn {
   background-color: $bgColorLight;
@@ -23,5 +23,19 @@
 
   &:active {
     background-color: $bgColorLight;
+  }
+
+  &--light {
+    background-color: $bgColorLighter;
+    color: $fgColorMuted;
+
+    &:hover {
+      background-color: $bgColorLightest;
+      color: $fgColor;
+    }
+
+    &:active {
+      background-color: $bgColorLighter;
+    }
   }
 }

@@ -1,16 +1,15 @@
 <script lang="ts">
-  import Book from "@data/book";
+  import { Book, Author } from "@data/book";
   import Modal from "@components/modal.svelte";
 
   let addBookOpen: boolean = false;
-  let book: Book = {
-    title: "",
-    author: {
-      name: "",
-    },
-    datePublished: new Date(),
-    dateRead: new Date(),
-  } as Book;
+  let book: Book = {} as Book;
+  let authors: string = "";
+  let searchString: string = "";
+
+  function setAuthors() {
+    book.authors = authors.split(",").map((name) => ({ name: name.trim() }) as Author);
+  }
 
   function addBook(): boolean {
     return true;
@@ -25,8 +24,8 @@
       <input type="text" name="title" bind:value={book.title} required />
     </label>
     <label class="field field--fullwidth">
-      Author
-      <input type="text" name="author" bind:value={book.author.name} required />
+      Authors
+      <input type="text" name="author" bind:value={authors} on:change={setAuthors} required />
     </label>
     <label class="field">
       Date Published

@@ -1,142 +1,143 @@
 {
-	"name": "book-tracker",
-	"displayName": "Book Tracker",
-	"description": "App for tracking books",
-	"version": "0.0.1",
-	"main": "dist/electron/electron/main.js",
-	"publishConfig": {
-		"access": "public"
-	},
-	"license": "GPL-3.0-or-later",
-	"author": {
-		"name": "Emma Litwa-Vulcu",
-		"email": "80431903+reiniiriarios@users.noreply.github.com"
-	},
-	"homepage": "https://github.com/reiniiriarios/book-tracker-electron#readme",
-	"bugs": {
-		"url": "https://github.com/reiniiriarios/book-tracker-electron/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/reiniiriarios/book-tracker-electron.git"
-	},
-	"engines": {
-		"node": ">=14.0.0"
-	},
-	"scripts": {
-		"start": "sirv dist",
-		"start:electron": "electron ./dist/electron/electron/main.js",
-		"dev": "rollup -c -w",
-		"dev:electron": "tsc -p ./electron/tsconfig.json && electron ./dist/electron/electron/main.js",
-		"build:client": "ts-node scripts/rmdist.ts && rollup -c",
-		"build:desktop": "tsc -p ./electron/tsconfig.json",
-		"release": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir",
-		"build-mac": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --mac dmg",
-		"build-win": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --win portable",
-		"build-win-32bit": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --win portable --ia32",
-		"build-lnx": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --linux appImage deb rpm",
-		"lint": "npm run lint-prettify && eslint . --cache --ext .ts,.js",
-		"lint-fix": "npm run lint-prettify && eslint . --cache --ext .ts,.js --fix",
-		"lint-prettify": "prettier --write --ignore-unknown '**/*.{ts,scss,md,json}'",
-		"pkg-clean": "rm -rf node_modules package-lock.json && npm install",
-		"pkg-update": "npm update",
-		"pkg-upgrade": "npx --yes npm-check-updates -u && npm install",
-		"prepare": "ts-patch install -s"
-	},
-	"dependencies": {
-		"svelte-spa-router": "^4.0.1"
-	},
-	"devDependencies": {
-		"@rollup/plugin-alias": "^5.1.0",
-		"@rollup/plugin-commonjs": "^25.0.7",
-		"@rollup/plugin-json": "^6.1.0",
-		"@rollup/plugin-node-resolve": "^15.2.3",
-		"@rollup/plugin-typescript": "^11.1.6",
-		"@types/node": "^20.11.30",
-		"@types/shelljs": "^0.8.15",
-		"@types/yargs": "^17.0.32",
-		"@typescript-eslint/eslint-plugin": "^7.4.0",
-		"@typescript-eslint/parser": "^7.4.0",
-		"electron": "^29.1.5",
-		"electron-builder": "^24.13.3",
-		"electron-debug": "^3.2.0",
-		"electron-devtools-installer": "^3.2.0",
-		"eslint": "^8.57.0",
-		"eslint-plugin-svelte": "",
-		"json": "^11.0.0",
-		"phosphor-svelte": "^1.4.2",
-		"pm2": "^5.3.1",
-		"postcss": "^8.4.38",
-		"postcss-load-config": "^5.0.3",
-		"prettier": "^3.2.5",
-		"replace-in-file": "^7.1.0",
-		"rollup": "^4.13.0",
-		"rollup-plugin-copy": "^3.5.0",
-		"rollup-plugin-css-only": "^4.5.2",
-		"rollup-plugin-livereload": "^2.0.5",
-		"rollup-plugin-svelte": "^7.2.0",
-		"rollup-plugin-ts-paths": "^1.0.5",
-		"sass": "^1.72.0",
-		"shelljs": "^0.8.5",
-		"sirv-cli": "^2.0.2",
-		"svelte": "^4.2.12",
-		"svelte-check": "^3.6.8",
-		"svelte-preprocess": "^5.1.3",
-		"ts-node": "^10.9.2",
-		"ts-patch": "^3.1.2",
-		"typescript": "^5.4.3",
-		"typescript-transform-paths": "^3.4.7"
-	},
-	"build": {
-		"productName": "book-tracker",
-		"appId": "me.reinii.book-tracker",
-		"artifactName": "${productName}-${version}-${arch}.${ext}",
-		"directories": {
-			"output": "build",
-			"buildResources": "assets/"
-		},
-		"files": [
-			"dist"
-		],
-		"win": {
-			"icon": "assets/icon.png"
-		},
-		"mac": {
-			"icon": "assets/icon.png",
-			"category": "public.app-category.network"
-		},
-		"nsis": {
-			"oneClick": false,
-			"allowToChangeInstallationDirectory": true,
-			"createDesktopShortcut": true
-		},
-		"dmg": {
-			"contents": [
-				{
-					"x": 110,
-					"y": 150
-				},
-				{
-					"x": 240,
-					"y": 150,
-					"type": "link",
-					"path": "/Applications"
-				}
-			]
-		},
-		"linux": {
-			"icon": "assets/icon.png",
-			"category": "Network",
-			"target": [
-				"deb",
-				"pacman",
-				"tar.gz",
-				"AppImage"
-			]
-		}
-	},
-	"keywords": [
-		"books"
-	],
-	"contributors": []
+  "name": "book-tracker",
+  "displayName": "Book Tracker",
+  "description": "App for tracking books",
+  "version": "0.0.1",
+  "main": "dist/electron/electron/main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "GPL-3.0-or-later",
+  "author": {
+    "name": "Emma Litwa-Vulcu",
+    "email": "80431903+reiniiriarios@users.noreply.github.com"
+  },
+  "homepage": "https://github.com/reiniiriarios/book-tracker-electron#readme",
+  "bugs": {
+    "url": "https://github.com/reiniiriarios/book-tracker-electron/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reiniiriarios/book-tracker-electron.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "start": "sirv dist",
+    "start:electron": "electron ./dist/electron/electron/main.js",
+    "dev": "BROWSER=true DEBUG=true rollup -c -w",
+    "dev:electron": "tsc -p ./electron/tsconfig.json && DEBUG=true electron ./dist/electron/electron/main.js",
+    "build:client": "ts-node scripts/rmdist.ts && rollup -c",
+    "build:desktop": "tsc -p ./electron/tsconfig.json",
+    "release": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir",
+    "build-mac": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --mac dmg",
+    "build-win": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --win portable",
+    "build-win-32bit": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --win portable --ia32",
+    "build-lnx": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --linux appImage deb rpm",
+    "lint": "npm run lint-prettify && eslint . --cache --ext .ts,.js",
+    "lint-fix": "npm run lint-prettify && eslint . --cache --ext .ts,.js --fix",
+    "lint-prettify": "prettier --write --ignore-unknown '**/*.{ts,scss,md,json}'",
+    "pkg-clean": "rm -rf node_modules package-lock.json && npm install",
+    "pkg-update": "npm update",
+    "pkg-upgrade": "npx --yes npm-check-updates -u && npm install",
+    "prepare": "ts-patch install -s"
+  },
+  "dependencies": {
+    "svelte-spa-router": "^4.0.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "^5.1.0",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/node": "^20.11.30",
+    "@types/shelljs": "^0.8.15",
+    "@types/yargs": "^17.0.32",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
+    "electron": "^29.1.5",
+    "electron-builder": "^24.13.3",
+    "electron-debug": "^3.2.0",
+    "electron-devtools-installer": "^3.2.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-svelte": "",
+    "json": "^11.0.0",
+    "phosphor-svelte": "^1.4.2",
+    "pm2": "^5.3.1",
+    "postcss": "^8.4.38",
+    "postcss-load-config": "^5.0.3",
+    "prettier": "^3.2.5",
+    "replace-in-file": "^7.1.0",
+    "rollup": "^4.13.0",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-css-only": "^4.5.2",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-polyfill-node": "^0.13.0",
+    "rollup-plugin-svelte": "^7.2.0",
+    "rollup-plugin-ts-paths": "^1.0.5",
+    "sass": "^1.72.0",
+    "shelljs": "^0.8.5",
+    "sirv-cli": "^2.0.2",
+    "svelte": "^4.2.12",
+    "svelte-check": "^3.6.8",
+    "svelte-preprocess": "^5.1.3",
+    "ts-node": "^10.9.2",
+    "ts-patch": "^3.1.2",
+    "typescript": "^5.4.3",
+    "typescript-transform-paths": "^3.4.7"
+  },
+  "build": {
+    "productName": "book-tracker",
+    "appId": "me.reinii.book-tracker",
+    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "directories": {
+      "output": "build",
+      "buildResources": "assets/"
+    },
+    "files": [
+      "dist"
+    ],
+    "win": {
+      "icon": "assets/icon.png"
+    },
+    "mac": {
+      "icon": "assets/icon.png",
+      "category": "public.app-category.network"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "icon": "assets/icon.png",
+      "category": "Network",
+      "target": [
+        "deb",
+        "pacman",
+        "tar.gz",
+        "AppImage"
+      ]
+    }
+  },
+  "keywords": [
+    "books"
+  ],
+  "contributors": []
 }

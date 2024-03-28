@@ -6,7 +6,14 @@
     "outDir": "../dist/electron",
     "baseUrl": ".",
     "allowJs": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "paths": {
+      "@core/*": ["../app/core/*"],
+      "@data/*": ["../app/data/*"],
+      "@style/*": ["../app/style/*"],
+      "@api/*": ["../api/*"],
+      "@app/*": ["../app/*"]
+    }
   },
   "include": ["**/*.ts"],
   "exclude": ["../node_modules/*", "../dist/*", "../scripts/*"]

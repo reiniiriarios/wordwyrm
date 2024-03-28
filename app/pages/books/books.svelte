@@ -1,11 +1,13 @@
 <script>
   import AddBook from "./add.svelte";
+  import SearchBook from "./search.svelte";
 </script>
 
 <div class="pageNav">
   <h2 class="pageNav__header">Books</h2>
   <div class="pageNav__actions">
     <AddBook />
+    <SearchBook />
   </div>
 </div>
 <div class="bookList">x x x</div>
