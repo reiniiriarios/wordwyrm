@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { app, BrowserWindow, ipcMain } from "electron";
 import * as path from "path";
-import { searchBook } from "../api/googlebooks";
+import { searchBook } from "../backend/googlebooks";
+import { readAllBooks, saveBook } from "../backend/yaml";
+import { Book } from "@data/book";
 const PORT = 5000;
 const DEBUG = process.env.DEBUG === "true";
 const BROWSER = process.env.BROWSER === "true";
@@ -33,9 +35,21 @@ app.on("ready", () => {
     }
   });
 
+  // --- Bridge ---
+
   ipcMain.on("searchBook", (event, q: string) => {
     searchBook(q).then((res) => event.reply("searchBookResults", res));
   });
+
+  ipcMain.on("readAllBooks", (event) => {
+    readAllBooks().then((res) => event.reply("receiveAllBooks", res));
+  });
+
+  ipcMain.on("saveBook", (event, book: Book) => {
+    saveBook(book).then((res) => event.reply("bookSaved", res));
+  });
+
+  // --------------
 });
 
 app.on("window-all-closed", () => {

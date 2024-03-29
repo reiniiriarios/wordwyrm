@@ -64,7 +64,7 @@ function tsalias() {
 }
 
 export default {
-  input: "app/core/init.ts",
+  input: "frontend/core/init.ts",
   output: {
     sourcemap: true,
     format: "iife",
