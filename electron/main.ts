@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import * as path from "path";
 import { searchBook } from "../backend/googlebooks";
-import { readAllBooks, saveBook } from "../backend/yaml";
+import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
+import { readAllBooks, saveBook } from "../backend/bookdata";
 import { Book } from "@data/book";
 const PORT = 5000;
 const DEBUG = process.env.DEBUG === "true";
-const BROWSER = process.env.BROWSER === "true";
 
-function createWindow() {
+let settings: Record<string, any> = {};
+
+function createWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
     width: 1024,
     height: 768,
@@ -24,32 +26,62 @@ function createWindow() {
   } else {
     mainWindow.loadFile(path.join(__dirname, "../../index.html"));
   }
+  return mainWindow;
 }
 
 app.on("ready", () => {
-  createWindow();
+  let window = createWindow();
 
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+      window = createWindow();
     }
   });
 
-  // --- Bridge ---
+  // Create user data directories if not already present.
+  initUserDirs();
+  settings = loadSettings();
+
+  // --------- Bridge ---------
 
   ipcMain.on("searchBook", (event, q: string) => {
     searchBook(q).then((res) => event.reply("searchBookResults", res));
   });
 
   ipcMain.on("readAllBooks", (event) => {
-    readAllBooks().then((res) => event.reply("receiveAllBooks", res));
+    if (settings.booksDir) {
+      readAllBooks(settings.booksDir).then((res) => event.reply("receiveAllBooks", res));
+    }
   });
 
   ipcMain.on("saveBook", (event, book: Book) => {
-    saveBook(book).then((res) => event.reply("bookSaved", res));
+    if (settings.booksDir) {
+      saveBook(settings.booksDir, book).then((res) => event.reply("bookSaved", res));
+    }
   });
 
-  // --------------
+  ipcMain.on("selectDataDir", async (event) => {
+    dialog
+      .showOpenDialog(window, {
+        defaultPath: settings?.booksDir ?? "",
+        properties: ["openDirectory"],
+        buttonLabel: "Choose",
+      })
+      .then((result) => {
+        if (result.filePaths[0].length) {
+          settings.booksDir = result.filePaths[0];
+          saveSettings(settings);
+          event.reply("dirSelected", settings.booksDir);
+        }
+      });
+  });
+
+  ipcMain.on("loadSettings", (event) => {
+    settings = loadSettings();
+    event.reply("settingsLoaded", settings);
+  });
+
+  // ------- End Bridge -------
 });
 
 app.on("window-all-closed", () => {

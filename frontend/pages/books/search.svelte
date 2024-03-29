@@ -23,7 +23,6 @@
   }
 
   window.electronAPI.searchBookResults((books: Book[]) => {
-    console.log(books);
     searchResults = books;
     searching = false;
   });

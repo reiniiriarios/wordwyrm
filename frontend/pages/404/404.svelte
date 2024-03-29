@@ -1,12 +1,15 @@
-<div id="container">
-  <section class="hero is-medium is-primary is-bold">
-    <div class="hero-body">
-      <div class="container">
-        <h1 class="title">404</h1>
-      </div>
-    </div>
-  </section>
-  <div class="content has-text-centered">
-    <p>Page not found</p>
-  </div>
+<div class="pageNav">
+  <h2 class="pageNav__header">Error</h2>
+  <div class="pageNav__actions"></div>
 </div>
+<div class="err"><div>Application Error: Page Not Found</div></div>
+
+<style lang="scss">
+  .err {
+    width: 100%;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>

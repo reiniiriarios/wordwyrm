@@ -1,10 +1,9 @@
-import Wild from "@pages/wild/wild.svelte";
 import NotFound from "@pages/404/404.svelte";
 import Books from "@pages/books/books.svelte";
+import Settings from "@pages/settings/settings.svelte";
 
 export default {
   "/": Books,
-  "/wild": Wild,
-  "/wild/*": Wild,
+  "/settings": Settings,
   "*": NotFound,
 };

@@ -1,6 +1,22 @@
-<script>
+<script lang="ts">
+  import { onMount } from "svelte";
   import AddBook from "./add.svelte";
   import SearchBook from "./search.svelte";
+  import { Book } from "@data/book";
+
+  let allBooks: Book[] = [];
+
+  function readBooks() {
+    window.electronAPI.readAllBooks();
+  }
+
+  onMount(() => {
+    readBooks();
+  });
+
+  window.electronAPI.receiveAllBooks((books: Book[]) => {
+    allBooks = books;
+  });
 </script>
 
 <div class="pageNav">
@@ -10,4 +26,8 @@
     <SearchBook />
   </div>
 </div>
-<div class="bookList">x x x</div>
+<div class="bookList">
+  {#each allBooks as book}
+    <div>{book.title}</div>
+  {/each}
+</div>

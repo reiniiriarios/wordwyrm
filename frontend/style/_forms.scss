@@ -48,3 +48,11 @@ fieldset {
     }
   }
 }
+
+.fileSelect {
+  display: flex;
+
+  input[type="text"] {
+    width: 100%;
+  }
+}
