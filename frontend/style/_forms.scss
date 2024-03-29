@@ -56,3 +56,18 @@ fieldset {
     width: 100%;
   }
 }
+
+.dropzone {
+  width: 100%;
+  background-color: $bgColorLight !important;
+  border-color: $bgColorLighter !important;
+  color: $fgColor !important;
+  cursor: pointer;
+
+  img {
+    margin: 0 auto;
+    max-height: 10rem;
+    width: auto;
+    max-width: 100%;
+  }
+}

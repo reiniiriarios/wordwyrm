@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { app, BrowserWindow, dialog, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, net, protocol } from "electron";
 import * as path from "path";
 import { searchBook } from "../backend/googlebooks";
 import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
@@ -26,11 +26,14 @@ function createWindow(): BrowserWindow {
   } else {
     mainWindow.loadFile(path.join(__dirname, "../../index.html"));
   }
+
   return mainWindow;
 }
 
 app.on("ready", () => {
   let window = createWindow();
+
+  protocol.handle("localfile", (request) => net.fetch("file://" + request.url.slice("localfile://".length)));
 
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) {
