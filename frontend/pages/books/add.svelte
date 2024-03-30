@@ -21,7 +21,10 @@
   }
 
   function setAuthors() {
-    book.authors = authors.split(",").map((name) => ({ name: name.trim() }) as Author);
+    book.authors = authors
+      .replace(/ and /, ",")
+      .split(",")
+      .map((name) => ({ name: name.trim() }) as Author);
   }
 
   function setTags() {
