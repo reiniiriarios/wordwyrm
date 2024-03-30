@@ -3,7 +3,7 @@ import { GOOGLE_API_KEY } from "../.env";
 
 const ENDPOINT = "https://www.googleapis.com/books/v1";
 
-export type VolumeLite = {
+export type Volume = {
   kind: "books#volume";
   id: string;
   etag: string;
@@ -24,9 +24,25 @@ export type VolumeLite = {
       large: string;
       extraLarge: string;
     };
-    language: string;
     infoLink: string;
     canonicalVolumeLink: string;
+    industryIdentifiers?: {
+      type: "ISBN_10" | "ISBN_13" | "ISSN" | "OTHER";
+      identifier: string;
+    }[];
+    pageCount?: number;
+    dimensions?: {
+      height: string;
+      width: string;
+      thickness: string;
+    };
+    printType?: "BOOK" | "MAGAZINE";
+    mainCategory?: string;
+    categories?: string[];
+    averageRating?: number;
+    ratingsCount?: number;
+    language?: string;
+    previewLink?: string;
   };
   saleInfo: {
     country: string;
@@ -38,7 +54,10 @@ export type VolumeLite = {
       amount: number;
       currencyCode: string;
     };
-    buyLink: string;
+    saleability?: "FOR_SALE" | "FREE" | "NOT_FOR_SALE" | "FOR_PREORDER";
+    onSaleDate?: string; // date
+    isEbook?: boolean;
+    buyLink?: string;
   };
   accessInfo: {
     country: string;
@@ -53,42 +72,12 @@ export type VolumeLite = {
       acsTokenLink: string;
     };
     accessViewStatus: "FULL_PURCHASED" | "FULL_PUBLIC_DOMAIN" | "SAMPLE" | "NONE";
-  };
-};
-
-export type Volume = VolumeLite & {
-  volumeInfo: {
-    industryIdentifiers: {
-      type: "ISBN_10" | "ISBN_13" | "ISSN" | "OTHER";
-      identifier: string;
-    }[];
-    pageCount: number;
-    dimensions: {
-      height: string;
-      width: string;
-      thickness: string;
-    };
-    printType: "BOOK" | "MAGAZINE";
-    mainCategory: string;
-    categories: string[];
-    averageRating: number;
-    ratingsCount: number;
-    language: string;
-    previewLink: string;
-  };
-  saleInfo: {
-    saleability: "FOR_SALE" | "FREE" | "NOT_FOR_SALE" | "FOR_PREORDER";
-    onSaleDate: string; // date
-    isEbook: boolean;
-    buyLink: string;
-  };
-  accessInfo: {
-    viewability: "PARTIAL" | "ALL_PAGES" | "NO_PAGES" | "UNKNOWN";
-    embeddable: boolean;
-    publicDomain: boolean;
-    textToSpeechPermission: "ALLOWED" | "ALLOWED_FOR_ACCESSIBILITY" | "NOT_ALLOWED";
-    webReaderLink: string;
-    downloadAccess: {
+    viewability?: "PARTIAL" | "ALL_PAGES" | "NO_PAGES" | "UNKNOWN";
+    embeddable?: boolean;
+    publicDomain?: boolean;
+    textToSpeechPermission?: "ALLOWED" | "ALLOWED_FOR_ACCESSIBILITY" | "NOT_ALLOWED";
+    webReaderLink?: string;
+    downloadAccess?: {
       kind: "books#downloadAccessRestriction";
       volumeId: string;
       restricted: boolean;
@@ -107,7 +96,7 @@ export type Volume = VolumeLite & {
 
 export type VolumeSearch = {
   kind: "books#volumes";
-  items: Volume[] | VolumeLite[];
+  items: Volume[];
 };
 
 async function searchVolume(q: string): Promise<VolumeSearch> {
@@ -116,13 +105,13 @@ async function searchVolume(q: string): Promise<VolumeSearch> {
     .then((res) => res as VolumeSearch);
 }
 
-async function getVolume(v: string, lite: boolean = true): Promise<Volume | VolumeLite> {
+async function getVolume(v: string, lite: boolean = true): Promise<Volume> {
   return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}&key=${GOOGLE_API_KEY}`)
     .then((res) => res.json())
-    .then((res) => (lite ? (res as VolumeLite) : (res as Volume)));
+    .then((res) => res as Volume);
 }
 
-function conformBook(v: Volume | VolumeLite): Book {
+function conformBook(v: Volume): Book {
   let authors: Author[] = [];
   let book = { authors } as Book;
   v.volumeInfo?.authors?.forEach((a) => book.authors.push({ name: a }));
@@ -163,6 +152,18 @@ function conformBook(v: Volume | VolumeLite): Book {
 
   if (book.image) {
     book.hasImage = true;
+  }
+
+  book.tags = [];
+  if (v.volumeInfo?.mainCategory) {
+    book.tags.push(v.volumeInfo.mainCategory);
+  }
+  if (v.volumeInfo?.categories) {
+    v.volumeInfo.categories.forEach((cat) => {
+      if (cat !== v.volumeInfo.mainCategory) {
+        book.tags.push(cat);
+      }
+    });
   }
 
   return book;

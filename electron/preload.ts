@@ -2,6 +2,9 @@ import { Book } from "@data/book";
 import { contextBridge, ipcRenderer } from "electron";
 
 export const api = {
+  getBookData: (id: string) => ipcRenderer.send("getBookData", id),
+  receiveBookData: (callback: Function) => ipcRenderer.on("receiveBookData", (_event, res: Book) => callback(res)),
+
   searchBook: (q: string) => ipcRenderer.send("searchBook", q),
   searchBookResults: (callback: Function) =>
     ipcRenderer.on("searchBookResults", (_event, res: Book[]) => callback(res)),

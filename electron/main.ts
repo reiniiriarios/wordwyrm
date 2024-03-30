@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { app, BrowserWindow, dialog, ipcMain, net, protocol } from "electron";
 import * as path from "path";
-import { searchBook } from "../backend/googlebooks";
+import { getBook, searchBook } from "../backend/googlebooks";
 import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
 import { readAllBooks, saveBook } from "../backend/bookdata";
 import { Book } from "@data/book";
@@ -50,6 +50,10 @@ app.on("ready", () => {
   settings = loadSettings();
 
   // --------- Bridge ---------
+
+  ipcMain.on("getBookData", (event, id: string) => {
+    getBook(id).then((res) => event.reply("receiveBookData", res));
+  });
 
   ipcMain.on("searchBook", (event, q: string) => {
     searchBook(q).then((res) => event.reply("searchBookResults", res));

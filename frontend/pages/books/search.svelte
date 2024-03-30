@@ -38,11 +38,16 @@
     canAdd = true;
   }
 
-  function addBook(): boolean {
-    window.electronAPI.saveBook(selectedBook);
-    addBookOpen = false;
-    return true;
+  function addBook() {
+    if (!selectedBook.googleBooksId) return;
+    window.electronAPI.getBookData(selectedBook.googleBooksId);
   }
+
+  window.electronAPI.receiveBookData((book: Book) => {
+    window.electronAPI.saveBook(book);
+    addBookOpen = false;
+    window.electronAPI.readAllBooks();
+  });
 </script>
 
 <button type="button" class="btn" on:click={openDialog}> Search for Book </button>

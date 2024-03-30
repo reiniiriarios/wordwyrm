@@ -31,11 +31,10 @@
     book.tags = tags.split(",").map((t) => t.trim());
   }
 
-  function addBook(): boolean {
+  function addBook() {
     window.electronAPI.saveBook(book);
     addBookOpen = false;
     window.electronAPI.readAllBooks();
-    return true;
   }
 
   function handleBookImage(e: CustomEvent<any>) {
