@@ -14,7 +14,7 @@
 
 <div class="pageNav">
   <h2 class="pageNav__header">Book</h2>
-  <div class="pageNav__actions">...</div>
+  <div class="pageNav__actions"><a class="btn" href={`#/book/${params.author}/${params.book}/edit`}>Edit</a></div>
 </div>
 {#if book}
   <div class="bookPage">
@@ -37,7 +37,7 @@
       {#if book.tags}
         <div class="tags">
           {#each book.tags as tag}
-            <span>{tag}</span>
+            <span class="tag">{tag}</span>
           {/each}
         </div>
       {/if}
@@ -99,13 +99,15 @@
       h4 {
         font-size: 1rem;
         padding: 0;
-        margin: 0 0 0.5rem;
+        margin: 0 0 1rem;
         font-weight: normal;
       }
 
       .tags {
-        span {
-        }
+        margin: 0 0 1rem;
+        display: flex;
+        gap: 0.25rem;
+        justify-content: left;
       }
 
       .read {

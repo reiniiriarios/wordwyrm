@@ -25,3 +25,10 @@
     text-align: right;
   }
 }
+
+.tag {
+  background-color: $bgColorLight;
+  color: $fgColor;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
