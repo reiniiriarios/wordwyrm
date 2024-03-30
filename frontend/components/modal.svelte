@@ -76,7 +76,7 @@
     &__body {
       font-size: 1rem;
       padding: 0.75rem 0.5rem;
-      height: 100%;
+      height: 85%;
     }
 
     &__actions {

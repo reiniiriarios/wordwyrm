@@ -31,7 +31,10 @@
     <div class="book">
       {#if book.hasImage}
         <a href={`#/book/${book.filename}`} class="book__inner book__inner--image">
-          <img src={`bookimage://${book.filename}.jpg`} alt="" />
+          <img
+            src={`bookimage://${book.authorDir?.replace(" ", "%20")}/${book.filename.replace(" ", "%20")}.jpg`}
+            alt=""
+          />
         </a>
       {:else}
         <a href={`#/book/${book.filename}`} class="book__inner book__inner--noimage">

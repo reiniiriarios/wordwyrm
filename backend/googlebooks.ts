@@ -126,8 +126,45 @@ function conformBook(v: Volume | VolumeLite): Book {
   let authors: Author[] = [];
   let book = { authors } as Book;
   v.volumeInfo?.authors?.forEach((a) => book.authors.push({ name: a }));
+
   book.title = v.volumeInfo?.title ?? "";
   book.datePublished = v.volumeInfo?.publishedDate ?? "";
+  book.googleBooksId = v.id;
+
+  // Select primary image. Prefer "large".
+  if (v.volumeInfo?.imageLinks?.large) {
+    book.image = v.volumeInfo.imageLinks.large;
+  } else if (v.volumeInfo?.imageLinks?.extraLarge) {
+    book.image = v.volumeInfo.imageLinks.extraLarge;
+  } else if (v.volumeInfo?.imageLinks?.medium) {
+    book.image = v.volumeInfo.imageLinks.medium;
+  } else if (v.volumeInfo?.imageLinks?.small) {
+    book.image = v.volumeInfo.imageLinks.small;
+  } else if (v.volumeInfo?.imageLinks?.thumbnail) {
+    book.image = v.volumeInfo.imageLinks.thumbnail;
+  } else if (v.volumeInfo?.imageLinks?.smallThumbnail) {
+    book.image = v.volumeInfo.imageLinks.smallThumbnail;
+  }
+
+  // Select thumbnail. Prefer "thumbnail".
+  if (v.volumeInfo?.imageLinks?.thumbnail) {
+    book.thumbnail = v.volumeInfo.imageLinks.thumbnail;
+  } else if (v.volumeInfo?.imageLinks?.smallThumbnail) {
+    book.thumbnail = v.volumeInfo.imageLinks.smallThumbnail;
+  } else if (v.volumeInfo?.imageLinks?.small) {
+    book.thumbnail = v.volumeInfo.imageLinks.small;
+  } else if (v.volumeInfo?.imageLinks?.medium) {
+    book.thumbnail = v.volumeInfo.imageLinks.medium;
+  } else if (v.volumeInfo?.imageLinks?.large) {
+    book.thumbnail = v.volumeInfo.imageLinks.large;
+  } else if (v.volumeInfo?.imageLinks?.extraLarge) {
+    book.thumbnail = v.volumeInfo.imageLinks.extraLarge;
+  }
+
+  if (book.image) {
+    book.hasImage = true;
+  }
+
   return book;
 }
 

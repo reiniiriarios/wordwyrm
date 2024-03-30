@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import fetch from "electron-fetch";
 import sharp from "sharp";
-import { Book } from "../frontend/data/book";
+import { Author, Book } from "../frontend/data/book";
 import { readYaml, saveYaml } from "./userdata";
 
 export function initBookDirs(dir: string) {
@@ -11,13 +11,17 @@ export function initBookDirs(dir: string) {
   }
 }
 
+function authorsToDir(authors: Author[]): string {
+  return authors.map((a) => a.name.replace(/[^A-Za-z0-9\-',\. ]/, "_")).join(", ");
+}
+
 export async function saveBook(dir: string, book: Book) {
   initBookDirs(dir);
 
   // Author directory.
-  const authorDir = book.authors.map((a) => a.name.replace(/[^A-Za-z0-9\-',\. ]/, "_")).join(", ");
-  if (!fs.existsSync(authorDir)) {
-    fs.mkdirSync(authorDir, { recursive: true });
+  book.authorDir = path.join(dir, authorsToDir(book.authors));
+  if (!fs.existsSync(book.authorDir)) {
+    fs.mkdirSync(book.authorDir, { recursive: true });
   }
 
   // Filename.
@@ -34,9 +38,8 @@ export async function saveBook(dir: string, book: Book) {
         response.buffer().then((buf) => {
           sharp(buf)
             .resize(1000, 1000, { fit: "inside" })
-            .toFile(path.join(dir, authorDir, `${book.filename}.jpg`), (err, info) => {
+            .toFile(path.join(book.authorDir ?? "", `${book.filename}.jpg`), (err, info) => {
               if (err) console.error(err);
-              console.log(info);
             });
         });
       });
@@ -44,15 +47,14 @@ export async function saveBook(dir: string, book: Book) {
       // Save from local file.
       sharp(book.image)
         .resize(1000, 1000, { fit: "inside" })
-        .toFile(path.join(dir, authorDir, `${book.filename}.jpg`), (err, info) => {
+        .toFile(path.join(book.authorDir, `${book.filename}.jpg`), (err, info) => {
           if (err) console.error(err);
-          console.log(info);
         });
     }
     delete book.image;
   }
 
-  saveYaml(path.join(dir, authorDir, `${book.filename}.yaml`), book);
+  saveYaml(path.join(book.authorDir, `${book.filename}.yaml`), book);
 }
 
 export async function readAllBooks(dir: string): Promise<Book[]> {
@@ -67,7 +69,9 @@ export async function readAllBooks(dir: string): Promise<Book[]> {
           // Get data for book
           let pathname = path.join(subFile.path, subFile.name);
           let book = readYaml(pathname) as Book;
+          // Reset image and dir location from current status
           book.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
+          book.authorDir = authorsToDir(book.authors);
           books.push(book);
         }
       });
