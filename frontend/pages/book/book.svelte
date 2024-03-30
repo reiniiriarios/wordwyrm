@@ -18,14 +18,14 @@
 </div>
 {#if book}
   <div class="bookPage">
-    <div class="bookPage__image">
-      {#if book.hasImage}
+    {#if book.hasImage}
+      <div class="bookPage__image">
         <img
-          src={`bookimage://${book.authorDir?.replace(" ", "%20")}/${book.filename.replace(" ", "%20")}.jpg`}
+          src={`bookimage://${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg`}
           alt=""
         />
-      {/if}
-    </div>
+      </div>
+    {/if}
     <div class="bookPage__info">
       <h2>{book.title}</h2>
       <h3><span>by</span> {book.authors.map((a) => a.name).join(", ")}</h3>

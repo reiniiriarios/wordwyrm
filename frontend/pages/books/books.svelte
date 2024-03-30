@@ -95,13 +95,15 @@
       {#if book.hasImage}
         <a href={`#/book/${book.authorDir}/${book.filename}`} class="book__inner book__inner--image">
           <img
-            src={`bookimage://${book.authorDir?.replace(" ", "%20")}/${book.filename.replace(" ", "%20")}.jpg`}
+            src={`bookimage://${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg`}
             alt=""
           />
         </a>
       {:else}
         <a href={`#/book/${book.authorDir}/${book.filename}`} class="book__inner book__inner--noimage">
-          {book.title} by {book.authors.map((a) => a.name).join(", ")}
+          <span>{book.title}</span>
+          <span>by</span>
+          <span>{book.authors.map((a) => a.name).join(", ")}</span>
         </a>
       {/if}
     </div>
@@ -184,9 +186,14 @@
       }
 
       &--noimage {
-        width: 9rem;
+        width: 20vw;
         background-color: $bgColorLightest;
         border: 2px solid transparent;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
 
         &:hover {
           border-color: $accentColor;
