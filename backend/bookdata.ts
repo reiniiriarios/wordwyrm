@@ -1,5 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
+import fetch from "electron-fetch";
+import sharp from "sharp";
 import { Book } from "../frontend/data/book";
 import { readYaml, saveYaml } from "./userdata";
 
@@ -10,16 +12,39 @@ export function initBookDirs(dir: string) {
 }
 
 export async function saveBook(dir: string, book: Book) {
-  let newFilename =
+  const newFilename =
     book.authors.map((a) => a.name.replace(/[^A-Za-z0-9\-]/, "_")).join("-") +
-      "--" +
-      book.title.replace(/[^A-Za-z0-9\-]/, "_") +
-      "--" +
-      book.datePublished?.getFullYear() ?? "";
+    "--" +
+    book.title.replace(/[^A-Za-z0-9\-]/, "_") +
+    (book.datePublished && book.datePublished !== "undefined" ? "--" + book.datePublished : "");
   if (book.filename != newFilename) {
-    // delete old file
+    // todo: delete old file
     book.filename = newFilename;
   }
+
+  if (book.image) {
+    if (book.image.startsWith("http") || book.image.startsWith("file:")) {
+      fetch(book.image).then((response) => {
+        response.buffer().then((buf) => {
+          sharp(buf)
+            .resize(1000, 1000, { fit: "inside" })
+            .toFile(`${book.filename}.jpg`, (err, info) => {
+              if (err) console.error(err);
+              console.log(info);
+            });
+        });
+      });
+    } else {
+      sharp(book.image)
+        .resize(1000, 1000, { fit: "inside" })
+        .toFile(path.join(dir, `${book.filename}.jpg`), (err, info) => {
+          if (err) console.error(err);
+          console.log(info);
+        });
+    }
+    delete book.image;
+  }
+
   saveYaml(path.join(dir, `${book.filename}.yaml`), book);
 }
 

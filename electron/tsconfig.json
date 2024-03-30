@@ -7,6 +7,7 @@
     "baseUrl": ".",
     "allowJs": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "paths": {
       "@core/*": ["../frontend/core/*"],
       "@data/*": ["../frontend/data/*"],

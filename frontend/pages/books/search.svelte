@@ -39,7 +39,7 @@
 </script>
 
 <button type="button" class="btn" on:click={openDialog}> Search for Book </button>
-<Modal bind:open={addBookOpen} heading="Search for Book" confirmWord="Add" confirm={addBook} canAccept={canAdd}>
+<Modal bind:open={addBookOpen} heading="Search for Book" confirmWord="Add" on:confirm={addBook} canConfirm={canAdd}>
   <div class="search">
     <input type="text" name="search" bind:value={searchString} required />
     <button class="btn btn--light" on:click={search} disabled={searching}>Search</button>

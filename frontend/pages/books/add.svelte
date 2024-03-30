@@ -6,12 +6,17 @@
   let addBookOpen: boolean = false;
   let book: Book = {} as Book;
   let authors: string = "";
+  let tags: string = "";
   let addImagePath: string = "";
+  let canConfirm: boolean = false;
+
+  $: canConfirm = (book.title?.length ?? 0) > 0 && (book.authors?.length ?? 0) > 0;
 
   function openDialog() {
     addBookOpen = true;
     book = {} as Book;
     authors = "";
+    tags = "";
     addImagePath = "";
   }
 
@@ -19,7 +24,14 @@
     book.authors = authors.split(",").map((name) => ({ name: name.trim() }) as Author);
   }
 
+  function setTags() {
+    book.tags = tags.split(",").map((t) => t.trim());
+  }
+
   function addBook(): boolean {
+    window.electronAPI.saveBook(book);
+    addBookOpen = false;
+    window.electronAPI.readAllBooks();
     return true;
   }
 
@@ -34,12 +46,13 @@
     if (acceptedFiles.length) {
       console.log(acceptedFiles);
       addImagePath = acceptedFiles[0].path;
+      book.image = addImagePath;
     }
   }
 </script>
 
 <button type="button" class="btn" on:click={openDialog}> Add Book + </button>
-<Modal bind:open={addBookOpen} heading="Add Book" confirmWord="Add" confirm={addBook}>
+<Modal bind:open={addBookOpen} heading="Add Book" confirmWord="Add" on:confirm={addBook} bind:canConfirm>
   <fieldset>
     <label class="field field--fullwidth">
       Title
@@ -56,6 +69,10 @@
     <label class="field">
       Date Read
       <input type="date" bind:value={book.dateRead} />
+    </label>
+    <label class="field field--fullwidth">
+      Tag(s)
+      <input type="text" bind:value={tags} on:change={setTags} />
     </label>
     <div class="field field--fullwidth">
       <Dropzone accept="image/*" on:drop={handleBookImage}>

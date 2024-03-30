@@ -126,8 +126,8 @@ function conformBook(v: Volume | VolumeLite): Book {
   let authors: Author[] = [];
   let book = { authors } as Book;
   v.volumeInfo?.authors?.forEach((a) => book.authors.push({ name: a }));
-  book.title = v.volumeInfo.title;
-  book.datePublished = new Date(v.volumeInfo?.publishedDate);
+  book.title = v.volumeInfo?.title ?? "";
+  book.datePublished = v.volumeInfo?.publishedDate ?? "";
   return book;
 }
 

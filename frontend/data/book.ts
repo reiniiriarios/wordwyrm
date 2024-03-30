@@ -1,7 +1,7 @@
 export type Author = {
   name: string;
-  birth?: Date;
-  death?: Date;
+  birth?: string;
+  death?: string;
 };
 
 export type Book = {
@@ -9,6 +9,7 @@ export type Book = {
   authors: Author[];
   filename: string;
   tags: string[];
-  datePublished?: Date;
-  dateRead?: Date;
+  datePublished?: string;
+  dateRead?: string;
+  image?: string;
 };

@@ -25,6 +25,12 @@
     background-color: $bgColorLight;
   }
 
+  &:disabled {
+    color: $fgColorDark;
+    background-color: $bgColorLight;
+    cursor: default;
+  }
+
   &--light {
     background-color: $bgColorLighter;
     color: $fgColorMuted;
@@ -35,6 +41,11 @@
     }
 
     &:active {
+      background-color: $bgColorLighter;
+    }
+
+    &:disabled {
+      color: $fgColorDark;
       background-color: $bgColorLighter;
     }
   }

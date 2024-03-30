@@ -1,22 +1,22 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
+
   export let open: boolean = false;
   export let canCancel: boolean = true;
-  export let canAccept: boolean = true;
-  export let confirm: () => boolean;
+  export let canConfirm: boolean = true;
   export let confirmWord: string = "Okay";
   export let heading: string;
 
-  function confirmClose() {
-    if (confirm()) {
-      open = false;
-    }
+  function confirm() {
+    dispatch("confirm");
   }
 
   window.addEventListener("keydown", function (e: KeyboardEvent) {
     if (canCancel && ["Escape"].includes(e.key)) {
       open = false;
-    } else if (["\n", "Enter"].includes(e.key) && canAccept) {
-      confirmClose();
+    } else if (["\n", "Enter"].includes(e.key) && canConfirm) {
+      confirm();
     }
   });
 </script>
@@ -31,7 +31,7 @@
       {#if canCancel}
         <button type="button" class="btn modal__button" on:click={() => (open = false)}>Cancel</button>
       {/if}
-      <button type="button" class="btn modal__button" disabled={canAccept} on:click={confirmClose}>
+      <button type="button" class="btn modal__button" disabled={!canConfirm} on:click={confirm}>
         {confirmWord}
       </button>
     </div>
