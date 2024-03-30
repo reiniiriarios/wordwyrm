@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Book } from "@data/book";
   import Modal from "@components/modal.svelte";
+  import { onMount } from "svelte";
 
   let addBookOpen: boolean = false;
   let selectedBook: Book = {} as Book;
@@ -27,10 +28,15 @@
     searching = false;
   });
 
-  window.addEventListener("keydown", function (e: KeyboardEvent) {
+  function searchKey(e: KeyboardEvent) {
     if (["\n", "Enter"].includes(e.key) && !canAdd) {
       search();
     }
+  }
+
+  onMount(() => {
+    window.addEventListener("keydown", searchKey);
+    return () => window.removeEventListener("keydown", searchKey);
   });
 
   function selectBook(book: Book) {
@@ -46,7 +52,8 @@
   window.electronAPI.receiveBookData((book: Book) => {
     window.electronAPI.saveBook(book);
     addBookOpen = false;
-    window.electronAPI.readAllBooks();
+    // stupid hack to avoid race condition
+    setTimeout(window.electronAPI.readAllBooks, 1000);
   });
 </script>
 

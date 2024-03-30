@@ -34,7 +34,8 @@
   function addBook() {
     window.electronAPI.saveBook(book);
     addBookOpen = false;
-    window.electronAPI.readAllBooks();
+    // stupid hack to avoid race condition
+    setTimeout(window.electronAPI.readAllBooks, 1000);
   }
 
   function handleBookImage(e: CustomEvent<any>) {

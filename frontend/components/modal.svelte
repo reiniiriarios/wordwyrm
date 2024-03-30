@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   const dispatch = createEventDispatcher();
 
   export let open: boolean = false;
@@ -12,12 +12,17 @@
     dispatch("confirm");
   }
 
-  window.addEventListener("keydown", function (e: KeyboardEvent) {
+  function modalKey(e: KeyboardEvent) {
     if (canCancel && ["Escape"].includes(e.key)) {
       open = false;
     } else if (["\n", "Enter"].includes(e.key) && canConfirm) {
       confirm();
     }
+  }
+
+  onMount(() => {
+    window.addEventListener("keydown", modalKey);
+    return () => window.removeEventListener("keydown", modalKey);
   });
 </script>
 
