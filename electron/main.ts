@@ -19,6 +19,7 @@ function createWindow(): BrowserWindow {
       contextIsolation: true,
     },
   });
+  mainWindow.maximize();
 
   if (DEBUG) {
     mainWindow.loadURL(`http://localhost:${PORT}`);

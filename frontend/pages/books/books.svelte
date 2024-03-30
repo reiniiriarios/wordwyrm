@@ -61,13 +61,13 @@
   }
 
   .book {
-    height: 14rem;
+    height: 30vw;
     display: flex;
     justify-content: center;
     align-items: center;
 
     &__inner {
-      height: 14rem;
+      height: 30vw;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -76,11 +76,11 @@
       color: $fgColor;
 
       &--image {
-        max-width: 9rem;
+        max-width: 20vw;
 
         img {
           max-height: 100%;
-          max-width: 9rem;
+          max-width: 20vw;
           border: 2px solid transparent;
         }
 
