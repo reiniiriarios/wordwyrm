@@ -15,6 +15,18 @@ function authorsToDir(authors: Author[]): string {
   return authors.map((a) => a.name.replace(/[^A-Za-z0-9\-',\. ]/g, "_")).join(", ");
 }
 
+export async function addBookImage(authorDir: string, filename: string, url: string) {
+  fetch(url).then((response) => {
+    response.buffer().then((buf) => {
+      sharp(buf)
+        .resize(1000, 1000, { fit: "inside" })
+        .toFile(path.join(authorDir, `${filename}.jpg`), (err, _info) => {
+          if (err) console.error(err);
+        });
+    });
+  });
+}
+
 export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFilename?: string) {
   initBookDirs(dir);
 
@@ -34,15 +46,7 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
   if (book.image) {
     // Save from interwebs or file protocol.
     if (book.image.startsWith("http") || book.image.startsWith("file:")) {
-      fetch(book.image).then((response) => {
-        response.buffer().then((buf) => {
-          sharp(buf)
-            .resize(1000, 1000, { fit: "inside" })
-            .toFile(path.join(book.authorDir ?? "", `${book.filename}.jpg`), (err, info) => {
-              if (err) console.error(err);
-            });
-        });
-      });
+      addBookImage(book.authorDir, book.filename, book.image);
     } else {
       // Save from local file.
       sharp(book.image)

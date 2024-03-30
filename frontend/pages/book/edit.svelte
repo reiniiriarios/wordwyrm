@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import Dropzone from "svelte-file-dropzone";
   import { push } from "svelte-spa-router";
+  import ImageSearch from "./imagesearch.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
 
@@ -86,6 +87,9 @@
           {/if}
         </Dropzone>
       </div>
+      <div class="searchButton">
+        <ImageSearch {book} />
+      </div>
     </div>
     <div class="bookPage__info">
       <fieldset>
@@ -151,5 +155,10 @@
       justify-content: right;
       gap: 0.5rem;
     }
+  }
+
+  .searchButton {
+    padding: 1rem;
+    text-align: center;
   }
 </style>

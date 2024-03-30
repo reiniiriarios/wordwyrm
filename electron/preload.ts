@@ -1,3 +1,4 @@
+import { SearchResult } from "@api/imagesearch";
 import { Book } from "@data/book";
 import { contextBridge, ipcRenderer } from "electron";
 
@@ -25,6 +26,13 @@ export const api = {
   loadSettings: () => ipcRenderer.send("loadSettings"),
   settingsLoaded: (callback: Function) =>
     ipcRenderer.on("settingsLoaded", (_event, settings: object) => callback(settings)),
+
+  imageSearch: (author: string, title: string) => ipcRenderer.send("imageSearch", author, title),
+  imageSearchResults: (callback: Function) =>
+    ipcRenderer.on("imageSearchResults", (_event, results: SearchResult[]) => callback(results)),
+
+  addBookImage: (authorDir: string, filename: string, url: string) =>
+    ipcRenderer.send("addBookImage", authorDir, filename, url),
 };
 
 contextBridge.exposeInMainWorld("electronAPI", api);

@@ -3,7 +3,8 @@ import { app, BrowserWindow, dialog, ipcMain, net, protocol } from "electron";
 import * as path from "path";
 import { getBook, searchBook } from "../backend/googlebooks";
 import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
-import { readAllBooks, readBook, saveBook } from "../backend/bookdata";
+import { addBookImage, readAllBooks, readBook, saveBook } from "../backend/bookdata";
+import { imageSearch } from "../backend/imagesearch";
 import { Book } from "@data/book";
 const PORT = 5000;
 const DEBUG = process.env.DEBUG === "true";
@@ -102,6 +103,14 @@ app.on("ready", () => {
   ipcMain.on("loadSettings", (event) => {
     settings = loadSettings();
     event.reply("settingsLoaded", settings);
+  });
+
+  ipcMain.on("imageSearch", (event, author: string, title: string) => {
+    imageSearch(author, title).then((res) => event.reply("imageSearchResults", res));
+  });
+
+  ipcMain.on("addBookImage", (_event, authorDir: string, filename: string, url: string) => {
+    addBookImage(authorDir, filename, url);
   });
 
   // ------- End Bridge -------
