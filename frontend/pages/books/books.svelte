@@ -30,14 +30,14 @@
   {#each allBooks as book}
     <div class="book">
       {#if book.hasImage}
-        <a href={`#/book/${book.filename}`} class="book__inner book__inner--image">
+        <a href={`#/book/${book.authorDir}/${book.filename}`} class="book__inner book__inner--image">
           <img
             src={`bookimage://${book.authorDir?.replace(" ", "%20")}/${book.filename.replace(" ", "%20")}.jpg`}
             alt=""
           />
         </a>
       {:else}
-        <a href={`#/book/${book.filename}`} class="book__inner book__inner--noimage">
+        <a href={`#/book/${book.authorDir}/${book.filename}`} class="book__inner book__inner--noimage">
           {book.title} by {book.authors.map((a) => a.name).join(", ")}
         </a>
       {/if}

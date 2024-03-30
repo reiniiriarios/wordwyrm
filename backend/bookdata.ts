@@ -53,6 +53,9 @@ export async function saveBook(dir: string, book: Book) {
     }
     delete book.image;
   }
+  if (book.thumbnail) {
+    delete book.thumbnail;
+  }
 
   saveYaml(path.join(book.authorDir, `${book.filename}.yaml`), book);
 }
@@ -78,4 +81,13 @@ export async function readAllBooks(dir: string): Promise<Book[]> {
     }
   });
   return books;
+}
+
+export async function readBook(dir: string, authorDir: string, filename: string): Promise<Book | null> {
+  const pathname = path.join(dir, authorDir, filename + ".yaml");
+  if (!fs.existsSync(pathname)) return null;
+  let book = readYaml(pathname) as Book;
+  book.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
+  book.authorDir = authorDir;
+  return book;
 }

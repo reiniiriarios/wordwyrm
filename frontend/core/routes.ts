@@ -6,7 +6,7 @@ import Settings from "@pages/settings/settings.svelte";
 export default {
   "/": Books,
   "/book": Book,
-  "/book/*": Book,
+  "/book/:author/:book": Book,
   "/settings": Settings,
   "*": NotFound,
 };

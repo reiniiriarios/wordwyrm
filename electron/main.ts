@@ -3,7 +3,7 @@ import { app, BrowserWindow, dialog, ipcMain, net, protocol } from "electron";
 import * as path from "path";
 import { getBook, searchBook } from "../backend/googlebooks";
 import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
-import { readAllBooks, saveBook } from "../backend/bookdata";
+import { readAllBooks, readBook, saveBook } from "../backend/bookdata";
 import { Book } from "@data/book";
 const PORT = 5000;
 const DEBUG = process.env.DEBUG === "true";
@@ -62,6 +62,12 @@ app.on("ready", () => {
   ipcMain.on("readAllBooks", (event) => {
     if (settings.booksDir) {
       readAllBooks(settings.booksDir).then((res) => event.reply("receiveAllBooks", res));
+    }
+  });
+
+  ipcMain.on("readBook", (event, authorDir: string, filename: string) => {
+    if (settings.booksDir) {
+      readBook(settings.booksDir, authorDir, filename).then((res) => event.reply("receiveBook", res));
     }
   });
 
