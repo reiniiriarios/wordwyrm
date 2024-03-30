@@ -9,6 +9,8 @@
   let settings: Record<string, any> = {};
 
   let book: Book;
+  let oAuthorDir: string = "";
+  let oFilename: string = "";
   let authors: string = "";
   let tags: string = "";
   let imagePath: string = "";
@@ -20,6 +22,8 @@
 
   window.electronAPI.receiveBook((b: Book) => {
     book = b;
+    oAuthorDir = b.authorDir ?? "";
+    oFilename = b.filename;
     authors = book.authors.map((a) => a.name).join(", ");
     tags = book.tags?.join(", ") ?? "";
     if (book.hasImage && settings.booksDir) {
@@ -61,8 +65,8 @@
   }
 
   function saveBook() {
-    window.electronAPI.editBook(book, book.authorDir ?? "", book.filename);
-    push(`#/book/${params.author}/${params.book}`);
+    window.electronAPI.editBook(book, oAuthorDir, oFilename);
+    push(`#/book/${book.authorDir}/${book.filename}`);
   }
 </script>
 
