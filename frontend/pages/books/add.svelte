@@ -73,6 +73,10 @@
       <input type="date" bind:value={book.dateRead} />
     </label>
     <label class="field field--fullwidth">
+      Series
+      <input type="text" bind:value={book.series} />
+    </label>
+    <label class="field field--fullwidth">
       Tag(s)
       <input type="text" bind:value={tags} on:change={setTags} />
     </label>

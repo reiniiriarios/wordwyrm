@@ -34,6 +34,9 @@
           ? new Date(book.datePublished).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
           : "No publish date listed"}
       </h4>
+      {#if book.series}
+        <div class="series">Series: {book.series}</div>
+      {/if}
       {#if book.tags}
         <div class="tags">
           {#each book.tags as tag}
@@ -101,6 +104,11 @@
         padding: 0;
         margin: 0 0 1rem;
         font-weight: normal;
+      }
+
+      .series {
+        margin: 0 0 1rem;
+        font-size: 1rem;
       }
 
       .tags {

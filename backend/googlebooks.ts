@@ -105,7 +105,7 @@ async function searchVolume(q: string): Promise<VolumeSearch> {
     .then((res) => res as VolumeSearch);
 }
 
-async function getVolume(v: string, lite: boolean = true): Promise<Volume> {
+async function getVolume(v: string, lite: boolean = false): Promise<Volume> {
   return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}&key=${GOOGLE_API_KEY}`)
     .then((res) => res.json())
     .then((res) => res as Volume);

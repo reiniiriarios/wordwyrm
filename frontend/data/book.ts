@@ -10,6 +10,7 @@ export type Book = {
   authorDir?: string;
   filename: string;
   tags: string[];
+  series?: string;
   datePublished?: string;
   dateRead?: string;
   hasImage?: boolean;
