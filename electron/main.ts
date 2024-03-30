@@ -77,6 +77,12 @@ app.on("ready", () => {
     }
   });
 
+  ipcMain.on("editBook", (event, book: Book, authorDir: string, filename: string) => {
+    if (settings.booksDir) {
+      saveBook(settings.booksDir, book, authorDir, filename).then((res) => event.reply("bookSaved", res));
+    }
+  });
+
   ipcMain.on("selectDataDir", async (event) => {
     dialog
       .showOpenDialog(window, {

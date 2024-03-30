@@ -16,6 +16,8 @@ export const api = {
   receiveBook: (callback: Function) => ipcRenderer.on("receiveBook", (_event, res: Book) => callback(res)),
 
   saveBook: (book: Book) => ipcRenderer.send("saveBook", book),
+  editBook: (book: Book, authorDir: string, filename: string) =>
+    ipcRenderer.send("editBook", book, authorDir, filename),
 
   selectDataDir: () => ipcRenderer.send("selectDataDir"),
   dirSelected: (callback: Function) => ipcRenderer.on("dirSelected", (_event, path: string) => callback(path)),

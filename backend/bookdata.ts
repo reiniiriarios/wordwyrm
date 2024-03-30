@@ -15,7 +15,7 @@ function authorsToDir(authors: Author[]): string {
   return authors.map((a) => a.name.replace(/[^A-Za-z0-9\-',\. ]/, "_")).join(", ");
 }
 
-export async function saveBook(dir: string, book: Book) {
+export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFilename?: string) {
   initBookDirs(dir);
 
   // Author directory.
@@ -24,10 +24,9 @@ export async function saveBook(dir: string, book: Book) {
     fs.mkdirSync(book.authorDir, { recursive: true });
   }
 
-  // Filename.
-  const filename = book.title.replace(/[^A-Za-z0-9\-'!\?,\. ]/, "_");
-  if (book.filename != filename) {
-    book.filename = filename;
+  const newFilename = book.title.replace(/[^A-Za-z0-9\-'!\?,\. ]/, "_");
+  if (book.filename != newFilename) {
+    book.filename = newFilename;
   }
 
   // Use the image variable to save the image, then delete the variable.
@@ -58,6 +57,16 @@ export async function saveBook(dir: string, book: Book) {
   }
 
   saveYaml(path.join(book.authorDir, `${book.filename}.yaml`), book);
+
+  // After saving everything else, delete old data if present.
+  if (oAuthorDir && path.join(dir, oAuthorDir) !== book.authorDir) {
+    console.log(oAuthorDir, book.authorDir);
+    fs.rmSync(path.join(dir, oAuthorDir), { recursive: true, force: true });
+  } else if (oFilename && oFilename !== book.filename) {
+    console.log(book.authorDir, oFilename, book.filename);
+    fs.rmSync(path.join(dir, book.authorDir, oFilename + ".yaml"), { force: true });
+    fs.rmSync(path.join(dir, book.authorDir, oFilename + ".jpg"), { force: true });
+  }
 }
 
 export async function readAllBooks(dir: string): Promise<Book[]> {

@@ -21,7 +21,7 @@
   window.electronAPI.receiveBook((b: Book) => {
     book = b;
     authors = book.authors.map((a) => a.name).join(", ");
-    tags = book.tags.join(", ");
+    tags = book.tags?.join(", ") ?? "";
     if (book.hasImage) {
       imagePath = settings.booksDir + "/" + book.authorDir + "/" + book.filename + ".jpg";
     }
@@ -61,7 +61,7 @@
   }
 
   function saveBook() {
-    window.electronAPI.saveBook(book);
+    window.electronAPI.editBook(book, book.authorDir ?? "", book.filename);
     push(`#/book/${params.author}/${params.book}`);
   }
 </script>
