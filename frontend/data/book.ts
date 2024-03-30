@@ -11,5 +11,6 @@ export type Book = {
   tags: string[];
   datePublished?: string;
   dateRead?: string;
+  hasImage?: boolean;
   image?: string;
 };

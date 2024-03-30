@@ -34,6 +34,9 @@ app.on("ready", () => {
   let window = createWindow();
 
   protocol.handle("localfile", (request) => net.fetch("file://" + request.url.slice("localfile://".length)));
+  protocol.handle("bookimage", (request) =>
+    net.fetch("file://" + path.join(settings.booksDir, request.url.slice("bookimage://".length))),
+  );
 
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) {

@@ -28,6 +28,73 @@
 </div>
 <div class="bookList">
   {#each allBooks as book}
-    <div>{book.title}</div>
+    <div class="book">
+      {#if book.hasImage}
+        <a href={`#/book/${book.filename}`} class="book__inner book__inner--image">
+          <img src={`bookimage://${book.filename}.jpg`} alt="" />
+        </a>
+      {:else}
+        <a href={`#/book/${book.filename}`} class="book__inner book__inner--noimage">
+          {book.title} by {book.authors.map((a) => a.name).join(", ")}
+        </a>
+      {/if}
+    </div>
   {/each}
 </div>
+
+<style lang="scss">
+  @import "../../style/variables";
+
+  .bookList {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem 1.25rem;
+    overflow-y: auto;
+    width: 100%;
+    height: calc(100vh - $pageNavHeight);
+    scrollbar-width: thin;
+    scrollbar-color: $bgColorLightest transparent;
+  }
+
+  .book {
+    height: 14rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__inner {
+      height: 14rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      color: $fgColor;
+
+      &--image {
+        max-width: 9rem;
+
+        img {
+          max-height: 100%;
+          max-width: 9rem;
+          border: 2px solid transparent;
+        }
+
+        &:hover img {
+          border-color: $accentColor;
+        }
+      }
+
+      &--noimage {
+        width: 9rem;
+        background-color: $bgColorLightest;
+        border: 2px solid transparent;
+
+        &:hover {
+          border-color: $accentColor;
+        }
+      }
+    }
+  }
+</style>

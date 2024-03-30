@@ -53,7 +53,9 @@ export async function readAllBooks(dir: string): Promise<Book[]> {
   let books: Book[] = [];
   fs.readdirSync(dir, { withFileTypes: true }).forEach((file) => {
     if (file.isFile() && file.name.endsWith(".yaml")) {
-      books.push(readYaml(path.join(file.path, file.name)) as Book);
+      let book = readYaml(path.join(file.path, file.name)) as Book;
+      book.hasImage = fs.existsSync(path.join(file.path, file.name.slice(0, -5) + ".jpg"));
+      books.push(book);
     }
   });
   return books;

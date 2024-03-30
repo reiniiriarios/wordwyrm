@@ -8,12 +8,14 @@
 
 .main {
   width: calc(100vw - $tabSize);
+  height: 100vh;
 }
 
 .pageNav {
   display: flex;
   justify-content: space-between;
-  margin: 0.5rem 1rem;
+  padding: 0.5rem 1rem;
+  height: $pageNavHeight;
 
   &__header {
     margin: 0;

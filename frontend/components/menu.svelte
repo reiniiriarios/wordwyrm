@@ -11,8 +11,8 @@
     <li class:active={$location === "/"}>
       <a href="#/"><Books size={32} /></a>
     </li>
-    <li class:active={$location === "/current"}>
-      <a href="#/current"><BookOpen size={32} /></a>
+    <li class:active={$location.startsWith("/book")}>
+      <a href="#/book"><BookOpen size={32} /></a>
     </li>
     <li class:active={$location === "/list"}>
       <a href="#/list"><ListDashes size={32} /></a>
