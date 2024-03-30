@@ -12,7 +12,7 @@ export function initBookDirs(dir: string) {
 }
 
 function authorsToDir(authors: Author[]): string {
-  return authors.map((a) => a.name.replace(/[^A-Za-z0-9\-',\. ]/, "_")).join(", ");
+  return authors.map((a) => a.name.replace(/[^A-Za-z0-9\-',\. ]/g, "_")).join(", ");
 }
 
 export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFilename?: string) {
@@ -24,12 +24,13 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
     fs.mkdirSync(book.authorDir, { recursive: true });
   }
 
-  const newFilename = book.title.replace(/[^A-Za-z0-9\-'!\?,\. ]/, "_");
+  const newFilename = book.title.replace(/[^A-Za-z0-9\-'!\?,\.:; ]/g, "_");
   if (book.filename != newFilename) {
     book.filename = newFilename;
   }
 
   // Use the image variable to save the image, then delete the variable.
+  let newImage = false;
   if (book.image) {
     // Save from interwebs or file protocol.
     if (book.image.startsWith("http") || book.image.startsWith("file:")) {
@@ -50,6 +51,7 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
           if (err) console.error(err);
         });
     }
+    newImage = true;
     delete book.image;
   }
   if (book.thumbnail) {
@@ -64,8 +66,11 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
     fs.rmSync(path.join(dir, oAuthorDir), { recursive: true, force: true });
   } else if (oFilename && oFilename !== book.filename) {
     console.log(book.authorDir, oFilename, book.filename);
-    fs.rmSync(path.join(dir, book.authorDir, oFilename + ".yaml"), { force: true });
-    fs.rmSync(path.join(dir, book.authorDir, oFilename + ".jpg"), { force: true });
+    if (newImage) {
+      fs.rmSync(path.join(book.authorDir, oFilename + ".yaml"), { force: true });
+    } else {
+      fs.renameSync(path.join(book.authorDir, oFilename + ".jpg"), path.join(book.authorDir, book.filename + ".jpg"));
+    }
   }
 }
 

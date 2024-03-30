@@ -22,14 +22,14 @@
     book = b;
     authors = book.authors.map((a) => a.name).join(", ");
     tags = book.tags?.join(", ") ?? "";
-    if (book.hasImage) {
+    if (book.hasImage && settings.booksDir) {
       imagePath = settings.booksDir + "/" + book.authorDir + "/" + book.filename + ".jpg";
     }
   });
 
   window.electronAPI.settingsLoaded((loadedSettings: Record<string, any>) => {
     settings = loadedSettings;
-    if (book.hasImage) {
+    if (book.hasImage && settings.booksDir) {
       imagePath = settings.booksDir + "/" + book.authorDir + "/" + book.filename + ".jpg";
     }
   });
