@@ -71,6 +71,20 @@ export const catFilters: Record<string, { name: string; filter: filterFn }> = {
     name: "All",
     filter: (books: Book[]): Book[] => books,
   },
+  read: {
+    name: "Read",
+    filter: (books: Book[]): Book[] =>
+      books.filter((book) => {
+        return book.dateRead;
+      }),
+  },
+  unread: {
+    name: "Unread",
+    filter: (books: Book[]): Book[] =>
+      books.filter((book) => {
+        return !book.dateRead;
+      }),
+  },
   fiction: {
     name: "Fiction",
     filter: (books: Book[]): Book[] =>
