@@ -162,7 +162,7 @@
   .bookList {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 0.75rem;
+    gap: 2vw;
     padding: 0.5rem 1rem 1.25rem;
     overflow-y: auto;
     width: 100%;
