@@ -63,6 +63,19 @@
         return books;
       },
     },
+    dateRead: {
+      name: "Date Read",
+      sort: (books: Book[]): Book[] => {
+        books.sort((x, y) => {
+          let xD = !x.dateRead ? 0 : new Date(x.dateRead).getTime();
+          let yD = !y.dateRead ? 0 : new Date(y.dateRead).getTime();
+          if (xD < yD) return -1;
+          if (xD > yD) return 1;
+          return 0;
+        });
+        return books;
+      },
+    },
   };
 </script>
 
