@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Book } from "@data/book";
   import { onMount } from "svelte";
+  import ImageSearch from "./imagesearch.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
@@ -14,7 +15,12 @@
 
 <div class="pageNav">
   <h2 class="pageNav__header">Book</h2>
-  <div class="pageNav__actions"><a class="btn" href={`#/book/${params.author}/${params.book}/edit`}>Edit</a></div>
+  <div class="pageNav__actions">
+    {#if book}
+      <ImageSearch {book} />
+    {/if}
+    <a class="btn" href={`#/book/${params.author}/${params.book}/edit`}>Edit</a>
+  </div>
 </div>
 {#if book}
   <div class="bookPage">

@@ -109,8 +109,8 @@ app.on("ready", () => {
     imageSearch(author, title).then((res) => event.reply("imageSearchResults", res));
   });
 
-  ipcMain.on("addBookImage", (_event, authorDir: string, filename: string, url: string) => {
-    addBookImage(settings.booksDir, authorDir, filename, url);
+  ipcMain.on("addBookImage", (event, authorDir: string, filename: string, url: string) => {
+    addBookImage(settings.booksDir, authorDir, filename, url).then(() => event.reply("bookImageAdded"));
   });
 
   // ------- End Bridge -------

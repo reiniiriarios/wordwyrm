@@ -33,6 +33,7 @@ export const api = {
 
   addBookImage: (authorDir: string, filename: string, url: string) =>
     ipcRenderer.send("addBookImage", authorDir, filename, url),
+  bookImageAdded: (callback: Function) => ipcRenderer.on("bookImageAdded", (_event) => callback()),
 };
 
 contextBridge.exposeInMainWorld("electronAPI", api);

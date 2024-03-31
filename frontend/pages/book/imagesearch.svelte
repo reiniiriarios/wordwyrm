@@ -31,11 +31,15 @@
 
   function addImage() {
     window.electronAPI.addBookImage(book.authorDir ?? "", book.filename, selectedImageUrl);
-    push(`#/book/${book.authorDir}/${book.filename}`);
   }
+
+  window.electronAPI.bookImageAdded(() => {
+    isOpen = false;
+    push(`#/book/${book.authorDir}/${book.filename}`);
+  });
 </script>
 
-<button type="button" class="btn" on:click={openDialog}>Search DuckDuckGo Images</button>
+<button type="button" class="btn" on:click={openDialog}>Search for Image</button>
 <Modal bind:open={isOpen} heading="Search for Book" confirmWord="Add" on:confirm={addImage} bind:canConfirm={canAdd}>
   <div class="results">
     {#each results as res}
