@@ -17,7 +17,8 @@
 
   window.electronAPI.receiveAllBooks((books: Book[]) => {
     allBooks = books;
-    sortedBooks = books;
+    currentSort = "author";
+    sortedBooks = sortFilters.author.sort(structuredClone(allBooks));
   });
 
   let currentSort: string = "";
