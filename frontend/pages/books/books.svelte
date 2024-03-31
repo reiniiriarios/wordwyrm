@@ -215,6 +215,7 @@
 
       &--noimage {
         width: 20vw;
+        height: 100%;
         background-color: $bgColorLightest;
         text-align: center;
         display: flex;
