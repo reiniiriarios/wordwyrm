@@ -107,10 +107,12 @@
     <div class="book">
       {#if book.hasImage}
         <a href={`#/book/${book.authorDir}/${book.filename}`} class="book__inner book__inner--image">
-          <img
-            src={`bookimage://${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg`}
-            alt=""
-          />
+          <div class="bookComposite">
+            <img
+              src={`bookimage://${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg`}
+              alt=""
+            />
+          </div>
         </a>
       {:else}
         <a href={`#/book/${book.authorDir}/${book.filename}`} class="book__inner book__inner--noimage">
@@ -187,29 +189,33 @@
       &--image {
         max-width: 20vw;
 
+        .bookComposite {
+          height: 30vw;
+          transition: 0.2s transform;
+        }
+
         img {
           max-height: 100%;
           max-width: 20vw;
-          border: 2px solid transparent;
         }
 
-        &:hover img {
-          border-color: $accentColor;
+        &:hover .bookComposite {
+          transform: scale(1.02);
         }
       }
 
       &--noimage {
         width: 20vw;
         background-color: $bgColorLightest;
-        border: 2px solid transparent;
         text-align: center;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        transition: 0.2s transform;
 
         &:hover {
-          border-color: $accentColor;
+          transform: scale(1.02);
         }
       }
     }
