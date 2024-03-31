@@ -32,6 +32,10 @@
     cursor: default;
   }
 
+  &--round {
+    border-radius: 0.5rem;
+  }
+
   &--light {
     background-color: $bgColorLighter;
     color: $fgColorMuted;
