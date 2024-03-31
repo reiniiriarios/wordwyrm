@@ -3,9 +3,12 @@
   import AddBook from "./add.svelte";
   import SearchBook from "./search.svelte";
   import { Book } from "@data/book";
+  import { catFilters, sortFilters } from "./sortBooks";
 
   let allBooks: Book[] = [];
   let sortedBooks: Book[] = [];
+  let currentSort: string = "";
+  let currentFilter: string = "";
 
   function readBooks() {
     window.electronAPI.readAllBooks();
@@ -18,66 +21,19 @@
   window.electronAPI.receiveAllBooks((books: Book[]) => {
     allBooks = books;
     currentSort = "author";
-    sortedBooks = sortFilters.author.sort(structuredClone(allBooks));
+    currentFilter = "all";
+    sortedBooks = sortFilters.author.sort(allBooks);
   });
 
-  let currentSort: string = "";
-
-  function sortFilter(i: string, sort: (books: Book[]) => Book[]) {
-    currentSort = i;
-    sortedBooks = sort(structuredClone(allBooks));
+  function sortFilter(s: string) {
+    currentSort = s;
+    sortedBooks = catFilters[currentFilter].filter(sortFilters[s].sort(structuredClone(allBooks)));
   }
 
-  const sortFilters = {
-    author: {
-      name: "Author",
-      sort: (books: Book[]): Book[] => {
-        books.sort((x, y) => {
-          let xA = x.authors[0].name.split(" ").pop();
-          let yA = y.authors[0].name.split(" ").pop();
-          return (xA ?? "").localeCompare(yA ?? "");
-        });
-        return books;
-      },
-    },
-    title: {
-      name: "Title",
-      sort: (books: Book[]): Book[] => {
-        books.sort((x, y) => {
-          let xT = x.title.replace(/^(?:A|An|The) /i, "");
-          let yT = y.title.replace(/^(?:A|An|The) /i, "");
-          return xT.localeCompare(yT);
-        });
-        return books;
-      },
-    },
-    datePublished: {
-      name: "Publish Date",
-      sort: (books: Book[]): Book[] => {
-        books.sort((x, y) => {
-          let xD = new Date(x.datePublished ?? "").getTime();
-          let yD = new Date(y.datePublished ?? "").getTime();
-          if (xD < yD) return -1;
-          if (xD > yD) return 1;
-          return 0;
-        });
-        return books;
-      },
-    },
-    dateRead: {
-      name: "Date Read",
-      sort: (books: Book[]): Book[] => {
-        books.sort((x, y) => {
-          let xD = !x.dateRead ? 0 : new Date(x.dateRead).getTime();
-          let yD = !y.dateRead ? 0 : new Date(y.dateRead).getTime();
-          if (xD < yD) return -1;
-          if (xD > yD) return 1;
-          return 0;
-        });
-        return books;
-      },
-    },
-  };
+  function catFilter(f: string) {
+    currentFilter = f;
+    sortedBooks = sortFilters[currentSort].sort(catFilters[f].filter(structuredClone(allBooks)));
+  }
 </script>
 
 <div class="pageNav">
@@ -91,16 +47,14 @@
   <div class="filter">
     <span>Sort:</span>
     {#each Object.entries(sortFilters) as [i, s]}
-      <button on:click={() => sortFilter(i, s.sort)} class:selected={currentSort === i}>{s.name}</button>
+      <button on:click={() => sortFilter(i)} class:selected={currentSort === i}>{s.name}</button>
     {/each}
   </div>
   <div class="filter">
     <span>Filter:</span>
-    <button data-filter="fiction">Fiction</button>
-    <button data-filter="nonfiction">Non-Fiction</button>
-    <button data-filter="scifi">Science Fiction</button>
-    <button data-filter="fantasy">Fantasy</button>
-    <button data-filter="nonfiction">Non-Fiction</button>
+    {#each Object.entries(catFilters) as [i, f]}
+      <button on:click={() => catFilter(i)} class:selected={currentFilter === i}>{f.name}</button>
+    {/each}
   </div>
 </div>
 <div class="bookList">
