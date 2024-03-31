@@ -6,12 +6,14 @@
   import { catFilters, sortFilters } from "./sortBooks";
   import SortAscending from "phosphor-svelte/lib/SortAscending";
   import SortDescending from "phosphor-svelte/lib/SortDescending";
+  import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
 
   let allBooks: Book[] = [];
   let sortedBooks: Book[] = [];
   let currentSort: string = "";
   let currentSortReverse: boolean = false;
   let currentFilter: string = "";
+  let currentSearch: string = "";
 
   function readBooks() {
     window.electronAPI.readAllBooks();
@@ -36,17 +38,45 @@
 
   function sortFilter(s: string) {
     currentSort = s;
-    sortedBooks = catFilters[currentFilter].filter(sortFilters[s].sort(structuredClone(allBooks), currentSortReverse));
+    let books = currentSearch ? searchBooks(allBooks) : allBooks;
+    sortedBooks = catFilters[currentFilter].filter(sortFilters[s].sort(structuredClone(books), currentSortReverse));
   }
 
   function catFilter(f: string) {
     currentFilter = f;
-    sortedBooks = sortFilters[currentSort].sort(catFilters[f].filter(structuredClone(allBooks)), currentSortReverse);
+    let books = currentSearch ? searchBooks(allBooks) : allBooks;
+    sortedBooks = sortFilters[currentSort].sort(catFilters[f].filter(structuredClone(books)), currentSortReverse);
+  }
+
+  function searchBooks(books: Book[]): Book[] {
+    if (!currentSearch) return books;
+    return structuredClone(books).filter((b) => {
+      return (
+        b.title.toLowerCase().includes(currentSearch.toLowerCase()) ||
+        b.authors
+          .map((a) => a.name)
+          .join(",")
+          .toLowerCase()
+          .includes(currentSearch.toLowerCase())
+      );
+    });
+  }
+
+  function searchFilter(e: KeyboardEvent) {
+    if (["\n", "Enter"].includes(e.key)) {
+      sortedBooks = sortFilters[currentSort].sort(
+        catFilters[currentFilter].filter(searchBooks(allBooks)),
+        currentSortReverse,
+      );
+    }
   }
 </script>
 
 <div class="pageNav">
   <h2 class="pageNav__header">Books</h2>
+  <div class="pageNav__search">
+    <MagnifyingGlass /><input type="text" bind:value={currentSearch} on:keydown={searchFilter} />
+  </div>
   <div class="pageNav__actions">
     <AddBook />
     <SearchBook />
