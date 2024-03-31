@@ -15,12 +15,12 @@ function authorsToDir(authors: Author[]): string {
   return authors.map((a) => a.name.replace(/[^A-Za-z0-9\-',\. ]/g, "_")).join(", ");
 }
 
-export async function addBookImage(authorDir: string, filename: string, url: string) {
+export async function addBookImage(dir: string, authorDir: string, filename: string, url: string) {
   fetch(url).then((response) => {
     response.buffer().then((buf) => {
       sharp(buf)
         .resize(1000, 1000, { fit: "inside" })
-        .toFile(path.join(authorDir, `${filename}.jpg`), (err, _info) => {
+        .toFile(path.join(dir, authorDir, `${filename}.jpg`), (err, _info) => {
           if (err) console.error(err);
         });
     });
@@ -31,9 +31,10 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
   initBookDirs(dir);
 
   // Author directory.
-  book.authorDir = path.join(dir, authorsToDir(book.authors));
-  if (!fs.existsSync(book.authorDir)) {
-    fs.mkdirSync(book.authorDir, { recursive: true });
+  book.authorDir = authorsToDir(book.authors);
+  const authorPath = path.join(dir, book.authorDir);
+  if (!fs.existsSync(authorPath)) {
+    fs.mkdirSync(authorPath, { recursive: true });
   }
 
   const newFilename = book.title.replace(/[^A-Za-z0-9\-'!\?,\.:; ]/g, "_");
@@ -46,12 +47,12 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
   if (book.image) {
     // Save from interwebs or file protocol.
     if (book.image.startsWith("http") || book.image.startsWith("file:")) {
-      addBookImage(book.authorDir, book.filename, book.image);
+      addBookImage(dir, book.authorDir, book.filename, book.image);
     } else {
       // Save from local file.
       sharp(book.image)
         .resize(1000, 1000, { fit: "inside" })
-        .toFile(path.join(book.authorDir, `${book.filename}.jpg`), (err, info) => {
+        .toFile(path.join(authorPath, `${book.filename}.jpg`), (err, info) => {
           if (err) console.error(err);
         });
     }
@@ -62,17 +63,17 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
     delete book.thumbnail;
   }
 
-  saveYaml(path.join(book.authorDir, `${book.filename}.yaml`), book);
+  saveYaml(path.join(authorPath, `${book.filename}.yaml`), book);
 
   // After saving everything else, delete old data if present.
-  if (oAuthorDir && path.join(dir, oAuthorDir) !== book.authorDir) {
+  if (oAuthorDir && path.join(dir, oAuthorDir) !== authorPath) {
     fs.rmSync(path.join(dir, oAuthorDir), { recursive: true, force: true });
   } else if (oFilename && oFilename !== book.filename) {
-    fs.rmSync(path.join(book.authorDir, oFilename + ".yaml"), { force: true });
+    fs.rmSync(path.join(authorPath, oFilename + ".yaml"), { force: true });
     if (newImage) {
-      fs.rmSync(path.join(book.authorDir, oFilename + ".jpg"), { force: true });
+      fs.rmSync(path.join(authorPath, oFilename + ".jpg"), { force: true });
     } else {
-      fs.renameSync(path.join(book.authorDir, oFilename + ".jpg"), path.join(book.authorDir, book.filename + ".jpg"));
+      fs.renameSync(path.join(authorPath, oFilename + ".jpg"), path.join(authorPath, book.filename + ".jpg"));
     }
   }
 }
