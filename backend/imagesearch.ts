@@ -24,7 +24,7 @@ function sleep(ms: number): Promise<void> {
 
 export async function imageSearch(title: string, author: string): Promise<SearchResult[]> {
   let reqUrl = url + "i.js";
-  let keywords = `${title} by ${author} book cover`;
+  let keywords = encodeURIComponent(`${title} by ${author} book cover`);
   let attempt = 0;
   let results: SearchResult[] = [];
 
