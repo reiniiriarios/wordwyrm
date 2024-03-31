@@ -169,9 +169,11 @@
   }
 
   .bookList {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 2vw;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
     padding: 0.5rem 1rem 1.25rem;
     overflow-y: auto;
     width: 100%;
@@ -181,13 +183,14 @@
   }
 
   .book {
-    height: 30vw;
+    width: 20rem;
+    height: 30rem;
     display: flex;
     justify-content: center;
     align-items: center;
 
     &__inner {
-      max-height: 30vw;
+      max-height: 30rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -196,16 +199,16 @@
       color: $fgColor;
 
       &--image {
-        max-width: 20vw;
+        max-width: 19rem;
 
         .bookComposite {
-          max-height: 30vw;
+          max-height: 29rem;
           transition: 0.2s transform;
         }
 
         img {
-          max-height: 30vw;
-          max-width: 20vw;
+          max-width: 19rem;
+          max-height: 29rem;
         }
 
         &:hover .bookComposite {
@@ -214,8 +217,8 @@
       }
 
       &--noimage {
-        width: 20vw;
-        height: 100%;
+        width: 18rem;
+        height: 28rem;
         background-color: $bgColorLightest;
         text-align: center;
         display: flex;
