@@ -16,11 +16,8 @@
     isOpen = true;
     canAdd = false;
     selectedImageUrl = "";
-  }
-
-  onMount(() => {
     window.electronAPI.imageSearch(book.title, book.authors.map((a) => a.name).join(", "));
-  });
+  }
 
   window.electronAPI.imageSearchResults((res: SearchResult[]) => (results = res));
 
