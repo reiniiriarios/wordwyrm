@@ -7,8 +7,6 @@
   const startDate = new Date(2020, 1, 1);
   const endDate = new Date();
 
-  let allBooks: Book[] = [];
-
   let years: Record<number, number> = ((): Record<number, number> => {
     let ys: Record<string, number> = {};
     let startYear = startDate.getFullYear();
@@ -54,20 +52,15 @@
     return ds;
   })();
 
-  function readBooks() {
-    window.electronAPI.readAllBooks();
-  }
-
-  onMount(() => {
-    readBooks();
-  });
-
   let chartCanvas: HTMLCanvasElement;
   let chart: Chart;
 
-  window.electronAPI.receiveAllBooks((books: Book[]) => {
-    allBooks = books;
-    allBooks.forEach((b) => {
+  onMount(() => {
+    window.electronAPI.readAllBooksChart();
+  });
+
+  window.electronAPI.receiveAllBooksChart((books: Book[]) => {
+    books.forEach((b) => {
       if (b.dateRead) {
         let t = new Date(b.dateRead);
         let y = t.getFullYear();
@@ -78,25 +71,41 @@
         days[d]++;
       }
     });
-    chart = new Chart(chartCanvas, {
-      type: "bar",
-      data: {
-        labels: Object.values(months).map((m) => m.display),
-        datasets: [
-          {
-            label: "Books Read",
-            data: Object.values(months).map((m) => m.count),
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
+
+    // Wait for the canvas element to appear, THEN run chart code.
+    new Promise((resolve) => {
+      if (chartCanvas) return resolve(true);
+      const observer = new MutationObserver((_mutations) => {
+        if (chartCanvas) {
+          observer.disconnect();
+          resolve(true);
+        }
+      });
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+    }).then(() => {
+      chart = new Chart(chartCanvas, {
+        type: "bar",
+        data: {
+          labels: Object.values(months).map((m) => m.display),
+          datasets: [
+            {
+              label: "Books Read",
+              data: Object.values(months).map((m) => m.count),
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
           },
         },
-      },
+      });
     });
   });
 

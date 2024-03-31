@@ -118,7 +118,7 @@ function conformBook(v: Volume): Book {
 
   book.title = v.volumeInfo?.title ?? "";
   book.datePublished = v.volumeInfo?.publishedDate ?? "";
-  book.googleBooksId = v.id;
+  book.googleBooksId = v.id ?? "";
 
   // Select primary image. Prefer "large".
   if (v.volumeInfo?.imageLinks?.large) {

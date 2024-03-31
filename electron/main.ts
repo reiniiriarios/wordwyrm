@@ -52,8 +52,10 @@ app.on("ready", () => {
 
   // --------- Bridge ---------
 
-  ipcMain.on("getBookData", (event, id: string) => {
-    getBook(id).then((res) => event.reply("receiveBookData", res));
+  ipcMain.on("getBookData", (event, id?: string) => {
+    if (id) {
+      getBook(id).then((res) => event.reply("receiveBookData", res));
+    }
   });
 
   ipcMain.on("searchBook", (event, q: string) => {
@@ -63,6 +65,12 @@ app.on("ready", () => {
   ipcMain.on("readAllBooks", (event) => {
     if (settings.booksDir) {
       readAllBooks(settings.booksDir).then((res) => event.reply("receiveAllBooks", res));
+    }
+  });
+
+  ipcMain.on("readAllBooksChart", (event) => {
+    if (settings.booksDir) {
+      readAllBooks(settings.booksDir).then((res) => event.reply("receiveAllBooksChart", res));
     }
   });
 

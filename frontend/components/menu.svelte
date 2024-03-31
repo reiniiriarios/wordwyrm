@@ -1,7 +1,6 @@
 <script lang="ts">
   import { location } from "svelte-spa-router";
   import Books from "phosphor-svelte/lib/Books";
-  import BookOpen from "phosphor-svelte/lib/BookOpen";
   import ListDashes from "phosphor-svelte/lib/ListDashes";
   import Gear from "phosphor-svelte/lib/Gear";
   import ChartLine from "phosphor-svelte/lib/ChartLine";
@@ -12,9 +11,11 @@
     <li class:active={$location === "/"}>
       <a href="#/"><Books size={32} /></a>
     </li>
+    <!--
     <li class:active={$location.startsWith("/book")}>
       <a href="#/book"><BookOpen size={32} /></a>
     </li>
+    -->
     <li class:active={$location === "/list"}>
       <a href="#/list"><ListDashes size={32} /></a>
     </li>

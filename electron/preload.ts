@@ -13,6 +13,10 @@ export const api = {
   readAllBooks: () => ipcRenderer.send("readAllBooks"),
   receiveAllBooks: (callback: Function) => ipcRenderer.on("receiveAllBooks", (_event, res: Book[]) => callback(res)),
 
+  readAllBooksChart: () => ipcRenderer.send("readAllBooksChart"),
+  receiveAllBooksChart: (callback: Function) =>
+    ipcRenderer.on("receiveAllBooksChart", (_event, res: Book[]) => callback(res)),
+
   readBook: (authorDir: string, filename: string) => ipcRenderer.send("readBook", authorDir, filename),
   receiveBook: (callback: Function) => ipcRenderer.on("receiveBook", (_event, res: Book) => callback(res)),
 

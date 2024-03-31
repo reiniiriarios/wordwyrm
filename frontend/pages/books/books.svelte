@@ -20,7 +20,9 @@
   }
 
   onMount(() => {
-    readBooks();
+    if (!allBooks.length) {
+      readBooks();
+    }
   });
 
   window.electronAPI.receiveAllBooks((books: Book[]) => {
