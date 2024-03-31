@@ -95,6 +95,8 @@
               label: "Books Read",
               data: Object.values(months).map((m) => m.count),
               borderWidth: 1,
+              borderColor: "#ff0088",
+              backgroundColor: "#ff008888",
             },
           ],
         },
