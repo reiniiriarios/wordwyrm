@@ -50,14 +50,14 @@ export const sortFilters: Record<string, { name: string; sort: sortFn }> = {
     name: "Date Read",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
-        let xD = !x.dateRead ? 0 : new Date(x.dateRead).getTime();
-        let yD = !y.dateRead ? 0 : new Date(y.dateRead).getTime();
+        let xD = !x.dateRead ? 9999999999999 : new Date(x.dateRead).getTime();
+        let yD = !y.dateRead ? 9999999999999 : new Date(y.dateRead).getTime();
         if (reverse) {
-          if (xD > yD) return -1;
-          if (xD < yD) return 1;
-        } else {
           if (xD < yD) return -1;
           if (xD > yD) return 1;
+        } else {
+          if (xD > yD) return -1;
+          if (xD < yD) return 1;
         }
         return 0;
       });
