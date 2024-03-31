@@ -4,10 +4,13 @@
   import SearchBook from "./search.svelte";
   import { Book } from "@data/book";
   import { catFilters, sortFilters } from "./sortBooks";
+  import SortAscending from "phosphor-svelte/lib/SortAscending";
+  import SortDescending from "phosphor-svelte/lib/SortDescending";
 
   let allBooks: Book[] = [];
   let sortedBooks: Book[] = [];
   let currentSort: string = "";
+  let currentSortReverse: boolean = false;
   let currentFilter: string = "";
 
   function readBooks() {
@@ -22,17 +25,23 @@
     allBooks = books;
     currentSort = "author";
     currentFilter = "all";
-    sortedBooks = sortFilters.author.sort(allBooks);
+    currentSortReverse = false;
+    sortedBooks = sortFilters.author.sort(allBooks, false);
   });
+
+  function sortReverse() {
+    currentSortReverse = !currentSortReverse;
+    sortedBooks = sortedBooks.reverse();
+  }
 
   function sortFilter(s: string) {
     currentSort = s;
-    sortedBooks = catFilters[currentFilter].filter(sortFilters[s].sort(structuredClone(allBooks)));
+    sortedBooks = catFilters[currentFilter].filter(sortFilters[s].sort(structuredClone(allBooks), currentSortReverse));
   }
 
   function catFilter(f: string) {
     currentFilter = f;
-    sortedBooks = sortFilters[currentSort].sort(catFilters[f].filter(structuredClone(allBooks)));
+    sortedBooks = sortFilters[currentSort].sort(catFilters[f].filter(structuredClone(allBooks)), currentSortReverse);
   }
 </script>
 
@@ -49,6 +58,13 @@
     {#each Object.entries(sortFilters) as [i, s]}
       <button on:click={() => sortFilter(i)} class:selected={currentSort === i}>{s.name}</button>
     {/each}
+    <button class="sortDirection" on:click={sortReverse}>
+      {#if currentSortReverse}
+        <SortDescending size={22} />
+      {:else}
+        <SortAscending size={22} />
+      {/if}
+    </button>
   </div>
   <div class="filter">
     <span>Filter:</span>
@@ -112,6 +128,11 @@
 
         &.selected {
           background-color: $bgColorLighter;
+        }
+
+        &.sortDirection {
+          padding: 0;
+          background: none;
         }
       }
     }
