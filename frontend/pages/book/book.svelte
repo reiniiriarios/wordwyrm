@@ -2,6 +2,7 @@
   import { Book } from "@data/book";
   import { onMount } from "svelte";
   import ImageSearch from "./imagesearch.svelte";
+  import PencilSimple from "phosphor-svelte/lib/PencilSimple";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
@@ -19,7 +20,7 @@
     {#if book}
       <ImageSearch {book} />
     {/if}
-    <a class="btn" href={`#/book/${params.author}/${params.book}/edit`}>Edit</a>
+    <a class="btn" href={`#/book/${params.author}/${params.book}/edit`}>Edit <PencilSimple /></a>
   </div>
 </div>
 {#if book}

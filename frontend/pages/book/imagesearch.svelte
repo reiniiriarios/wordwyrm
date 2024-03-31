@@ -2,8 +2,8 @@
   import { SearchResult } from "@api/imagesearch";
   import Modal from "@components/modal.svelte";
   import { Book } from "@data/book";
-  import { onMount } from "svelte";
   import { push } from "svelte-spa-router";
+  import ImageSquare from "phosphor-svelte/lib/ImageSquare";
 
   export let book: Book = {} as Book;
   export let selectedImageUrl: string = "";
@@ -36,7 +36,7 @@
   });
 </script>
 
-<button type="button" class="btn" on:click={openDialog}>Search for Image</button>
+<button type="button" class="btn" on:click={openDialog}>Search for Image <ImageSquare /></button>
 <Modal bind:open={isOpen} heading="Search for Book" confirmWord="Add" on:confirm={addImage} bind:canConfirm={canAdd}>
   <div class="results">
     {#each results as res}

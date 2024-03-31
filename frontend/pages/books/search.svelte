@@ -2,6 +2,7 @@
   import { Book } from "@data/book";
   import Modal from "@components/modal.svelte";
   import { onMount } from "svelte";
+  import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
 
   let addBookOpen: boolean = false;
   let selectedBook: Book = {} as Book;
@@ -57,7 +58,7 @@
   });
 </script>
 
-<button type="button" class="btn" on:click={openDialog}> Search for Book </button>
+<button type="button" class="btn" on:click={openDialog}>Search for Book <MagnifyingGlass /></button>
 <Modal
   bind:open={addBookOpen}
   heading="Search for Book"

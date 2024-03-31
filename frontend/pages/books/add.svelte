@@ -2,6 +2,7 @@
   import { Book, Author } from "@data/book";
   import Dropzone from "svelte-file-dropzone";
   import Modal from "@components/modal.svelte";
+  import Plus from "phosphor-svelte/lib/Plus";
 
   let addBookOpen: boolean = false;
   let book: Book = {} as Book;
@@ -54,7 +55,7 @@
   }
 </script>
 
-<button type="button" class="btn" on:click={openDialog}> Add Book + </button>
+<button type="button" class="btn" on:click={openDialog}>Add Book <Plus /></button>
 <Modal bind:open={addBookOpen} heading="Add Book" confirmWord="Add" on:confirm={addBook} bind:canConfirm>
   <fieldset>
     <label class="field field--fullwidth">
