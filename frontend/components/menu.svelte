@@ -4,6 +4,7 @@
   import BookOpen from "phosphor-svelte/lib/BookOpen";
   import ListDashes from "phosphor-svelte/lib/ListDashes";
   import Gear from "phosphor-svelte/lib/Gear";
+  import ChartLine from "phosphor-svelte/lib/ChartLine";
 </script>
 
 <nav>
@@ -16,6 +17,9 @@
     </li>
     <li class:active={$location === "/list"}>
       <a href="#/list"><ListDashes size={32} /></a>
+    </li>
+    <li class:active={$location === "/chart"}>
+      <a href="#/chart"><ChartLine size={32} /></a>
     </li>
     <li class:active={$location === "/settings"}>
       <a href="#/settings"><Gear size={32} /></a>

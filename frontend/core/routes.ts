@@ -3,12 +3,14 @@ import Books from "@pages/books/books.svelte";
 import Book from "@pages/book/book.svelte";
 import EditBook from "@pages/book/edit.svelte";
 import Settings from "@pages/settings/settings.svelte";
+import Chart from "@pages/chart/chart.svelte";
 
 export default {
   "/": Books,
   "/book": Book,
   "/book/:author/:book/edit": EditBook,
   "/book/:author/:book": Book,
+  "/chart": Chart,
   "/settings": Settings,
   "*": NotFound,
 };
