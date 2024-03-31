@@ -54,6 +54,7 @@
     height: 100vh;
     background-color: rgba(0 0 0 / 25%);
     display: none;
+    z-index: 10;
 
     &.open {
       display: flex;
@@ -70,6 +71,8 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      z-index: 11;
+      box-shadow: rgba(0, 0, 0, 0.2) 0.1rem 0.1rem 0.4rem 0.2rem;
     }
 
     &__header {

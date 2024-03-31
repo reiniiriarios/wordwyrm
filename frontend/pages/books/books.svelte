@@ -112,6 +112,9 @@
               src={`bookimage://${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg`}
               alt=""
             />
+            {#if !book.dateRead}
+              <span class="unread">Unread</span>
+            {/if}
           </div>
         </a>
       {:else}
