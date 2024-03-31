@@ -182,7 +182,7 @@
     align-items: center;
 
     &__inner {
-      height: 30vw;
+      max-height: 30vw;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -194,12 +194,12 @@
         max-width: 20vw;
 
         .bookComposite {
-          height: 30vw;
+          max-height: 30vw;
           transition: 0.2s transform;
         }
 
         img {
-          max-height: 100%;
+          max-height: 30vw;
           max-width: 20vw;
         }
 
