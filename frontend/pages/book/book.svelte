@@ -74,7 +74,7 @@
     height: calc(100vh - $pageNavHeight);
 
     &__image {
-      height: 100%;
+      height: 95%;
       width: 50vw;
       padding: 1rem;
       display: flex;
