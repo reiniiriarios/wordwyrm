@@ -21,6 +21,7 @@ function createWindow(): BrowserWindow {
     },
   });
   mainWindow.maximize();
+  mainWindow.removeMenu();
 
   if (DEBUG) {
     mainWindow.loadURL(`http://localhost:${PORT}`);
