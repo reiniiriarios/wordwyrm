@@ -3,7 +3,7 @@
   import AddBook from "./add.svelte";
   import SearchBook from "./search.svelte";
   import { Book } from "@data/book";
-  import { catFilters, sortFilters } from "./sortBooks";
+  import { catFilters, sortFilters, recentFilters } from "./sortBooks";
   import SortAscending from "phosphor-svelte/lib/SortAscending";
   import SortDescending from "phosphor-svelte/lib/SortDescending";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
@@ -14,6 +14,7 @@
   let currentSort: string = "";
   let currentSortReverse: boolean = false;
   let currentFilter: string = "";
+  let currentRecent: string = "all";
   let currentSearch: string = "";
   let zoomLevel: string = "m";
 
@@ -42,14 +43,25 @@
 
   function sortFilter(s: string) {
     currentSort = s;
-    let books = currentSearch ? searchBooks(allBooks) : allBooks;
-    sortedBooks = catFilters[currentFilter].filter(sortFilters[s].sort(structuredClone(books), currentSortReverse));
+    filter();
   }
 
   function catFilter(f: string) {
     currentFilter = f;
+    filter();
+  }
+
+  function recentFilter(f: string) {
+    currentRecent = f;
+    filter();
+  }
+
+  function filter() {
     let books = currentSearch ? searchBooks(allBooks) : allBooks;
-    sortedBooks = sortFilters[currentSort].sort(catFilters[f].filter(structuredClone(books)), currentSortReverse);
+    sortedBooks = sortFilters[currentSort].sort(
+      catFilters[currentFilter].filter(recentFilters[currentRecent].filter(structuredClone(books))),
+      currentSortReverse,
+    );
   }
 
   function searchBooks(books: Book[]): Book[] {
@@ -107,6 +119,22 @@
     {#each Object.entries(catFilters) as [i, f]}
       <button on:click={() => catFilter(i)} class:selected={currentFilter === i}>{f.name}</button>
     {/each}
+  </div>
+
+  <div class="filter">
+    <span>Read:</span>
+    <div class="recentFilter">
+      <button class="recentFilter__selected">
+        {recentFilters[currentRecent].name}
+      </button>
+      <div class="recentFilter__dropdown">
+        {#each Object.entries(recentFilters) as [i, f]}
+          <button on:click={() => recentFilter(i)} class="recentFilter__opt" class:selected={i === currentRecent}
+            >{f.name}</button
+          >
+        {/each}
+      </div>
+    </div>
   </div>
 
   <div class="filter filter--right">
@@ -185,6 +213,47 @@
           padding: 0;
           background: none;
         }
+      }
+    }
+  }
+
+  .recentFilter {
+    position: relative;
+    display: inline-block;
+
+    &__selected {
+      min-width: 7rem;
+    }
+
+    &__dropdown {
+      display: none;
+      position: absolute;
+      min-width: 7rem;
+      box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.4);
+      z-index: 1;
+    }
+
+    &__opt {
+      display: block;
+      width: 100%;
+      padding: 0.33rem !important;
+      border-top: 1px solid $bgColor !important;
+      border-radius: 0 !important;
+
+      &:last-child {
+        border-bottom-left-radius: 0.25rem !important;
+        border-bottom-right-radius: 0.25rem !important;
+      }
+    }
+
+    &:hover {
+      .recentFilter__selected {
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+      }
+
+      .recentFilter__dropdown {
+        display: block;
       }
     }
   }

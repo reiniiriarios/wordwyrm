@@ -71,20 +71,6 @@ export const catFilters: Record<string, { name: string; filter: filterFn }> = {
     name: "All",
     filter: (books: Book[]): Book[] => books,
   },
-  read: {
-    name: "Read",
-    filter: (books: Book[]): Book[] =>
-      books.filter((book) => {
-        return book.dateRead;
-      }),
-  },
-  unread: {
-    name: "Unread",
-    filter: (books: Book[]): Book[] =>
-      books.filter((book) => {
-        return !book.dateRead;
-      }),
-  },
   fiction: {
     name: "Fiction",
     filter: (books: Book[]): Book[] =>
@@ -116,5 +102,47 @@ export const catFilters: Record<string, { name: string; filter: filterFn }> = {
         let tags = book.tags.map((t) => t.toLowerCase());
         return tags.includes("fantasy");
       }),
+  },
+};
+
+function yearsAgo(books: Book[], years: number, reverse: boolean = false): Book[] {
+  let yearsAgo = new Date();
+  yearsAgo.setFullYear(yearsAgo.getFullYear() - years);
+  let timeAgo = yearsAgo.getTime();
+  return books.filter((book) => {
+    if (!book.dateRead) return false;
+    let diff = new Date(book.dateRead).getTime() - timeAgo;
+    return reverse ? diff < 0 : diff > 0;
+  });
+}
+
+export const recentFilters: Record<string, { name: string; filter: filterFn }> = {
+  all: {
+    name: "All Books",
+    filter: (books: Book[]): Book[] => books,
+  },
+  allRead: {
+    name: "All Read",
+    filter: (books: Book[]): Book[] => books.filter((book) => book.dateRead),
+  },
+  allUnread: {
+    name: "All Unread",
+    filter: (books: Book[]): Book[] => books.filter((book) => !book.dateRead),
+  },
+  read1: {
+    name: "Last Year",
+    filter: (books: Book[]): Book[] => yearsAgo(books, 1),
+  },
+  read2: {
+    name: "Last 2 Years",
+    filter: (books: Book[]): Book[] => yearsAgo(books, 2),
+  },
+  read5: {
+    name: "Last 5 Years",
+    filter: (books: Book[]): Book[] => yearsAgo(books, 5),
+  },
+  read5rev: {
+    name: "> 5 Years Ago",
+    filter: (books: Book[]): Book[] => yearsAgo(books, 5, true),
   },
 };
