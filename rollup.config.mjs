@@ -17,7 +17,7 @@ import { spawn } from "child_process";
 import tsconfig from "./tsconfig.json" assert { type: "json" };
 
 const PORT = 5000;
-const production = false;
+const production = process.env.PRODUCTION ? true : false;
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -28,7 +28,7 @@
     "start:electron": "electron ./dist/electron/electron/main.js",
     "dev": "BROWSER=true DEBUG=true rollup -c -w",
     "dev:electron": "tsc -p ./electron/tsconfig.json && DEBUG=true electron ./dist/electron/electron/main.js",
-    "build:client": "ts-node scripts/rmdist.ts && rollup -c",
+    "build:client": "ts-node scripts/rmdist.ts && PRODUCTION=true rollup -c",
     "build:desktop": "tsc -p ./electron/tsconfig.json",
     "release": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir",
     "build-mac": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --mac dmg",
