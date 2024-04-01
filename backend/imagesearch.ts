@@ -6,7 +6,8 @@ export async function imageSearch(title: string, author: string): Promise<Duckba
     const searchResults = await search(keywords, {
       offset: 24,
     });
-    return searchResults.images ?? null;
+    if (!searchResults.images) throw "no image results";
+    return searchResults.images;
   } catch (e) {
     console.error(e);
   }
