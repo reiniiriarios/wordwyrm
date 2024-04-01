@@ -11,6 +11,9 @@
 
   window.electronAPI.settingsLoaded((loadedSettings: Record<string, any>) => {
     settings = loadedSettings;
+    if (!settings.chartStartYear) {
+      settings.chartStartYear = 2020;
+    }
     if (settingsLoaded) {
       saved = true;
       setTimeout(() => (saved = false), 1500);
@@ -48,6 +51,10 @@
   <label class="field field--fullwidth">
     Google Cloud API Key
     <input type="text" bind:value={settings.googleApiKey} />
+  </label>
+  <label class="field field--fullwidth">
+    Chart Default Start Year
+    <input type="text" bind:value={settings.chartStartYear} />
   </label>
   <div class="actions">
     <button class="btn" on:click={save}>Save</button>
