@@ -3,7 +3,7 @@ import { Book } from "@data/book";
 type sortFn = (books: Book[], reverse: boolean) => Book[];
 type filterFn = (books: Book[]) => Book[];
 
-export const sortFilters: Record<string, { name: string; sort: sortFn }> = {
+export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: boolean }> = {
   author: {
     name: "Author",
     sort: (books: Book[], reverse: boolean): Book[] => {
@@ -28,7 +28,7 @@ export const sortFilters: Record<string, { name: string; sort: sortFn }> = {
       return books;
     },
   },
-  datePublished: {
+  published: {
     name: "Publish Date",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
@@ -46,7 +46,7 @@ export const sortFilters: Record<string, { name: string; sort: sortFn }> = {
       return books;
     },
   },
-  dateRead: {
+  read: {
     name: "Date Read",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
@@ -63,6 +63,41 @@ export const sortFilters: Record<string, { name: string; sort: sortFn }> = {
       });
       return books;
     },
+  },
+  series: {
+    name: "Series",
+    sort: (books: Book[], reverse: boolean): Book[] => {
+      books.sort((x, y) => {
+        let xS = x.series?.replace(/^(?:A|An|The) /i, "") ?? "";
+        let yS = y.series?.replace(/^(?:A|An|The) /i, "") ?? "";
+        if (xS && !yS) return -1;
+        if (!xS && yS) return 1;
+        if (reverse) return yS.localeCompare(xS);
+        return xS.localeCompare(yS);
+      });
+      return books;
+    },
+    hidden: true,
+  },
+  tags: {
+    name: "Tags",
+    sort: (books: Book[], reverse: boolean): Book[] => {
+      books.sort((x, y) => {
+        if (reverse) {
+          if (x.tags.length < y.tags.length) return -1;
+          if (x.tags.length > y.tags.length) return 1;
+        } else {
+          if (x.tags.length > y.tags.length) return -1;
+          if (x.tags.length < y.tags.length) return 1;
+        }
+        let xT = x.tags.join(" ");
+        let yT = y.tags.join(" ");
+        if (reverse) return yT.localeCompare(xT);
+        return xT.localeCompare(yT);
+      });
+      return books;
+    },
+    hidden: true,
   },
 };
 
@@ -146,3 +181,19 @@ export const recentFilters: Record<string, { name: string; filter: filterFn }> =
     filter: (books: Book[]): Book[] => yearsAgo(books, 5, true),
   },
 };
+
+export function searchBooks(books: Book[], search: string): Book[] {
+  if (!search) return books;
+  search = search.toLowerCase();
+  return structuredClone(books).filter((b) => {
+    return (
+      b.title.toLowerCase().includes(search) ||
+      b.authors
+        .map((a) => a.name)
+        .join(",")
+        .toLowerCase()
+        .includes(search) ||
+      b.series?.toLowerCase().includes(search)
+    );
+  });
+}

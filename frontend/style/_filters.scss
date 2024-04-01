@@ -1,0 +1,81 @@
+@import "variables";
+
+.listFilter {
+  height: $filterHeight;
+  padding: 0.5rem 1rem 1.25rem;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: left;
+  white-space: nowrap;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 0.25rem;
+
+  &--right {
+    margin-left: auto;
+  }
+
+  button {
+    background-color: $bgColorLight;
+    color: $fgColor;
+    padding: 0.25rem 0.5rem;
+    border: 0;
+    border-radius: 0.25rem;
+    cursor: pointer;
+
+    &.selected {
+      background-color: $bgColorLighter;
+    }
+
+    &.sortDirection {
+      padding: 0;
+      background: none;
+    }
+  }
+}
+
+.recentFilter {
+  position: relative;
+  display: inline-block;
+
+  &__selected {
+    min-width: 7rem;
+  }
+
+  &__dropdown {
+    display: none;
+    position: absolute;
+    min-width: 7rem;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.4);
+    z-index: 1;
+  }
+
+  &__opt {
+    display: block;
+    width: 100%;
+    padding: 0.33rem !important;
+    border-top: 1px solid $bgColor !important;
+    border-radius: 0 !important;
+
+    &:last-child {
+      border-bottom-left-radius: 0.25rem !important;
+      border-bottom-right-radius: 0.25rem !important;
+    }
+  }
+
+  &:hover {
+    .recentFilter__selected {
+      border-bottom-left-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
+
+    .recentFilter__dropdown {
+      display: block;
+    }
+  }
+}

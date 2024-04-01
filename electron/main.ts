@@ -68,12 +68,6 @@ app.on("ready", () => {
     }
   });
 
-  ipcMain.on("readAllBooksChart", (event) => {
-    if (settings.booksDir) {
-      readAllBooks(settings.booksDir).then((res) => event.reply("receiveAllBooksChart", res));
-    }
-  });
-
   ipcMain.on("readBook", (event, authorDir: string, filename: string) => {
     if (settings.booksDir) {
       readBook(settings.booksDir, authorDir, filename).then((res) => event.reply("receiveBook", res));

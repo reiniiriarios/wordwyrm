@@ -3,7 +3,7 @@
   import AddBook from "./add.svelte";
   import SearchBook from "./search.svelte";
   import { Book } from "@data/book";
-  import { catFilters, sortFilters, recentFilters } from "./sortBooks";
+  import { catFilters, sortFilters, recentFilters, searchBooks } from "./sortBooks";
   import SortAscending from "phosphor-svelte/lib/SortAscending";
   import SortDescending from "phosphor-svelte/lib/SortDescending";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
@@ -18,13 +18,9 @@
   let currentSearch: string = "";
   let zoomLevel: string = "m";
 
-  function readBooks() {
-    window.electronAPI.readAllBooks();
-  }
-
   onMount(() => {
     if (!allBooks.length) {
-      readBooks();
+      window.electronAPI.readAllBooks();
     }
   });
 
@@ -57,31 +53,17 @@
   }
 
   function filter() {
-    let books = currentSearch ? searchBooks(allBooks) : allBooks;
+    let books = currentSearch ? searchBooks(allBooks, currentSearch) : allBooks;
     sortedBooks = sortFilters[currentSort].sort(
       catFilters[currentFilter].filter(recentFilters[currentRecent].filter(structuredClone(books))),
       currentSortReverse,
     );
   }
 
-  function searchBooks(books: Book[]): Book[] {
-    if (!currentSearch) return books;
-    return structuredClone(books).filter((b) => {
-      return (
-        b.title.toLowerCase().includes(currentSearch.toLowerCase()) ||
-        b.authors
-          .map((a) => a.name)
-          .join(",")
-          .toLowerCase()
-          .includes(currentSearch.toLowerCase())
-      );
-    });
-  }
-
   function searchFilter(e: KeyboardEvent) {
     if (["\n", "Enter"].includes(e.key)) {
       sortedBooks = sortFilters[currentSort].sort(
-        catFilters[currentFilter].filter(searchBooks(allBooks)),
+        catFilters[currentFilter].filter(searchBooks(allBooks, currentSearch)),
         currentSortReverse,
       );
     }
@@ -103,7 +85,9 @@
   <div class="filter">
     <span>Sort:</span>
     {#each Object.entries(sortFilters) as [i, s]}
-      <button on:click={() => sortFilter(i)} class:selected={currentSort === i}>{s.name}</button>
+      {#if !s.hidden}
+        <button on:click={() => sortFilter(i)} class:selected={currentSort === i}>{s.name}</button>
+      {/if}
     {/each}
     <button class="sortDirection" on:click={sortReverse}>
       {#if currentSortReverse}
@@ -175,88 +159,6 @@
 
 <style lang="scss">
   @import "../../style/variables";
-
-  $filterHeight: 3rem;
-
-  .listFilter {
-    height: $filterHeight;
-    padding: 0.5rem 1rem 1.25rem;
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    justify-content: left;
-    white-space: nowrap;
-
-    .filter {
-      display: flex;
-      align-items: center;
-      justify-content: left;
-      gap: 0.25rem;
-
-      &--right {
-        margin-left: auto;
-      }
-
-      button {
-        background-color: $bgColorLight;
-        color: $fgColor;
-        padding: 0.25rem 0.5rem;
-        border: 0;
-        border-radius: 0.25rem;
-        cursor: pointer;
-
-        &.selected {
-          background-color: $bgColorLighter;
-        }
-
-        &.sortDirection {
-          padding: 0;
-          background: none;
-        }
-      }
-    }
-  }
-
-  .recentFilter {
-    position: relative;
-    display: inline-block;
-
-    &__selected {
-      min-width: 7rem;
-    }
-
-    &__dropdown {
-      display: none;
-      position: absolute;
-      min-width: 7rem;
-      box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.4);
-      z-index: 1;
-    }
-
-    &__opt {
-      display: block;
-      width: 100%;
-      padding: 0.33rem !important;
-      border-top: 1px solid $bgColor !important;
-      border-radius: 0 !important;
-
-      &:last-child {
-        border-bottom-left-radius: 0.25rem !important;
-        border-bottom-right-radius: 0.25rem !important;
-      }
-    }
-
-    &:hover {
-      .recentFilter__selected {
-        border-bottom-left-radius: 0 !important;
-        border-bottom-right-radius: 0 !important;
-      }
-
-      .recentFilter__dropdown {
-        display: block;
-      }
-    }
-  }
 
   .resizeIcon {
     color: $fgColorMuted;

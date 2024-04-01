@@ -56,19 +56,19 @@
   let chart: Chart;
 
   onMount(() => {
-    window.electronAPI.readAllBooksChart();
+    window.electronAPI.readAllBooks();
   });
 
-  window.electronAPI.receiveAllBooksChart((books: Book[]) => {
+  window.electronAPI.receiveAllBooks((books: Book[]) => {
     books.forEach((b) => {
       if (b.dateRead) {
         let t = new Date(b.dateRead);
         let y = t.getFullYear();
         let m = y + "-" + t.getMonth().toString().padStart(2, "0");
         let d = m + "-" + t.getDate().toString().padStart(2, "0");
-        years[y]++;
-        months[m].count++;
-        days[d]++;
+        if (years[y]) years[y]++;
+        if (months[m]) months[m].count++;
+        if (days[d]) days[d]++;
       }
     });
 
