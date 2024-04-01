@@ -59,6 +59,7 @@
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
     "chart.js": "^4.4.2",
+    "duck-duck-scrape": "^2.2.5",
     "electron": "^29.1.5",
     "electron-builder": "^24.13.3",
     "electron-debug": "^3.2.0",
