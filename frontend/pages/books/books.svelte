@@ -7,6 +7,7 @@
   import SortAscending from "phosphor-svelte/lib/SortAscending";
   import SortDescending from "phosphor-svelte/lib/SortDescending";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
+  import FrameCorners from "phosphor-svelte/lib/FrameCorners";
 
   let allBooks: Book[] = [];
   let sortedBooks: Book[] = [];
@@ -14,6 +15,7 @@
   let currentSortReverse: boolean = false;
   let currentFilter: string = "";
   let currentSearch: string = "";
+  let zoomLevel: string = "m";
 
   function readBooks() {
     window.electronAPI.readAllBooks();
@@ -84,6 +86,7 @@
     <SearchBook />
   </div>
 </div>
+
 <div class="listFilter">
   <div class="filter">
     <span>Sort:</span>
@@ -98,16 +101,27 @@
       {/if}
     </button>
   </div>
+
   <div class="filter">
     <span>Filter:</span>
     {#each Object.entries(catFilters) as [i, f]}
       <button on:click={() => catFilter(i)} class:selected={currentFilter === i}>{f.name}</button>
     {/each}
   </div>
+
+  <div class="filter filter--right">
+    <div class="resizeIcon">
+      <FrameCorners size={22} />
+    </div>
+    <button on:click={() => (zoomLevel = "s")} class:selected={zoomLevel === "s"}>S</button>
+    <button on:click={() => (zoomLevel = "m")} class:selected={zoomLevel === "m"}>M</button>
+    <button on:click={() => (zoomLevel = "l")} class:selected={zoomLevel === "l"}>L</button>
+  </div>
 </div>
+
 <div class="bookList">
   {#each sortedBooks as book}
-    <div class="book">
+    <div class="book" class:zoomSmall={zoomLevel === "s"} class:zoomLarge={zoomLevel === "l"}>
       {#if book.hasImage}
         <a href={`#/book/${book.authorDir}/${book.filename}`} class="book__inner book__inner--image">
           <div class="bookComposite">
@@ -143,12 +157,17 @@
     gap: 2rem;
     align-items: center;
     justify-content: left;
+    white-space: nowrap;
 
     .filter {
       display: flex;
       align-items: center;
       justify-content: left;
       gap: 0.25rem;
+
+      &--right {
+        margin-left: auto;
+      }
 
       button {
         background-color: $bgColorLight;
@@ -170,6 +189,11 @@
     }
   }
 
+  .resizeIcon {
+    color: $fgColorMuted;
+    opacity: 0.8;
+  }
+
   .bookList {
     display: flex;
     flex-wrap: wrap;
@@ -185,14 +209,27 @@
   }
 
   .book {
-    width: 20rem;
-    height: 30rem;
+    --book-width: 20rem;
+    --book-height: 30rem;
+
+    &.zoomSmall {
+      --book-width: 13rem;
+      --book-height: 20rem;
+    }
+
+    &.zoomLarge {
+      --book-width: 25rem;
+      --book-height: 37rem;
+    }
+
+    width: var(--book-width);
+    height: var(--book-height);
     display: flex;
     justify-content: center;
     align-items: center;
 
     &__inner {
-      max-height: 30rem;
+      max-height: var(--book-height);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -201,16 +238,16 @@
       color: $fgColor;
 
       &--image {
-        max-width: 19rem;
+        max-width: calc(var(--book-width) - 1rem);
 
         .bookComposite {
-          max-height: 29rem;
+          max-height: calc(var(--book-height) - 1rem);
           transition: 0.2s transform;
         }
 
         img {
-          max-width: 19rem;
-          max-height: 29rem;
+          max-width: calc(var(--book-width) - 1rem);
+          max-height: calc(var(--book-height) - 1rem);
         }
 
         &:hover .bookComposite {
@@ -219,8 +256,8 @@
       }
 
       &--noimage {
-        width: 18rem;
-        height: 28rem;
+        width: calc(var(--book-width) - 2rem);
+        height: calc(var(--book-height) - 2rem);
         background-color: $bgColorLightest;
         text-align: center;
         display: flex;
