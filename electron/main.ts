@@ -115,7 +115,11 @@ app.on("ready", () => {
   });
 
   ipcMain.on("imageSearch", (event, author: string, title: string) => {
-    imageSearch(author, title).then((res) => event.reply("imageSearchResults", res));
+    if (settings.googleApiKey && settings.googleSearchEngineId) {
+      imageSearch(settings.googleApiKey, settings.googleSearchEngineId, author, title).then((res) =>
+        event.reply("imageSearchResults", res),
+      );
+    }
   });
 
   ipcMain.on("addBookImage", (event, authorDir: string, filename: string, url: string) => {

@@ -1,5 +1,5 @@
+import { SearchResult } from "@api/imagesearch";
 import { Book } from "@data/book";
-import { DuckbarImageResult } from "duck-duck-scrape";
 import { contextBridge, ipcRenderer } from "electron";
 
 export const api = {
@@ -30,7 +30,7 @@ export const api = {
 
   imageSearch: (author: string, title: string) => ipcRenderer.send("imageSearch", author, title),
   imageSearchResults: (callback: Function) =>
-    ipcRenderer.on("imageSearchResults", (_event, results: DuckbarImageResult[] | null) => callback(results)),
+    ipcRenderer.on("imageSearchResults", (_event, results: SearchResult[] | string) => callback(results)),
 
   addBookImage: (authorDir: string, filename: string, url: string) =>
     ipcRenderer.send("addBookImage", authorDir, filename, url),

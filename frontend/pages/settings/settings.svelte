@@ -53,6 +53,10 @@
     <input type="text" bind:value={settings.googleApiKey} />
   </label>
   <label class="field field--fullwidth">
+    Google Custom Search Engine ID
+    <input type="text" bind:value={settings.googleSearchEngineId} />
+  </label>
+  <label class="field field--fullwidth">
     Chart Default Start Year
     <input type="text" bind:value={settings.chartStartYear} />
   </label>
