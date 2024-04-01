@@ -1,5 +1,4 @@
 import { Author, Book } from "@data/book";
-import { GOOGLE_API_KEY } from "../.env";
 
 const ENDPOINT = "https://www.googleapis.com/books/v1";
 
@@ -99,14 +98,14 @@ export type VolumeSearch = {
   items: Volume[];
 };
 
-async function searchVolume(q: string): Promise<VolumeSearch> {
-  return fetch(`${ENDPOINT}/volumes?q=${q}&key=${GOOGLE_API_KEY}`)
+async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch> {
+  return fetch(`${ENDPOINT}/volumes?q=${q}&key=${apiKey}`)
     .then((res) => res.json())
     .then((res) => res as VolumeSearch);
 }
 
-async function getVolume(v: string, lite: boolean = false): Promise<Volume> {
-  return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}&key=${GOOGLE_API_KEY}`)
+async function getVolume(v: string, apiKey: string, lite: boolean = false): Promise<Volume> {
+  return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}&key=${apiKey}`)
     .then((res) => res.json())
     .then((res) => res as Volume);
 }
@@ -169,8 +168,8 @@ function conformBook(v: Volume): Book {
   return book;
 }
 
-export async function searchBook(q: string): Promise<Book[]> {
-  return searchVolume(q).then((volumeSearch) => {
+export async function searchBook(q: string, apiKey: string): Promise<Book[]> {
+  return searchVolume(q, apiKey).then((volumeSearch) => {
     let books: Book[] = [];
     volumeSearch.items?.forEach((v) => {
       books.push(conformBook(v));
@@ -179,6 +178,6 @@ export async function searchBook(q: string): Promise<Book[]> {
   });
 }
 
-export async function getBook(gid: string): Promise<Book> {
-  return getVolume(gid).then((v) => conformBook(v));
+export async function getBook(gid: string, apiKey: string): Promise<Book> {
+  return getVolume(gid, apiKey).then((v) => conformBook(v));
 }

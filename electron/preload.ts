@@ -24,6 +24,7 @@ export const api = {
   dirSelected: (callback: Function) => ipcRenderer.on("dirSelected", (_event, path: string) => callback(path)),
 
   loadSettings: () => ipcRenderer.send("loadSettings"),
+  saveSettings: (newSettings: Record<string, any>) => ipcRenderer.send("saveSettings", newSettings),
   settingsLoaded: (callback: Function) =>
     ipcRenderer.on("settingsLoaded", (_event, settings: object) => callback(settings)),
 

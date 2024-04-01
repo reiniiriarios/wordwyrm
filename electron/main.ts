@@ -54,13 +54,15 @@ app.on("ready", () => {
   // --------- Bridge ---------
 
   ipcMain.on("getBookData", (event, id?: string) => {
-    if (id) {
-      getBook(id).then((res) => event.reply("receiveBookData", res));
+    if (id && settings.googleApiKey) {
+      getBook(id, settings.googleApiKey).then((res) => event.reply("receiveBookData", res));
     }
   });
 
   ipcMain.on("searchBook", (event, q: string) => {
-    searchBook(q).then((res) => event.reply("searchBookResults", res));
+    if (settings.googleApiKey) {
+      searchBook(q, settings.googleApiKey).then((res) => event.reply("searchBookResults", res));
+    }
   });
 
   ipcMain.on("readAllBooks", (event) => {
@@ -96,15 +98,19 @@ app.on("ready", () => {
       })
       .then((result) => {
         if (result.filePaths[0].length) {
-          settings.booksDir = result.filePaths[0];
-          saveSettings(settings);
-          event.reply("dirSelected", settings.booksDir);
+          event.reply("dirSelected", result.filePaths[0]);
         }
       });
   });
 
   ipcMain.on("loadSettings", (event) => {
     settings = loadSettings();
+    event.reply("settingsLoaded", settings);
+  });
+
+  ipcMain.on("saveSettings", (event, newSettings: Record<string, any>) => {
+    settings = newSettings;
+    saveSettings(newSettings);
     event.reply("settingsLoaded", settings);
   });
 
