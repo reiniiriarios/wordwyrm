@@ -1,4 +1,4 @@
-@import 'variables';
+@import "variables";
 
 * {
   box-sizing: border-box;
@@ -29,4 +29,9 @@ h3 {
   padding: 0;
   margin: 0;
   font-size: 1.25rem;
+}
+
+*:focus {
+  z-index: 1000;
+  outline: 1px solid $accentColor;
 }
