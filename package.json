@@ -93,9 +93,9 @@
     "typescript-transform-paths": "^3.4.7"
   },
   "build": {
-    "productName": "BookTracker",
+    "productName": "Book Tracker",
     "appId": "me.reinii.book-tracker",
-    "artifactName": "${productName}-v${version}-${arch}.${ext}",
+    "artifactName": "BookTracker-v${version}-${arch}.${ext}",
     "directories": {
       "output": "build",
       "buildResources": "assets/"
@@ -111,7 +111,7 @@
       "category": "public.app-category.network"
     },
     "nsis": {
-      "artifactName": "${productName}-v${version}-${arch}-installer.${ext}",
+      "artifactName": "BookTracker-v${version}-${arch}-installer.${ext}",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true
@@ -135,14 +135,15 @@
       "category": "Office",
       "target": [
         "deb",
-        "pacman",
-        "tar.gz",
+        "rpm",
         "AppImage"
       ]
     }
   },
   "keywords": [
-    "books"
-  ],
-  "contributors": []
+    "books",
+    "reading",
+    "reading-list",
+    "novels"
+  ]
 }
