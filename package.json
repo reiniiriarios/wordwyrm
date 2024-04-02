@@ -1,7 +1,7 @@
 {
   "name": "book-tracker",
   "displayName": "Book Tracker",
-  "description": "App for tracking books",
+  "description": "A cross-platform desktop app for tracking what books you've read and when.",
   "version": "1.0.1",
   "main": "dist/electron/electron/main.js",
   "publishConfig": {
@@ -97,7 +97,7 @@
   },
   "build": {
     "productName": "Book Tracker",
-    "appId": "me.reinii.book-tracker",
+    "appId": "com.electron.book-tracker",
     "artifactName": "BookTracker-v${version}-${arch}.${ext}",
     "icon": "./icons/512x512.png",
     "directories": {
