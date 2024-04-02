@@ -44,7 +44,7 @@ try {
 }
 
 logExec("git add package.json package-lock.json", () => {
-  logExec(`git commit -m "chore: update version to ${newVersion}"`, () => {
+  logExec(`git commit -m "chore(release): update version to ${newVersion}"`, () => {
     logExec(`git tag v${newVersion}`, () => {
       const rl = readline.createInterface({
         input: process.stdin,
