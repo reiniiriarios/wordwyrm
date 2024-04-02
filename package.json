@@ -103,6 +103,11 @@
     "files": [
       "dist"
     ],
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/sharp/**/*",
+      "node_modules/@img/**/*"
+    ],
     "win": {
       "icon": "assets/icon.png"
     },
