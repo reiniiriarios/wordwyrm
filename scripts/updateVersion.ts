@@ -50,7 +50,7 @@ logExec("git add package.json package-lock.json", () => {
         input: process.stdin,
         output: process.stdout,
       });
-      rl.question(`\x1b[36m→ \x1b[35mPush? (Y/n)\x1b[0m `, (ans) => {
+      rl.question(`\x1b[36m→ \x1b[33mPush? (Y/n)\x1b[0m `, (ans) => {
         rl.close();
         if (!ans || ["y", "yes"].includes(ans.toLowerCase())) {
           logExec(`git push`, () => {
