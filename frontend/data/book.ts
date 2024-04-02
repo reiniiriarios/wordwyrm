@@ -7,13 +7,14 @@ export type Author = {
 export type Book = {
   title: string;
   authors: Author[];
-  authorDir?: string;
+  authorDir: string;
   filename: string;
   tags: string[];
   series?: string;
   datePublished?: string;
   dateRead?: string;
   hasImage?: boolean;
+  imageUpdated?: number;
   image?: string;
   thumbnail?: string;
   googleBooksId?: string;

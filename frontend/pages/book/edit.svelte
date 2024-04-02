@@ -23,7 +23,7 @@
 
   window.electronAPI.receiveBook((b: Book) => {
     book = b;
-    oAuthorDir = b.authorDir ?? "";
+    oAuthorDir = b.authorDir;
     oFilename = b.filename;
     authors = book.authors.map((a) => a.name).join(", ");
     tags = book.tags?.join(", ") ?? "";

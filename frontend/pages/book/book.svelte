@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import ImageSearch from "./imagesearch.svelte";
   import PencilSimple from "phosphor-svelte/lib/PencilSimple";
+  import Bookimage from "@components/bookimage.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
@@ -12,13 +13,14 @@
   });
 
   window.electronAPI.receiveBook((b: Book) => (book = b));
+  window.electronAPI.bookSaved((b: Book) => (book = b));
 </script>
 
 <div class="pageNav">
   <h2 class="pageNav__header">Book</h2>
   <div class="pageNav__actions">
     {#if book}
-      <ImageSearch {book} />
+      <ImageSearch bind:book />
     {/if}
     <a class="btn" href={`#/book/${params.author}/${params.book}/edit`}>Edit <PencilSimple /></a>
   </div>
@@ -27,10 +29,7 @@
   <div class="bookPage">
     {#if book.hasImage}
       <div class="bookPage__image">
-        <img
-          src={`bookimage://${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg`}
-          alt=""
-        />
+        <Bookimage {book} />
       </div>
     {/if}
     <div class="bookPage__info">
@@ -80,11 +79,6 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-
-      img {
-        max-height: 100%;
-        max-width: 100%;
-      }
     }
 
     &__info {

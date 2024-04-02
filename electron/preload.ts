@@ -17,6 +17,7 @@ export const api = {
   receiveBook: (callback: Function) => ipcRenderer.on("receiveBook", (_event, res: Book) => callback(res)),
 
   saveBook: (book: Book) => ipcRenderer.send("saveBook", book),
+  bookSaved: (callback: Function) => ipcRenderer.on("bookSaved", (_event, book: Book) => callback(book)),
   editBook: (book: Book, authorDir: string, filename: string) =>
     ipcRenderer.send("editBook", book, authorDir, filename),
 
@@ -32,8 +33,7 @@ export const api = {
   imageSearchResults: (callback: Function) =>
     ipcRenderer.on("imageSearchResults", (_event, results: SearchResult[] | string) => callback(results)),
 
-  addBookImage: (authorDir: string, filename: string, url: string) =>
-    ipcRenderer.send("addBookImage", authorDir, filename, url),
+  addBookImage: (book: Book, url: string) => ipcRenderer.send("addBookImage", book, url),
   bookImageAdded: (callback: Function) => ipcRenderer.on("bookImageAdded", (_event) => callback()),
 };
 

@@ -37,11 +37,13 @@
   }
 
   function addImage() {
-    window.electronAPI.addBookImage(book.authorDir ?? "", book.filename, selectedImageUrl);
+    window.electronAPI.addBookImage(book, selectedImageUrl);
   }
 
   window.electronAPI.bookImageAdded(() => {
     isOpen = false;
+    book.imageUpdated = new Date().getTime();
+    book.hasImage = true;
     push(`#/book/${book.authorDir}/${book.filename}`);
   });
 </script>
@@ -93,7 +95,6 @@
     margin: 0;
 
     .image {
-      height: 80%;
       display: flex;
       justify-content: center;
       align-items: center;

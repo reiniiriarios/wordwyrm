@@ -15,19 +15,32 @@ function authorsToDir(authors: Author[]): string {
   return authors.map((a) => a.name.replace(/[^A-Za-z0-9\-',\. ]/g, "_")).join(", ");
 }
 
-export async function addBookImage(dir: string, authorDir: string, filename: string, url: string) {
-  fetch(url).then((response) => {
-    response.buffer().then((buf) => {
-      sharp(buf)
-        .resize(1000, 1000, { fit: "inside" })
-        .toFile(path.join(dir, authorDir, `${filename}.jpg`), (err, _info) => {
-          if (err) console.error(err);
-        });
-    });
-  });
+async function saveBookImage(dir: string, book: Book, url: string) {
+  let filepath = path.join(dir, book.authorDir, `${book.filename}.jpg`);
+  // If a remote file, fetch and use buffer in sharp instead.
+  if (url.startsWith("http") || url.startsWith("file:")) {
+    let res = await fetch(url);
+    let buf = await res.buffer();
+    await sharpImage(buf, filepath);
+  } else {
+    await sharpImage(url, filepath);
+  }
 }
 
-export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFilename?: string) {
+async function sharpImage(img: Buffer | string, filepath: string) {
+  await sharp(img).resize(1000, 1000, { fit: "inside" }).toFile(filepath);
+}
+
+export async function addBookImage(dir: string, book: Book, url: string) {
+  await saveBookImage(dir, book, url);
+  delete book.image;
+  delete book.thumbnail;
+  book.hasImage = true;
+  book.imageUpdated = new Date().getTime();
+  saveYaml(path.join(dir, book.authorDir, `${book.filename}.yaml`), book);
+}
+
+export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFilename?: string): Promise<Book> {
   initBookDirs(dir);
 
   // Author directory.
@@ -45,18 +58,9 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
   // Use the image variable to save the image, then delete the variable.
   let newImage = false;
   if (book.image) {
-    // Save from interwebs or file protocol.
-    if (book.image.startsWith("http") || book.image.startsWith("file:")) {
-      addBookImage(dir, book.authorDir, book.filename, book.image);
-    } else {
-      // Save from local file.
-      sharp(book.image)
-        .resize(1000, 1000, { fit: "inside" })
-        .toFile(path.join(authorPath, `${book.filename}.jpg`), (err, info) => {
-          if (err) console.error(err);
-        });
-    }
+    await saveBookImage(dir, book, book.image);
     newImage = true;
+    book.imageUpdated = new Date().getTime();
     delete book.image;
   }
   if (book.thumbnail) {
@@ -76,6 +80,8 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
       fs.renameSync(path.join(authorPath, oFilename + ".jpg"), path.join(authorPath, book.filename + ".jpg"));
     }
   }
+
+  return book;
 }
 
 export async function readAllBooks(dir: string): Promise<Book[]> {

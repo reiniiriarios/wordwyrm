@@ -122,8 +122,8 @@ app.on("ready", () => {
     }
   });
 
-  ipcMain.on("addBookImage", (event, authorDir: string, filename: string, url: string) => {
-    addBookImage(settings.booksDir, authorDir, filename, url).then(() => event.reply("bookImageAdded"));
+  ipcMain.on("addBookImage", (event, book: Book, url: string) => {
+    addBookImage(settings.booksDir, book, url).then(() => event.reply("bookImageAdded"));
   });
 
   // ------- End Bridge -------

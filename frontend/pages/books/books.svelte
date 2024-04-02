@@ -8,6 +8,7 @@
   import SortDescending from "phosphor-svelte/lib/SortDescending";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
   import FrameCorners from "phosphor-svelte/lib/FrameCorners";
+  import Bookimage from "@components/bookimage.svelte";
 
   let allBooks: Book[] = [];
   let sortedBooks: Book[] = [];
@@ -136,15 +137,10 @@
     <div class="book" class:zoomSmall={zoomLevel === "s"} class:zoomLarge={zoomLevel === "l"}>
       {#if book.hasImage}
         <a href={`#/book/${book.authorDir}/${book.filename}`} class="book__inner book__inner--image">
-          <div class="bookComposite">
-            <img
-              src={`bookimage://${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg`}
-              alt=""
-            />
-            {#if !book.dateRead}
-              <span class="unread">Unread</span>
-            {/if}
-          </div>
+          <Bookimage {book} overlay={true} />
+          {#if !book.dateRead}
+            <span class="unread">Unread</span>
+          {/if}
         </a>
       {:else}
         <a href={`#/book/${book.authorDir}/${book.filename}`} class="book__inner book__inner--noimage">
@@ -180,55 +176,47 @@
   }
 
   .book {
-    --book-width: 20rem;
-    --book-height: 30rem;
+    --book-width: 19rem;
+    --book-height: 29rem;
 
     &.zoomSmall {
-      --book-width: 13rem;
-      --book-height: 20rem;
+      --book-width: 12rem;
+      --book-height: 19rem;
     }
 
     &.zoomLarge {
-      --book-width: 25rem;
-      --book-height: 37rem;
+      --book-width: 24rem;
+      --book-height: 36rem;
     }
 
-    width: var(--book-width);
-    height: var(--book-height);
+    width: calc(var(--book-width) + 1rem);
+    height: calc(var(--book-height) + 1rem);
     display: flex;
     justify-content: center;
     align-items: center;
 
     &__inner {
-      max-height: var(--book-height);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: relative;
       cursor: pointer;
       text-decoration: none;
       color: $fgColor;
 
       &--image {
-        max-width: calc(var(--book-width) - 1rem);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: var(--book-width);
+        height: var(--book-height);
+        transition: 0.2s transform;
 
-        .bookComposite {
-          max-height: calc(var(--book-height) - 1rem);
-          transition: 0.2s transform;
-        }
-
-        img {
-          max-width: calc(var(--book-width) - 1rem);
-          max-height: calc(var(--book-height) - 1rem);
-        }
-
-        &:hover .bookComposite {
+        &:hover {
           transform: scale(1.02);
         }
       }
 
       &--noimage {
-        width: calc(var(--book-width) - 2rem);
-        height: calc(var(--book-height) - 2rem);
+        width: calc(var(--book-width) - 1rem);
+        height: calc(var(--book-height) - 1rem);
         background-color: $bgColorLightest;
         text-align: center;
         display: flex;
@@ -240,6 +228,17 @@
         &:hover {
           transform: scale(1.02);
         }
+      }
+
+      .unread {
+        position: absolute;
+        bottom: -0.45rem;
+        right: -0.45rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 1rem;
+        background: linear-gradient(0deg, rgb(5, 140, 8) 0%, rgb(10, 160, 15) 100%);
+        box-shadow: rgb(0, 0, 0, 0.3) 0.05rem 0.05rem 0.5rem 0.2rem;
+        z-index: 20;
       }
     }
   }
