@@ -22,13 +22,14 @@
 
 <style lang="scss">
   img {
-    max-height: 100%;
+    max-height: var(--book-height, 100%);
     max-width: 100%;
   }
 
   .bookComposite {
     position: relative;
     display: inline-block;
+    max-height: var(--book-height, 100%);
 
     &.fixedHeight {
       height: 100%;
