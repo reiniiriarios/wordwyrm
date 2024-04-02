@@ -137,7 +137,7 @@
     <div class="book" class:zoomSmall={zoomLevel === "s"} class:zoomLarge={zoomLevel === "l"}>
       {#if book.hasImage}
         <a href={`#/book/${book.authorDir}/${book.filename}`} class="book__inner book__inner--image">
-          <Bookimage {book} overlay={true} />
+          <Bookimage {book} overlay />
           {#if !book.dateRead}
             <span class="unread">Unread</span>
           {/if}
@@ -177,7 +177,7 @@
 
   .book {
     --book-width: 19rem;
-    --book-height: 29rem;
+    --book-height: 30rem;
 
     &.zoomSmall {
       --book-width: 12rem;
