@@ -21,7 +21,7 @@
     "url": "git+https://github.com/reiniiriarios/book-tracker.git"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "dev": "cross-env BROWSER=true DEBUG=true rollup -c -w",
