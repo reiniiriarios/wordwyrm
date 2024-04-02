@@ -39,6 +39,7 @@
     "build:deb": "electron-builder --dir --linux deb",
     "build:rpm": "electron-builder --dir --linux rpm",
     "build:lnx": "electron-builder --dir --linux appImage deb rpm",
+    "newver": "ts-node scripts/updateVersion.ts",
     "prepare": "ts-patch install -s"
   },
   "dependencies": {
