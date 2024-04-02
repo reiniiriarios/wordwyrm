@@ -2,7 +2,7 @@
   "name": "book-tracker",
   "displayName": "Book Tracker",
   "description": "App for tracking books",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/electron/electron/main.js",
   "publishConfig": {
     "access": "public"
