@@ -32,6 +32,7 @@
     "start": "sirv dist",
     "start:electron": "electron ./dist/electron/electron/main.js",
     "clean": "ts-node scripts/rmdist.ts",
+    "build:icons": "npx png2icons assets/icons/512x512.png assets/icons/icon -allwe",
     "build:mac": "electron-builder --dir --mac dmg",
     "build:win": "electron-builder --dir --win portable",
     "build:nsis": "electron-builder --dir --win nsis",
@@ -69,6 +70,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-svelte": "",
     "pm2": "^5.3.1",
+    "png2icons": "^2.0.1",
     "postcss": "^8.4.38",
     "postcss-load-config": "^5.0.3",
     "prettier": "^3.2.5",
@@ -96,6 +98,7 @@
     "productName": "Book Tracker",
     "appId": "me.reinii.book-tracker",
     "artifactName": "BookTracker-v${version}-${arch}.${ext}",
+    "icon": "./icons/512x512.png",
     "directories": {
       "output": "build",
       "buildResources": "assets/"
@@ -109,11 +112,11 @@
       "node_modules/@img/**/*"
     ],
     "win": {
-      "icon": "assets/icon.png"
+      "icon": "./assets/icons/icon.ico"
     },
     "mac": {
-      "icon": "assets/icon.png",
-      "category": "public.app-category.network"
+      "icon": "./assets/icons/icon.icns",
+      "category": "public.app-category.lifestyle"
     },
     "nsis": {
       "artifactName": "BookTracker-v${version}-${arch}-installer.${ext}",
@@ -136,13 +139,16 @@
       ]
     },
     "linux": {
-      "icon": "assets/icon.png",
+      "icon": "./assets/icons/",
       "category": "Office",
       "target": [
         "deb",
         "rpm",
         "AppImage"
-      ]
+      ],
+      "desktop": {
+        "StartupWMClass": "${productName}"
+      }
     }
   },
   "keywords": [

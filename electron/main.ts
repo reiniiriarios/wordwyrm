@@ -23,6 +23,7 @@ function createWindow(): BrowserWindow {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
     },
+    icon: "assets/icons/512x512.png",
   });
   mainWindow.maximize();
   mainWindow.removeMenu();
