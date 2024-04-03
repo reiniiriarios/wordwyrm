@@ -24,25 +24,21 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "start": "sirv dist",
-    "start:electron": "electron ./dist/electron/electron/main.js",
     "dev": "cross-env BROWSER=true DEBUG=true rollup -c -w",
     "dev:electron": "tsc -p ./electron/tsconfig.json && cross-env DEBUG=true electron ./dist/electron/electron/main.js",
-    "build:client": "ts-node scripts/rmdist.ts && cross-env PRODUCTION=true rollup -c",
-    "build:desktop": "tsc -p ./electron/tsconfig.json",
-    "release": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir",
-    "build-mac": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --mac dmg",
-    "build-win": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --win portable",
-    "build-win-32bit": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --win portable --ia32",
-    "build-deb": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --linux appImage deb",
-    "build-rpm": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --linux appImage rpm",
-    "build-lnx": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir --linux appImage deb rpm",
-    "lint": "npm run lint-prettify && eslint . --cache --ext .ts,.js",
-    "lint-fix": "npm run lint-prettify && eslint . --cache --ext .ts,.js --fix",
-    "lint-prettify": "prettier --write --ignore-unknown '**/*.{ts,scss,md,json}'",
-    "pkg-clean": "rm -rf node_modules package-lock.json && npm install",
-    "pkg-update": "npm update",
-    "pkg-upgrade": "npx --yes npm-check-updates -u && npm install",
+    "build:client": "cross-env PRODUCTION=true rollup -c",
+    "build:electron": "tsc -p ./electron/tsconfig.json",
+    "build:prod": "ts-node scripts/rmdist.ts && npm run build:client && npm run build:electron",
+    "start": "sirv dist",
+    "start:electron": "electron ./dist/electron/electron/main.js",
+    "clean": "ts-node scripts/rmdist.ts",
+    "build:mac": "electron-builder --dir --mac dmg",
+    "build:win": "electron-builder --dir --win portable",
+    "build:nsis": "electron-builder --dir --win nsis",
+    "build:deb": "electron-builder --dir --linux deb",
+    "build:rpm": "electron-builder --dir --linux rpm",
+    "build:snap": "electron-builder --dir --linux snap",
+    "build:lnx": "electron-builder --dir --linux appImage deb snap rpm",
     "prepare": "ts-patch install -s"
   },
   "dependencies": {
@@ -98,9 +94,9 @@
     "typescript-transform-paths": "^3.4.7"
   },
   "build": {
-    "productName": "book-tracker",
+    "productName": "BookTracker",
     "appId": "me.reinii.book-tracker",
-    "artifactName": "${productName}-${version}-${arch}.${ext}",
+    "artifactName": "${productName}-v${version}-${arch}.${ext}",
     "directories": {
       "output": "build",
       "buildResources": "assets/"
