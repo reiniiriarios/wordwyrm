@@ -59,6 +59,10 @@
     window.electronAPI.editBook(book, oAuthorDir, oFilename);
     push(`#/book/${book.authorDir}/${book.filename}`);
   }
+
+  function validateDatePublished() {
+    book.datePublished = book.datePublished?.replace(/[^\-0-9]/, "") ?? "";
+  }
 </script>
 
 <div class="pageNav">
@@ -95,7 +99,16 @@
         </label>
         <label class="field">
           Date Published
-          <input type="date" bind:value={book.datePublished} />
+          {#if book.datePublished?.match(/^\d+\-\d+\-\d+$/)}
+            <input type="date" bind:value={book.datePublished} />
+          {:else}
+            <input
+              type="text"
+              on:keypress={validateDatePublished}
+              on:change={validateDatePublished}
+              bind:value={book.datePublished}
+            />
+          {/if}
         </label>
         <label class="field">
           Date Read

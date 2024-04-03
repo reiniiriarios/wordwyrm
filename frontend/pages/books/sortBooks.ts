@@ -32,8 +32,12 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
     name: "Publish Date",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
-        let xD = new Date(x.datePublished ?? "").getTime();
-        let yD = new Date(y.datePublished ?? "").getTime();
+        let xD = (
+          x.datePublished?.match(/^\-?\d+$/) ? new Date(+x.datePublished, 1, 1) : new Date(x.datePublished ?? "")
+        ).getTime();
+        let yD = (
+          y.datePublished?.match(/^\-?\d+$/) ? new Date(+y.datePublished, 1, 1) : new Date(y.datePublished ?? "")
+        ).getTime();
         if (reverse) {
           if (xD > yD) return -1;
           if (xD < yD) return 1;

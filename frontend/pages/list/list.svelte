@@ -132,7 +132,13 @@
               {/each}
             </div>
           </td>
-          <td>{book.datePublished ?? ""}</td>
+          <td>
+            {#if book.datePublished?.match(/^\-\d+$/)}
+              {Math.abs(+book.datePublished)} BCE
+            {:else}
+              {book.datePublished ?? ""}
+            {/if}
+          </td>
           <td>{book.dateRead ?? ""}</td>
         </tr>
       {/each}

@@ -36,14 +36,20 @@
       <h2>{book.title}</h2>
       <h3><span>by</span> {book.authors.map((a) => a.name).join(", ")}</h3>
       <h4>
-        {book.datePublished
-          ? new Date(book.datePublished).toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-              timeZone: "UTC",
-            })
-          : "No publish date listed"}
+        {#if !book.datePublished}
+          No publish date
+        {:else if book.datePublished.match(/^\d+\-\d+\-\d+$/)}
+          {new Date(book.datePublished).toLocaleDateString("en-US", {
+            month: "long",
+            day: "numeric",
+            year: "numeric",
+            timeZone: "UTC",
+          })}
+        {:else if book.datePublished.match(/^\-\d+$/)}
+          {Math.abs(+book.datePublished)} BCE
+        {:else}
+          {book.datePublished}
+        {/if}
       </h4>
       {#if book.series}
         <div class="series">Series: {book.series}</div>

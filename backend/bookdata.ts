@@ -67,6 +67,9 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
     delete book.thumbnail;
   }
 
+  book.datePublished = book.datePublished?.trim() ?? "";
+  book.dateRead = book.dateRead?.trim() ?? "";
+
   saveYaml(path.join(authorPath, `${book.filename}.yaml`), book);
 
   // After saving everything else, delete old data if present.
