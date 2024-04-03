@@ -37,8 +37,7 @@
     "build:nsis": "electron-builder --dir --win nsis",
     "build:deb": "electron-builder --dir --linux deb",
     "build:rpm": "electron-builder --dir --linux rpm",
-    "build:snap": "electron-builder --dir --linux snap",
-    "build:lnx": "electron-builder --dir --linux appImage deb snap rpm",
+    "build:lnx": "electron-builder --dir --linux appImage deb rpm",
     "prepare": "ts-patch install -s"
   },
   "dependencies": {

@@ -64,9 +64,6 @@ jobs:
           retention-days: 2
 
       # ubuntu
-      - name: Install linux dependencies
-        run: sudo snap install snapcraft --classic
-
       - name: Build for linux
         if: matrix.platform == 'ubuntu-latest'
         run: |
@@ -105,7 +102,6 @@ jobs:
             ${{steps.artifact.outputs.download-path}}/release-macos/BookTracker-${{ github.ref_name }}-x64.dmg
             ${{steps.artifact.outputs.download-path}}/release-windows/BookTracker-${{ github.ref_name }}-x64.exe
             ${{steps.artifact.outputs.download-path}}/release-windows/BookTracker-${{ github.ref_name }}-x64-installer.exe
-            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-x64.deb
-            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-x64.rpm
-            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-amd64.snap
+            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-amd64.deb
+            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-amd64.rpm
             ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-x86_64.AppImage
