@@ -1,6 +1,6 @@
 import fetch from "electron-fetch";
 
-// https://programmablesearchengine.google.com/controlpanel/overview
+// https://programmablesearchengine.google.com/
 
 const endpoint = "https://customsearch.googleapis.com/customsearch/v1";
 
