@@ -165,6 +165,14 @@ function conformBook(v: Volume): Book {
     });
   }
 
+  v.volumeInfo?.industryIdentifiers?.forEach((id) => {
+    if (id.type === "ISBN_13") {
+      book.isbn = id.identifier;
+    } else if (!book.isbn && id.type === "ISBN_10") {
+      book.isbn = id.identifier;
+    }
+  });
+
   return book;
 }
 
