@@ -26,8 +26,8 @@
   "scripts": {
     "start": "sirv dist",
     "start:electron": "electron ./dist/electron/electron/main.js",
-    "dev": "BROWSER=true DEBUG=true rollup -c -w",
-    "dev:electron": "tsc -p ./electron/tsconfig.json && DEBUG=true electron ./dist/electron/electron/main.js",
+    "dev": "cross-env BROWSER=true DEBUG=true rollup -c -w",
+    "dev:electron": "tsc -p ./electron/tsconfig.json && cross-env DEBUG=true electron ./dist/electron/electron/main.js",
     "build:client": "ts-node scripts/rmdist.ts && cross-env PRODUCTION=true rollup -c",
     "build:desktop": "tsc -p ./electron/tsconfig.json",
     "release": " ts-node scripts/rmdist.ts && npm run build:client && npm run build:desktop && electron-builder --dir",
