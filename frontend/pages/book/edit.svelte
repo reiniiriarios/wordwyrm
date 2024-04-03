@@ -66,6 +66,27 @@
   function validateDatePublished() {
     book.datePublished = book.datePublished?.replace(/[^\-0-9]/, "") ?? "";
   }
+
+  // @todo: Put these somewhere!
+  const commonTags = [
+    "Fantasy",
+    "Dark Fantasy",
+    "Science Fiction",
+    "Romance",
+    "Space Opera",
+    "Non-Fiction",
+    "Mythology",
+    "Science",
+  ];
+
+  function addCommonTag(tag: string) {
+    if (tag) {
+      if (!book.tags) book.tags = [];
+      book.tags.push(tag);
+      if (tags.length) tags += ", ";
+      tags += tag;
+    }
+  }
 </script>
 
 <div class="pageNav">
@@ -127,13 +148,21 @@
           <input type="text" bind:value={book.series} />
         </label>
         <label class="field field--fullwidth">
-          Tag(s)
-          <input type="text" bind:value={tags} on:change={setTags} />
-        </label>
-        <label class="field field--fullwidth">
           ISBN
           <input type="text" bind:value={book.isbn} />
         </label>
+        <label class="field field--fullwidth">
+          Tag(s)
+          <input type="text" bind:value={tags} on:change={setTags} />
+        </label>
+        <div class="field field--fullwidth commonTags">
+          <div class="commonTags__title">Common Tags (click to add)</div>
+          <div class="commonTags__tags">
+            {#each commonTags as tag}
+              <button class="tag" on:click={() => addCommonTag(tag)}>{tag}</button>
+            {/each}
+          </div>
+        </div>
       </fieldset>
       <div class="bookPage__actions">
         <a class="btn" href={`#/book/${params.author}/${params.book}`}>Cancel</a>
@@ -177,5 +206,19 @@
   .searchButton {
     padding: 1rem;
     text-align: center;
+  }
+
+  .commonTags {
+    &__title {
+      font-size: 0.9rem;
+      color: $fgColorMuted;
+    }
+
+    &__tags {
+      margin-top: 0.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
   }
 </style>

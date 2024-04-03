@@ -70,6 +70,8 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
   book.datePublished = book.datePublished?.trim() ?? "";
   book.dateRead = book.dateRead?.trim() ?? "";
 
+  book.tags = book.tags.filter((t) => t.trim().length);
+
   saveYaml(path.join(authorPath, `${book.filename}.yaml`), book);
 
   // After saving everything else, delete old data if present.
