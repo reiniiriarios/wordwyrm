@@ -3,7 +3,7 @@
 
   export let book: Book;
   export let overlay: boolean = false;
-  export let fixedHeight: boolean = false;
+  export let pageHeight: boolean = false;
   let src: string;
   $: src = `bookimage://${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg?t=${book.imageUpdated ?? 0}`;
 </script>
@@ -11,7 +11,7 @@
 {#if book && book.hasImage}
   {#key book.imageUpdated}
     {#if overlay}
-      <div class="bookComposite" class:fixedHeight>
+      <div class="bookComposite" class:pageHeight>
         <img {src} alt="" />
       </div>
     {:else}
@@ -31,14 +31,18 @@
     display: inline-block;
     max-height: var(--book-height, 100%);
 
-    &.fixedHeight {
-      height: 100%;
-    }
-
     img {
       display: block;
       box-shadow: rgb(0, 0, 0, 0.3) 0.14rem 0.14rem 0.6rem 0.2rem;
       border-radius: 2px;
+    }
+
+    &.pageHeight {
+      max-height: 85vh;
+
+      img {
+        max-height: 85vh;
+      }
     }
 
     &::after {

@@ -29,7 +29,7 @@
   <div class="bookPage">
     {#if book.hasImage}
       <div class="bookPage__image">
-        <Bookimage {book} overlay fixedHeight />
+        <Bookimage {book} overlay pageHeight />
       </div>
     {/if}
     <div class="bookPage__info">

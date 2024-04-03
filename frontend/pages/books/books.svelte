@@ -197,11 +197,11 @@
 
   .book {
     --book-width: 19rem;
-    --book-height: 30rem;
+    --book-height: 29rem;
 
     &.zoomSmall {
       --book-width: 12rem;
-      --book-height: 19rem;
+      --book-height: 18rem;
     }
 
     &.zoomLarge {
