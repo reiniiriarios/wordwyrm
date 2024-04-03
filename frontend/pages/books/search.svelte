@@ -81,7 +81,7 @@
         <div class="book" class:selected={selectedBook.googleBooksId === book.googleBooksId}>
           {#if book.hasImage}
             <button class="book__inner book__inner--image" on:click={() => selectBook(book)}>
-              <img src={book.thumbnail} alt="" />
+              <img src={book.thumbnail?.replace(/^http:/, "https:")} alt="" />
             </button>
           {:else}
             <button class="book__inner book__inner--noimage" on:click={() => selectBook(book)}>
