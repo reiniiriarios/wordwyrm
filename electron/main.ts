@@ -68,10 +68,19 @@ function createWindow(): BrowserWindow {
 app.on("ready", () => {
   let window = createWindow();
 
-  protocol.handle("localfile", (request) => net.fetch("file://" + request.url.slice("localfile://".length)));
-  protocol.handle("bookimage", (request) =>
-    net.fetch("file://" + path.join(settings.booksDir, request.url.slice("bookimage://".length))),
-  );
+  protocol.handle("localfile", (request) => {
+    let url = request.url.slice("localfile://".length).replace(/\\/g, "/").replace(/ /g, "%20");
+    if (url.charAt(0) !== "/") url = "/" + url;
+    return net.fetch("file://" + url);
+  });
+  protocol.handle("bookimage", (request) => {
+    let url = path
+      .join(settings.booksDir, request.url.slice("bookimage://".length))
+      .replace(/\\/g, "/")
+      .replace(/ /g, "%20");
+    if (url.charAt(0) !== "/") url = "/" + url;
+    return net.fetch("file://" + url);
+  });
 
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) {

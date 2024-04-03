@@ -25,7 +25,9 @@
     authors = book.authors.map((a) => a.name).join(", ");
     tags = book.tags?.join(", ") ?? "";
     if (book.hasImage && window.userSettings.booksDir) {
-      imagePath = window.userSettings.booksDir + "/" + book.authorDir + "/" + book.filename + ".jpg";
+      let booksDir = window.userSettings.booksDir.replace(/\\/g, "/").replace(/ /g, "%20");
+      if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
+      imagePath = `${booksDir}/${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg`;
     }
   });
 
