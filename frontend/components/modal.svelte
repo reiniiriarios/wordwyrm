@@ -9,14 +9,28 @@
   export let heading: string;
 
   function confirm() {
-    dispatch("confirm");
+    if (open) {
+      window.removeEventListener("keydown", modalKey);
+      dispatch("confirm");
+    }
+  }
+
+  function close() {
+    if (open) {
+      window.removeEventListener("keydown", modalKey);
+      open = false;
+    }
   }
 
   function modalKey(e: KeyboardEvent) {
-    if (canCancel && ["Escape"].includes(e.key)) {
-      open = false;
-    } else if (["\n", "Enter"].includes(e.key) && canConfirm) {
-      confirm();
+    if (open) {
+      if (canCancel && ["Escape"].includes(e.key)) {
+        console.log("cancel modal");
+        close();
+      } else if (["\n", "Enter"].includes(e.key) && canConfirm) {
+        console.log("confirm modal");
+        confirm();
+      }
     }
   }
 
@@ -28,13 +42,13 @@
 
 <!-- keyboard interaction handled above -->
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-<div class="modal" class:open on:click|self={() => (open = false)}>
+<div class="modal" class:open on:click|self={close}>
   <div class="modal__window" role="dialog">
     <div class="modal__header">{heading}</div>
     <div class="modal__body"><slot /></div>
     <div class="modal__actions">
       {#if canCancel}
-        <button type="button" class="btn modal__button" on:click={() => (open = false)}>Cancel</button>
+        <button type="button" class="btn modal__button" on:click={close}>Cancel</button>
       {/if}
       <button type="button" class="btn modal__button" disabled={!canConfirm} on:click={confirm}>
         {confirmWord}
