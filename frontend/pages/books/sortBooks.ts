@@ -126,23 +126,14 @@ export const catFilters: Record<string, { name: string; filter: filterFn }> = {
         return tags.includes("non-fiction") || tags.includes("nonfiction");
       }),
   },
-  scienceFiction: {
-    name: "Science Fiction",
-    filter: (books: Book[]): Book[] =>
-      books.filter((book) => {
-        let tags = book.tags.map((t) => t.toLowerCase());
-        return tags.includes("science fiction") || tags.includes("scifi");
-      }),
-  },
-  fantasy: {
-    name: "Fantasy",
-    filter: (books: Book[]): Book[] =>
-      books.filter((book) => {
-        let tags = book.tags.map((t) => t.toLowerCase());
-        return tags.includes("fantasy");
-      }),
-  },
 };
+
+export function filterByTag(books: Book[], tag: string): Book[] {
+  return books.filter((book) => {
+    let tags = book.tags.map((t) => t.toLowerCase());
+    return tags.includes(tag.toLowerCase());
+  });
+}
 
 function yearsAgo(books: Book[], years: number, reverse: boolean = false): Book[] {
   let yearsAgo = new Date();

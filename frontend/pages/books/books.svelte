@@ -3,12 +3,13 @@
   import AddBook from "./add.svelte";
   import SearchBook from "./search.svelte";
   import { Book } from "@data/book";
-  import { catFilters, sortFilters, recentFilters, searchBooks } from "./sortBooks";
+  import { catFilters, sortFilters, recentFilters, searchBooks, filterByTag } from "./sortBooks";
   import SortAscending from "phosphor-svelte/lib/SortAscending";
   import SortDescending from "phosphor-svelte/lib/SortDescending";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
   import FrameCorners from "phosphor-svelte/lib/FrameCorners";
   import Bookimage from "@components/bookimage.svelte";
+  import { UserSettings } from "types/global";
 
   let allBooks: Book[] = [];
   let filteredBooks: Book[] = [];
@@ -17,9 +18,12 @@
   let currentSort: string = "author";
   let currentSortReverse: boolean = false;
   let currentFilter: string = "all";
+  let currentTagFilter: string = "";
   let currentRecent: string = "all";
   let currentSearch: string = "";
   let zoomLevel: string = "m";
+  let filterTags: string[] = [];
+  $: filterTags = window.userSettings?.filterTags?.split(",").map((t) => t.trim());
 
   // -- Init --
 
@@ -29,9 +33,14 @@
     }
   });
 
+  window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
+    filterTags = loadedSettings.filterTags?.split(",").map((t) => t.trim());
+  });
+
   window.electronAPI.receiveAllBooks((books: Book[]) => {
     currentSort = "author";
     currentFilter = "all";
+    currentTagFilter = "";
     currentSortReverse = false;
     allBooks = books;
     filteredBooks = books;
@@ -53,8 +62,16 @@
   }
 
   function filter() {
-    // filter both by category and recent, then search, then sort
-    filteredBooks = catFilters[currentFilter].filter(recentFilters[currentRecent].filter(structuredClone(allBooks)));
+    // filter by recent first
+    let books: Book[] = recentFilters[currentRecent].filter(structuredClone(allBooks));
+    // then by either predefined filter or user tag filter
+    if (currentFilter) {
+      books = catFilters[currentFilter].filter(books);
+    } else if (currentTagFilter) {
+      books = filterByTag(books, currentTagFilter);
+    }
+    filteredBooks = books;
+    // then search and sort
     search();
     sort();
   }
@@ -80,6 +97,13 @@
 
   function catFilter(f: string) {
     currentFilter = f;
+    currentTagFilter = "";
+    filter();
+  }
+
+  function tagFilter(tag: string) {
+    currentFilter = "";
+    currentTagFilter = tag;
     filter();
   }
 
@@ -124,6 +148,11 @@
     {#each Object.entries(catFilters) as [i, f]}
       <button on:click={() => catFilter(i)} class:selected={currentFilter === i}>{f.name}</button>
     {/each}
+    {#if filterTags}
+      {#each filterTags as tag}
+        <button on:click={() => tagFilter(tag)} class:selected={currentTagFilter === tag}>{tag}</button>
+      {/each}
+    {/if}
   </div>
 
   <div class="filter">

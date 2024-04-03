@@ -7,6 +7,8 @@ type UserSettings = {
   chartStartYear: number;
   googleApiKey: string;
   googleSearchEngineId: string;
+  filterTags: string;
+  commonTags: string;
 };
 
 declare global {

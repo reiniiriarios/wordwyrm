@@ -52,6 +52,14 @@
     <input type="text" bind:value={settings.chartStartYear} />
   </label>
   <label class="field field--fullwidth">
+    Tags for Filtering (comma-separated)
+    <input type="text" bind:value={settings.filterTags} maxlength="60" />
+  </label>
+  <label class="field field--fullwidth">
+    Common Tags for Editing (comma-separated)
+    <input type="text" bind:value={settings.commonTags} maxlength="255" />
+  </label>
+  <label class="field field--fullwidth">
     Google Cloud API Key
     <input type="text" bind:value={settings.googleApiKey} />
   </label>

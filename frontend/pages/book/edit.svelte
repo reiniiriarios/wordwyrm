@@ -14,9 +14,16 @@
   let authors: string = "";
   let tags: string = "";
   let imagePath: string = "";
+  let commonTags: string[] = [];
 
   onMount(() => {
     window.electronAPI.readBook(params.author, params.book);
+
+    if (window.userSettings?.commonTags?.length) {
+      commonTags = window.userSettings.commonTags.split(",").map((t) => t.trim());
+    } else {
+      commonTags = ["Fiction", "Fantasy", "Science Fiction", "Romance", "Non-Fiction", "Historical"];
+    }
   });
 
   window.electronAPI.receiveBook((b: Book) => {
@@ -67,18 +74,6 @@
   function validateDatePublished() {
     book.datePublished = book.datePublished?.replace(/[^\-0-9]/, "") ?? "";
   }
-
-  // @todo: Put these somewhere!
-  const commonTags = [
-    "Fantasy",
-    "Dark Fantasy",
-    "Science Fiction",
-    "Romance",
-    "Space Opera",
-    "Non-Fiction",
-    "Mythology",
-    "Science",
-  ];
 
   function addCommonTag(tag: string) {
     if (tag) {
