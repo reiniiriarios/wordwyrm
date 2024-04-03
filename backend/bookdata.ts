@@ -17,12 +17,17 @@ function authorsToDir(authors: Author[]): string {
 
 async function saveBookImage(dir: string, book: Book, url: string) {
   let filepath = path.join(dir, book.authorDir, `${book.filename}.jpg`);
+  url = url.replace(/\\/g, "/");
   // If a remote file, fetch and use buffer in sharp instead.
   if (url.startsWith("http") || url.startsWith("file:")) {
     let res = await fetch(url);
     let buf = await res.buffer();
     await sharpImage(buf, filepath);
   } else {
+    // sharp needs windows files to NOT start with a /
+    if (url.match(/^\/[A-Za-z]:/)) {
+      url = url.slice(1);
+    }
     await sharpImage(url, filepath);
   }
 }
