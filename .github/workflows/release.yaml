@@ -12,9 +12,11 @@ jobs:
       matrix:
         platform: [macos-latest, windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.platform }}
+    env:
+      GH_TOKEN: ${{secrets.GH_TOKEN}}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Dependencies
         run: npm ci
@@ -62,6 +64,9 @@ jobs:
           retention-days: 2
 
       # ubuntu
+      - name: Install linux dependencies
+        run: sudo snap install snapcraft --classic
+
       - name: Build for linux
         if: matrix.platform == 'ubuntu-latest'
         run: |
@@ -97,10 +102,10 @@ jobs:
           draft: true
           prerelease: false
           files: |
-            ${{steps.artifact.outputs.download-path}}/release-macos/BookTracker-${{ github.ref_name }}-macos.dmg
+            ${{steps.artifact.outputs.download-path}}/release-macos/BookTracker-${{ github.ref_name }}-x64.dmg
             ${{steps.artifact.outputs.download-path}}/release-windows/BookTracker-${{ github.ref_name }}-x64.exe
             ${{steps.artifact.outputs.download-path}}/release-windows/BookTracker-${{ github.ref_name }}-x64-installer.exe
             ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-x64.deb
             ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-x64.rpm
-            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-x64.snap
-            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-x64.AppImage
+            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-amd64.snap
+            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-x86_64.AppImage

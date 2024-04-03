@@ -12,13 +12,13 @@
     "name": "Emma Litwa-Vulcu",
     "email": "80431903+reiniiriarios@users.noreply.github.com"
   },
-  "homepage": "https://github.com/reiniiriarios/book-tracker-electron#readme",
+  "homepage": "https://github.com/reiniiriarios/book-tracker#readme",
   "bugs": {
-    "url": "https://github.com/reiniiriarios/book-tracker-electron/issues"
+    "url": "https://github.com/reiniiriarios/book-tracker/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reiniiriarios/book-tracker-electron.git"
+    "url": "git+https://github.com/reiniiriarios/book-tracker.git"
   },
   "engines": {
     "node": ">=14.0.0"
