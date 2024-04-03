@@ -98,10 +98,15 @@ export type VolumeSearch = {
   items: Volume[];
 };
 
-async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch> {
-  return fetch(`${ENDPOINT}/volumes?q=${q}&key=${apiKey}`)
-    .then((res) => res.json())
-    .then((res) => res as VolumeSearch);
+async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch | null> {
+  try {
+    return fetch(`${ENDPOINT}/volumes?q=${q}&key=${apiKey}`)
+      .then((res) => res.json())
+      .then((res) => res as VolumeSearch);
+  } catch (e) {
+    console.error(e);
+  }
+  return null;
 }
 
 async function getVolume(v: string, apiKey: string, lite: boolean = false): Promise<Volume> {
@@ -178,6 +183,7 @@ function conformBook(v: Volume): Book {
 
 export async function searchBook(q: string, apiKey: string): Promise<Book[]> {
   return searchVolume(q, apiKey).then((volumeSearch) => {
+    if (!volumeSearch) return [];
     let books: Book[] = [];
     volumeSearch.items?.forEach((v) => {
       books.push(conformBook(v));
