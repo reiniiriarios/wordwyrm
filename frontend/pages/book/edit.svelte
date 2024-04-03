@@ -7,8 +7,6 @@
 
   export let params: { author: string; book: string } = { author: "", book: "" };
 
-  let settings: Record<string, any> = {};
-
   let book: Book;
   let oAuthorDir: string = "";
   let oFilename: string = "";
@@ -18,7 +16,6 @@
 
   onMount(() => {
     window.electronAPI.readBook(params.author, params.book);
-    window.electronAPI.loadSettings();
   });
 
   window.electronAPI.receiveBook((b: Book) => {
@@ -27,15 +24,8 @@
     oFilename = b.filename;
     authors = book.authors.map((a) => a.name).join(", ");
     tags = book.tags?.join(", ") ?? "";
-    if (book.hasImage && settings.booksDir) {
-      imagePath = settings.booksDir + "/" + book.authorDir + "/" + book.filename + ".jpg";
-    }
-  });
-
-  window.electronAPI.settingsLoaded((loadedSettings: Record<string, any>) => {
-    settings = loadedSettings;
-    if (book.hasImage && settings.booksDir) {
-      imagePath = settings.booksDir + "/" + book.authorDir + "/" + book.filename + ".jpg";
+    if (book.hasImage && window.userSettings.booksDir) {
+      imagePath = window.userSettings.booksDir + "/" + book.authorDir + "/" + book.filename + ".jpg";
     }
   });
 
@@ -88,7 +78,9 @@
         </Dropzone>
       </div>
       <div class="searchButton">
-        <ImageSearch {book} />
+        {#if book && window.userSettings.googleApiKey && window.userSettings.googleSearchEngineId}
+          <ImageSearch {book} />
+        {/if}
       </div>
     </div>
     <div class="bookPage__info">

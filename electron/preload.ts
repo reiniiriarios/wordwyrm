@@ -1,8 +1,14 @@
 import { SearchResult } from "@api/imagesearch";
 import { Book } from "@data/book";
 import { contextBridge, ipcRenderer } from "electron";
+import type { UserSettings } from "../types/global";
 
 export const api = {
+  loadSettings: () => ipcRenderer.send("loadSettings"),
+  saveSettings: (newSettings: UserSettings) => ipcRenderer.send("saveSettings", newSettings),
+  settingsLoaded: (callback: Function) =>
+    ipcRenderer.on("settingsLoaded", (_event, loadedSettings: UserSettings) => callback(loadedSettings)),
+
   getBookData: (id: string) => ipcRenderer.send("getBookData", id),
   receiveBookData: (callback: Function) => ipcRenderer.on("receiveBookData", (_event, res: Book) => callback(res)),
 
@@ -23,11 +29,6 @@ export const api = {
 
   selectDataDir: () => ipcRenderer.send("selectDataDir"),
   dirSelected: (callback: Function) => ipcRenderer.on("dirSelected", (_event, path: string) => callback(path)),
-
-  loadSettings: () => ipcRenderer.send("loadSettings"),
-  saveSettings: (newSettings: Record<string, any>) => ipcRenderer.send("saveSettings", newSettings),
-  settingsLoaded: (callback: Function) =>
-    ipcRenderer.on("settingsLoaded", (_event, settings: object) => callback(settings)),
 
   imageSearch: (author: string, title: string) => ipcRenderer.send("imageSearch", author, title),
   imageSearchResults: (callback: Function) =>

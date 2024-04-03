@@ -78,7 +78,9 @@
   </div>
   <div class="pageNav__actions">
     <AddBook />
-    <SearchBook />
+    {#if window.userSettings.googleApiKey}
+      <SearchBook />
+    {/if}
   </div>
 </div>
 

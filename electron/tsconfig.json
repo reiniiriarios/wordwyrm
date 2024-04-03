@@ -14,7 +14,8 @@
       "@style/*": ["../frontend/style/*"],
       "@api/*": ["../backend/*"],
       "@app/*": ["../frontend/*"]
-    }
+    },
+    "typeRoots": ["../types"]
   },
   "include": ["**/*.ts"],
   "exclude": ["../node_modules/*", "../dist/*", "../scripts/*"]

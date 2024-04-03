@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as yaml from "js-yaml";
 import * as path from "path";
+import { UserSettings } from "../types/global";
 
 const USER_DATA_PATH =
   process.env.APPDATA ||
@@ -31,15 +32,15 @@ export function saveYaml(filename: string, data: any) {
   }
 }
 
-export function loadSettings(): Record<string, any> {
+export function loadSettings(): UserSettings {
   const sf = path.join(DATA_PATH, "settings.yaml");
   if (!fs.existsSync(sf)) {
     saveYaml(sf, {});
-    return {};
+    return {} as UserSettings;
   }
   return readYaml(sf);
 }
 
-export function saveSettings(settings: Record<string, any>) {
+export function saveSettings(settings: UserSettings) {
   return saveYaml(path.join(DATA_PATH, "settings.yaml"), settings);
 }

@@ -4,11 +4,10 @@
   import { Book } from "@data/book";
   import { onMount } from "svelte";
 
-  let startYear = 2020;
-  const startDate = new Date(2020, 1, 1);
+  let startYear = window.userSettings.chartStartYear ?? 2020;
+  const startDate = new Date(startYear, 1, 1);
   const endDate = new Date();
   let allBooks: Book[] = [];
-  let settingsLoaded: boolean = false;
 
   function initYears(): Record<number, number> {
     let ys: Record<string, number> = {};
@@ -86,17 +85,10 @@
   }
 
   onMount(() => {
-    window.electronAPI.loadSettings();
     window.electronAPI.readAllBooks();
-  });
-
-  window.electronAPI.settingsLoaded((settings: Record<string, any>) => {
-    startYear = settings.chartStartYear ?? startYear ?? 2020;
-    startDate.setFullYear(startYear);
     years = initYears();
     months = initMonths();
     days = initDays();
-    settingsLoaded = true;
   });
 
   window.electronAPI.receiveAllBooks((books: Book[]) => {
@@ -105,11 +97,11 @@
 
     // Wait for the canvas element to appear, THEN run chart code.
     new Promise((resolve) => {
-      if (chartCanvas && settingsLoaded) {
+      if (chartCanvas) {
         return resolve(true);
       }
       const observer = new MutationObserver((_mutations) => {
-        if (chartCanvas && settingsLoaded) {
+        if (chartCanvas) {
           observer.disconnect();
           resolve(true);
         }

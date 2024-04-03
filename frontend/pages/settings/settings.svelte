@@ -1,24 +1,22 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { UserSettings } from "types/global";
 
-  let settings: Record<string, any> = {};
-  let settingsLoaded: boolean = false;
+  let settings: UserSettings = {} as UserSettings;
   let saved: boolean = false;
 
   onMount(() => {
-    window.electronAPI.loadSettings();
-  });
-
-  window.electronAPI.settingsLoaded((loadedSettings: Record<string, any>) => {
-    settings = loadedSettings;
+    settings = window.userSettings;
     if (!settings.chartStartYear) {
       settings.chartStartYear = 2020;
     }
-    if (settingsLoaded) {
-      saved = true;
-      setTimeout(() => (saved = false), 1500);
-    }
-    settingsLoaded = true;
+  });
+
+  window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
+    settings = loadedSettings;
+    window.userSettings = loadedSettings;
+    saved = true;
+    setTimeout(() => (saved = false), 1500);
   });
 
   function selectDataDir(e: MouseEvent | KeyboardEvent) {
@@ -33,6 +31,7 @@
 
   window.electronAPI.dirSelected((path: string) => {
     settings.booksDir = path;
+    window.userSettings.booksDir = path;
   });
 </script>
 

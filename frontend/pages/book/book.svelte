@@ -19,7 +19,7 @@
 <div class="pageNav">
   <h2 class="pageNav__header">Book</h2>
   <div class="pageNav__actions">
-    {#if book}
+    {#if book && window.userSettings.googleApiKey && window.userSettings.googleSearchEngineId}
       <ImageSearch bind:book />
     {/if}
     <a class="btn" href={`#/book/${params.author}/${params.book}/edit`}>Edit <PencilSimple /></a>

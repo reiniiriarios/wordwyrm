@@ -6,10 +6,12 @@ import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
 import { addBookImage, readAllBooks, readBook, saveBook } from "../backend/bookdata";
 import { imageSearch } from "../backend/imagesearch";
 import { Book } from "@data/book";
+import type { UserSettings } from "../types/global";
+
 const PORT = 5000;
 const DEBUG = process.env.DEBUG === "true";
 
-let settings: Record<string, any> = {};
+let settings: UserSettings;
 
 function createWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
@@ -108,7 +110,7 @@ app.on("ready", () => {
     event.reply("settingsLoaded", settings);
   });
 
-  ipcMain.on("saveSettings", (event, newSettings: Record<string, any>) => {
+  ipcMain.on("saveSettings", (event, newSettings: UserSettings) => {
     settings = newSettings;
     saveSettings(newSettings);
     event.reply("settingsLoaded", settings);
