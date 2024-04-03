@@ -8,6 +8,7 @@
     "allowJs": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "paths": {
       "@core/*": ["../frontend/core/*"],
       "@data/*": ["../frontend/data/*"],

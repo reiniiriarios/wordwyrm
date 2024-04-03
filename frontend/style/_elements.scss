@@ -31,6 +31,16 @@ h3 {
   font-size: 1.25rem;
 }
 
+a {
+  color: $accentColor;
+  text-decoration: none;
+
+  &:hover {
+    color: lighten($accentColor, 5%);
+    text-decoration: underline;
+  }
+}
+
 *:focus {
   outline: 0;
 }

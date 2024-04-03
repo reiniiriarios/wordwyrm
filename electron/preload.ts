@@ -9,6 +9,9 @@ export const api = {
   settingsLoaded: (callback: Function) =>
     ipcRenderer.on("settingsLoaded", (_event, loadedSettings: UserSettings) => callback(loadedSettings)),
 
+  updateAvailable: (callback: Function) =>
+    ipcRenderer.on("updateAvailable", (_event, latestVersion: string) => callback(latestVersion)),
+
   getBookData: (id: string) => ipcRenderer.send("getBookData", id),
   receiveBookData: (callback: Function) => ipcRenderer.on("receiveBookData", (_event, res: Book) => callback(res)),
 

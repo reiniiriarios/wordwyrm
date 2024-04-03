@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { app, BrowserWindow, dialog, ipcMain, net, protocol } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from "electron";
 import * as path from "path";
 import { getBook, searchBook } from "../backend/googlebooks";
 import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
 import { addBookImage, readAllBooks, readBook, saveBook } from "../backend/bookdata";
+import { hasUpdate } from "../backend/updates";
 import { imageSearch } from "../backend/imagesearch";
 import { Book } from "@data/book";
 import type { UserSettings } from "../types/global";
+import packageJson from "../package.json";
 
 const PORT = 5000;
 const DEBUG = process.env.DEBUG === "true";
+const APP_VERSION = packageJson.version;
 
 let settings: UserSettings;
 
@@ -34,6 +37,30 @@ function createWindow(): BrowserWindow {
   } else {
     mainWindow.loadFile(path.join(__dirname, "../../index.html"));
   }
+
+  // Intercept a click on anchor with `target="_blank"`.
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (url.startsWith("http:") || url.startsWith("https:")) {
+      try {
+        shell.openExternal(url);
+      } catch (error: unknown) {
+        console.error(`Failed to open url: ${error}`);
+      }
+    }
+    return { action: "deny" };
+  });
+
+  // Check if app is latest version.
+  mainWindow.webContents.once("dom-ready", () => {
+    mainWindow.webContents.send("check-version");
+    ipcMain.once("check-version", (event) => {
+      hasUpdate(APP_VERSION, (updateAvailable) => {
+        if (updateAvailable) {
+          event.reply("updateAvailable", updateAvailable);
+        }
+      });
+    });
+  });
 
   return mainWindow;
 }
