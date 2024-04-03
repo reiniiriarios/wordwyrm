@@ -111,6 +111,7 @@
       "category": "public.app-category.network"
     },
     "nsis": {
+      "artifactName": "${productName}-v${version}-${arch}-installer.${ext}",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true

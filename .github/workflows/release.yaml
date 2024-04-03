@@ -36,7 +36,7 @@ jobs:
 
       - name: Upload macos files
         if: matrix.platform == 'macos-latest'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-macos
           path: BookTracker-${{ github.ref_name }}-*
@@ -47,7 +47,7 @@ jobs:
         if: matrix.platform == 'windows-latest'
         run: |
           npm run build:nsis
-          Move-Item -Path "$PWD\build\BookTracker-${{ github.ref_name }}-x64.exe" -Destination "$PWD\BookTracker-${{ github.ref_name }}-x64-installer.exe"
+          Move-Item -Path "$PWD\build\BookTracker-${{ github.ref_name }}-x64-installer.exe" -Destination "$PWD\BookTracker-${{ github.ref_name }}-x64-installer.exe"
 
       - name: Build for windows (portable)
         if: matrix.platform == 'windows-latest'
@@ -57,7 +57,7 @@ jobs:
 
       - name: Upload windows files
         if: matrix.platform == 'windows-latest'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-windows
           path: BookTracker-${{ github.ref_name }}-*
@@ -72,7 +72,7 @@ jobs:
 
       - name: Upload linux files
         if: matrix.platform == 'ubuntu-latest'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: release-linux
           path: BookTracker-${{ github.ref_name }}-*
@@ -82,9 +82,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     name: Release
+    permissions:
+      contents: write
     steps:
       - name: Download all release pacakges
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         id: artifact
         with:
           path: releases
@@ -93,7 +95,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           tag_name: ${{ github.ref_name }}
           draft: true
@@ -103,5 +105,5 @@ jobs:
             ${{steps.artifact.outputs.download-path}}/release-windows/BookTracker-${{ github.ref_name }}-x64.exe
             ${{steps.artifact.outputs.download-path}}/release-windows/BookTracker-${{ github.ref_name }}-x64-installer.exe
             ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-amd64.deb
-            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-amd64.rpm
+            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-x86_64.rpm
             ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-x86_64.AppImage
