@@ -12,9 +12,9 @@
 
   let allBooks: Book[] = [];
   let sortedBooks: Book[] = [];
-  let currentSort: string = "";
+  let currentSort: string = "author";
   let currentSortReverse: boolean = false;
-  let currentFilter: string = "";
+  let currentFilter: string = "all";
   let currentRecent: string = "all";
   let currentSearch: string = "";
   let zoomLevel: string = "m";

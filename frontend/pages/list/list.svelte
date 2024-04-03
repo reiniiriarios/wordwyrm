@@ -9,9 +9,9 @@
 
   let allBooks: Book[] = [];
   let sortedBooks: Book[] = [];
-  let currentSort: string = "";
+  let currentSort: string = "author";
   let currentSortReverse: boolean = false;
-  let currentFilter: string = "";
+  let currentFilter: string = "all";
   let currentRecent: string = "all";
   let currentSearch: string = "";
   let zoomLevel: string = "m";
@@ -111,9 +111,9 @@
           >{h.charAt(0).toUpperCase()}{h.slice(1)}
           {#if currentSort === h}
             {#if currentSortReverse}
-              <CaretDown />
+              <CaretDown size={12} />
             {:else}
-              <CaretUp />
+              <CaretUp size={12} />
             {/if}
           {/if}
         </th>
@@ -179,12 +179,6 @@
 
     &.selected {
       color: $fgColor;
-    }
-
-    svg {
-      height: 1rem;
-      width: 1rem;
-      vertical-align: bottom;
     }
   }
 
