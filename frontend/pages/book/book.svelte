@@ -37,7 +37,12 @@
       <h3><span>by</span> {book.authors.map((a) => a.name).join(", ")}</h3>
       <h4>
         {book.datePublished
-          ? new Date(book.datePublished).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
+          ? new Date(book.datePublished).toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+              timeZone: "UTC",
+            })
           : "No publish date listed"}
       </h4>
       {#if book.series}
@@ -56,6 +61,7 @@
             month: "long",
             day: "numeric",
             year: "numeric",
+            timeZone: "UTC",
           })}
         {:else}
           Unread
