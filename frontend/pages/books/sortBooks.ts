@@ -168,8 +168,22 @@ export const recentFilters: Record<string, { name: string; filter: filterFn }> =
     name: "All Unread",
     filter: (books: Book[]): Book[] => books.filter((book) => !book.dateRead),
   },
+  readThis: {
+    name: "This Year",
+    filter: (books: Book[]): Book[] => {
+      let thisYearJan1 = new Date();
+      thisYearJan1.setMonth(0);
+      thisYearJan1.setDate(1);
+      let timeAgo = thisYearJan1.getTime();
+      return books.filter((book) => {
+        if (!book.dateRead) return false;
+        let diff = new Date(book.dateRead).getTime() - timeAgo;
+        return diff > 0;
+      });
+    },
+  },
   read1: {
-    name: "Last Year",
+    name: "Last 1 Year",
     filter: (books: Book[]): Book[] => yearsAgo(books, 1),
   },
   read2: {
