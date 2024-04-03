@@ -34,6 +34,7 @@
 
   function searchKey(e: KeyboardEvent) {
     if (["\n", "Enter"].includes(e.key) && !canAdd) {
+      console.log("searching api");
       search();
     }
   }
@@ -88,6 +89,9 @@
               <span>{book.title} by {book.authors.map((a) => a.name).join(", ")}</span>
             </button>
           {/if}
+          <div class="book__meta">
+            {book.datePublished}
+          </div>
         </div>
       {/each}
     </div>
@@ -127,6 +131,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 
     &__inner {
       height: 14rem;
@@ -162,6 +167,11 @@
           border-color: $accentColor;
         }
       }
+    }
+
+    &__meta {
+      font-size: 0.9rem;
+      color: $fgColorMuted;
     }
 
     &.selected {

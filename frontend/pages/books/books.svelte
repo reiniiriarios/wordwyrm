@@ -29,7 +29,9 @@
   // -- Init --
 
   onMount(() => {
+    console.log("mounted");
     if (!allBooks.length) {
+      console.log("sending for books");
       window.electronAPI.readAllBooks();
     }
   });
@@ -42,6 +44,7 @@
   });
 
   window.electronAPI.receiveAllBooks((books: Book[]) => {
+    console.log("received");
     currentSort = "author";
     currentFilter = "all";
     currentTagFilter = "";
@@ -55,17 +58,20 @@
   // -- Filter functions --
 
   function sort() {
+    console.log("sorting");
     // sort what is already filtered, then searched through
     sortedBooks = sortFilters[currentSort].sort(structuredClone(searchedBooks), currentSortReverse);
   }
 
   function search() {
+    console.log("searching");
     // search through what is already filtered, then sort
     searchedBooks = searchBooks(structuredClone(filteredBooks), currentSearch);
     sort();
   }
 
   function filter() {
+    console.log("filtering");
     // filter by recent first
     let books: Book[] = recentFilters[currentRecent].filter(structuredClone(allBooks));
     // then by either predefined filter or user tag filter

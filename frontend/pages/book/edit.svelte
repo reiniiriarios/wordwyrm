@@ -59,7 +59,6 @@
       console.error("rejected files", fileRejections);
     }
     if (acceptedFiles.length) {
-      console.log(acceptedFiles);
       imagePath = acceptedFiles[0].path.replace(/\\/g, "/").replace(/ /g, "%20");
       if (imagePath.charAt(0) !== "/") imagePath = "/" + imagePath;
       book.image = imagePath;
