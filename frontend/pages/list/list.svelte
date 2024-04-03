@@ -8,13 +8,16 @@
   import { push } from "svelte-spa-router";
 
   let allBooks: Book[] = [];
+  let filteredBooks: Book[] = [];
+  let searchedBooks: Book[] = [];
   let sortedBooks: Book[] = [];
   let currentSort: string = "author";
   let currentSortReverse: boolean = false;
   let currentFilter: string = "all";
   let currentRecent: string = "all";
   let currentSearch: string = "";
-  let zoomLevel: string = "m";
+
+  // -- Init --
 
   onMount(() => {
     if (!allBooks.length) {
@@ -23,17 +26,36 @@
   });
 
   window.electronAPI.receiveAllBooks((books: Book[]) => {
-    allBooks = books;
     currentSort = "author";
     currentFilter = "all";
     currentSortReverse = false;
-    sortedBooks = sortFilters.author.sort(allBooks, false);
+    allBooks = books;
+    filteredBooks = books;
+    searchedBooks = books;
+    sortedBooks = sortFilters.author.sort(books, false);
   });
 
-  function sortReverse() {
-    currentSortReverse = !currentSortReverse;
-    sortedBooks = sortedBooks.reverse();
+  // -- Filter functions --
+
+  function sort() {
+    // sort what is already filtered, then searched through
+    sortedBooks = sortFilters[currentSort].sort(structuredClone(searchedBooks), currentSortReverse);
   }
+
+  function search() {
+    // search through what is already filtered, then sort
+    searchedBooks = searchBooks(structuredClone(filteredBooks), currentSearch);
+    sort();
+  }
+
+  function filter() {
+    // filter both by category and recent, then search, then sort
+    filteredBooks = catFilters[currentFilter].filter(recentFilters[currentRecent].filter(structuredClone(allBooks)));
+    search();
+    sort();
+  }
+
+  // -- User action functions --
 
   function sortFilter(s: string) {
     if (s === currentSort) {
@@ -42,7 +64,14 @@
       currentSortReverse = false;
     }
     currentSort = s;
-    filter();
+    sort();
+  }
+
+  function searchFilter(e: KeyboardEvent) {
+    if (["\n", "Enter"].includes(e.key)) {
+      // currentSearch is bound
+      search();
+    }
   }
 
   function catFilter(f: string) {
@@ -53,23 +82,6 @@
   function recentFilter(f: string) {
     currentRecent = f;
     filter();
-  }
-
-  function filter() {
-    let books = currentSearch ? searchBooks(allBooks, currentSearch) : allBooks;
-    sortedBooks = sortFilters[currentSort].sort(
-      catFilters[currentFilter].filter(recentFilters[currentRecent].filter(structuredClone(books))),
-      currentSortReverse,
-    );
-  }
-
-  function searchFilter(e: KeyboardEvent) {
-    if (["\n", "Enter"].includes(e.key)) {
-      sortedBooks = sortFilters[currentSort].sort(
-        catFilters[currentFilter].filter(searchBooks(allBooks, currentSearch)),
-        currentSortReverse,
-      );
-    }
   }
 </script>
 
