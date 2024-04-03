@@ -1,3 +1,5 @@
+/// <reference types="svelte" />
+
 import { api } from "../electron/preload";
 
 type UserSettings = {
