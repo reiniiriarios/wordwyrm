@@ -4,6 +4,7 @@
   import Dropzone from "svelte-file-dropzone";
   import { push } from "svelte-spa-router";
   import ImageSearch from "./imagesearch.svelte";
+  import Moreinfo from "./moreinfo.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
 
@@ -69,6 +70,11 @@
 
 <div class="pageNav">
   <h2 class="pageNav__header">Edit Book</h2>
+  <div class="pageNav__actions">
+    {#if book}
+      <Moreinfo isbn={book.isbn} googleId={book.googleBooksId} />
+    {/if}
+  </div>
 </div>
 {#if book}
   <div class="bookPage">
@@ -123,6 +129,10 @@
         <label class="field field--fullwidth">
           Tag(s)
           <input type="text" bind:value={tags} on:change={setTags} />
+        </label>
+        <label class="field field--fullwidth">
+          ISBN
+          <input type="text" bind:value={book.isbn} />
         </label>
       </fieldset>
       <div class="bookPage__actions">

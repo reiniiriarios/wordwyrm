@@ -4,6 +4,7 @@
   import ImageSearch from "./imagesearch.svelte";
   import PencilSimple from "phosphor-svelte/lib/PencilSimple";
   import Bookimage from "@components/bookimage.svelte";
+  import Moreinfo from "./moreinfo.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
@@ -73,6 +74,9 @@
           Unread
         {/if}
       </div>
+      <div class="moreInfo">
+        <Moreinfo isbn={book.isbn} googleId={book.googleBooksId} />
+      </div>
     </div>
   </div>
 {/if}
@@ -133,6 +137,10 @@
 
       .read {
         font-size: 1rem;
+      }
+
+      .moreInfo {
+        margin: 1rem 0;
       }
     }
   }

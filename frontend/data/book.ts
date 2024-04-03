@@ -18,5 +18,5 @@ export type Book = {
   image?: string;
   thumbnail?: string;
   googleBooksId?: string;
-  isbn: string;
+  isbn?: string;
 };
