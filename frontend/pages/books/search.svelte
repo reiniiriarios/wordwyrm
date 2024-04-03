@@ -8,6 +8,7 @@
   let selectedBook: Book = {} as Book;
   let searchString: string = "";
   let searchResults: Book[] = [];
+  let searched: boolean = false;
   let searching: boolean = false;
   let canAdd: boolean = false;
 
@@ -15,6 +16,7 @@
     addBookOpen = true;
     searchString = "";
     searchResults = [];
+    searched = false;
     searching = false;
     canAdd = false;
   }
@@ -27,6 +29,7 @@
   window.electronAPI.searchBookResults((books: Book[]) => {
     searchResults = books;
     searching = false;
+    searched = true;
   });
 
   function searchKey(e: KeyboardEvent) {
@@ -70,21 +73,25 @@
     <input type="text" name="search" bind:value={searchString} required />
     <button class="btn btn--light" on:click={search} disabled={searching}>Search</button>
   </div>
-  <div class="results">
-    {#each searchResults as book}
-      <div class="book" class:selected={selectedBook.googleBooksId === book.googleBooksId}>
-        {#if book.hasImage}
-          <button class="book__inner book__inner--image" on:click={() => selectBook(book)}>
-            <img src={book.thumbnail} alt="" />
-          </button>
-        {:else}
-          <button class="book__inner book__inner--noimage" on:click={() => selectBook(book)}>
-            <span>{book.title} by {book.authors.map((a) => a.name).join(", ")}</span>
-          </button>
-        {/if}
-      </div>
-    {/each}
-  </div>
+  {#if searched && !searchResults.length}
+    <div class="err">Error fetching results</div>
+  {:else}
+    <div class="results">
+      {#each searchResults as book}
+        <div class="book" class:selected={selectedBook.googleBooksId === book.googleBooksId}>
+          {#if book.hasImage}
+            <button class="book__inner book__inner--image" on:click={() => selectBook(book)}>
+              <img src={book.thumbnail} alt="" />
+            </button>
+          {:else}
+            <button class="book__inner book__inner--noimage" on:click={() => selectBook(book)}>
+              <span>{book.title} by {book.authors.map((a) => a.name).join(", ")}</span>
+            </button>
+          {/if}
+        </div>
+      {/each}
+    </div>
+  {/if}
 </Modal>
 
 <style lang="scss">
@@ -98,6 +105,10 @@
       margin-right: 0.5rem;
       width: 100%;
     }
+  }
+
+  .err {
+    padding: 2rem;
   }
 
   .results {

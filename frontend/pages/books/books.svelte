@@ -24,6 +24,7 @@
   let zoomLevel: string = "m";
   let filterTags: string[] = [];
   $: filterTags = window.userSettings?.filterTags?.split(",").map((t) => t.trim());
+  let showSearch: boolean = window.userSettings?.googleApiKey?.length > 0;
 
   // -- Init --
 
@@ -35,6 +36,9 @@
 
   window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
     filterTags = loadedSettings.filterTags?.split(",").map((t) => t.trim());
+    if (loadedSettings.googleApiKey.length) {
+      showSearch = true;
+    }
   });
 
   window.electronAPI.receiveAllBooks((books: Book[]) => {
@@ -120,7 +124,7 @@
   </div>
   <div class="pageNav__actions">
     <AddBook />
-    {#if window.userSettings.googleApiKey}
+    {#if showSearch}
       <SearchBook />
     {/if}
   </div>
