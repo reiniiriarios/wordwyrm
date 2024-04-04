@@ -60,11 +60,11 @@
   </label>
   <label class="field field--fullwidth">
     Tags for Filtering <Hoverinfo details="Tags should be comma-separated." />
-    <input type="text" bind:value={settings.filterTags} maxlength="60" />
+    <input type="text" bind:value={settings.filterTags} maxlength="255" />
   </label>
   <label class="field field--fullwidth">
     Common Tags for Editing <Hoverinfo details="Tags should be comma-separated." />
-    <input type="text" bind:value={settings.commonTags} maxlength="255" />
+    <input type="text" bind:value={settings.commonTags} maxlength="1024" />
   </label>
   <label class="field field--fullwidth">
     Google Cloud API Key <Hoverinfo details="Optional. Enables searching for book data via Google Books." />
