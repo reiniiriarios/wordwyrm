@@ -62,9 +62,9 @@
   }
 
   function addBook() {
-    if (!selectedBook.googleBooksId) return;
+    if (!selectedBook.cache.searchId) return;
     window.removeEventListener("keydown", searchKey);
-    window.electronAPI.getBookData(selectedBook.googleBooksId);
+    window.electronAPI.getBookData(selectedBook.cache.searchId);
   }
 
   function closeSearch() {
@@ -90,10 +90,10 @@
   {:else}
     <div class="results">
       {#each searchResults as book}
-        <div class="book" class:selected={selectedBook.googleBooksId === book.googleBooksId}>
-          {#if book.hasImage}
+        <div class="book" class:selected={selectedBook.cache.searchId === book.cache.searchId}>
+          {#if book.images.hasImage}
             <button class="book__inner book__inner--image" on:click={() => selectBook(book)}>
-              <img src={book.thumbnail?.replace(/^http:/, "https:")} alt="" />
+              <img src={book.cache.thumbnail?.replace(/^http:/, "https:")} alt="" />
             </button>
           {:else}
             <button class="book__inner book__inner--noimage" on:click={() => selectBook(book)}>

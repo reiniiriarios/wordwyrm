@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import type { UserSettings } from "types/global";
+import type { UserSettings } from "../types/global";
 
 function ipcCallback(channel: string, callback: Function) {
   const subscription = (_event: any, ...args: any[]) => callback(...args);

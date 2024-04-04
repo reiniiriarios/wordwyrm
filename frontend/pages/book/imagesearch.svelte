@@ -34,9 +34,9 @@
 
     const removeBookImageListener = window.electronAPI.bookImageAdded(() => {
       isOpen = false;
-      book.imageUpdated = new Date().getTime();
-      book.hasImage = true;
-      push(`#/book/${book.authorDir}/${book.filename}`);
+      book.images.imageUpdated = new Date().getTime();
+      book.images.hasImage = true;
+      push(`#/book/${book.cache.filepath}`);
     });
 
     return () => {

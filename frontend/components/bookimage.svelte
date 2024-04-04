@@ -3,11 +3,11 @@
   export let overlay: boolean = false;
   export let pageHeight: boolean = false;
   let src: string;
-  $: src = `bookimage://${book.authorDir?.replace(/ /g, "%20")}/${book.filename?.replace(/ /g, "%20")}.jpg?t=${book.imageUpdated ?? 0}`;
+  $: src = book ? `bookimage://${book.cache.urlpath}.jpg?t=${book.images.imageUpdated ?? 0}` : "";
 </script>
 
-{#if book && book.hasImage}
-  {#key book.imageUpdated}
+{#if book && book.images.hasImage}
+  {#key book.images.imageUpdated}
     {#if overlay}
       <div class="bookComposite" class:pageHeight>
         <img {src} alt="" />

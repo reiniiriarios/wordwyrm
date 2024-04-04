@@ -136,7 +136,7 @@
     </thead>
     <tbody>
       {#each sortedBooks as book}
-        <tr on:click={() => push(`#/book/${book.authorDir}/${book.filename}`)}>
+        <tr on:click={() => push(`#/book/${book.cache.filepath}`)}>
           <td>{book.title}</td>
           <td>{book.authors.map((a) => a.name).join(", ")}</td>
           <td>{book.series ?? ""}</td>

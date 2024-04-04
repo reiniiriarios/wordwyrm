@@ -171,29 +171,41 @@ function setFirstId(ids: string[] | undefined | null, callback: (id: string) => 
 
 function conformOpenLibrarySearchResult(work: OpenLibrarySearchResult, isbn?: string): Book {
   const book: Book = {
+    version: "2",
     title: work.title,
     authors: work.author_name.map((name) => ({ name })),
-    datePublished: (work.first_publish_year ?? work.publish_year.sort()[0] ?? "").toString(),
+    datePublished: (work.first_publish_year ?? work.publish_year?.sort()[0] ?? "").toString(),
+    dateRead: "",
+    timestampAdded: 0,
     tags: [],
-    openLibraryId: work.key,
+    series: "",
+    images: {
+      hasImage: false,
+    },
+    ids: {
+      openLibraryId: work.key,
+    },
+    cache: {
+      searchId: work.key,
+    },
   };
   if (work.cover_edition_key || work.cover_i) {
-    book.hasImage = true;
-    book.image =
-      imgEndpoint + (work.cover_edition_key ? "olid/" + work.cover_edition_key : "id/" + work.cover_i) + ".jpg";
-    book.thumbnail = book.image;
+    book.images.hasImage = true;
+    let imageUrl = imgEndpoint + (work.cover_edition_key ? "olid/" + work.cover_edition_key : "id/" + work.cover_i);
+    book.cache.image = imageUrl + "-L.jpg";
+    book.cache.thumbnail = imageUrl + "-M.jpg";
   }
   if (isbn) {
-    book.isbn = isbn;
+    book.ids.isbn = isbn;
   } else {
-    setFirstId(work.isbn, (i) => (book.isbn = i));
+    setFirstId(work.isbn, (i) => (book.ids.isbn = i));
   }
-  setFirstId(work.id_google, (i) => (book.googleBooksId = i));
-  setFirstId(work.id_librarything, (i) => (book.libraryThingId = i));
-  setFirstId(work.id_amazon, (i) => (book.amazonId = i));
-  setFirstId(work.id_goodreads, (i) => (book.goodreadsId = i));
-  setFirstId(work.id_wikidata, (i) => (book.wikidataId = i));
-  setFirstId(work.oclc, (i) => (book.oclcId = i));
-  setFirstId(work.ia, (i) => (book.internetArchiveId = i));
+  setFirstId(work.id_google, (i) => (book.ids.googleBooksId = i));
+  setFirstId(work.id_librarything, (i) => (book.ids.libraryThingId = i));
+  setFirstId(work.id_amazon, (i) => (book.ids.amazonId = i));
+  setFirstId(work.id_goodreads, (i) => (book.ids.goodreadsId = i));
+  setFirstId(work.id_wikidata, (i) => (book.ids.wikidataId = i));
+  setFirstId(work.oclc, (i) => (book.ids.oclcId = i));
+  setFirstId(work.ia, (i) => (book.ids.internetArchiveId = i));
   return book;
 }

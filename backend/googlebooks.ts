@@ -114,46 +114,58 @@ async function getVolume(v: string, apiKey: string, lite: boolean = false): Prom
 }
 
 function conformBook(v: Volume): Book {
-  let authors: Author[] = [];
-  let book = { authors } as Book;
-  v.volumeInfo?.authors?.forEach((a) => book.authors.push({ name: a }));
-
-  book.title = v.volumeInfo?.title ?? "";
-  book.datePublished = v.volumeInfo?.publishedDate ?? "";
-  book.googleBooksId = v.id ?? "";
+  let book: Book = {
+    version: "2",
+    title: v.volumeInfo?.title ?? "",
+    authors: v.volumeInfo?.authors?.map((a) => ({ name: a })) ?? [],
+    datePublished: v.volumeInfo?.publishedDate ?? "",
+    dateRead: "",
+    tags: [],
+    series: "",
+    timestampAdded: 0,
+    images: {
+      hasImage: false,
+    },
+    ids: {
+      googleBooksId: v.id ?? "",
+    },
+    cache: {
+      searchId: v.id ?? "",
+    },
+  };
 
   // Select primary image in preference order.
   if (v.volumeInfo?.imageLinks?.medium) {
-    book.image = v.volumeInfo.imageLinks.medium;
+    book.cache.image = v.volumeInfo.imageLinks.medium;
   } else if (v.volumeInfo?.imageLinks?.large) {
-    book.image = v.volumeInfo.imageLinks.large;
+    book.cache.image = v.volumeInfo.imageLinks.large;
   } else if (v.volumeInfo?.imageLinks?.extraLarge) {
-    book.image = v.volumeInfo.imageLinks.extraLarge;
+    book.cache.image = v.volumeInfo.imageLinks.extraLarge;
   } else if (v.volumeInfo?.imageLinks?.small) {
-    book.image = v.volumeInfo.imageLinks.small;
+    book.cache.image = v.volumeInfo.imageLinks.small;
   } else if (v.volumeInfo?.imageLinks?.thumbnail) {
-    book.image = v.volumeInfo.imageLinks.thumbnail;
+    book.cache.image = v.volumeInfo.imageLinks.thumbnail;
   } else if (v.volumeInfo?.imageLinks?.smallThumbnail) {
-    book.image = v.volumeInfo.imageLinks.smallThumbnail;
+    book.cache.image = v.volumeInfo.imageLinks.smallThumbnail;
   }
 
   // Select thumbnail in preference order.
   if (v.volumeInfo?.imageLinks?.thumbnail) {
-    book.thumbnail = v.volumeInfo.imageLinks.thumbnail;
+    book.cache.thumbnail = v.volumeInfo.imageLinks.thumbnail;
   } else if (v.volumeInfo?.imageLinks?.smallThumbnail) {
-    book.thumbnail = v.volumeInfo.imageLinks.smallThumbnail;
+    book.cache.thumbnail = v.volumeInfo.imageLinks.smallThumbnail;
   } else if (v.volumeInfo?.imageLinks?.small) {
-    book.thumbnail = v.volumeInfo.imageLinks.small;
+    book.cache.thumbnail = v.volumeInfo.imageLinks.small;
   } else if (v.volumeInfo?.imageLinks?.medium) {
-    book.thumbnail = v.volumeInfo.imageLinks.medium;
+    book.cache.thumbnail = v.volumeInfo.imageLinks.medium;
   } else if (v.volumeInfo?.imageLinks?.large) {
-    book.thumbnail = v.volumeInfo.imageLinks.large;
+    book.cache.thumbnail = v.volumeInfo.imageLinks.large;
   } else if (v.volumeInfo?.imageLinks?.extraLarge) {
-    book.thumbnail = v.volumeInfo.imageLinks.extraLarge;
+    book.cache.thumbnail = v.volumeInfo.imageLinks.extraLarge;
   }
 
-  if (book.image) {
-    book.hasImage = true;
+  if (book.cache.image) {
+    book.images.hasImage = true;
   }
 
   book.tags = [];
@@ -170,9 +182,9 @@ function conformBook(v: Volume): Book {
 
   v.volumeInfo?.industryIdentifiers?.forEach((id) => {
     if (id.type === "ISBN_13") {
-      book.isbn = id.identifier;
-    } else if (!book.isbn && id.type === "ISBN_10") {
-      book.isbn = id.identifier;
+      book.ids.isbn = id.identifier;
+    } else if (!book.ids.isbn && id.type === "ISBN_10") {
+      book.ids.isbn = id.identifier;
     }
   });
 

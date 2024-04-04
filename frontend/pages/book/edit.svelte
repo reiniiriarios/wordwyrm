@@ -27,14 +27,14 @@
 
     const removeReceiveListener = window.electronAPI.receiveBook((b: Book) => {
       book = b;
-      oAuthorDir = b.authorDir ?? "";
-      oFilename = b.filename ?? "";
+      oAuthorDir = b.cache.authorDir ?? "";
+      oFilename = b.cache.filename ?? "";
       authors = book.authors.map((a) => a.name).join(", ");
       tags = book.tags?.join(", ") ?? "";
-      if (book.hasImage && window.userSettings.booksDir) {
+      if (book.images.hasImage && window.userSettings.booksDir) {
         let booksDir = window.userSettings.booksDir.replace(/\\/g, "/").replace(/ /g, "%20");
         if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
-        imagePath = `${booksDir}/${book.authorDir?.replace(/ /g, "%20")}/${book.filename?.replace(/ /g, "%20")}.jpg`;
+        imagePath = `${booksDir}/${book.cache.urlpath}.jpg`;
       }
     });
 
@@ -65,13 +65,13 @@
     if (acceptedFiles.length) {
       imagePath = acceptedFiles[0].path.replace(/\\/g, "/").replace(/ /g, "%20");
       if (imagePath.charAt(0) !== "/") imagePath = "/" + imagePath;
-      book.image = imagePath;
+      book.cache.image = imagePath;
     }
   }
 
   function saveBook() {
     window.electronAPI.editBook(book, oAuthorDir, oFilename);
-    push(`#/book/${book.authorDir}/${book.filename}`);
+    push(`#/book/${book.cache.filepath}`);
   }
 
   function validateDatePublished() {
@@ -92,7 +92,7 @@
   <h2 class="pageNav__header">Edit Book</h2>
   <div class="pageNav__actions">
     {#if book}
-      <Moreinfo isbn={book.isbn} googleId={book.googleBooksId} />
+      <Moreinfo isbn={book.ids.isbn} googleId={book.ids.googleBooksId} />
     {/if}
   </div>
 </div>
@@ -149,7 +149,7 @@
         </label>
         <label class="field field--fullwidth">
           ISBN <Hoverinfo details="Enables quick-links to Google Books, LibraryThing, and Goodreads." />
-          <input type="text" bind:value={book.isbn} />
+          <input type="text" bind:value={book.ids.isbn} />
         </label>
         <label class="field field--fullwidth">
           Tag(s) <Hoverinfo details="Tags should be comma-separated." />

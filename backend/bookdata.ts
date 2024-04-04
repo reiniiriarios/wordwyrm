@@ -16,10 +16,10 @@ export function authorsToDir(authors: Author[]): string {
 
 async function saveBookImage(dir: string, book: Book, url: string) {
   try {
-    if (!book.authorDir) {
-      book.authorDir = authorsToDir(book.authors);
+    if (!book.cache.authorDir) {
+      book.cache.authorDir = authorsToDir(book.authors);
     }
-    let filepath = path.join(dir, book.authorDir, `${book.filename}.jpg`);
+    let filepath = path.join(dir, book.cache.authorDir, `${book.cache.filename}.jpg`);
     url = url.replace(/\\/g, "/");
     // If a remote file, fetch and use buffer in sharp instead.
     if (url.startsWith("http") || url.startsWith("file:")) {
@@ -32,7 +32,7 @@ async function saveBookImage(dir: string, book: Book, url: string) {
       if (url.match(/^\/[A-Za-z]:/)) {
         url = url.slice(1);
       }
-      url = url.replace(/%20/g, " ");
+      url = url.replace(/%20/g, " "); // bugfix
       await sharpImage(url, filepath);
     }
   } catch (e) {
@@ -45,42 +45,37 @@ async function sharpImage(img: Buffer | string, filepath: string) {
 }
 
 export async function addBookImage(dir: string, book: Book, url: string) {
-  if (!book.authorDir) {
-    book.authorDir = authorsToDir(book.authors);
+  if (!book.cache.authorDir) {
+    book.cache.authorDir = authorsToDir(book.authors);
   }
   await saveBookImage(dir, book, url);
-  delete book.image;
-  delete book.thumbnail;
-  book.hasImage = true;
-  book.imageUpdated = new Date().getTime();
-  saveYaml(path.join(dir, book.authorDir, `${book.filename}.yaml`), book);
+  book.images.hasImage = true;
+  book.images.imageUpdated = new Date().getTime();
+  saveYaml(path.join(dir, book.cache.authorDir, `${book.cache.filename}.yaml`), book);
 }
 
 export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFilename?: string): Promise<Book> {
   initBookDirs(dir);
 
   // Author directory.
-  book.authorDir = authorsToDir(book.authors);
-  const authorPath = path.join(dir, book.authorDir);
+  book.cache.authorDir = authorsToDir(book.authors);
+  const authorPath = path.join(dir, book.cache.authorDir);
   if (!fs.existsSync(authorPath)) {
     fs.mkdirSync(authorPath, { recursive: true });
   }
 
   const newFilename = book.title.replace(/[^A-Za-z0-9\-'!\?,\.:; ]/g, "_");
-  if (book.filename != newFilename) {
-    book.filename = newFilename;
+  if (book.cache.filename != newFilename) {
+    book.cache.filename = newFilename;
   }
 
   // Use the image variable to save the image, then delete the variable.
   let newImage = false;
-  if (book.image) {
-    await saveBookImage(dir, book, book.image);
+  // [sic], not checking the hasImage variable, checking if there's a new image
+  if (book.cache.image) {
+    await saveBookImage(dir, book, book.cache.image);
     newImage = true;
-    book.imageUpdated = new Date().getTime();
-    delete book.image;
-  }
-  if (book.thumbnail) {
-    delete book.thumbnail;
+    book.images.imageUpdated = new Date().getTime();
   }
 
   book.datePublished = book.datePublished?.trim() ?? "";
@@ -88,7 +83,7 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
 
   book.tags = book.tags.filter((t) => t.trim().length);
 
-  const filepath = path.join(authorPath, `${book.filename}.yaml`);
+  const filepath = path.join(authorPath, `${newFilename}.yaml`);
   if (!book.timestampAdded && !fs.existsSync(filepath)) {
     book.timestampAdded = new Date().getTime();
   }
@@ -98,12 +93,12 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
   // After saving everything else, delete old data if present.
   if (oAuthorDir && path.join(dir, oAuthorDir) !== authorPath) {
     fs.rmSync(path.join(dir, oAuthorDir), { recursive: true, force: true });
-  } else if (oFilename && oFilename !== book.filename) {
+  } else if (oFilename && oFilename !== newFilename) {
     fs.rmSync(path.join(authorPath, oFilename + ".yaml"), { force: true });
     if (newImage) {
       fs.rmSync(path.join(authorPath, oFilename + ".jpg"), { force: true });
     } else {
-      fs.renameSync(path.join(authorPath, oFilename + ".jpg"), path.join(authorPath, book.filename + ".jpg"));
+      fs.renameSync(path.join(authorPath, oFilename + ".jpg"), path.join(authorPath, newFilename + ".jpg"));
     }
   }
 
@@ -120,11 +115,18 @@ export async function readAllBooks(dir: string): Promise<Book[]> {
       fs.readdirSync(path.join(file.path, file.name), { withFileTypes: true }).forEach((subFile) => {
         if (subFile.isFile() && subFile.name.endsWith(".yaml")) {
           // Get data for book
-          let pathname = path.join(subFile.path, subFile.name);
-          let book = readYaml(pathname) as Book;
-          // Reset image and dir location from current status
-          book.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
-          book.authorDir = file.name;
+          const pathname = path.join(subFile.path, subFile.name);
+          // Import
+          let book = readYaml(pathname) as BookImport;
+          if (book.version !== "2") book = transformV1(book);
+          // Build cache data
+          book.images.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
+          book.cache = {
+            authorDir: file.name,
+            filename: subFile.name.slice(0, -5),
+          };
+          book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
+          book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
           books.push(book);
         }
       });
@@ -136,8 +138,45 @@ export async function readAllBooks(dir: string): Promise<Book[]> {
 export async function readBook(dir: string, authorDir: string, filename: string): Promise<Book | null> {
   const pathname = path.join(dir, authorDir, filename + ".yaml");
   if (!fs.existsSync(pathname)) return null;
-  let book = readYaml(pathname) as Book;
-  book.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
-  book.authorDir = authorDir;
+  // Import
+  let book = readYaml(pathname) as BookImport;
+  if (book.version !== "2") book = transformV1(book);
+  // Build cache data
+  book.images.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
+  let filepath = authorDir + "/" + filename;
+  book.cache = {
+    authorDir,
+    filename,
+    filepath,
+    urlpath: filepath.replace(/ /g, "%20"),
+  };
   return book;
+}
+
+function transformV1(book: Book_v1): Book {
+  return {
+    version: "2",
+    title: book.title,
+    authors: book.authors,
+    tags: book.tags,
+    series: book.series ?? "",
+    datePublished: book.datePublished ?? "",
+    dateRead: book.dateRead ?? "",
+    timestampAdded: book.timestampAdded ?? 0,
+    images: {
+      hasImage: book.hasImage ?? false,
+      imageUpdated: book.imageUpdated,
+    },
+    ids: {
+      isbn: book.isbn,
+      googleBooksId: book.googleBooksId,
+    },
+    cache: {
+      authorDir: book.authorDir,
+      filename: book.filename,
+      filepath: book.authorDir + "/" + book.filename,
+      image: book.image,
+      thumbnail: book.thumbnail,
+    },
+  };
 }

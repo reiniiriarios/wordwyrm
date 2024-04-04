@@ -5,6 +5,42 @@ type Author = {
 };
 
 type Book = {
+  version: "2";
+  title: string;
+  authors: Author[];
+  tags: string[];
+  series: string;
+  datePublished: string;
+  dateRead: string;
+  timestampAdded: number; // ms
+  images: {
+    hasImage: boolean;
+    imageUpdated?: number;
+  };
+  ids: {
+    isbn?: string;
+    googleBooksId?: string;
+    goodreadsId?: string;
+    amazonId?: string;
+    libraryThingId?: string;
+    wikidataId?: string;
+    openLibraryId?: string;
+    internetArchiveId?: string;
+    oclcId?: string;
+  };
+  cache: {
+    authorDir?: string;
+    filename?: string;
+    filepath?: string;
+    urlpath?: string;
+    searchId?: string;
+    image?: string;
+    thumbnail?: string;
+  };
+};
+
+type Book_v1 = {
+  version: "1";
   title: string;
   authors: Author[];
   authorDir?: string;
@@ -28,3 +64,5 @@ type Book = {
   internetArchiveId?: string;
   oclcId?: string;
 };
+
+type BookImport = Book | Book_v1;

@@ -49,7 +49,7 @@
     if (acceptedFiles.length) {
       console.log(acceptedFiles);
       addImagePath = acceptedFiles[0].path;
-      book.image = addImagePath;
+      book.cache.image = addImagePath;
     }
   }
 </script>

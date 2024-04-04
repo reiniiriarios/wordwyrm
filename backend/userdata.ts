@@ -25,7 +25,9 @@ export function readYaml(filename: string): any {
 
 export function saveYaml(filename: string, data: any) {
   try {
-    const doc = yaml.dump(data);
+    let toWrite = structuredClone(data);
+    if (toWrite.cache) delete toWrite.cache;
+    const doc = yaml.dump(toWrite);
     fs.writeFileSync(filename, doc, { flag: "w", encoding: "utf8" });
   } catch (e) {
     console.error(e);

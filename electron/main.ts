@@ -7,7 +7,8 @@ import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
 import { addBookImage, readAllBooks, readBook, saveBook } from "../backend/bookdata";
 import { checkForUpdate } from "../backend/updates";
 import packageJson from "../package.json";
-import { UserSettings } from "types/global";
+import { UserSettings } from "../types/global";
+import { searchOpenLibrary } from "../backend/openlibrary";
 
 const PORT = 5000;
 const DEBUG = process.env.DEBUG === "true";

@@ -4,12 +4,12 @@
     "target": "ES6",
     "sourceMap": true,
     "outDir": "../dist/electron",
-    "baseUrl": "..",
+    "baseUrl": ".",
     "allowJs": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "typeRoots": ["types", "node_modules/@types"]
+    "typeRoots": ["../types", "../node_modules/@types"]
   },
   "include": ["**/*.ts", "../backend/*.ts", "../types"],
   "exclude": ["../node_modules/*", "../dist/*", "../scripts/*"]

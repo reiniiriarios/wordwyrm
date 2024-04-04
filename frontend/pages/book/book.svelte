@@ -12,16 +12,17 @@
   let seriesBooks: Book[] = [];
 
   onMount(() => {
+    console.log("book/", params);
     readBook(params.author, params.book);
 
     const removeReceiveListener = window.electronAPI.receiveBook((b: Book) => {
       book = b;
-      if (book.series?.length) getSeries();
+      getSeries();
     });
 
     const removeSaveListener = window.electronAPI.bookSaved((b: Book) => {
       book = b;
-      if (book.series?.length) getSeries();
+      getSeries();
     });
 
     const removeAllListener = window.electronAPI.receiveAllBooks((books: Book[]) => {
@@ -41,10 +42,12 @@
   }
 
   function getSeries() {
-    if (!allBooks.length) {
-      window.electronAPI.readAllBooks();
-    } else {
-      filterSeries();
+    if (book.series.length) {
+      if (!allBooks.length) {
+        window.electronAPI.readAllBooks();
+      } else {
+        filterSeries();
+      }
     }
   }
 
@@ -70,7 +73,7 @@
 </div>
 {#if book}
   <div class="bookPage">
-    {#if book.hasImage}
+    {#if book.images.hasImage}
       <div class="bookPage__image">
         <Bookimage {book} overlay pageHeight />
       </div>
@@ -100,18 +103,18 @@
           <div class="seriesList">
             {#each seriesBooks as sb}
               <div class="seriesList__book">
-                {#if sb.hasImage}
+                {#if sb.images.hasImage}
                   <a
-                    href={`#/book/${sb.authorDir}/${sb.filename}`}
-                    on:click={() => readBook(sb.authorDir ?? "", sb.filename ?? "")}
+                    href={`#/book/${sb.cache.filepath}`}
+                    on:click={() => readBook(sb.cache.authorDir ?? "", sb.cache.filename ?? "")}
                     class="seriesList__inner seriesList__inner--image"
                   >
                     <Bookimage book={sb} overlay />
                   </a>
                 {:else}
                   <a
-                    href={`#/book/${sb.authorDir}/${sb.filename}`}
-                    on:click={() => readBook(sb.authorDir ?? "", sb.filename ?? "")}
+                    href={`#/book/${sb.cache.filepath}`}
+                    on:click={() => readBook(sb.cache.authorDir ?? "", sb.cache.filename ?? "")}
                     class="seriesList__inner seriesList__inner--noimage"
                   >
                     <span>{sb.title}</span>
@@ -144,7 +147,7 @@
         {/if}
       </div>
       <div class="moreInfo">
-        <Moreinfo isbn={book.isbn} googleId={book.googleBooksId} />
+        <Moreinfo isbn={book.ids.isbn} googleId={book.ids.googleBooksId} />
       </div>
     </div>
   </div>

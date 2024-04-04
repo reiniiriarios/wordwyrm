@@ -237,15 +237,15 @@
 <div class="bookList">
   {#each sortedBooks as book}
     <div class="book" class:zoomSmall={zoomLevel === "s"} class:zoomLarge={zoomLevel === "l"}>
-      {#if book.hasImage}
-        <a href={`#/book/${book.authorDir}/${book.filename}`} class="book__inner book__inner--image">
+      {#if book.images.hasImage}
+        <a href={`#/book/${book.cache.filepath}`} class="book__inner book__inner--image">
           <Bookimage {book} overlay />
           {#if !book.dateRead}
             <span class="unread">Unread</span>
           {/if}
         </a>
       {:else}
-        <a href={`#/book/${book.authorDir}/${book.filename}`} class="book__inner book__inner--noimage">
+        <a href={`#/book/${book.cache.filepath}`} class="book__inner book__inner--noimage">
           <span>{book.title}</span>
           <span>by</span>
           <span>{book.authors.map((a) => a.name).join(", ")}</span>
