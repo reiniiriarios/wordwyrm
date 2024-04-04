@@ -13,6 +13,7 @@ export type Book = {
   series?: string;
   datePublished?: string;
   dateRead?: string;
+  timestampAdded?: number; // ms
   hasImage?: boolean;
   imageUpdated?: number;
   image?: string;

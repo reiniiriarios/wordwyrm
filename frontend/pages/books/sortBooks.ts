@@ -68,6 +68,24 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
       return books;
     },
   },
+  added: {
+    name: "Date Added",
+    sort: (books: Book[], reverse: boolean): Book[] => {
+      books.sort((x, y) => {
+        let xD = x.timestampAdded ?? 0;
+        let yD = y.timestampAdded ?? 0;
+        if (reverse) {
+          if (xD < yD) return -1;
+          if (xD > yD) return 1;
+        } else {
+          if (xD > yD) return -1;
+          if (xD < yD) return 1;
+        }
+        return 0;
+      });
+      return books;
+    },
+  },
   series: {
     name: "Series",
     sort: (books: Book[], reverse: boolean): Book[] => {

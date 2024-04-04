@@ -82,7 +82,12 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
 
   book.tags = book.tags.filter((t) => t.trim().length);
 
-  saveYaml(path.join(authorPath, `${book.filename}.yaml`), book);
+  const filepath = path.join(authorPath, `${book.filename}.yaml`);
+  if (!book.timestampAdded && !fs.existsSync(filepath)) {
+    book.timestampAdded = new Date().getTime();
+  }
+
+  saveYaml(filepath, book);
 
   // After saving everything else, delete old data if present.
   if (oAuthorDir && path.join(dir, oAuthorDir) !== authorPath) {
