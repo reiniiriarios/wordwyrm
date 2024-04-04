@@ -125,7 +125,7 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
 
 export const catFilters: Record<string, { name: string; filter: filterFn }> = {
   all: {
-    name: "All",
+    name: "All Books",
     filter: (books: Book[]): Book[] => books,
   },
   fiction: {

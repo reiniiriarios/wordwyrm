@@ -147,6 +147,15 @@
     <MagnifyingGlass /><input type="text" bind:value={currentSearch} on:keydown={searchFilter} />
   </div>
   <div class="pageNav__actions">
+    <div class="zoom">
+      <div class="resizeIcon">
+        <FrameCorners size={22} />
+      </div>
+      <button on:click={() => zoom("s")} class:selected={zoomLevel === "s"}>S</button>
+      <button on:click={() => zoom("m")} class:selected={zoomLevel === "m"}>M</button>
+      <button on:click={() => zoom("l")} class:selected={zoomLevel === "l"}>L</button>
+    </div>
+
     <AddBook />
     {#if showSearch}
       <SearchBook />
@@ -173,14 +182,29 @@
 
   <div class="filter">
     <span>Filter:</span>
-    {#each Object.entries(catFilters) as [i, f]}
-      <button on:click={() => catFilter(i)} class:selected={currentFilter === i}>{f.name}</button>
-    {/each}
-    {#if filterTags}
-      {#each filterTags as tag}
-        <button on:click={() => tagFilter(tag)} class:selected={currentTagFilter === tag}>{tag}</button>
-      {/each}
-    {/if}
+    <div class="customFilter">
+      <button class="customFilter__selected">
+        {#if filterTags && currentTagFilter}
+          {currentTagFilter}
+        {:else}
+          {catFilters[currentFilter].name}
+        {/if}
+      </button>
+      <div class="customFilter__dropdown">
+        {#each Object.entries(catFilters) as [i, f]}
+          <button on:click={() => catFilter(i)} class="customFilter__opt" class:selected={currentFilter === i}
+            >{f.name}</button
+          >
+        {/each}
+        {#if filterTags}
+          {#each filterTags as tag}
+            <button on:click={() => tagFilter(tag)} class="customFilter__opt" class:selected={currentTagFilter === tag}
+              >{tag}</button
+            >
+          {/each}
+        {/if}
+      </div>
+    </div>
   </div>
 
   <div class="filter">
@@ -200,12 +224,14 @@
   </div>
 
   <div class="filter filter--right">
-    <div class="resizeIcon">
-      <FrameCorners size={22} />
+    <div class="bookCount">
+      {#if allBooks.length > 0}
+        {#if sortedBooks.length < allBooks.length}
+          {sortedBooks.length} <span class="bookCount__sep">/</span>
+        {/if}
+        <span class:mute={sortedBooks.length < allBooks.length}>{allBooks.length}</span> Books
+      {/if}
     </div>
-    <button on:click={() => zoom("s")} class:selected={zoomLevel === "s"}>S</button>
-    <button on:click={() => zoom("m")} class:selected={zoomLevel === "m"}>M</button>
-    <button on:click={() => zoom("l")} class:selected={zoomLevel === "l"}>L</button>
   </div>
 </div>
 
@@ -233,9 +259,44 @@
 <style lang="scss">
   @import "../../style/variables";
 
-  .resizeIcon {
-    color: $fgColorMuted;
-    opacity: 0.8;
+  .zoom {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 0.25rem;
+    margin-right: 2rem;
+
+    .resizeIcon {
+      color: $fgColorMuted;
+      opacity: 0.8;
+    }
+
+    button {
+      background-color: $bgColorLight;
+      color: $fgColor;
+      padding: 0.25rem 0.5rem;
+      border: 0;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-size: 0.75rem;
+
+      &.selected {
+        background-color: $bgColorLighter;
+      }
+    }
+  }
+
+  .bookCount {
+    font-size: 1rem;
+
+    &__sep {
+      color: $fgColorMuted;
+      opacity: 0.8;
+    }
+
+    .mute {
+      color: $fgColorMuted;
+    }
   }
 
   .bookList {
@@ -247,7 +308,7 @@
     padding: 0.5rem 1rem 1.25rem;
     overflow-y: auto;
     width: 100%;
-    height: calc(100vh - $pageNavHeight - $filterHeight);
+    height: calc(100vh - $pageNavHeight - var(--filter-height));
     scrollbar-width: thin;
     scrollbar-color: $bgColorLightest transparent;
   }

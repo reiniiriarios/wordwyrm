@@ -1,10 +1,20 @@
 @import "variables";
 
+:root {
+  --filter-height: 3rem;
+
+  @media screen and (max-width: 1150px) {
+    --filter-height: 6rem;
+  }
+}
+
 .listFilter {
-  height: $filterHeight;
+  height: var(--filter-height);
   padding: 0.5rem 1rem 1.25rem;
   display: flex;
-  gap: 2rem;
+  flex-wrap: wrap;
+  column-gap: 1.5rem;
+  row-gap: 0.5rem;
   align-items: center;
   justify-content: left;
   white-space: nowrap;
@@ -39,6 +49,7 @@
   }
 }
 
+.customFilter,
 .recentFilter {
   position: relative;
   display: inline-block;
@@ -69,11 +80,13 @@
   }
 
   &:hover {
+    .customFilter__selected,
     .recentFilter__selected {
       border-bottom-left-radius: 0 !important;
       border-bottom-right-radius: 0 !important;
     }
 
+    .customFilter__dropdown,
     .recentFilter__dropdown {
       display: block;
     }
