@@ -41,10 +41,6 @@ a {
   }
 }
 
-*:focus {
-  outline: 0;
-}
-
 *:focus-visible {
   z-index: 1000;
   outline: 1px solid $accentColor;

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Book } from "@data/book";
   import Modal from "@components/modal.svelte";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
 
   let addBookOpen: boolean = false;
@@ -11,6 +11,7 @@
   let searched: boolean = false;
   let searching: boolean = false;
   let canAdd: boolean = false;
+  let searchInput: HTMLInputElement;
 
   function openDialog() {
     window.addEventListener("keydown", searchKey);
@@ -20,6 +21,7 @@
     searched = false;
     searching = false;
     canAdd = false;
+    tick().then(() => searchInput.focus());
   }
 
   function search() {
@@ -81,7 +83,7 @@
   bind:canConfirm={canAdd}
 >
   <div class="search">
-    <input type="text" name="search" bind:value={searchString} required />
+    <input type="text" name="search" bind:this={searchInput} bind:value={searchString} required />
     <button class="btn btn--light" on:click={search} disabled={searching}>Search</button>
   </div>
   {#if searched && !searchResults.length}
