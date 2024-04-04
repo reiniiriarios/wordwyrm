@@ -7,8 +7,8 @@ export type Author = {
 export type Book = {
   title: string;
   authors: Author[];
-  authorDir: string;
-  filename: string;
+  authorDir?: string;
+  filename?: string;
   tags: string[];
   series?: string;
   datePublished?: string;
@@ -18,6 +18,13 @@ export type Book = {
   imageUpdated?: number;
   image?: string;
   thumbnail?: string;
-  googleBooksId?: string;
   isbn?: string;
+  googleBooksId?: string;
+  goodreadsId?: string;
+  amazonId?: string;
+  libraryThingId?: string;
+  wikidataId?: string;
+  openLibraryId?: string;
+  internetArchiveId?: string;
+  oclcId?: string;
 };

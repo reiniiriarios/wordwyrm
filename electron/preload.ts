@@ -1,4 +1,3 @@
-import { SearchResult } from "@api/imagesearch";
 import { Book } from "@data/book";
 import { contextBridge, ipcRenderer } from "electron";
 import type { UserSettings } from "../types/global";

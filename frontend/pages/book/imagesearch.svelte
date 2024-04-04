@@ -3,7 +3,7 @@
   import { Book } from "@data/book";
   import { push } from "svelte-spa-router";
   import ImageSquare from "phosphor-svelte/lib/ImageSquare";
-  import { SearchResult } from "@api/imagesearch";
+  import { SearchResult } from "@api/googleimagesearch";
   import { onMount } from "svelte";
 
   export let book: Book = {} as Book;

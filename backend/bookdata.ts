@@ -11,12 +11,15 @@ export function initBookDirs(dir: string) {
   }
 }
 
-function authorsToDir(authors: Author[]): string {
+export function authorsToDir(authors: Author[]): string {
   return authors.map((a) => a.name.replace(/[^A-Za-z0-9\-',\. ]/g, "_")).join(", ");
 }
 
 async function saveBookImage(dir: string, book: Book, url: string) {
   try {
+    if (!book.authorDir) {
+      book.authorDir = authorsToDir(book.authors);
+    }
     let filepath = path.join(dir, book.authorDir, `${book.filename}.jpg`);
     url = url.replace(/\\/g, "/");
     // If a remote file, fetch and use buffer in sharp instead.
@@ -43,6 +46,9 @@ async function sharpImage(img: Buffer | string, filepath: string) {
 }
 
 export async function addBookImage(dir: string, book: Book, url: string) {
+  if (!book.authorDir) {
+    book.authorDir = authorsToDir(book.authors);
+  }
   await saveBookImage(dir, book, url);
   delete book.image;
   delete book.thumbnail;
