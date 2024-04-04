@@ -16,7 +16,7 @@ export const api = {
 
   updateAvailable: (callback: Function) => ipcCallback("updateAvailable", callback),
 
-  getBookData: (id: string) => ipcRenderer.send("getBookData", id),
+  getBookData: (book: Book) => ipcRenderer.send("getBookData", book),
   receiveBookData: (callback: Function) => ipcCallback("receiveBookData", callback),
 
   searchBook: (q: string) => ipcRenderer.send("searchBook", q),

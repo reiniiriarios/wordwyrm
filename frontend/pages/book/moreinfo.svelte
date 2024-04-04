@@ -29,20 +29,8 @@
   {/if}
 
   {#if book.ids.openLibraryId}
-    <a class="btn" href={`https://openlibrary.org/works/${book.ids.openLibraryId}`} target="_blank">
+    <a class="btn" href={`https://openlibrary.org/${book.ids.openLibraryId}`} target="_blank">
       OpenLibrary
-      <ArrowSquareOut />
-    </a>
-  {/if}
-
-  {#if book.ids.libraryThingId}
-    <a class="btn" href={`https://www.librarything.com/work/${book.ids.libraryThingId}}`} target="_blank">
-      LibraryThing
-      <ArrowSquareOut />
-    </a>
-  {:else if book.ids.isbn}
-    <a class="btn" href={`https://www.librarything.com/isbn/${book.ids.isbn}`} target="_blank">
-      LibraryThing
       <ArrowSquareOut />
     </a>
   {/if}

@@ -147,10 +147,26 @@
           Series
           <input type="text" bind:value={book.series} />
         </label>
-        <label class="field field--fullwidth">
+
+        <label class="field field">
           ISBN <Hoverinfo details="Enables quick-links to Google Books, LibraryThing, and Goodreads." />
           <input type="text" bind:value={book.ids.isbn} />
         </label>
+        <label class="field field">
+          Google Books ID <Hoverinfo details="Enables quick-link to Google Books." />
+          <input type="text" bind:value={book.ids.googleBooksId} />
+        </label>
+        <label class="field field">
+          OpenLibrary ID <Hoverinfo
+            details="Enables quick-link to OpenLibrary. Format should be /works/id or /books/id."
+          />
+          <input type="text" bind:value={book.ids.openLibraryId} />
+        </label>
+        <label class="field field">
+          Goodreads ID <Hoverinfo details="Enables quick-link to Goodreads." />
+          <input type="text" bind:value={book.ids.goodreadsId} />
+        </label>
+
         <label class="field field--fullwidth">
           Tag(s) <Hoverinfo details="Tags should be comma-separated." />
           <input type="text" bind:value={tags} on:change={setTags} />

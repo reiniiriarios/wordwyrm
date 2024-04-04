@@ -40,7 +40,15 @@ export function loadSettings(): UserSettings {
     saveYaml(sf, {});
     return {} as UserSettings;
   }
-  return readYaml(sf);
+  let settings: UserSettings = readYaml(sf);
+  if (!settings.searchEngines) {
+    settings.searchEngines = [];
+  }
+  // Verify we have the API Key to search with the Google Books engine.
+  else if (!settings.googleApiKey?.length && settings.searchEngines.includes("googleBooks")) {
+    settings.searchEngines.filter((e) => e !== "googleBooks");
+  }
+  return settings;
 }
 
 export function saveSettings(settings: UserSettings) {

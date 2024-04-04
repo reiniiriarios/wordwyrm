@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from "electron";
 import * as path from "path";
-import { getBook, searchBook } from "../backend/googlebooks";
+import { getGoogleBook, searchGoogleBooks } from "../backend/googlebooks";
 import { imageSearch } from "../backend/googleimagesearch";
 import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
 import { addBookImage, readAllBooks, readBook, saveBook } from "../backend/bookdata";
 import { checkForUpdate } from "../backend/updates";
 import packageJson from "../package.json";
 import { UserSettings } from "../types/global";
-import { searchOpenLibrary } from "../backend/openlibrary";
+import { searchOpenLibrary, searchOpenLibraryWorkByISBN } from "../backend/openlibrary";
 
 const PORT = 5000;
 const DEBUG = process.env.DEBUG === "true";
@@ -95,15 +95,44 @@ app.on("ready", () => {
 
   // --------- Bridge ---------
 
-  ipcMain.on("getBookData", (event, id?: string) => {
-    if (id && settings.googleApiKey) {
-      getBook(id, settings.googleApiKey).then((res) => event.reply("receiveBookData", res));
+  ipcMain.on("getBookData", (event, book: Book) => {
+    // If using both search engines, get the Google Books data, then supplement with OpenLibrary.
+    if (settings.searchEngines.includes("googleBooks") && settings.searchEngines.includes("openLibrary")) {
+      getGoogleBook(book.ids.googleBooksId, settings.googleApiKey).then((updatedBook) => {
+        if (updatedBook.ids.isbn) {
+          searchOpenLibraryWorkByISBN(updatedBook.ids.isbn).then((olBook) => {
+            updatedBook.datePublished = olBook.datePublished; // OpenLibrary accurate to original publish date
+            updatedBook.ids.openLibraryId = olBook.ids.openLibraryId;
+            updatedBook.ids.amazonId = olBook.ids.amazonId;
+            updatedBook.ids.goodreadsId = olBook.ids.goodreadsId;
+            updatedBook.ids.internetArchiveId = olBook.ids.internetArchiveId;
+            updatedBook.ids.libraryThingId = olBook.ids.libraryThingId;
+            updatedBook.ids.oclcId = olBook.ids.oclcId;
+            updatedBook.ids.wikidataId = olBook.ids.wikidataId;
+            event.reply("receiveBookData", updatedBook);
+          });
+        } else {
+          event.reply("receiveBookData", updatedBook);
+        }
+      });
+    }
+    // If just using Google Books, fetch full data.
+    else if (settings.searchEngines.includes("googleBooks")) {
+      getGoogleBook(book.ids.googleBooksId, settings.googleApiKey).then((updatedBook) =>
+        event.reply("receiveBookData", updatedBook),
+      );
+    }
+    // If just using OpenLibrary, there's no more data to get.
+    else {
+      event.reply("receiveBookData", book);
     }
   });
 
   ipcMain.on("searchBook", (event, q: string) => {
-    if (settings.googleApiKey) {
-      searchBook(q, settings.googleApiKey).then((res) => event.reply("searchBookResults", res));
+    if (settings.searchEngines.includes("googleBooks")) {
+      searchGoogleBooks(q, settings.googleApiKey).then((res) => event.reply("searchBookResults", res));
+    } else {
+      searchOpenLibrary(q).then((res) => event.reply("searchBookResults", res));
     }
   });
 

@@ -6,16 +6,28 @@
 
   let settings: UserSettings = {} as UserSettings;
   let saved: boolean = false;
+  let seOpenLibrary: boolean;
+  let seGoogleBooks: boolean;
 
   onMount(() => {
     settings = window.userSettings;
     if (!settings.chartStartYear) {
       settings.chartStartYear = 2020;
     }
+    if (!settings.searchEngines?.length) {
+      settings.searchEngines = ["openLibrary"];
+    }
+    seOpenLibrary = settings.searchEngines?.includes("openLibrary");
+    seGoogleBooks = settings.searchEngines?.includes("googleBooks");
 
     const removeSettingsListener = window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
       settings = loadedSettings;
       window.userSettings = loadedSettings;
+      if (!loadedSettings.searchEngines.length) {
+        settings.searchEngines = ["openLibrary"];
+      }
+      seOpenLibrary = loadedSettings.searchEngines.includes("openLibrary");
+      seGoogleBooks = loadedSettings.searchEngines.includes("googleBooks");
       saved = true;
       setTimeout(() => (saved = false), 1500);
     });
@@ -30,6 +42,32 @@
       removeDirListener();
     };
   });
+
+  function toggleSearchEngine(engine: string) {
+    if (engine === "googleBooks") {
+      if (!settings.googleApiKey?.length) {
+        return;
+      }
+      seGoogleBooks = !seGoogleBooks;
+    } else if (engine === "openLibrary") {
+      seOpenLibrary = !seOpenLibrary;
+    }
+    if (settings.searchEngines.includes(engine)) {
+      settings.searchEngines = settings.searchEngines.filter((e) => e !== engine);
+      // Ensure at least one is selected.
+      if (!settings.searchEngines.length) {
+        if (engine === "googleBooks") {
+          settings.searchEngines.push("openLibrary");
+          seOpenLibrary = true;
+        } else {
+          settings.searchEngines.push("googleBooks");
+          seGoogleBooks = true;
+        }
+      }
+    } else {
+      settings.searchEngines.push(engine);
+    }
+  }
 
   function selectDataDir(e: MouseEvent | KeyboardEvent) {
     e.preventDefault();
@@ -54,10 +92,12 @@
       <button class="btn btn--light" on:click={selectDataDir}>Select</button>
     </div>
   </label>
+
   <label class="field field--fullwidth">
     Chart Default Start Year <Hoverinfo details="Sets the default start year for the chart page." />
     <input type="text" bind:value={settings.chartStartYear} />
   </label>
+
   <label class="field field--fullwidth">
     Tags for Filtering <Hoverinfo details="Tags should be comma-separated." />
     <input type="text" bind:value={settings.filterTags} maxlength="255" />
@@ -66,6 +106,24 @@
     Common Tags for Editing <Hoverinfo details="Tags should be comma-separated." />
     <input type="text" bind:value={settings.commonTags} maxlength="1024" />
   </label>
+
+  <div class="field field--fullwidth">
+    Search Engine <Hoverinfo
+      details="Engine used to search for book data. Add Google Cloud API Key to use Google Books for data. Google Books data will be supplemented with OpenLibrary data."
+    />
+    <div class="btnOptions">
+      <button class="btn btn--option" class:selected={seOpenLibrary} on:click={() => toggleSearchEngine("openLibrary")}
+        >OpenLibrary</button
+      >
+      <button
+        class="btn btn--option"
+        class:selected={seGoogleBooks}
+        disabled={!settings.googleApiKey?.length}
+        on:click={() => toggleSearchEngine("googleBooks")}>Google Books</button
+      >
+    </div>
+  </div>
+
   <label class="field field--fullwidth">
     Google Cloud API Key <Hoverinfo details="Optional. Enables searching for book data via Google Books." />
     <input type="text" bind:value={settings.googleApiKey} />

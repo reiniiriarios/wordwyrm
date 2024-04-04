@@ -191,7 +191,7 @@ function conformBook(v: Volume): Book {
   return book;
 }
 
-export async function searchBook(q: string, apiKey: string): Promise<Book[]> {
+export async function searchGoogleBooks(q: string, apiKey: string): Promise<Book[]> {
   return searchVolume(q, apiKey).then((volumeSearch) => {
     if (!volumeSearch) return [];
     let books: Book[] = [];
@@ -202,6 +202,6 @@ export async function searchBook(q: string, apiKey: string): Promise<Book[]> {
   });
 }
 
-export async function getBook(gid: string, apiKey: string): Promise<Book> {
+export async function getGoogleBook(gid: string, apiKey: string): Promise<Book> {
   return getVolume(gid, apiKey).then((v) => conformBook(v));
 }

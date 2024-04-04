@@ -40,6 +40,7 @@
       searchResults = books;
       searching = false;
       searched = true;
+      console.log(books);
     });
 
     const removeReceiveListener = window.electronAPI.receiveBookData((book: Book) => {
@@ -62,9 +63,9 @@
   }
 
   function addBook() {
-    if (!selectedBook.cache.searchId) return;
+    if (!selectedBook.cache?.searchId) return;
     window.removeEventListener("keydown", searchKey);
-    window.electronAPI.getBookData(selectedBook.cache.searchId);
+    window.electronAPI.getBookData(selectedBook);
   }
 
   function closeSearch() {
@@ -90,7 +91,7 @@
   {:else}
     <div class="results">
       {#each searchResults as book}
-        <div class="book" class:selected={selectedBook.cache.searchId === book.cache.searchId}>
+        <div class="book" class:selected={selectedBook.cache?.searchId === book.cache.searchId}>
           {#if book.images.hasImage}
             <button class="book__inner book__inner--image" on:click={() => selectBook(book)}>
               <img src={book.cache.thumbnail?.replace(/^http:/, "https:")} alt="" />
