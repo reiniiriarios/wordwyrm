@@ -1,12 +1,27 @@
 <script lang="ts">
-  export let latestVersion: string = "?.?.?";
+  import { onMount } from "svelte";
+
+  export let latestVersion: string = "";
+
+  let show: boolean = true;
+
+  onMount(() => {
+    setTimeout(() => (show = false), 30000);
+  });
 </script>
 
-<div class="update">
-  Update Available: <a href="https://github.com/reiniiriarios/book-tracker/releases/latest" target="_blank"
-    >Download v{latestVersion}</a
-  >
-</div>
+{#if show}
+  <div class="update">
+    Update Available: <a href="https://github.com/reiniiriarios/book-tracker/releases/latest" target="_blank">
+      Download
+      {#if latestVersion}
+        v{latestVersion}
+      {:else}
+        Latest Version
+      {/if}
+    </a>
+  </div>
+{/if}
 
 <style lang="scss">
   @import "../style/variables";
