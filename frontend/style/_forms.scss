@@ -18,6 +18,12 @@ textarea {
   }
 }
 
+.field {
+  margin: 0.125rem 0 0.125rem;
+  font-size: 0.9rem;
+  color: $fgColorMuted;
+}
+
 fieldset {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -30,7 +36,15 @@ fieldset {
     display: block;
     font-size: 0.9rem;
     color: $fgColorMuted;
-    margin-bottom: 0.1rem;
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    textarea,
+    button,
+    button.btn {
+      margin-top: 0.2rem;
+    }
   }
 
   input[type="text"],
@@ -41,8 +55,6 @@ fieldset {
   }
 
   .field {
-    margin: 0.125rem 0 0.125rem;
-
     &--fullwidth {
       grid-column: 1 / 3;
     }
@@ -69,5 +81,15 @@ fieldset {
     max-height: 10rem;
     width: auto;
     max-width: 100%;
+  }
+
+  &__info {
+    font-size: 0.9rem;
+    color: $fgColorMuted;
+    padding: 1rem;
+
+    img + & {
+      padding-bottom: 0.1rem;
+    }
   }
 }

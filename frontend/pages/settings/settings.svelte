@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { UserSettings } from "types/global";
   import ArrowSquareOut from "phosphor-svelte/lib/ArrowSquareOut";
+  import Hoverinfo from "@components/hoverinfo.svelte";
 
   let settings: UserSettings = {} as UserSettings;
   let saved: boolean = false;
@@ -47,30 +48,32 @@
 </div>
 <fieldset class="settings">
   <label class="field field--fullwidth">
-    Book Data Directory
+    Book Data Directory <Hoverinfo details="Select a directory in a cloud drive to share your data between devices." />
     <div class="fileSelect">
       <input type="text" readonly on:click={selectDataDir} bind:value={settings.booksDir} />
       <button class="btn btn--light" on:click={selectDataDir}>Select</button>
     </div>
   </label>
   <label class="field field--fullwidth">
-    Chart Default Start Year
+    Chart Default Start Year <Hoverinfo details="Sets the default start year for the chart page." />
     <input type="text" bind:value={settings.chartStartYear} />
   </label>
   <label class="field field--fullwidth">
-    Tags for Filtering (comma-separated)
+    Tags for Filtering <Hoverinfo details="Tags should be comma-separated." />
     <input type="text" bind:value={settings.filterTags} maxlength="60" />
   </label>
   <label class="field field--fullwidth">
-    Common Tags for Editing (comma-separated)
+    Common Tags for Editing <Hoverinfo details="Tags should be comma-separated." />
     <input type="text" bind:value={settings.commonTags} maxlength="255" />
   </label>
   <label class="field field--fullwidth">
-    Google Cloud API Key
+    Google Cloud API Key <Hoverinfo details="Optional. Enables searching for book data via Google Books." />
     <input type="text" bind:value={settings.googleApiKey} />
   </label>
   <label class="field field--fullwidth">
-    Google Custom Search Engine ID
+    Google Custom Search Engine ID <Hoverinfo
+      details="Optional. Along with API Key, enables searching for cover images via Google Image Search."
+    />
     <input type="text" bind:value={settings.googleSearchEngineId} />
   </label>
   <div class="actions">
