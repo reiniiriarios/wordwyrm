@@ -4,13 +4,16 @@
   import Menu from "@components/menu.svelte";
   import UpdateAvailable from "@components/updateavailable.svelte";
   import { onMount } from "svelte";
-  import { UserSettings } from "types/global";
+  import { AppState, UserSettings } from "types/global";
 
   let updateAvailable: string = "";
 
   onMount(() => {
     window.userSettings = {} as UserSettings;
     window.electronAPI.loadSettings();
+    window.appState = {
+      books: {},
+    } as AppState;
 
     const removeSettingsListener = window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
       window.userSettings = loadedSettings;

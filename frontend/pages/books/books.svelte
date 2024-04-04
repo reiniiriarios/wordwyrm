@@ -15,13 +15,13 @@
   let filteredBooks: Book[] = [];
   let searchedBooks: Book[] = [];
   let sortedBooks: Book[] = [];
-  let currentSort: string = "author";
-  let currentSortReverse: boolean = false;
-  let currentFilter: string = "all";
-  let currentTagFilter: string = "";
-  let currentRecent: string = "all";
+  let currentSort: string = window.appState?.books?.sort ?? "author";
+  let currentSortReverse: boolean = window.appState?.books?.reverse ?? false;
+  let currentFilter: string = window.appState?.books?.filter ?? "all";
+  let currentTagFilter: string = window.appState?.books?.tag ?? "";
+  let currentRecent: string = window.appState?.books?.recent ?? "all";
   let currentSearch: string = "";
-  let zoomLevel: string = "m";
+  let zoomLevel: string = window.appState?.books?.zoom ?? "m";
   let filterTags: string[] = [];
   $: filterTags = window.userSettings?.filterTags?.split(",").map((t) => t.trim());
   let showSearch: boolean = window.userSettings?.googleApiKey?.length > 0;
@@ -44,14 +44,15 @@
 
     const removeReceiveListener = window.electronAPI.receiveAllBooks((books: Book[]) => {
       console.log("received");
-      currentSort = "author";
-      currentFilter = "all";
-      currentTagFilter = "";
-      currentSortReverse = false;
+      currentSort = window.appState?.books?.sort ?? "author";
+      currentFilter = window.appState?.books?.filter ?? "all";
+      currentTagFilter = window.appState?.books?.tag ?? "";
+      currentSortReverse = window.appState?.books?.reverse ?? false;
+      currentRecent = window.appState?.books?.recent ?? "all";
       allBooks = books;
       filteredBooks = books;
       searchedBooks = books;
-      sortedBooks = sortFilters.author.sort(books, false);
+      sortedBooks = sortFilters[currentSort].sort(books, false);
     });
 
     return () => {
@@ -95,11 +96,13 @@
 
   function sortFilter(s: string) {
     currentSort = s;
+    window.appState.books.sort = currentSort;
     sort();
   }
 
   function sortReverse() {
     currentSortReverse = !currentSortReverse;
+    window.appState.books.reverse = currentSortReverse;
     sortedBooks = sortedBooks.reverse();
   }
 
@@ -113,18 +116,28 @@
   function catFilter(f: string) {
     currentFilter = f;
     currentTagFilter = "";
+    window.appState.books.filter = currentFilter;
+    window.appState.books.tag = currentTagFilter;
     filter();
   }
 
   function tagFilter(tag: string) {
     currentFilter = "";
     currentTagFilter = tag;
+    window.appState.books.filter = currentFilter;
+    window.appState.books.tag = currentTagFilter;
     filter();
   }
 
   function recentFilter(f: string) {
     currentRecent = f;
+    window.appState.books.recent = currentRecent;
     filter();
+  }
+
+  function zoom(z: string) {
+    zoomLevel = z;
+    window.appState.books.zoom = zoomLevel;
   }
 </script>
 
@@ -190,9 +203,9 @@
     <div class="resizeIcon">
       <FrameCorners size={22} />
     </div>
-    <button on:click={() => (zoomLevel = "s")} class:selected={zoomLevel === "s"}>S</button>
-    <button on:click={() => (zoomLevel = "m")} class:selected={zoomLevel === "m"}>M</button>
-    <button on:click={() => (zoomLevel = "l")} class:selected={zoomLevel === "l"}>L</button>
+    <button on:click={() => zoom("s")} class:selected={zoomLevel === "s"}>S</button>
+    <button on:click={() => zoom("m")} class:selected={zoomLevel === "m"}>M</button>
+    <button on:click={() => zoom("l")} class:selected={zoomLevel === "l"}>L</button>
   </div>
 </div>
 
