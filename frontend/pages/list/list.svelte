@@ -148,14 +148,14 @@
               {/each}
             </div>
           </td>
-          <td>
+          <td class="date">
             {#if book.datePublished?.match(/^\-\d+$/)}
               {Math.abs(+book.datePublished)} BCE
             {:else}
               {book.datePublished ?? ""}
             {/if}
           </td>
-          <td>{book.dateRead ?? ""}</td>
+          <td class="date">{book.dateRead ?? ""}</td>
         </tr>
       {/each}
     </tbody>
@@ -218,6 +218,10 @@
         background-color: rgba($accentColor, 10%);
       }
     }
+  }
+
+  .date {
+    white-space: nowrap;
   }
 
   .tags {
