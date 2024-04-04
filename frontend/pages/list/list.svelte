@@ -23,16 +23,20 @@
     if (!allBooks.length) {
       window.electronAPI.readAllBooks();
     }
-  });
 
-  window.electronAPI.receiveAllBooks((books: Book[]) => {
-    currentSort = "author";
-    currentFilter = "all";
-    currentSortReverse = false;
-    allBooks = books;
-    filteredBooks = books;
-    searchedBooks = books;
-    sortedBooks = sortFilters.author.sort(books, false);
+    const removeReceiveListener = window.electronAPI.receiveAllBooks((books: Book[]) => {
+      currentSort = "author";
+      currentFilter = "all";
+      currentSortReverse = false;
+      allBooks = books;
+      filteredBooks = books;
+      searchedBooks = books;
+      sortedBooks = sortFilters.author.sort(books, false);
+    });
+
+    return () => {
+      removeReceiveListener();
+    };
   });
 
   // -- Filter functions --

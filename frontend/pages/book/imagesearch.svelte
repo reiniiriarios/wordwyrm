@@ -4,6 +4,7 @@
   import { push } from "svelte-spa-router";
   import ImageSquare from "phosphor-svelte/lib/ImageSquare";
   import { SearchResult } from "@api/imagesearch";
+  import { onMount } from "svelte";
 
   export let book: Book = {} as Book;
   export let selectedImageUrl: string = "";
@@ -24,11 +25,25 @@
     window.electronAPI.imageSearch(book.title, book.authors.map((a) => a.name).join(", "));
   }
 
-  window.electronAPI.imageSearchResults((res: SearchResult[] | string) => {
-    if (typeof res === "string") err = res ?? "Unknown error";
-    else if (res && res.length > 0) results = res;
-    else err = "No results";
-    searching = false;
+  onMount(() => {
+    const removeImageSearchListener = window.electronAPI.imageSearchResults((res: SearchResult[] | string) => {
+      if (typeof res === "string") err = res ?? "Unknown error";
+      else if (res && res.length > 0) results = res;
+      else err = "No results";
+      searching = false;
+    });
+
+    const removeBookImageListener = window.electronAPI.bookImageAdded(() => {
+      isOpen = false;
+      book.imageUpdated = new Date().getTime();
+      book.hasImage = true;
+      push(`#/book/${book.authorDir}/${book.filename}`);
+    });
+
+    return () => {
+      removeImageSearchListener();
+      removeBookImageListener();
+    };
   });
 
   function selectImage(img: string) {
@@ -39,13 +54,6 @@
   function addImage() {
     window.electronAPI.addBookImage(book, selectedImageUrl);
   }
-
-  window.electronAPI.bookImageAdded(() => {
-    isOpen = false;
-    book.imageUpdated = new Date().getTime();
-    book.hasImage = true;
-    push(`#/book/${book.authorDir}/${book.filename}`);
-  });
 </script>
 
 <button type="button" class="btn" on:click={openDialog}>Search for Image <ImageSquare /></button>

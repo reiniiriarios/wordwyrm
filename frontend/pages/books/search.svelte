@@ -13,6 +13,7 @@
   let canAdd: boolean = false;
 
   function openDialog() {
+    window.addEventListener("keydown", searchKey);
     addBookOpen = true;
     searchString = "";
     searchResults = [];
@@ -26,12 +27,6 @@
     window.electronAPI.searchBook(searchString);
   }
 
-  window.electronAPI.searchBookResults((books: Book[]) => {
-    searchResults = books;
-    searching = false;
-    searched = true;
-  });
-
   function searchKey(e: KeyboardEvent) {
     if (["\n", "Enter"].includes(e.key) && !canAdd) {
       console.log("searching api");
@@ -40,8 +35,24 @@
   }
 
   onMount(() => {
-    window.addEventListener("keydown", searchKey);
-    return () => window.removeEventListener("keydown", searchKey);
+    const removeSearchListener = window.electronAPI.searchBookResults((books: Book[]) => {
+      searchResults = books;
+      searching = false;
+      searched = true;
+    });
+
+    const removeReceiveListener = window.electronAPI.receiveBookData((book: Book) => {
+      window.electronAPI.saveBook(book);
+      addBookOpen = false;
+      // stupid hack to avoid race condition
+      setTimeout(window.electronAPI.readAllBooks, 1000);
+    });
+
+    return () => {
+      window.removeEventListener("keydown", searchKey);
+      removeSearchListener();
+      removeReceiveListener();
+    };
   });
 
   function selectBook(book: Book) {
@@ -51,15 +62,13 @@
 
   function addBook() {
     if (!selectedBook.googleBooksId) return;
+    window.removeEventListener("keydown", searchKey);
     window.electronAPI.getBookData(selectedBook.googleBooksId);
   }
 
-  window.electronAPI.receiveBookData((book: Book) => {
-    window.electronAPI.saveBook(book);
-    addBookOpen = false;
-    // stupid hack to avoid race condition
-    setTimeout(window.electronAPI.readAllBooks, 1000);
-  });
+  function closeSearch() {
+    window.removeEventListener("keydown", searchKey);
+  }
 </script>
 
 <button type="button" class="btn" on:click={openDialog}>Search for Book <MagnifyingGlass /></button>
@@ -68,6 +77,7 @@
   heading="Search for Book"
   confirmWord="Add"
   on:confirm={addBook}
+  on:cancel={closeSearch}
   bind:canConfirm={canAdd}
 >
   <div class="search">

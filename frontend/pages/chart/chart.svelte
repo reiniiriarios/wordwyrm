@@ -89,51 +89,55 @@
     years = initYears();
     months = initMonths();
     days = initDays();
-  });
 
-  window.electronAPI.receiveAllBooks((books: Book[]) => {
-    allBooks = books;
-    parseBooks();
+    const removeReceiveListener = window.electronAPI.receiveAllBooks((books: Book[]) => {
+      allBooks = books;
+      parseBooks();
 
-    // Wait for the canvas element to appear, THEN run chart code.
-    new Promise((resolve) => {
-      if (chartCanvas) {
-        return resolve(true);
-      }
-      const observer = new MutationObserver((_mutations) => {
+      // Wait for the canvas element to appear, THEN run chart code.
+      new Promise((resolve) => {
         if (chartCanvas) {
-          observer.disconnect();
-          resolve(true);
+          return resolve(true);
         }
-      });
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-      });
-    }).then(() => {
-      chart = new Chart(chartCanvas, {
-        type: "bar",
-        data: {
-          labels: Object.values(months).map((m) => m.display),
-          datasets: [
-            {
-              label: "Books Read",
-              data: Object.values(months).map((m) => m.count),
-              borderWidth: 1,
-              borderColor: "#ff0088",
-              backgroundColor: "#ff008888",
-            },
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
+        const observer = new MutationObserver((_mutations) => {
+          if (chartCanvas) {
+            observer.disconnect();
+            resolve(true);
+          }
+        });
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+        });
+      }).then(() => {
+        chart = new Chart(chartCanvas, {
+          type: "bar",
+          data: {
+            labels: Object.values(months).map((m) => m.display),
+            datasets: [
+              {
+                label: "Books Read",
+                data: Object.values(months).map((m) => m.count),
+                borderWidth: 1,
+                borderColor: "#ff0088",
+                backgroundColor: "#ff008888",
+              },
+            ],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
             },
           },
-        },
+        });
       });
     });
+
+    return () => {
+      removeReceiveListener();
+    };
   });
 
   let view: "year" | "month" | "day" = "month";

@@ -24,19 +24,23 @@
     } else {
       commonTags = ["Fiction", "Fantasy", "Science Fiction", "Romance", "Non-Fiction", "Historical"];
     }
-  });
 
-  window.electronAPI.receiveBook((b: Book) => {
-    book = b;
-    oAuthorDir = b.authorDir;
-    oFilename = b.filename;
-    authors = book.authors.map((a) => a.name).join(", ");
-    tags = book.tags?.join(", ") ?? "";
-    if (book.hasImage && window.userSettings.booksDir) {
-      let booksDir = window.userSettings.booksDir.replace(/\\/g, "/").replace(/ /g, "%20");
-      if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
-      imagePath = `${booksDir}/${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg`;
-    }
+    const removeReceiveListener = window.electronAPI.receiveBook((b: Book) => {
+      book = b;
+      oAuthorDir = b.authorDir;
+      oFilename = b.filename;
+      authors = book.authors.map((a) => a.name).join(", ");
+      tags = book.tags?.join(", ") ?? "";
+      if (book.hasImage && window.userSettings.booksDir) {
+        let booksDir = window.userSettings.booksDir.replace(/\\/g, "/").replace(/ /g, "%20");
+        if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
+        imagePath = `${booksDir}/${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg`;
+      }
+    });
+
+    return () => {
+      removeReceiveListener();
+    };
   });
 
   function setAuthors() {

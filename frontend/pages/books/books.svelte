@@ -34,25 +34,30 @@
       console.log("sending for books");
       window.electronAPI.readAllBooks();
     }
-  });
 
-  window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
-    filterTags = loadedSettings.filterTags?.split(",").map((t) => t.trim());
-    if (loadedSettings.googleApiKey.length) {
-      showSearch = true;
-    }
-  });
+    const removeSettingsListener = window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
+      filterTags = loadedSettings.filterTags?.split(",").map((t) => t.trim());
+      if (loadedSettings.googleApiKey.length) {
+        showSearch = true;
+      }
+    });
 
-  window.electronAPI.receiveAllBooks((books: Book[]) => {
-    console.log("received");
-    currentSort = "author";
-    currentFilter = "all";
-    currentTagFilter = "";
-    currentSortReverse = false;
-    allBooks = books;
-    filteredBooks = books;
-    searchedBooks = books;
-    sortedBooks = sortFilters.author.sort(books, false);
+    const removeReceiveListener = window.electronAPI.receiveAllBooks((books: Book[]) => {
+      console.log("received");
+      currentSort = "author";
+      currentFilter = "all";
+      currentTagFilter = "";
+      currentSortReverse = false;
+      allBooks = books;
+      filteredBooks = books;
+      searchedBooks = books;
+      sortedBooks = sortFilters.author.sort(books, false);
+    });
+
+    return () => {
+      removeReceiveListener();
+      removeSettingsListener();
+    };
   });
 
   // -- Filter functions --

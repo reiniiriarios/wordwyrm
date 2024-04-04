@@ -11,14 +11,19 @@
   onMount(() => {
     window.userSettings = {} as UserSettings;
     window.electronAPI.loadSettings();
-  });
 
-  window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
-    window.userSettings = loadedSettings;
-  });
+    const removeSettingsListener = window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
+      window.userSettings = loadedSettings;
+    });
 
-  window.electronAPI.updateAvailable((latestVersion: string) => {
-    updateAvailable = latestVersion;
+    const removeUpdateListener = window.electronAPI.updateAvailable((latestVersion: string) => {
+      updateAvailable = latestVersion;
+    });
+
+    return () => {
+      removeSettingsListener();
+      removeUpdateListener();
+    };
   });
 </script>
 

@@ -11,10 +11,15 @@
 
   onMount(() => {
     window.electronAPI.readBook(params.author, params.book);
-  });
 
-  window.electronAPI.receiveBook((b: Book) => (book = b));
-  window.electronAPI.bookSaved((b: Book) => (book = b));
+    const removeReceiveListener = window.electronAPI.receiveBook((b: Book) => (book = b));
+    const removeSaveListener = window.electronAPI.bookSaved((b: Book) => (book = b));
+
+    return () => {
+      removeReceiveListener();
+      removeSaveListener();
+    };
+  });
 </script>
 
 <div class="pageNav">

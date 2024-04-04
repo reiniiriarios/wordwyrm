@@ -10,13 +10,23 @@
     if (!settings.chartStartYear) {
       settings.chartStartYear = 2020;
     }
-  });
 
-  window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
-    settings = loadedSettings;
-    window.userSettings = loadedSettings;
-    saved = true;
-    setTimeout(() => (saved = false), 1500);
+    const removeSettingsListener = window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
+      settings = loadedSettings;
+      window.userSettings = loadedSettings;
+      saved = true;
+      setTimeout(() => (saved = false), 1500);
+    });
+
+    const removeDirListener = window.electronAPI.dirSelected((path: string) => {
+      settings.booksDir = path;
+      window.userSettings.booksDir = path;
+    });
+
+    return () => {
+      removeSettingsListener();
+      removeDirListener();
+    };
   });
 
   function selectDataDir(e: MouseEvent | KeyboardEvent) {
@@ -28,11 +38,6 @@
     e.preventDefault();
     window.electronAPI.saveSettings(settings);
   }
-
-  window.electronAPI.dirSelected((path: string) => {
-    settings.booksDir = path;
-    window.userSettings.booksDir = path;
-  });
 </script>
 
 <div class="pageNav">

@@ -19,6 +19,7 @@
     if (open) {
       window.removeEventListener("keydown", modalKey);
       open = false;
+      dispatch("cancel");
     }
   }
 
