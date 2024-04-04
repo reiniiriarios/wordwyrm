@@ -124,13 +124,13 @@ function conformBook(v: Volume): Book {
   book.datePublished = v.volumeInfo?.publishedDate ?? "";
   book.googleBooksId = v.id ?? "";
 
-  // Select primary image. Prefer "large".
-  if (v.volumeInfo?.imageLinks?.large) {
+  // Select primary image in preference order.
+  if (v.volumeInfo?.imageLinks?.medium) {
+    book.image = v.volumeInfo.imageLinks.medium;
+  } else if (v.volumeInfo?.imageLinks?.large) {
     book.image = v.volumeInfo.imageLinks.large;
   } else if (v.volumeInfo?.imageLinks?.extraLarge) {
     book.image = v.volumeInfo.imageLinks.extraLarge;
-  } else if (v.volumeInfo?.imageLinks?.medium) {
-    book.image = v.volumeInfo.imageLinks.medium;
   } else if (v.volumeInfo?.imageLinks?.small) {
     book.image = v.volumeInfo.imageLinks.small;
   } else if (v.volumeInfo?.imageLinks?.thumbnail) {
@@ -139,7 +139,7 @@ function conformBook(v: Volume): Book {
     book.image = v.volumeInfo.imageLinks.smallThumbnail;
   }
 
-  // Select thumbnail. Prefer "thumbnail".
+  // Select thumbnail in preference order.
   if (v.volumeInfo?.imageLinks?.thumbnail) {
     book.thumbnail = v.volumeInfo.imageLinks.thumbnail;
   } else if (v.volumeInfo?.imageLinks?.smallThumbnail) {
