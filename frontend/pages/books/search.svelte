@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Book } from "@data/book";
   import Modal from "@components/modal.svelte";
   import { onMount, tick } from "svelte";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";

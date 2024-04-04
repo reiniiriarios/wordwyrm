@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from "electron";
 import * as path from "path";
-import { getBook, searchBook } from "@api/googlebooks";
-import { imageSearch } from "@api/googleimagesearch";
-import { initUserDirs, loadSettings, saveSettings } from "@api/userdata";
-import { addBookImage, readAllBooks, readBook, saveBook } from "@api/bookdata";
-import { checkForUpdate } from "@api/updates";
-import { Book } from "@data/book";
-import type { UserSettings } from "../types/global";
+import { getBook, searchBook } from "../backend/googlebooks";
+import { imageSearch } from "../backend/googleimagesearch";
+import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
+import { addBookImage, readAllBooks, readBook, saveBook } from "../backend/bookdata";
+import { checkForUpdate } from "../backend/updates";
 import packageJson from "../package.json";
+import { UserSettings } from "types/global";
 
 const PORT = 5000;
 const DEBUG = process.env.DEBUG === "true";

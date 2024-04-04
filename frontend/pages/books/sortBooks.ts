@@ -1,5 +1,3 @@
-import { Book } from "@data/book";
-
 type sortFn = (books: Book[], reverse: boolean) => Book[];
 type filterFn = (books: Book[]) => Book[];
 

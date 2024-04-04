@@ -2,7 +2,6 @@ import * as fs from "fs";
 import * as path from "path";
 import fetch from "electron-fetch";
 import sharp from "sharp";
-import { Author, Book } from "../frontend/data/book";
 import { readYaml, saveYaml } from "./userdata";
 
 export function initBookDirs(dir: string) {

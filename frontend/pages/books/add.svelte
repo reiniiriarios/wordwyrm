@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Book, Author } from "@data/book";
   import Dropzone from "svelte-file-dropzone";
   import Modal from "@components/modal.svelte";
   import Plus from "phosphor-svelte/lib/Plus";

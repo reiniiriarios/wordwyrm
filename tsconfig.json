@@ -28,7 +28,7 @@
       "@api/*": ["backend/*"],
       "@app/*": ["frontend/*"]
     },
-    "typeRoots": ["frontend/**/types", "node_modules/@types"],
+    "typeRoots": ["types", "frontend/**/types", "node_modules/@types"],
     "plugins": [
       { "transform": "typescript-transform-paths" },
       { "transform": "typescript-transform-paths", "afterDeclarations": true }

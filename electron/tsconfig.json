@@ -4,20 +4,13 @@
     "target": "ES6",
     "sourceMap": true,
     "outDir": "../dist/electron",
-    "baseUrl": ".",
+    "baseUrl": "..",
     "allowJs": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "paths": {
-      "@core/*": ["../frontend/core/*"],
-      "@data/*": ["../frontend/data/*"],
-      "@style/*": ["../frontend/style/*"],
-      "@api/*": ["../backend/*"],
-      "@app/*": ["../frontend/*"]
-    },
-    "typeRoots": ["../types"]
+    "typeRoots": ["types", "node_modules/@types"]
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "../backend/*.ts", "../types"],
   "exclude": ["../node_modules/*", "../dist/*", "../scripts/*"]
 }

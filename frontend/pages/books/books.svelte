@@ -2,7 +2,6 @@
   import { onMount } from "svelte";
   import AddBook from "./add.svelte";
   import SearchBook from "./search.svelte";
-  import { Book } from "@data/book";
   import { catFilters, sortFilters, recentFilters, searchBooks, filterByTag } from "./sortBooks";
   import SortAscending from "phosphor-svelte/lib/SortAscending";
   import SortDescending from "phosphor-svelte/lib/SortDescending";

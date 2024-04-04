@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { Book } from "@data/book";
   import { catFilters, recentFilters, searchBooks, sortFilters } from "@pages/books/sortBooks";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
   import CaretUp from "phosphor-svelte/lib/CaretUp";

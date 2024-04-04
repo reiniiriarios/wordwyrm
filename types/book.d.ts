@@ -1,10 +1,10 @@
-export type Author = {
+type Author = {
   name: string;
   birth?: string;
   death?: string;
 };
 
-export type Book = {
+type Book = {
   title: string;
   authors: Author[];
   authorDir?: string;

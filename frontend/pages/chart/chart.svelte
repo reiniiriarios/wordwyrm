@@ -1,7 +1,5 @@
 <script lang="ts">
   import Chart from "chart.js/auto";
-
-  import { Book } from "@data/book";
   import { onMount } from "svelte";
 
   let startYear = window.userSettings.chartStartYear ?? 2020;

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { Author, Book } from "@data/book";
   import { onMount } from "svelte";
   import Dropzone from "svelte-file-dropzone";
   import { push } from "svelte-spa-router";
@@ -28,14 +27,14 @@
 
     const removeReceiveListener = window.electronAPI.receiveBook((b: Book) => {
       book = b;
-      oAuthorDir = b.authorDir;
-      oFilename = b.filename;
+      oAuthorDir = b.authorDir ?? "";
+      oFilename = b.filename ?? "";
       authors = book.authors.map((a) => a.name).join(", ");
       tags = book.tags?.join(", ") ?? "";
       if (book.hasImage && window.userSettings.booksDir) {
         let booksDir = window.userSettings.booksDir.replace(/\\/g, "/").replace(/ /g, "%20");
         if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
-        imagePath = `${booksDir}/${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg`;
+        imagePath = `${booksDir}/${book.authorDir?.replace(/ /g, "%20")}/${book.filename?.replace(/ /g, "%20")}.jpg`;
       }
     });
 

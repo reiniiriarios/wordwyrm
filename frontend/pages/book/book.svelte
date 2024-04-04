@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { Book } from "@data/book";
   import PencilSimple from "phosphor-svelte/lib/PencilSimple";
   import Bookimage from "@components/bookimage.svelte";
   import ImageSearch from "./imagesearch.svelte";
@@ -104,7 +103,7 @@
                 {#if sb.hasImage}
                   <a
                     href={`#/book/${sb.authorDir}/${sb.filename}`}
-                    on:click={() => readBook(sb.authorDir, sb.filename)}
+                    on:click={() => readBook(sb.authorDir ?? "", sb.filename ?? "")}
                     class="seriesList__inner seriesList__inner--image"
                   >
                     <Bookimage book={sb} overlay />
@@ -112,7 +111,7 @@
                 {:else}
                   <a
                     href={`#/book/${sb.authorDir}/${sb.filename}`}
-                    on:click={() => readBook(sb.authorDir, sb.filename)}
+                    on:click={() => readBook(sb.authorDir ?? "", sb.filename ?? "")}
                     class="seriesList__inner seriesList__inner--noimage"
                   >
                     <span>{sb.title}</span>

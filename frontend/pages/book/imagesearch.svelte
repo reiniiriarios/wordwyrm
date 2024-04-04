@@ -1,6 +1,5 @@
 <script lang="ts">
   import Modal from "@components/modal.svelte";
-  import { Book } from "@data/book";
   import { push } from "svelte-spa-router";
   import ImageSquare from "phosphor-svelte/lib/ImageSquare";
   import { SearchResult } from "@api/googleimagesearch";

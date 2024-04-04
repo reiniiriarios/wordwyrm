@@ -1,5 +1,3 @@
-import { Author, Book } from "@data/book";
-
 const ENDPOINT = "https://www.googleapis.com/books/v1";
 
 export type Volume = {

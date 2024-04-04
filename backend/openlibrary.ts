@@ -1,4 +1,3 @@
-import { Author, Book } from "@data/book";
 import fetch from "electron-fetch";
 
 // https://openlibrary.org/dev/docs/api/search

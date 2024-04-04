@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { Book } from "@data/book";
-
   export let book: Book;
   export let overlay: boolean = false;
   export let pageHeight: boolean = false;
   let src: string;
-  $: src = `bookimage://${book.authorDir?.replace(/ /g, "%20")}/${book.filename.replace(/ /g, "%20")}.jpg?t=${book.imageUpdated ?? 0}`;
+  $: src = `bookimage://${book.authorDir?.replace(/ /g, "%20")}/${book.filename?.replace(/ /g, "%20")}.jpg?t=${book.imageUpdated ?? 0}`;
 </script>
 
 {#if book && book.hasImage}
