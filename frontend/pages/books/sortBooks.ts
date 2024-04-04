@@ -4,6 +4,42 @@ type sortFn = (books: Book[], reverse: boolean) => Book[];
 type filterFn = (books: Book[]) => Book[];
 
 export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: boolean }> = {
+  read: {
+    name: "Date Read",
+    sort: (books: Book[], reverse: boolean): Book[] => {
+      books.sort((x, y) => {
+        let xD = !x.dateRead ? 9999999999999 : new Date(x.dateRead).getTime();
+        let yD = !y.dateRead ? 9999999999999 : new Date(y.dateRead).getTime();
+        if (reverse) {
+          if (xD < yD) return -1;
+          if (xD > yD) return 1;
+        } else {
+          if (xD > yD) return -1;
+          if (xD < yD) return 1;
+        }
+        return 0;
+      });
+      return books;
+    },
+  },
+  added: {
+    name: "Date Added",
+    sort: (books: Book[], reverse: boolean): Book[] => {
+      books.sort((x, y) => {
+        let xD = x.timestampAdded ?? 0;
+        let yD = y.timestampAdded ?? 0;
+        if (reverse) {
+          if (xD < yD) return -1;
+          if (xD > yD) return 1;
+        } else {
+          if (xD > yD) return -1;
+          if (xD < yD) return 1;
+        }
+        return 0;
+      });
+      return books;
+    },
+  },
   author: {
     name: "Author",
     sort: (books: Book[], reverse: boolean): Book[] => {
@@ -44,42 +80,6 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
         } else {
           if (xD < yD) return -1;
           if (xD > yD) return 1;
-        }
-        return 0;
-      });
-      return books;
-    },
-  },
-  read: {
-    name: "Date Read",
-    sort: (books: Book[], reverse: boolean): Book[] => {
-      books.sort((x, y) => {
-        let xD = !x.dateRead ? 9999999999999 : new Date(x.dateRead).getTime();
-        let yD = !y.dateRead ? 9999999999999 : new Date(y.dateRead).getTime();
-        if (reverse) {
-          if (xD < yD) return -1;
-          if (xD > yD) return 1;
-        } else {
-          if (xD > yD) return -1;
-          if (xD < yD) return 1;
-        }
-        return 0;
-      });
-      return books;
-    },
-  },
-  added: {
-    name: "Date Added",
-    sort: (books: Book[], reverse: boolean): Book[] => {
-      books.sort((x, y) => {
-        let xD = x.timestampAdded ?? 0;
-        let yD = y.timestampAdded ?? 0;
-        if (reverse) {
-          if (xD < yD) return -1;
-          if (xD > yD) return 1;
-        } else {
-          if (xD > yD) return -1;
-          if (xD < yD) return 1;
         }
         return 0;
       });

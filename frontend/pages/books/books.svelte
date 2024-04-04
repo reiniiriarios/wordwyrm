@@ -15,7 +15,7 @@
   let filteredBooks: Book[] = [];
   let searchedBooks: Book[] = [];
   let sortedBooks: Book[] = [];
-  let currentSort: string = window.appState?.books?.sort ?? "author";
+  let currentSort: string = window.appState?.books?.sort ?? "read";
   let currentSortReverse: boolean = window.appState?.books?.reverse ?? false;
   let currentFilter: string = window.appState?.books?.filter ?? "all";
   let currentTagFilter: string = window.appState?.books?.tag ?? "";
@@ -44,7 +44,7 @@
 
     const removeReceiveListener = window.electronAPI.receiveAllBooks((books: Book[]) => {
       console.log("received");
-      currentSort = window.appState?.books?.sort ?? "author";
+      currentSort = window.appState?.books?.sort ?? "read";
       currentFilter = window.appState?.books?.filter ?? "all";
       currentTagFilter = window.appState?.books?.tag ?? "";
       currentSortReverse = window.appState?.books?.reverse ?? false;
