@@ -30,6 +30,7 @@ async function saveBookImage(dir: string, book: Book, url: string) {
       if (url.match(/^\/[A-Za-z]:/)) {
         url = url.slice(1);
       }
+      url = url.replace(/%20/g, " ");
       await sharpImage(url, filepath);
     }
   } catch (e) {
