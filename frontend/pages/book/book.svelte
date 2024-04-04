@@ -1,25 +1,63 @@
 <script lang="ts">
-  import { Book } from "@data/book";
   import { onMount } from "svelte";
-  import ImageSearch from "./imagesearch.svelte";
+  import { Book } from "@data/book";
   import PencilSimple from "phosphor-svelte/lib/PencilSimple";
   import Bookimage from "@components/bookimage.svelte";
+  import ImageSearch from "./imagesearch.svelte";
   import Moreinfo from "./moreinfo.svelte";
+  import { sortFilters } from "@pages/books/sortBooks";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
+  let allBooks: Book[] = [];
+  let seriesBooks: Book[] = [];
 
   onMount(() => {
-    window.electronAPI.readBook(params.author, params.book);
+    readBook(params.author, params.book);
 
-    const removeReceiveListener = window.electronAPI.receiveBook((b: Book) => (book = b));
-    const removeSaveListener = window.electronAPI.bookSaved((b: Book) => (book = b));
+    const removeReceiveListener = window.electronAPI.receiveBook((b: Book) => {
+      book = b;
+      if (book.series?.length) getSeries();
+    });
+
+    const removeSaveListener = window.electronAPI.bookSaved((b: Book) => {
+      book = b;
+      if (book.series?.length) getSeries();
+    });
+
+    const removeAllListener = window.electronAPI.receiveAllBooks((books: Book[]) => {
+      allBooks = books;
+      filterSeries();
+    });
 
     return () => {
       removeReceiveListener();
       removeSaveListener();
+      removeAllListener();
     };
   });
+
+  function readBook(a: string, b: string) {
+    window.electronAPI.readBook(a, b);
+  }
+
+  function getSeries() {
+    if (!allBooks.length) {
+      window.electronAPI.readAllBooks();
+    } else {
+      filterSeries();
+    }
+  }
+
+  function filterSeries() {
+    seriesBooks = [];
+    allBooks.forEach((b) => {
+      if (b.series === book.series) {
+        seriesBooks.push(b);
+      }
+    });
+    seriesBooks = sortFilters.published.sort(seriesBooks, false);
+  }
 </script>
 
 <div class="pageNav">
@@ -59,6 +97,33 @@
       </h4>
       {#if book.series}
         <div class="series">Series: {book.series}</div>
+        {#if seriesBooks.length}
+          <div class="seriesList">
+            {#each seriesBooks as sb}
+              <div class="seriesList__book">
+                {#if sb.hasImage}
+                  <a
+                    href={`#/book/${sb.authorDir}/${sb.filename}`}
+                    on:click={() => readBook(sb.authorDir, sb.filename)}
+                    class="seriesList__inner seriesList__inner--image"
+                  >
+                    <Bookimage book={sb} overlay />
+                  </a>
+                {:else}
+                  <a
+                    href={`#/book/${sb.authorDir}/${sb.filename}`}
+                    on:click={() => readBook(sb.authorDir, sb.filename)}
+                    class="seriesList__inner seriesList__inner--noimage"
+                  >
+                    <span>{sb.title}</span>
+                    <span>by</span>
+                    <span>{sb.authors.map((a) => a.name).join(", ")}</span>
+                  </a>
+                {/if}
+              </div>
+            {/each}
+          </div>
+        {/if}
       {/if}
       {#if book.tags}
         <div class="tags">
@@ -131,6 +196,61 @@
       .series {
         margin: 0 0 1rem;
         font-size: 1rem;
+      }
+
+      .seriesList {
+        --book-width: 8rem;
+        --book-height: 12rem;
+
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: left;
+        margin-bottom: 1rem;
+
+        &__book {
+          width: calc(var(--book-width) + 0.5rem);
+          height: calc(var(--book-height) + 0.5rem);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        &__inner {
+          position: relative;
+          cursor: pointer;
+          text-decoration: none;
+          color: $fgColor;
+
+          &--image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: var(--book-width);
+            height: var(--book-height);
+            transition: 0.2s transform;
+
+            &:hover {
+              transform: scale(1.02);
+            }
+          }
+
+          &--noimage {
+            width: calc(var(--book-width) - 0.5rem);
+            height: calc(var(--book-height) - 0.5rem);
+            background-color: $bgColorLightest;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: 0.2s transform;
+
+            &:hover {
+              transform: scale(1.02);
+            }
+          }
+        }
       }
 
       .tags {
