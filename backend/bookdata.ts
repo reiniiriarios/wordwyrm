@@ -119,7 +119,7 @@ export async function readAllBooks(dir: string): Promise<Book[]> {
           let book = readYaml(pathname) as Book;
           // Reset image and dir location from current status
           book.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
-          book.authorDir = authorsToDir(book.authors);
+          book.authorDir = file.name;
           books.push(book);
         }
       });
