@@ -141,7 +141,7 @@
             timeZone: "UTC",
           })}
         {:else}
-          Unread
+          <span class="unread">Unread</span>
         {/if}
       </div>
       <div class="moreInfo">
@@ -262,6 +262,16 @@
 
       .read {
         font-size: 1rem;
+        padding: 0.5rem 0;
+
+        .unread {
+          font-size: 0.9rem;
+          margin: 0.25rem 0;
+          padding: 0.25rem 0.5rem;
+          border-radius: 1rem;
+          background: linear-gradient(0deg, rgb(5, 140, 8) 0%, rgb(10, 160, 15) 100%);
+          box-shadow: rgb(0, 0, 0, 0.3) 0.05rem 0.05rem 0.5rem 0.2rem;
+        }
       }
 
       .moreInfo {
