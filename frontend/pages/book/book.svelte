@@ -147,7 +147,7 @@
         {/if}
       </div>
       <div class="moreInfo">
-        <Moreinfo isbn={book.ids.isbn} googleId={book.ids.googleBooksId} />
+        <Moreinfo {book} />
       </div>
     </div>
   </div>

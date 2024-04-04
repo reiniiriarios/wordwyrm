@@ -92,7 +92,7 @@
   <h2 class="pageNav__header">Edit Book</h2>
   <div class="pageNav__actions">
     {#if book}
-      <Moreinfo isbn={book.ids.isbn} googleId={book.ids.googleBooksId} />
+      <Moreinfo {book} />
     {/if}
   </div>
 </div>

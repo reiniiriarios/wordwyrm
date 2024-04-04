@@ -1,28 +1,48 @@
 <script lang="ts">
   import ArrowSquareOut from "phosphor-svelte/lib/ArrowSquareOut";
-  export let isbn: string = "";
-  export let googleId: string = "";
+  export let book: Book = {} as Book;
 </script>
 
 <div class="moreinfo">
-  {#if googleId}
-    <a class="btn" href={`https://www.google.com/books/edition/_/${googleId}`} target="_blank">
-      View on Google Books
+  {#if book.ids.googleBooksId}
+    <a class="btn" href={`https://www.google.com/books/edition/_/${book.ids.googleBooksId}`} target="_blank">
+      Google Books
       <ArrowSquareOut />
     </a>
-  {:else if isbn}
-    <a class="btn" href={`https://www.google.com/search?tbo=p&tbm=bks&q=isbn:${isbn}`} target="_blank">
-      View on Google Books
+  {:else if book.ids.isbn}
+    <a class="btn" href={`https://www.google.com/search?tbo=p&tbm=bks&q=isbn:${book.ids.isbn}`} target="_blank">
+      Google Books
       <ArrowSquareOut />
     </a>
   {/if}
-  {#if isbn}
-    <a class="btn" href={`https://www.librarything.com/isbn/${isbn}`} target="_blank">
-      View on LibraryThing
+
+  {#if book.ids.goodreadsId}
+    <a class="btn" href={`https://goodreads.com/search?q=${book.ids.isbn}`} target="_blank">
+      Goodreads
       <ArrowSquareOut />
     </a>
-    <a class="btn" href={`https://goodreads.com/search?q=${isbn}`} target="_blank">
-      View on Goodreads
+  {:else if book.ids.isbn}
+    <a class="btn" href={`https://goodreads.com/search?q=${book.ids.isbn}`} target="_blank">
+      Goodreads
+      <ArrowSquareOut />
+    </a>
+  {/if}
+
+  {#if book.ids.openLibraryId}
+    <a class="btn" href={`https://openlibrary.org/works/${book.ids.openLibraryId}`} target="_blank">
+      OpenLibrary
+      <ArrowSquareOut />
+    </a>
+  {/if}
+
+  {#if book.ids.libraryThingId}
+    <a class="btn" href={`https://www.librarything.com/work/${book.ids.libraryThingId}}`} target="_blank">
+      LibraryThing
+      <ArrowSquareOut />
+    </a>
+  {:else if book.ids.isbn}
+    <a class="btn" href={`https://www.librarything.com/isbn/${book.ids.isbn}`} target="_blank">
+      LibraryThing
       <ArrowSquareOut />
     </a>
   {/if}
