@@ -3,9 +3,8 @@ import fetch from "electron-fetch";
 const user = "reiniiriarios";
 const repo = "book-tracker";
 
-export async function hasUpdate(currentVersion: string, callback?: (updateAvailable: string | null) => void) {
-  let updateAvailable: string | null = null;
-  fetch(`https://api.github.com/repos/${user}/${repo}/releases?per_page=1`)
+export async function checkForUpdate(currentVersion: string): Promise<string | null> {
+  return await fetch(`https://api.github.com/repos/${user}/${repo}/releases?per_page=1`)
     .then((res) => res.json())
     .then((releases) => {
       const tag = releases[0].tag_name;
@@ -14,11 +13,11 @@ export async function hasUpdate(currentVersion: string, callback?: (updateAvaila
       }
       const latestVersion = tag.slice(1);
       if (latestVersion !== currentVersion) {
-        updateAvailable = latestVersion;
+        return latestVersion;
       }
     })
     .catch((err) => {
       console.error(err);
+      return null;
     });
-  if (callback) callback(updateAvailable);
 }

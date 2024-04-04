@@ -9,6 +9,7 @@ type UserSettings = {
   googleSearchEngineId: string;
   filterTags: string;
   commonTags: string;
+  appVersion: string;
 };
 
 declare global {

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { UserSettings } from "types/global";
+  import ArrowSquareOut from "phosphor-svelte/lib/ArrowSquareOut";
 
   let settings: UserSettings = {} as UserSettings;
   let saved: boolean = false;
@@ -80,7 +81,16 @@
   </div>
 </fieldset>
 
+<div class="footer">
+  {#if settings.appVersion}
+    <div>Version: {settings.appVersion}</div>
+  {/if}
+  <div><a href="https://github.com/reiniiriarios/book-tracker" target="_blank">GitHub <ArrowSquareOut /></a></div>
+</div>
+
 <style lang="scss">
+  @import "../../style/variables";
+
   .settings {
     padding: 0.5rem 1rem;
   }
@@ -91,5 +101,35 @@
     align-items: center;
     gap: 2rem;
     font-size: 1rem;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: $fgColorMuted;
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+
+    > div:not(:first-child) {
+      &::before {
+        content: "·";
+        position: relative;
+        left: -0.375rem;
+        opacity: 0.3;
+      }
+    }
+
+    a {
+      color: $fgColorMuted;
+
+      &:hover {
+        color: $accentColor;
+        text-decoration: none;
+      }
+    }
   }
 </style>

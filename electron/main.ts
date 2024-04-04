@@ -4,7 +4,7 @@ import * as path from "path";
 import { getBook, searchBook } from "../backend/googlebooks";
 import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
 import { addBookImage, readAllBooks, readBook, saveBook } from "../backend/bookdata";
-import { hasUpdate } from "../backend/updates";
+import { checkForUpdate } from "../backend/updates";
 import { imageSearch } from "../backend/imagesearch";
 import { Book } from "@data/book";
 import type { UserSettings } from "../types/global";
@@ -54,7 +54,7 @@ function createWindow(): BrowserWindow {
   mainWindow.webContents.once("dom-ready", () => {
     mainWindow.webContents.send("check-version");
     ipcMain.once("check-version", (event) => {
-      hasUpdate(APP_VERSION, (updateAvailable) => {
+      checkForUpdate(APP_VERSION).then((updateAvailable) => {
         if (updateAvailable) {
           event.reply("updateAvailable", updateAvailable);
         }
@@ -91,6 +91,7 @@ app.on("ready", () => {
   // Create user data directories if not already present.
   initUserDirs();
   settings = loadSettings();
+  settings.appVersion = APP_VERSION;
 
   // --------- Bridge ---------
 
@@ -146,6 +147,7 @@ app.on("ready", () => {
 
   ipcMain.on("loadSettings", (event) => {
     settings = loadSettings();
+    settings.appVersion = APP_VERSION;
     event.reply("settingsLoaded", settings);
   });
 
