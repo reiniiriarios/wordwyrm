@@ -20,13 +20,16 @@ Google Drive, Dropbox, etc.
 title: Gideon the Ninth
 authors:
   - name: Tamsyn Muir
+series: Locked Tomb
 datePublished: "2019-09-10"
 dateRead: "2021-04-15"
 googleBooksId: HHJwDwAAQBAJ
+isbn: "9781101081983"
 hasImage: true
+imageUpdated: 1712189916634
+timestampAdded: 1712189892724
 filename: Gideon the Ninth
 authorDir: /home/reinii/Documents/books/Tamsyn Muir
-series: Locked Tomb
 tags:
   - Science Fiction
   - Fantasy
