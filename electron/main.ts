@@ -192,9 +192,9 @@ app.on("ready", () => {
     event.reply("settingsLoaded", settings);
   });
 
-  ipcMain.on("imageSearch", (event, author: string, title: string) => {
+  ipcMain.on("imageSearch", (event, author: string, title: string, page: number) => {
     if (settings.googleApiKey && settings.googleSearchEngineId) {
-      imageSearch(settings.googleApiKey, settings.googleSearchEngineId, author, title).then((res) =>
+      imageSearch(settings.googleApiKey, settings.googleSearchEngineId, author, title, page).then((res) =>
         event.reply("imageSearchResults", res),
       );
     }

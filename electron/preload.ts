@@ -36,7 +36,7 @@ export const api = {
   selectDataDir: () => ipcRenderer.send("selectDataDir"),
   dirSelected: (callback: Function) => ipcCallback("dirSelected", callback),
 
-  imageSearch: (author: string, title: string) => ipcRenderer.send("imageSearch", author, title),
+  imageSearch: (author: string, title: string, page: number) => ipcRenderer.send("imageSearch", author, title, page),
   imageSearchResults: (callback: Function) => ipcCallback("imageSearchResults", callback),
 
   addBookImage: (book: Book, url: string) => ipcRenderer.send("addBookImage", book, url),

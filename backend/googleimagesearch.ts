@@ -135,6 +135,7 @@ export async function imageSearch(
   engineId: string,
   title: string,
   author: string,
+  page: number = 0,
 ): Promise<SearchResult[] | string> {
   let keywords = `${title} by ${author} book cover`;
   let results: SearchResult[] = [];
@@ -146,20 +147,25 @@ export async function imageSearch(
       cx: engineId,
       filter: "0", // do not filter duplicate content
       num: "10", // number of results to obtain
+      start: (10 * Math.min(Math.max(page, 0), 10)).toString(), // offset
       searchType: "image",
       q: keywords,
     }).toString();
 
     let response: GoogleSearchResponse = await fetch(`${endpoint}?${params}`).then((res) => res.json());
 
-    response.items?.forEach((item) => {
-      results.push({
-        image: item.link ?? "",
-        width: item.image?.width ?? 0,
-        height: item.image?.height ?? 0,
-        thumbnail: item.image?.thumbnailLink ?? "",
+    if (response.items?.length) {
+      response.items.forEach((item) => {
+        results.push({
+          image: item.link ?? "",
+          width: item.image?.width ?? 0,
+          height: item.image?.height ?? 0,
+          thumbnail: item.image?.thumbnailLink ?? "",
+        });
       });
-    });
+    } else {
+      console.log(response);
+    }
 
     return results;
   } catch (error: any) {

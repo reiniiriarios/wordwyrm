@@ -13,15 +13,22 @@
   let results: SearchResult[] = [];
   let searching: boolean = true;
   let err: string = "";
+  let page: number = 0;
 
   function openDialog() {
     isOpen = true;
     canAdd = false;
     selectedImageUrl = "";
-    searching = true;
     results = [];
     err = "";
-    window.electronAPI.imageSearch(book.title, book.authors.map((a) => a.name).join(", "));
+    page = 0;
+    search();
+  }
+
+  function search() {
+    searching = true;
+    console.log("searching page", page);
+    window.electronAPI.imageSearch(book.title, book.authors.map((a) => a.name).join(", "), page);
   }
 
   onMount(() => {
@@ -53,6 +60,16 @@
   function addImage() {
     window.electronAPI.addBookImage(book, selectedImageUrl);
   }
+
+  function nextPage() {
+    page++;
+    search();
+  }
+
+  function prevPage() {
+    page--;
+    search();
+  }
 </script>
 
 <button type="button" class="btn" on:click={openDialog}>Search for Image <ImageSquare /></button>
@@ -76,6 +93,16 @@
       {/each}
     {/if}
   </div>
+  {#if !searching}
+    <div class="nextPage">
+      {#if page > 0}
+        <button class="btn btn--light" on:click={prevPage}>Previous Page</button>
+      {/if}
+      {#if page < 9 && results?.length >= 10}
+        <button class="btn btn--light" on:click={nextPage}>Next Page</button>
+      {/if}
+    </div>
+  {/if}
 </Modal>
 
 <style lang="scss">
@@ -87,7 +114,7 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     gap: 0.5rem;
     overflow-y: auto;
-    height: 95%;
+    height: 90%;
     scrollbar-width: thin;
     scrollbar-color: $bgColorLightest transparent;
   }
@@ -125,5 +152,13 @@
         }
       }
     }
+  }
+
+  .nextPage {
+    margin: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
   }
 </style>
