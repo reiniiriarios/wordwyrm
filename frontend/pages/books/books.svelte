@@ -47,7 +47,7 @@
       allBooks = books;
       filteredBooks = books;
       searchedBooks = books;
-      sortedBooks = sortFilters[currentSort].sort(books, false);
+      filter();
     });
 
     return () => {
