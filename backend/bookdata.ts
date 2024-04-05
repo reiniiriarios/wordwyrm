@@ -14,7 +14,7 @@ export function authorsToDir(authors: Author[]): string {
   return authors
     .map((a) =>
       a.name
-        .replace(/[^A-Za-z0-9\-',\. ]/g, "_")
+        .replace(/[\/\\\:\^\*\{\}\[\]\?`\|\"]/g, "_")
         .replace(/_+/g, "_")
         .replace(/(?:_ | _)/g, " "),
     )
@@ -23,7 +23,7 @@ export function authorsToDir(authors: Author[]): string {
 
 export function titleToDir(title: string): string {
   return title
-    .replace(/[\/\\\:!@#\$%\^&\*\(\)\{\}\[\]\?`\|\"]/g, "_")
+    .replace(/[\/\\\:\^\*\{\}\[\]\?`\|\"]/g, "_")
     .replace(/_+/g, "_")
     .replace(/(?:_ | _)/g, " ");
 }
