@@ -17,23 +17,28 @@ Google Drive, Dropbox, etc.
 ![](docs/screenshot-data-01-linux.png)
 
 ```yaml
+version: "2"
 title: Gideon the Ninth
 authors:
   - name: Tamsyn Muir
-series: Locked Tomb
-datePublished: "2019-09-10"
-dateRead: "2021-04-15"
-googleBooksId: HHJwDwAAQBAJ
-isbn: "9781101081983"
-hasImage: true
-imageUpdated: 1712189916634
-timestampAdded: 1712189892724
-filename: Gideon the Ninth
-authorDir: /home/reinii/Documents/books/Tamsyn Muir
 tags:
   - Science Fiction
   - Fantasy
   - Dark Fantasy
+series: Locked Tomb
+datePublished: "2019-09-10"
+dateRead: "2021-04-15"
+timestampAdded: 1712277340024
+images:
+  hasImage: true
+  imageUpdated: 1712277341293
+ids:
+  isbn: "1101443316"
+  googleBooksId: HHJwDwAAQBAJ
+  goodreadsId: "42036538"
+  openLibraryId: /works/OL20128158W
+  wikidataId: Q100708760
+  internetArchiveId: gideonninth0000muir
 ```
 
 ## Google Cloud :cloud:
