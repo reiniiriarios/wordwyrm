@@ -10,7 +10,7 @@
   let seGoogleBooks: boolean;
 
   onMount(() => {
-    settings = window.userSettings;
+    settings = structuredClone(window.userSettings);
     if (!settings.chartStartYear) {
       settings.chartStartYear = 2020;
     }
