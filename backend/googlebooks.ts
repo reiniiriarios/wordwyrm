@@ -107,10 +107,15 @@ async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch | n
   return null;
 }
 
-async function getVolume(v: string, apiKey: string, lite: boolean = false): Promise<Volume> {
-  return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}&key=${apiKey}`)
-    .then((res) => res.json())
-    .then((res) => res as Volume);
+async function getVolume(v: string, apiKey: string, lite: boolean = false): Promise<Volume | null> {
+  try {
+    return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}&key=${apiKey}`)
+      .then((res) => res.json())
+      .then((res) => res as Volume);
+  } catch (e) {
+    console.error(e);
+  }
+  return null;
 }
 
 function conformBook(v: Volume): Book {
@@ -202,6 +207,6 @@ export async function searchGoogleBooks(q: string, apiKey: string): Promise<Book
   });
 }
 
-export async function getGoogleBook(gid: string, apiKey: string): Promise<Book> {
-  return getVolume(gid, apiKey).then((v) => conformBook(v));
+export async function getGoogleBook(gid: string, apiKey: string): Promise<Book | null> {
+  return getVolume(gid, apiKey).then((v) => (v ? conformBook(v) : null));
 }

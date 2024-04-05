@@ -99,7 +99,10 @@ app.on("ready", () => {
     // If using both search engines, get the Google Books data, then supplement with OpenLibrary.
     if (settings.searchEngines.includes("googleBooks") && settings.searchEngines.includes("openLibrary")) {
       getGoogleBook(book.ids.googleBooksId, settings.googleApiKey).then((updatedBook) => {
-        if (updatedBook.ids.isbn) {
+        if (!updatedBook) {
+          // we already have some data, so save what we've already fetched
+          event.reply("receiveBookData", book);
+        } else if (updatedBook.ids.isbn) {
           searchOpenLibraryWorkByISBN(updatedBook.ids.isbn).then((olBook) => {
             if (olBook) {
               updatedBook.datePublished = olBook.datePublished; // OpenLibrary accurate to original publish date
