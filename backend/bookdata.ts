@@ -117,8 +117,9 @@ export async function readAllBooks(dir: string): Promise<Book[]> {
           // Get data for book
           const pathname = path.join(subFile.path, subFile.name);
           // Import
-          let book = readYaml(pathname) as BookImport;
-          if (book.version !== "2") book = transformV1(book);
+          let book: BookImport = readYaml(pathname);
+          if (!book.version || book.version === "1") book = transformV1(book as Book_v1);
+          else if (book.version !== "2") return; // Unrecognized version, unable to parse.
           // Build cache data
           book.images.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
           book.cache = {
@@ -139,8 +140,9 @@ export async function readBook(dir: string, authorDir: string, filename: string)
   const pathname = path.join(dir, authorDir, filename + ".yaml");
   if (!fs.existsSync(pathname)) return null;
   // Import
-  let book = readYaml(pathname) as BookImport;
-  if (book.version !== "2") book = transformV1(book);
+  let book: BookImport = readYaml(pathname);
+  if (!book.version || book.version === "1") book = transformV1(book as Book_v1);
+  else if (book.version !== "2") return null; // Unrecognized version, unable to parse.
   // Build cache data
   book.images.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
   let filepath = authorDir + "/" + filename;
