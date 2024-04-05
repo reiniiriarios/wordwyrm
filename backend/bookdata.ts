@@ -71,17 +71,18 @@ export async function addBookImage(dir: string, book: Book, url: string) {
 export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFilename?: string): Promise<Book> {
   initBookDirs(dir);
 
-  // Author directory.
+  // Paths
   book.cache.authorDir = authorsToDir(book.authors);
   const authorPath = path.join(dir, book.cache.authorDir);
   if (!fs.existsSync(authorPath)) {
     fs.mkdirSync(authorPath, { recursive: true });
   }
-
   const newFilename = titleToDir(book.title);
   if (book.cache.filename != newFilename) {
     book.cache.filename = newFilename;
   }
+  book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
+  book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
 
   // Use the image variable to save the image, then delete the variable.
   let newImage = false;
