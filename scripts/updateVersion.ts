@@ -7,7 +7,7 @@ import packageJson from "../package.json";
 import packageLock from "../package-lock.json";
 
 const newVersion = process.argv.pop();
-if (!newVersion || !/^\d\.\d\.\d$/.test(newVersion)) {
+if (!newVersion || !/^\d+\.\d+\.\d+$/.test(newVersion)) {
   console.error("Invalid new version. Usage: npm run newver 1.2.3");
   process.exit();
 }
