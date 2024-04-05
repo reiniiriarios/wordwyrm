@@ -100,9 +100,12 @@ async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch | n
   try {
     return fetch(`${ENDPOINT}/volumes?q=${q}&key=${apiKey}`)
       .then((res) => res.json())
-      .then((res) => res as VolumeSearch);
+      .then((res) => res as VolumeSearch)
+      .catch((e) => {
+        throw e;
+      });
   } catch (e) {
-    console.error(e);
+    console.error("searchVolume", e);
   }
   return null;
 }
@@ -111,9 +114,12 @@ async function getVolume(v: string, apiKey: string, lite: boolean = false): Prom
   try {
     return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}&key=${apiKey}`)
       .then((res) => res.json())
-      .then((res) => res as Volume);
+      .then((res) => res as Volume)
+      .catch((e) => {
+        throw e;
+      });
   } catch (e) {
-    console.error(e);
+    console.error("getVolume", e);
   }
   return null;
 }

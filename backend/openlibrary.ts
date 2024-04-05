@@ -87,10 +87,13 @@ export async function getOpenLibraryWork(olid: string): Promise<OpenLibraryWork 
   try {
     const work: OpenLibraryWork = await fetch(`${endpoint}/works/${olid}.json`)
       .then((res) => res.json())
-      .then((json: OpenLibraryWork) => json);
+      .then((json: OpenLibraryWork) => json)
+      .catch((e) => {
+        throw e;
+      });
     return work;
   } catch (e) {
-    console.error(e);
+    console.error("getOpenLibraryWork", e);
   }
   return null;
 }
@@ -103,10 +106,13 @@ export async function getOpenLibraryEditions(olid: string): Promise<OpenLibraryE
       .then((json: OpenLibraryEditions) => {
         if (!json.size) throw new Error("No results");
         return json.entries;
+      })
+      .catch((e) => {
+        throw e;
       });
     return editions;
   } catch (e) {
-    console.error(e);
+    console.error("getOpenLibraryEditions", e);
   }
   return null;
 }
@@ -119,10 +125,13 @@ export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLi
       .then((json: OpenLibraryEditions) => {
         if (!json.size) throw new Error("No results");
         return json.entries;
+      })
+      .catch((e) => {
+        throw e;
       });
     return editions;
   } catch (e) {
-    console.error(e);
+    console.error("getOpenLibraryEditionsByISBN", e);
   }
   return null;
 }
@@ -134,10 +143,13 @@ export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | 
       .then((json: OpenLibrarySearchResponse) => {
         if (!json.numFound) throw new Error("No results");
         return json.docs[0];
+      })
+      .catch((e) => {
+        throw e;
       });
     return conformOpenLibrarySearchResult(work, isbn);
   } catch (e) {
-    console.error(e);
+    console.error("searchOpenLibraryWorkByISBN", e);
   }
   return null;
 }
@@ -149,12 +161,15 @@ export async function searchOpenLibrary(search: string): Promise<Book[]> {
       .then((json: OpenLibrarySearchResponse) => {
         if (!json.numFound) throw new Error("No results");
         return json.docs;
+      })
+      .catch((e) => {
+        throw e;
       });
     if (works.length) {
       return works.map((work) => conformOpenLibrarySearchResult(work));
     }
   } catch (e) {
-    console.error(e);
+    console.error("searchOpenLibrary", e);
   }
   return [];
 }
