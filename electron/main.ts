@@ -105,7 +105,8 @@ app.on("ready", () => {
         } else if (updatedBook.ids.isbn) {
           searchOpenLibraryWorkByISBN(updatedBook.ids.isbn).then((olBook) => {
             if (olBook) {
-              updatedBook.datePublished = olBook.datePublished; // OpenLibrary accurate to original publish date
+              // OpenLibrary accurate to original publish date
+              if (olBook.datePublished) updatedBook.datePublished = olBook.datePublished;
               updatedBook.ids.openLibraryId = olBook.ids.openLibraryId;
               updatedBook.ids.amazonId = olBook.ids.amazonId;
               updatedBook.ids.goodreadsId = olBook.ids.goodreadsId;
