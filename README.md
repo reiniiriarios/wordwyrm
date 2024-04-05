@@ -45,8 +45,8 @@ ids:
 
 ### Books API Key
 
-You will need a Google Cloud account to enable the Search functionality to automagically load book
-data. [Enable the Books API](https://console.cloud.google.com/apis/api/books.googleapis.com) and
+You will need a Google Cloud account to enable the Search functionality for Google Books.
+[Enable the Books API](https://console.cloud.google.com/apis/api/books.googleapis.com) and
 then [create an API key](https://console.cloud.google.com/apis/credentials) that has permissions to
 use the **Books API**.
 See [Acquiring and using an API key](https://developers.google.com/books/docs/v1/using#APIKey) for
