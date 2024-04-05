@@ -17,7 +17,7 @@
   {/if}
 
   {#if book.ids.goodreadsId}
-    <a class="btn" href={`https://goodreads.com/search?q=${book.ids.isbn}`} target="_blank">
+    <a class="btn" href={`https://goodreads.com/book/show/${book.ids.goodreadsId}`} target="_blank">
       Goodreads
       <ArrowSquareOut />
     </a>
