@@ -11,7 +11,21 @@ export function initBookDirs(dir: string) {
 }
 
 export function authorsToDir(authors: Author[]): string {
-  return authors.map((a) => a.name.replace(/[^A-Za-z0-9\-',\. ]/g, "_")).join(", ");
+  return authors
+    .map((a) =>
+      a.name
+        .replace(/[^A-Za-z0-9\-',\. ]/g, "_")
+        .replace(/_+/g, "_")
+        .replace(/(?:_ | _)/g, " "),
+    )
+    .join(", ");
+}
+
+export function titleToDir(title: string): string {
+  return title
+    .replace(/[\/\\\:!@#\$%\^&\*\(\)\{\}\[\]\?`\|\"]/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/(?:_ | _)/g, " ");
 }
 
 async function saveBookImage(dir: string, book: Book, url: string) {
@@ -64,7 +78,7 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
     fs.mkdirSync(authorPath, { recursive: true });
   }
 
-  const newFilename = book.title.replace(/[^A-Za-z0-9\-'!\?,\.:; ]/g, "_");
+  const newFilename = titleToDir(book.title);
   if (book.cache.filename != newFilename) {
     book.cache.filename = newFilename;
   }
