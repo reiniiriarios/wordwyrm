@@ -15,6 +15,7 @@
   let tags: string = "";
   let imagePath: string = "";
   let commonTags: string[] = [];
+  let saving: boolean = false;
 
   onMount(() => {
     window.electronAPI.readBook(params.author, params.book);
@@ -38,8 +39,16 @@
       }
     });
 
+    const removeSavedListener = window.electronAPI.bookSaved((_book: Book) => {
+      saving = false;
+      // hacky fix to maybe beat race condition on saving image
+      // would rather go ahead and change the page than beat it
+      setTimeout(() => push(`#/book/${book.cache.filepath}`), 250);
+    });
+
     return () => {
       removeReceiveListener();
+      removeSavedListener();
     };
   });
 
@@ -70,8 +79,9 @@
   }
 
   function saveBook() {
+    // Without timeout, disabled won't set.
+    setTimeout(() => (saving = true), 50);
     window.electronAPI.editBook(book, oAuthorDir, oFilename);
-    push(`#/book/${book.cache.filepath}`);
   }
 
   function validateDatePublished() {
@@ -184,7 +194,7 @@
       </fieldset>
       <div class="bookPage__actions">
         <a class="btn" href={`#/book/${params.author}/${params.book}`}>Cancel</a>
-        <button class="btn" on:click={saveBook}>Save</button>
+        <button class="btn" disabled={saving} on:click={saveBook}>Save</button>
       </div>
     </div>
   </div>
