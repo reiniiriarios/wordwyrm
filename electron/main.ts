@@ -101,14 +101,16 @@ app.on("ready", () => {
       getGoogleBook(book.ids.googleBooksId, settings.googleApiKey).then((updatedBook) => {
         if (updatedBook.ids.isbn) {
           searchOpenLibraryWorkByISBN(updatedBook.ids.isbn).then((olBook) => {
-            updatedBook.datePublished = olBook.datePublished; // OpenLibrary accurate to original publish date
-            updatedBook.ids.openLibraryId = olBook.ids.openLibraryId;
-            updatedBook.ids.amazonId = olBook.ids.amazonId;
-            updatedBook.ids.goodreadsId = olBook.ids.goodreadsId;
-            updatedBook.ids.internetArchiveId = olBook.ids.internetArchiveId;
-            updatedBook.ids.libraryThingId = olBook.ids.libraryThingId;
-            updatedBook.ids.oclcId = olBook.ids.oclcId;
-            updatedBook.ids.wikidataId = olBook.ids.wikidataId;
+            if (olBook) {
+              updatedBook.datePublished = olBook.datePublished; // OpenLibrary accurate to original publish date
+              updatedBook.ids.openLibraryId = olBook.ids.openLibraryId;
+              updatedBook.ids.amazonId = olBook.ids.amazonId;
+              updatedBook.ids.goodreadsId = olBook.ids.goodreadsId;
+              updatedBook.ids.internetArchiveId = olBook.ids.internetArchiveId;
+              updatedBook.ids.libraryThingId = olBook.ids.libraryThingId;
+              updatedBook.ids.oclcId = olBook.ids.oclcId;
+              updatedBook.ids.wikidataId = olBook.ids.wikidataId;
+            }
             event.reply("receiveBookData", updatedBook);
           });
         } else {
