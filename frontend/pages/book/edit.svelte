@@ -39,11 +39,11 @@
       }
     });
 
-    const removeSavedListener = window.electronAPI.bookSaved((_book: Book) => {
+    const removeSavedListener = window.electronAPI.bookSaved((savedBook: Book) => {
       saving = false;
       // hacky fix to maybe beat race condition on saving image
       // would rather go ahead and change the page than beat it
-      setTimeout(() => push(`#/book/${book.cache.filepath}`), 250);
+      setTimeout(() => push(`#/book/${savedBook.cache.filepath}`), 250);
     });
 
     return () => {
