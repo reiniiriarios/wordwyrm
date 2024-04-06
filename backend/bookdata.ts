@@ -229,6 +229,7 @@ function transformV1(book: Book_v1): Book {
     tags: book.tags,
     series: book.series ?? "",
     rating: 0,
+    notes: "",
     datePublished: book.datePublished ?? "",
     dateRead: book.dateRead ?? "",
     timestampAdded: book.timestampAdded ?? 0,

@@ -200,6 +200,11 @@
           </div>
         </div>
 
+        <label class="field field--fullwidth">
+          Notes
+          <textarea rows="4" bind:value={book.notes} />
+        </label>
+
         <label class="field field">
           ISBN <Hoverinfo details="Enables quick-links to Google Books, LibraryThing, and Goodreads." />
           <input type="text" bind:value={book.ids.isbn} />

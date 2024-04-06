@@ -142,7 +142,8 @@
       {/if}
       <div class="read">
         {#if book.dateRead}
-          Read: {new Date(book.dateRead).toLocaleDateString("en-US", {
+          <div class="dataTitle">Read</div>
+          {new Date(book.dateRead).toLocaleDateString("en-US", {
             month: "long",
             day: "numeric",
             year: "numeric",
@@ -152,6 +153,12 @@
           <span class="unread">Unread</span>
         {/if}
       </div>
+      {#if book.notes}
+        <div class="notes">
+          <div class="dataTitle">Notes</div>
+          {book.notes}
+        </div>
+      {/if}
       <div class="moreInfo">
         <Moreinfo {book} />
       </div>
@@ -177,6 +184,12 @@
 
     &__info {
       padding: 1rem;
+
+      .dataTitle {
+        font-size: 0.9rem;
+        color: $fgColorDark;
+        margin: 0 0 0.2rem;
+      }
 
       h2 {
         padding: 0;
@@ -270,6 +283,11 @@
         display: flex;
         gap: 0.25rem;
         justify-content: left;
+      }
+
+      .notes {
+        font-size: 1rem;
+        padding: 0.5rem 0;
       }
 
       .read {
