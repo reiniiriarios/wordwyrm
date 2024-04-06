@@ -160,6 +160,7 @@
     cursor: pointer;
     color: $fgColorMuted;
     vertical-align: bottom;
+    white-space: nowrap;
 
     &:hover {
       color: $fgColor;
