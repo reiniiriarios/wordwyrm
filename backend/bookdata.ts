@@ -70,10 +70,7 @@ export async function addBookImage(dir: string, book: Book, url: string) {
 
 export async function addBookImageBase64(dir: string, book: Book, base64: string) {
   try {
-    if (!book.cache.authorDir) {
-      book.cache.authorDir = authorsToDir(book.authors);
-    }
-    if (!book.cache.filepath) {
+    if (!book.cache.authorDir || !book.cache.filepath) {
       book.cache.authorDir = authorsToDir(book.authors);
       book.cache.filename = titleToDir(book.title);
       book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
@@ -89,6 +86,8 @@ export async function addBookImageBase64(dir: string, book: Book, base64: string
 export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFilename?: string): Promise<Book> {
   initBookDirs(dir);
 
+  if (!book.cache) book.cache = {};
+
   // Paths
   book.cache.authorDir = authorsToDir(book.authors);
   const authorPath = path.join(dir, book.cache.authorDir);
@@ -102,19 +101,29 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
   book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
   book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
 
+  if (!book.images) {
+    book.images = {
+      hasImage: false,
+    };
+  }
+
   // Use the image variable to save the image, then delete the variable.
   let newImage = false;
   // [sic], not checking the hasImage variable, checking if there's a new image
   if (book.cache.image) {
     await saveBookImage(dir, book, book.cache.image);
     newImage = true;
+    book.images.hasImage = true;
     book.images.imageUpdated = new Date().getTime();
   }
 
   book.datePublished = book.datePublished?.trim() ?? "";
   book.dateRead = book.dateRead?.trim() ?? "";
 
-  book.tags = book.tags.filter((t) => t.trim().length);
+  if (!book.tags) book.tags = [];
+  else {
+    book.tags = book.tags.filter((t) => t.trim().length);
+  }
 
   const filepath = path.join(authorPath, `${newFilename}.yaml`);
   if (!book.timestampAdded && !fs.existsSync(filepath)) {
@@ -136,6 +145,30 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
   }
 
   return book;
+}
+
+export async function deleteBook(dir: string, book: Book) {
+  try {
+    if (!book.cache.authorDir || !book.cache.filepath) {
+      book.cache.authorDir = authorsToDir(book.authors);
+      book.cache.filename = titleToDir(book.title);
+      book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
+    }
+    const authorpath = path.join(dir, book.cache.authorDir);
+    const fullpath = path.join(dir, book.cache.filepath);
+    if (fs.existsSync(`${fullpath}.yaml`)) {
+      fs.rmSync(`${fullpath}.yaml`, { force: true });
+    }
+    if (fs.existsSync(`${fullpath}.jpg`)) {
+      fs.rmSync(`${fullpath}.jpg`, { force: true });
+    }
+    const ad = fs.readdirSync(authorpath);
+    if (!ad.length) {
+      fs.rmSync(authorpath, { recursive: true, force: true });
+    }
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 export async function readAllBooks(dir: string): Promise<Book[]> {

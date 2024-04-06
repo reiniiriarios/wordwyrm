@@ -4,7 +4,6 @@
   import Crop from "phosphor-svelte/lib/Crop";
   import { onMount } from "svelte";
   import Croppie from "croppie";
-  import { load } from "js-yaml";
 
   export let book: Book = {} as Book;
 

@@ -43,6 +43,9 @@ export const api = {
   bookImageAdded: (callback: Function) => ipcCallback("bookImageAdded", callback),
   addBookImageBase64: (book: Book, base64: string) => ipcRenderer.send("addBookImageBase64", book, base64),
   bookImageBase64Added: (callback: Function) => ipcCallback("bookImageBase64Added", callback),
+
+  deleteBook: (book: Book) => ipcRenderer.send("deleteBook", book),
+  bookDeleted: (callback: Function) => ipcCallback("bookDeleted", callback),
 };
 
 contextBridge.exposeInMainWorld("electronAPI", api);

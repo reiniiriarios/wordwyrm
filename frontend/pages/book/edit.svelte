@@ -6,6 +6,7 @@
   import Moreinfo from "./moreinfo.svelte";
   import Hoverinfo from "@components/hoverinfo.svelte";
   import Crop from "./crop.svelte";
+  import Delete from "./delete.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
 
@@ -197,6 +198,9 @@
         </div>
       </fieldset>
       <div class="bookPage__actions">
+        <div class="left">
+          <Delete {book} />
+        </div>
         <a class="btn" href={`#/book/${params.author}/${params.book}`}>Cancel</a>
         <button class="btn" disabled={saving} on:click={saveBook}>Save</button>
       </div>
@@ -231,7 +235,12 @@
       padding: 1.5rem 0.5rem;
       display: flex;
       justify-content: right;
+      align-items: center;
       gap: 0.5rem;
+
+      .left {
+        margin-right: auto;
+      }
     }
   }
 
