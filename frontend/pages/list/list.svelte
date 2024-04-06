@@ -1,13 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { push } from "svelte-spa-router";
-  import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
-  import X from "phosphor-svelte/lib/X";
   import CaretUp from "phosphor-svelte/lib/CaretUp";
   import CaretDown from "phosphor-svelte/lib/CaretDown";
   import { catFilters, recentFilters } from "@scripts/sortBooks";
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
+  import Searchbar from "@components/searchbar.svelte";
 
   let filterTags: string[] = [];
   $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());
@@ -19,13 +18,6 @@
       books.fetch();
     }
   });
-
-  function search(e: KeyboardEvent) {
-    if (["\n", "Enter"].includes(e.key)) {
-      // currentSearch is bound
-      books.search();
-    }
-  }
 
   function sortFilter(s: string) {
     if (s === $books.filters.sort) {
@@ -40,16 +32,7 @@
 <div class="pageNav">
   <h2 class="pageNav__header">List</h2>
   <div class="pageNav__search">
-    <span class="glass">
-      <MagnifyingGlass />
-    </span>
-    <input type="text" bind:value={$books.filters.search} on:keydown={search} on:change={books.search} />
-
-    {#if $books.filters.search.length}
-      <div class="x" role="button" tabindex="0" on:click={books.clearSearch} on:keypress={books.clearSearch}>
-        <X />
-      </div>
-    {/if}
+    <Searchbar />
   </div>
   <div class="pageNav__actions">
     <div class="filter">

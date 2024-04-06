@@ -2,13 +2,12 @@
   import { onMount } from "svelte";
   import SortAscending from "phosphor-svelte/lib/SortAscending";
   import SortDescending from "phosphor-svelte/lib/SortDescending";
-  import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
   import FrameCorners from "phosphor-svelte/lib/FrameCorners";
-  import X from "phosphor-svelte/lib/X";
   import { catFilters, sortFilters, recentFilters } from "@scripts/sortBooks";
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
   import Bookimage from "@components/bookimage.svelte";
+  import Searchbar from "@components/searchbar.svelte";
   import AddBook from "./add.svelte";
   import SearchBook from "./search.svelte";
 
@@ -23,13 +22,6 @@
     }
   });
 
-  function search(e: KeyboardEvent) {
-    if (["\n", "Enter"].includes(e.key)) {
-      // currentSearch is bound
-      books.search();
-    }
-  }
-
   function zoom(z: "s" | "m" | "l") {
     $books.view.zoom = z;
   }
@@ -38,15 +30,7 @@
 <div class="pageNav">
   <h2 class="pageNav__header">Books</h2>
   <div class="pageNav__search">
-    <span class="glass">
-      <MagnifyingGlass />
-    </span>
-    <input type="text" bind:value={$books.filters.search} on:keydown={search} on:change={books.search} />
-    {#if $books.filters.search.length}
-      <div class="x" role="button" tabindex="0" on:click={books.clearSearch} on:keypress={books.clearSearch}>
-        <X />
-      </div>
-    {/if}
+    <Searchbar />
   </div>
   <div class="pageNav__actions">
     <div class="zoom">
