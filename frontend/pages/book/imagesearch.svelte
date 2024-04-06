@@ -106,8 +106,6 @@
 </Modal>
 
 <style lang="scss">
-  @import "../../style/variables";
-
   .results {
     padding: 0.5rem;
     display: grid;
@@ -116,14 +114,14 @@
     overflow-y: auto;
     height: 90%;
     scrollbar-width: thin;
-    scrollbar-color: $bgColorLightest transparent;
+    scrollbar-color: var(--bg-color-lightest) transparent;
   }
 
   .result {
     height: 14rem;
     cursor: pointer;
     background-color: transparent;
-    color: $fgColor;
+    color: var(--fg-color);
     border: 0;
     padding: 0;
     margin: 0;
@@ -148,7 +146,7 @@
     &.selected {
       .image {
         img {
-          border-color: $accentColor;
+          border-color: var(--accent-color);
         }
       }
     }

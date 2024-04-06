@@ -167,12 +167,10 @@
 </div>
 
 <style lang="scss">
-  @import "../../style/variables";
-
   .chart {
     padding: 1rem;
   }
   .btn.selected {
-    background-color: $bgColorLighter;
+    background-color: var(--bg-color-lighter);
   }
 </style>

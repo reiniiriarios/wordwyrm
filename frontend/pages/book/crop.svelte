@@ -82,8 +82,6 @@
 </Modal>
 
 <style lang="scss">
-  @import "../../style/variables";
-
   .croppie {
     width: 100%;
     height: 90%;

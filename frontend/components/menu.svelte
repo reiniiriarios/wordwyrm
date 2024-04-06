@@ -29,11 +29,9 @@
 </nav>
 
 <style lang="scss">
-  @import "../style/variables";
-
   nav {
-    width: $tabSize;
-    background-color: $bgColorLight;
+    width: var(--tab-size);
+    background-color: var(--bg-color-light);
     height: 100vh;
 
     ul {
@@ -47,18 +45,18 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: $tabSize;
-        height: $tabSize;
-        color: $fgColorDark;
+        width: var(--tab-size);
+        height: var(--tab-size);
+        color: var(--fg-color-dark);
         text-decoration: none;
 
         &:hover {
-          color: $accentColor;
+          color: var(--accent-color);
         }
       }
 
       &.active a {
-        color: $fgColor;
+        color: var(--fg-color);
       }
     }
   }

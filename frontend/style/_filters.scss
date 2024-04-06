@@ -1,13 +1,3 @@
-@import "variables";
-
-:root {
-  --filter-height: 3rem;
-
-  @media screen and (max-width: 1150px) {
-    --filter-height: 6rem;
-  }
-}
-
 .listFilter {
   height: var(--filter-height);
   padding: 0.5rem 1rem 1.25rem;
@@ -31,15 +21,15 @@
   }
 
   button {
-    background-color: $bgColorLight;
-    color: $fgColor;
+    background-color: var(--bg-color-light);
+    color: var(--fg-color);
     padding: 0.25rem 0.5rem;
     border: 0;
     border-radius: 0.25rem;
     cursor: pointer;
 
     &.selected {
-      background-color: $bgColorLighter;
+      background-color: var(--bg-color-lighter);
     }
 
     &.sortDirection {
@@ -70,7 +60,7 @@
     display: block;
     width: 100%;
     padding: 0.33rem !important;
-    border-top: 1px solid $bgColor !important;
+    border-top: 1px solid var(--bg-color) !important;
     border-radius: 0 !important;
 
     &:last-child {

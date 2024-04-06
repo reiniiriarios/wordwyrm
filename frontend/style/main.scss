@@ -4,11 +4,7 @@
  */
 @use "croppie/croppie.css";
 
-:root,
-input {
-  color-scheme: dark;
-}
-
+@import "variables";
 @import "elements";
 @import "page";
 @import "buttons";

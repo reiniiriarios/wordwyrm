@@ -237,11 +237,9 @@
 {/if}
 
 <style lang="scss">
-  @import "../../style/variables";
-
   .bookPage {
     display: flex;
-    height: calc(100vh - $pageNavHeight);
+    height: calc(100vh - var(--page-nav-height));
 
     &__image {
       height: 100%;
@@ -259,7 +257,7 @@
       padding: 1rem;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: $bgColorLightest transparent;
+      scrollbar-color: var(--bg-color-lightest) transparent;
     }
 
     &__actions {
@@ -297,7 +295,7 @@
   .commonTags {
     &__title {
       font-size: 0.9rem;
-      color: $fgColorMuted;
+      color: var(--fg-color-muted);
     }
 
     &__tags {

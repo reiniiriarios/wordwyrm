@@ -24,15 +24,13 @@
 {/if}
 
 <style lang="scss">
-  @import "../style/variables";
-
   .update {
     position: absolute;
     bottom: 0;
     right: 0;
     font-size: 0.9rem;
     padding: 0.25rem 0.5rem;
-    background-color: $bgColorLight;
+    background-color: var(--bg-color-light);
     border-top-left-radius: 0.25rem;
     box-shadow: 0 0 0.5rem 0.25rem rgba(0, 0, 0, 0.4);
   }

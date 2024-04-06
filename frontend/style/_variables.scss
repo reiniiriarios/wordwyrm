@@ -1,19 +1,28 @@
-$black: #000;
-$white: #fff;
+:root {
+  --bg-color: #222;
+  --bg-color-hint: #262626;
+  --bg-color-light: #333;
+  --bg-color-lighter: #444;
+  --bg-color-lightest: #555;
 
-$bgColor: #222;
-$bgColorLight: #333;
-$bgColorLighter: #444;
-$bgColorLightest: #555;
-$fgColor: #fff;
-$fgColorMuted: #ccc;
-$fgColorDark: #aaa;
+  --fg-color: #fff;
+  --fg-color-muted: #ccc;
+  --fg-color-dark: #aaa;
 
-$accentColor: #ff0088;
+  --accent-color: #ff0088;
+  --accent-color-light: #ff0d8e;
+  --accent-color-transparent: #ff00881a;
 
-$bgColorDelete: #6f0000;
-$fgColorDelete: #c22424;
+  --bg-color-delete: #6f0000;
+  --bg-color-delete-fade: #531c1c;
+  --fg-color-delete: #c22424;
+  --fg-color-delete-fade: #b23434;
 
-$tabSize: 42px;
+  --tab-size: 42px;
+  --page-nav-height: 3rem;
+  --filter-height: 3rem;
 
-$pageNavHeight: 3rem;
+  @media screen and (max-width: 1150px) {
+    --filter-height: 6rem;
+  }
+}

@@ -67,8 +67,6 @@
 </div>
 
 <style lang="scss">
-  @import "../style/variables";
-
   .modal {
     position: absolute;
     top: 0;
@@ -89,7 +87,7 @@
       width: 75vw;
       height: 75vh;
       overflow-y: auto;
-      background-color: $bgColorLight;
+      background-color: var(--bg-color-light);
       text-align: left;
       display: flex;
       flex-direction: column;
@@ -101,7 +99,7 @@
     &__header {
       font-size: 1.125rem;
       padding: 0.5rem;
-      border-bottom: 1px solid $bgColorLighter;
+      border-bottom: 1px solid var(--bg-color-lighter);
     }
 
     &__body {
@@ -111,7 +109,7 @@
     }
 
     &__actions {
-      border-top: 1px solid $bgColorLighter;
+      border-top: 1px solid var(--bg-color-lighter);
       padding: 0.5rem;
       text-align: right;
     }

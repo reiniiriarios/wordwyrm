@@ -1,12 +1,10 @@
-@import "variables";
-
 input[type="text"],
 input[type="number"],
 input[type="date"],
 textarea {
-  border: 1px solid $bgColorLighter;
+  border: 1px solid var(--bg-color-lighter);
   background-color: transparent;
-  color: $fgColor;
+  color: var(--fg-color);
   padding: 0.25rem 0.5rem;
   font-size: 1rem;
   font-family: sans-serif;
@@ -14,14 +12,14 @@ textarea {
 
   &:focus {
     outline: none;
-    border-color: $accentColor;
+    border-color: var(--accent-color);
   }
 }
 
 .field {
   margin: 0.125rem 0 0.125rem;
   font-size: 0.9rem;
-  color: $fgColorMuted;
+  color: var(--fg-color-muted);
 }
 
 fieldset {
@@ -35,7 +33,7 @@ fieldset {
   label {
     display: block;
     font-size: 0.9rem;
-    color: $fgColorMuted;
+    color: var(--fg-color-muted);
 
     input[type="text"],
     input[type="number"],
@@ -71,9 +69,9 @@ fieldset {
 
 .dropzone {
   width: 100%;
-  background-color: $bgColorLight !important;
-  border-color: $bgColorLighter !important;
-  color: $fgColor !important;
+  background-color: var(--bg-color-light) !important;
+  border-color: var(--bg-color-lighter) !important;
+  color: var(--fg-color) !important;
   cursor: pointer;
 
   img {
@@ -85,7 +83,7 @@ fieldset {
 
   &__info {
     font-size: 0.9rem;
-    color: $fgColorMuted;
+    color: var(--fg-color-muted);
     padding: 1rem;
 
     img + & {

@@ -143,8 +143,6 @@
 </div>
 
 <style lang="scss">
-  @import "../../style/variables";
-
   .settings {
     padding: 0.5rem 1rem;
   }
@@ -163,7 +161,7 @@
     right: 0;
     padding: 1rem;
     font-size: 0.9rem;
-    color: $fgColorMuted;
+    color: var(--fg-color-muted);
     display: flex;
     align-items: baseline;
     gap: 0.75rem;
@@ -178,10 +176,10 @@
     }
 
     a {
-      color: $fgColorMuted;
+      color: var(--fg-color-muted);
 
       &:hover {
-        color: $accentColor;
+        color: var(--accent-color);
         text-decoration: none;
       }
     }

@@ -147,8 +147,6 @@
 </div>
 
 <style lang="scss">
-  @import "../../style/variables";
-
   .zoom {
     display: flex;
     align-items: center;
@@ -157,13 +155,13 @@
     margin-right: 2rem;
 
     .resizeIcon {
-      color: $fgColorMuted;
+      color: var(--fg-color-muted);
       opacity: 0.8;
     }
 
     button {
-      background-color: $bgColorLight;
-      color: $fgColor;
+      background-color: var(--bg-color-light);
+      color: var(--fg-color);
       padding: 0.25rem 0.5rem;
       border: 0;
       border-radius: 0.25rem;
@@ -171,7 +169,7 @@
       font-size: 0.75rem;
 
       &.selected {
-        background-color: $bgColorLighter;
+        background-color: var(--bg-color-lighter);
       }
     }
   }
@@ -180,12 +178,12 @@
     font-size: 1rem;
 
     &__sep {
-      color: $fgColorMuted;
+      color: var(--fg-color-muted);
       opacity: 0.8;
     }
 
     .mute {
-      color: $fgColorMuted;
+      color: var(--fg-color-muted);
     }
   }
 
@@ -198,9 +196,9 @@
     padding: 0.5rem 1rem 1.25rem;
     overflow-y: auto;
     width: 100%;
-    height: calc(100vh - $pageNavHeight - var(--filter-height));
+    height: calc(100vh - var(--page-nav-height) - var(--filter-height));
     scrollbar-width: thin;
-    scrollbar-color: $bgColorLightest transparent;
+    scrollbar-color: var(--bg-color-lightest) transparent;
   }
 
   .book {
@@ -227,7 +225,7 @@
       position: relative;
       cursor: pointer;
       text-decoration: none;
-      color: $fgColor;
+      color: var(--fg-color);
 
       &--image {
         display: flex;
@@ -245,7 +243,7 @@
       &--noimage {
         width: calc(var(--book-width) - 1rem);
         height: calc(var(--book-height) - 1rem);
-        background-color: $bgColorLightest;
+        background-color: var(--bg-color-lightest);
         text-align: center;
         display: flex;
         align-items: center;

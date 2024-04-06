@@ -152,11 +152,9 @@
 {/if}
 
 <style lang="scss">
-  @import "../../style/variables";
-
   .bookPage {
     display: flex;
-    height: calc(100vh - $pageNavHeight);
+    height: calc(100vh - var(--page-nav-height));
 
     &__image {
       height: 95%;
@@ -172,7 +170,7 @@
 
       .dataTitle {
         font-size: 0.9rem;
-        color: $fgColorDark;
+        color: var(--fg-color-dark);
         margin: 0 0 0.2rem;
       }
 
@@ -230,7 +228,7 @@
           position: relative;
           cursor: pointer;
           text-decoration: none;
-          color: $fgColor;
+          color: var(--fg-color);
 
           &--image {
             display: flex;
@@ -248,7 +246,7 @@
           &--noimage {
             width: calc(var(--book-width) - 0.5rem);
             height: calc(var(--book-height) - 0.5rem);
-            background-color: $bgColorLightest;
+            background-color: var(--bg-color-lightest);
             text-align: center;
             display: flex;
             align-items: center;

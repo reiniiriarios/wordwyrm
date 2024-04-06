@@ -24,8 +24,6 @@
 </div>
 
 <style lang="scss">
-  @import "../style/variables";
-
   .search {
     position: relative;
 
@@ -43,10 +41,10 @@
       cursor: pointer;
 
       right: 0.5rem;
-      color: $fgColorDark;
+      color: var(--fg-color-dark);
 
       &:hover {
-        color: $fgColorMuted;
+        color: var(--fg-color-muted);
       }
     }
 

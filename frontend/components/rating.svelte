@@ -65,12 +65,6 @@
 </div>
 
 <style lang="scss">
-  @import "../style/variables";
-
-  $starColor: #ffc400;
-  $starNoColor: $bgColorLighter;
-  $starHoverColor: $accentColor;
-
   .rating {
     display: flex;
     justify-content: left;
@@ -80,13 +74,13 @@
     .star {
       height: 2rem;
       width: 2rem;
-      background-color: $starNoColor;
+      background-color: var(--bg-color-lighter);
       mask-image: url(star.svg);
       mask-mode: alpha;
       mask-size: 2rem 2rem;
 
       &.full {
-        background-color: $starColor;
+        background-color: #ffc400;
       }
     }
 
@@ -96,7 +90,7 @@
 
         &.hover,
         &:focus-visible {
-          background-color: $accentColor;
+          background-color: var(--accent-color);
         }
       }
     }
@@ -111,7 +105,7 @@
 
       &:hover,
       &:focus-visible {
-        color: $starHoverColor;
+        color: var(--accent-color);
       }
     }
 

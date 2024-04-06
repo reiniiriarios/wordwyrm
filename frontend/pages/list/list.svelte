@@ -129,15 +129,13 @@
 </div>
 
 <style lang="scss">
-  @import "../../style/variables";
-
   .list {
     margin: 1rem 0;
     padding: 0 1rem;
     width: 100%;
-    height: calc(100vh - $pageNavHeight - 2rem);
+    height: calc(100vh - var(--page-nav-height) - 2rem);
     scrollbar-width: thin;
-    scrollbar-color: $bgColorLightest transparent;
+    scrollbar-color: var(--bg-color-lightest) transparent;
     overflow: auto;
   }
 
@@ -154,20 +152,20 @@
 
   th {
     text-align: left;
-    background-color: $bgColor;
+    background-color: var(--bg-color);
     position: sticky;
     top: 0;
     cursor: pointer;
-    color: $fgColorMuted;
+    color: var(--fg-color-muted);
     vertical-align: bottom;
     white-space: nowrap;
 
     &:hover {
-      color: $fgColor;
+      color: var(--fg-color);
     }
 
     &.selected {
-      color: $fgColor;
+      color: var(--fg-color);
     }
   }
 
@@ -175,14 +173,14 @@
     cursor: pointer;
 
     &:nth-child(odd) {
-      background-color: lighten($bgColor, 2%);
+      background-color: var(--bg-color-hint);
     }
 
     &:hover td {
-      background-color: rgba($accentColor, 10%);
+      background-color: var(--accent-color-transparent);
 
       .tag {
-        background-color: rgba($accentColor, 10%);
+        background-color: var(--accent-color-transparent);
       }
     }
   }

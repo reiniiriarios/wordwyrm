@@ -1,14 +1,12 @@
-@import "variables";
-
 * {
   box-sizing: border-box;
 }
 
 body {
   position: relative;
-  color: $fgColor;
+  color: var(--fg-color);
   height: 100vh;
-  background: $bgColor;
+  background: var(--bg-color);
   font-family: sans-serif;
   overflow-y: hidden;
   display: flex;
@@ -32,16 +30,16 @@ h3 {
 }
 
 a {
-  color: $accentColor;
+  color: var(--accent-color);
   text-decoration: none;
 
   &:hover {
-    color: lighten($accentColor, 5%);
+    color: var(--accent-color-light);
     text-decoration: underline;
   }
 }
 
 *:focus-visible {
   z-index: 1000;
-  outline: 1px solid $accentColor;
+  outline: 1px solid var(--accent-color);
 }

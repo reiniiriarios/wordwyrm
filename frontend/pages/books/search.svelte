@@ -111,8 +111,6 @@
 </Modal>
 
 <style lang="scss">
-  @import "../../style/variables";
-
   .search {
     display: flex;
     width: 100%;
@@ -135,7 +133,7 @@
     overflow-y: auto;
     height: 95%;
     scrollbar-width: thin;
-    scrollbar-color: $bgColorLightest transparent;
+    scrollbar-color: var(--bg-color-lightest) transparent;
   }
 
   .book {
@@ -166,31 +164,31 @@
         }
 
         &:hover img {
-          border-color: $accentColor;
+          border-color: var(--accent-color);
         }
       }
 
       &--noimage {
         width: 9rem;
-        background-color: $bgColorLightest;
+        background-color: var(--bg-color-lightest);
         border: 2px solid transparent;
 
         &:hover {
-          border-color: $accentColor;
+          border-color: var(--accent-color);
         }
       }
     }
 
     &__meta {
       font-size: 0.9rem;
-      color: $fgColorMuted;
+      color: var(--fg-color-muted);
     }
 
     &.selected {
       .book__inner {
         &--image img,
         &--noimage {
-          border-color: $accentColor;
+          border-color: var(--accent-color);
         }
       }
     }
