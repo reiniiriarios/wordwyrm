@@ -2,9 +2,11 @@
   import { onMount } from "svelte";
   import Dropzone from "svelte-file-dropzone";
   import { push } from "svelte-spa-router";
+  import Hash from "phosphor-svelte/lib/Hash";
+  import Calendar from "phosphor-svelte/lib/Calendar";
+  import Hoverinfo from "@components/hoverinfo.svelte";
   import ImageSearch from "./imagesearch.svelte";
   import Moreinfo from "./moreinfo.svelte";
-  import Hoverinfo from "@components/hoverinfo.svelte";
   import Crop from "./crop.svelte";
   import Delete from "./delete.svelte";
 
@@ -18,6 +20,7 @@
   let imagePath: string = "";
   let commonTags: string[] = [];
   let saving: boolean = false;
+  let datePublishedIsDate: boolean = true;
 
   onMount(() => {
     window.electronAPI.readBook(params.author, params.book);
@@ -39,6 +42,7 @@
         if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
         imagePath = `${booksDir}/${book.cache.urlpath}.jpg?t=${book.images.imageUpdated}`;
       }
+      datePublishedIsDate = !!book.datePublished?.match(/^\d+\-\d+\-\d+$/);
     });
 
     const removeSavedListener = window.electronAPI.bookSaved((savedBook: Book) => {
@@ -98,6 +102,10 @@
       tags += tag;
     }
   }
+
+  function switchDatePublished() {
+    datePublishedIsDate = !datePublishedIsDate;
+  }
 </script>
 
 <div class="pageNav">
@@ -143,16 +151,24 @@
         </label>
         <label class="field">
           Date Published
-          {#if book.datePublished?.match(/^\d+\-\d+\-\d+$/)}
-            <input type="date" bind:value={book.datePublished} />
-          {:else}
-            <input
-              type="text"
-              on:keypress={validateDatePublished}
-              on:change={validateDatePublished}
-              bind:value={book.datePublished}
-            />
-          {/if}
+          <div class="datePublished">
+            {#if datePublishedIsDate}
+              <input type="date" bind:value={book.datePublished} />
+              <div role="button" tabindex="0" on:click={switchDatePublished} on:keypress={switchDatePublished}>
+                <Hash size="1.25rem" />
+              </div>
+            {:else}
+              <input
+                type="text"
+                on:keypress={validateDatePublished}
+                on:change={validateDatePublished}
+                bind:value={book.datePublished}
+              />
+              <div role="button" tabindex="0" on:click={switchDatePublished} on:keypress={switchDatePublished}>
+                <Calendar size="1.25rem" />
+              </div>
+            {/if}
+          </div>
         </label>
         <label class="field">
           Date Read
@@ -253,6 +269,17 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
+  }
+
+  .datePublished {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    > div {
+      margin: 0.2rem 0 0 0.5rem;
+      cursor: pointer;
+    }
   }
 
   .commonTags {
