@@ -10,6 +10,7 @@
   let searched: boolean = false;
   let searching: boolean = false;
   let canAdd: boolean = false;
+  let adding: boolean = false;
   let searchInput: HTMLInputElement;
   let elSearchResults: HTMLDivElement;
   let shadowTopOpacity: number = 0;
@@ -23,6 +24,7 @@
     searched = false;
     searching = false;
     canAdd = false;
+    adding = false;
     shadowTopOpacity = 0;
     shadowBottomOpacity = 0;
     tick().then(() => searchInput.focus());
@@ -57,6 +59,7 @@
     const removeReceiveListener = window.electronAPI.receiveBookData((book: Book) => {
       window.electronAPI.saveBook(book);
       addBookOpen = false;
+      adding = false;
       // stupid hack to avoid race condition
       setTimeout(window.electronAPI.readAllBooks, 1000);
     });
@@ -75,6 +78,8 @@
 
   function addBook() {
     if (!selectedBook.cache?.searchId) return;
+    canAdd = false;
+    adding = true;
     window.removeEventListener("keydown", searchKey);
     window.electronAPI.getBookData(selectedBook);
   }
@@ -84,11 +89,14 @@
   }
 </script>
 
-<button type="button" class="btn" on:click={openDialog}>Search for Book <MagnifyingGlass /></button>
+<button type="button" class="btn" on:click={openDialog}
+  >Search for Book <span class="icon"><MagnifyingGlass /></span></button
+>
 <Modal
   bind:open={addBookOpen}
   heading="Search for Book"
   confirmWord="Add"
+  loading={adding}
   on:confirm={addBook}
   on:cancel={closeSearch}
   bind:canConfirm={canAdd}

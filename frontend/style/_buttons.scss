@@ -17,7 +17,8 @@
   cursor: pointer;
   text-decoration: none;
 
-  svg {
+  .icon {
+    display: inline-block;
     margin-left: 0.33rem;
     height: 1rem;
     width: 1rem;

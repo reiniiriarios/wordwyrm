@@ -54,7 +54,7 @@
   }
 </script>
 
-<button type="button" class="btn" on:click={openDialog}>Add Book <Plus /></button>
+<button type="button" class="btn" on:click={openDialog}>Add Book <span class="icon"><Plus /></span></button>
 <Modal bind:open={addBookOpen} heading="Add Book" confirmWord="Add" on:confirm={addBook} bind:canConfirm>
   <fieldset>
     <label class="field field--fullwidth">

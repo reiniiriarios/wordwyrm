@@ -12,6 +12,7 @@
   let canAdd: boolean = false;
   let results: SearchResult[] = [];
   let searching: boolean = true;
+  let saving: boolean = false;
   let err: string = "";
   let page: number = 0;
 
@@ -22,6 +23,7 @@
     results = [];
     err = "";
     page = 0;
+    saving = false;
     search();
   }
 
@@ -41,6 +43,8 @@
 
     const removeBookImageListener = window.electronAPI.bookImageAdded(() => {
       isOpen = false;
+      canAdd = true;
+      saving = false;
       book.images.imageUpdated = new Date().getTime();
       book.images.hasImage = true;
       push(`#/book/${book.cache.filepath}`);
@@ -58,6 +62,8 @@
   }
 
   function addImage() {
+    saving = true;
+    canAdd = false;
     window.electronAPI.addBookImage(book, selectedImageUrl);
   }
 
@@ -72,8 +78,17 @@
   }
 </script>
 
-<button type="button" class="btn" on:click={openDialog}>Search for Image <ImageSquare /></button>
-<Modal bind:open={isOpen} heading="Search for Book" confirmWord="Add" on:confirm={addImage} bind:canConfirm={canAdd}>
+<button type="button" class="btn" on:click={openDialog}>
+  Search for Image <span class="icon"><ImageSquare /></span>
+</button>
+<Modal
+  bind:open={isOpen}
+  heading="Search for Book"
+  confirmWord="Add"
+  on:confirm={addImage}
+  bind:canConfirm={canAdd}
+  loading={saving}
+>
   <div class="results">
     {#if err}
       <div class="err">{err}</div>

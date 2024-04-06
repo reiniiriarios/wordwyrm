@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
+  import Spinner from "./spinner.svelte";
   const dispatch = createEventDispatcher();
 
   export let open: boolean = false;
@@ -9,6 +10,7 @@
   export let heading: string;
   export let height: string = "";
   export let warning: boolean = false;
+  export let loading: boolean = false;
 
   function confirm() {
     if (open) {
@@ -55,12 +57,16 @@
       {/if}
       <button
         type="button"
-        class="btn modal__button"
+        class="btn modal__button modal__button--confirm"
         class:btn--delete={warning}
         disabled={!canConfirm}
         on:click={confirm}
       >
-        {confirmWord}
+        {#if loading}
+          <Spinner />
+        {:else}
+          {confirmWord}
+        {/if}
       </button>
     </div>
   </div>
@@ -117,6 +123,13 @@
       border-top: 1px solid var(--bg-color-lighter);
       padding: 0.5rem;
       text-align: right;
+    }
+
+    &__button {
+      &--confirm {
+        min-width: 5rem;
+        justify-content: center;
+      }
     }
   }
 </style>

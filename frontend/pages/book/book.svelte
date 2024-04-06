@@ -54,7 +54,9 @@
     {#if book && $settings.googleApiKey && $settings.googleSearchEngineId}
       <ImageSearch bind:book />
     {/if}
-    <a class="btn" href={`#/book/${params.author}/${params.book}/edit`}>Edit <PencilSimple /></a>
+    <a class="btn" href={`#/book/${params.author}/${params.book}/edit`}
+      >Edit <span class="icon"><PencilSimple /></span></a
+    >
   </div>
 </div>
 {#if book}
