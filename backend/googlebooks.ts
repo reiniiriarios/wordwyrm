@@ -134,6 +134,7 @@ function conformBook(v: Volume): Book {
     tags: [],
     series: "",
     timestampAdded: 0,
+    rating: 0,
     images: {
       hasImage: false,
     },

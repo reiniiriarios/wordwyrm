@@ -84,6 +84,28 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
       return books;
     },
   },
+  rating: {
+    name: "Rating",
+    sort: (books: Book[], reverse: boolean): Book[] => {
+      books.sort((x, y) => {
+        let xR = x.rating ?? 0;
+        let yR = y.rating ?? 0;
+        if (reverse) {
+          if (xR > yR) return -1;
+          if (xR < yR) return 1;
+        } else {
+          if (xR > yR) return -1;
+          if (xR < yR) return 1;
+        }
+        // ratings are often similar, go to author name after that
+        let xA = x.authors[0].name.split(" ").pop();
+        let yA = y.authors[0].name.split(" ").pop();
+        if (reverse) return (yA ?? "").localeCompare(xA ?? "");
+        return (xA ?? "").localeCompare(yA ?? "");
+      });
+      return books;
+    },
+  },
   series: {
     name: "Series",
     sort: (books: Book[], reverse: boolean): Book[] => {

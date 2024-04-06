@@ -2,13 +2,12 @@
  * @NOTE: Prepend a `~` to css file paths that are in your node_modules
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
+@use "croppie/croppie.css";
 
 :root,
 input {
   color-scheme: dark;
 }
-
-@use "croppie/croppie.css";
 
 @import "elements";
 @import "page";

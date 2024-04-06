@@ -192,6 +192,7 @@ function conformOpenLibrarySearchResult(work: OpenLibrarySearchResult, isbn?: st
     datePublished: (work.first_publish_year ?? work.publish_year?.sort()[0] ?? "").toString(),
     dateRead: "",
     timestampAdded: 0,
+    rating: 0,
     tags: [],
     series: "",
     images: {

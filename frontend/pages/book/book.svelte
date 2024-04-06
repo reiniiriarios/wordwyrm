@@ -5,6 +5,7 @@
   import ImageSearch from "./imagesearch.svelte";
   import Moreinfo from "./moreinfo.svelte";
   import { sortFilters } from "@pages/books/sortBooks";
+  import Rating from "./rating.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
@@ -97,6 +98,11 @@
           {book.datePublished}
         {/if}
       </h4>
+      {#if book.rating}
+        <div class="rating">
+          <Rating rating={book.rating} />
+        </div>
+      {/if}
       {#if book.series}
         <div class="series">Series: {book.series}</div>
         {#if seriesBooks.length}
@@ -193,6 +199,10 @@
         padding: 0;
         margin: 0 0 1rem;
         font-weight: normal;
+      }
+
+      .rating {
+        margin: 0 0 1rem;
       }
 
       .series {

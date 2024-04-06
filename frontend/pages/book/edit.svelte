@@ -9,6 +9,7 @@
   import Moreinfo from "./moreinfo.svelte";
   import Crop from "./crop.svelte";
   import Delete from "./delete.svelte";
+  import Rating from "./rating.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
 
@@ -179,6 +180,26 @@
           <input type="text" bind:value={book.series} />
         </label>
 
+        <div class="field field--fullwidth">
+          Rating
+          <Rating bind:rating={book.rating} editable />
+        </div>
+
+        <label class="field field--fullwidth">
+          Tag(s) <Hoverinfo details="Tags should be comma-separated." />
+          <input type="text" bind:value={tags} on:change={setTags} />
+        </label>
+        <div class="field field--fullwidth commonTags">
+          <div class="commonTags__title">
+            Common Tags <Hoverinfo details="Click to add. Change tags displayed in Settings." />
+          </div>
+          <div class="commonTags__tags">
+            {#each commonTags as tag}
+              <button class="tag" on:click={() => addCommonTag(tag)}>{tag}</button>
+            {/each}
+          </div>
+        </div>
+
         <label class="field field">
           ISBN <Hoverinfo details="Enables quick-links to Google Books, LibraryThing, and Goodreads." />
           <input type="text" bind:value={book.ids.isbn} />
@@ -197,21 +218,6 @@
           Goodreads ID <Hoverinfo details="Enables quick-link to Goodreads." />
           <input type="text" bind:value={book.ids.goodreadsId} />
         </label>
-
-        <label class="field field--fullwidth">
-          Tag(s) <Hoverinfo details="Tags should be comma-separated." />
-          <input type="text" bind:value={tags} on:change={setTags} />
-        </label>
-        <div class="field field--fullwidth commonTags">
-          <div class="commonTags__title">
-            Common Tags <Hoverinfo details="Click to add. Change tags displayed in Settings." />
-          </div>
-          <div class="commonTags__tags">
-            {#each commonTags as tag}
-              <button class="tag" on:click={() => addCommonTag(tag)}>{tag}</button>
-            {/each}
-          </div>
-        </div>
       </fieldset>
       <div class="bookPage__actions">
         <div class="left">

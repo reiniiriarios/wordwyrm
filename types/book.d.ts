@@ -13,6 +13,7 @@ type Book = {
   datePublished: string;
   dateRead: string;
   timestampAdded: number; // ms
+  rating: number;
   images: {
     hasImage: boolean;
     imageUpdated?: number;
