@@ -8,20 +8,13 @@
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
   import FrameCorners from "phosphor-svelte/lib/FrameCorners";
   import Bookimage from "@components/bookimage.svelte";
-  import { UserSettings } from "types/global";
   import { settings } from "@stores/settings";
+  import { appState } from "@stores/appState";
 
   let allBooks: Book[] = [];
   let filteredBooks: Book[] = [];
   let searchedBooks: Book[] = [];
   let sortedBooks: Book[] = [];
-  let currentSort: string = window.appState?.books?.sort ?? "read";
-  let currentSortReverse: boolean = window.appState?.books?.reverse ?? false;
-  let currentFilter: string = window.appState?.books?.filter ?? "all";
-  let currentTagFilter: string = window.appState?.books?.tag ?? "";
-  let currentRecent: string = window.appState?.books?.recent ?? "all";
-  let currentSearch: string = "";
-  let zoomLevel: string = window.appState?.books?.zoom ?? "m";
   let filterTags: string[] = [];
   $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());
 
@@ -34,17 +27,8 @@
       window.electronAPI.readAllBooks();
     }
 
-    const removeSettingsListener = window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
-      filterTags = loadedSettings.filterTags?.split(",").map((t) => t.trim());
-    });
-
     const removeReceiveListener = window.electronAPI.receiveAllBooks((books: Book[]) => {
       console.log("received");
-      currentSort = window.appState?.books?.sort ?? "read";
-      currentFilter = window.appState?.books?.filter ?? "all";
-      currentTagFilter = window.appState?.books?.tag ?? "";
-      currentSortReverse = window.appState?.books?.reverse ?? false;
-      currentRecent = window.appState?.books?.recent ?? "all";
       allBooks = books;
       filteredBooks = books;
       searchedBooks = books;
@@ -53,7 +37,6 @@
 
     return () => {
       removeReceiveListener();
-      removeSettingsListener();
     };
   });
 
@@ -62,25 +45,25 @@
   function sort() {
     console.log("sorting");
     // sort what is already filtered, then searched through
-    sortedBooks = sortFilters[currentSort].sort(structuredClone(searchedBooks), currentSortReverse);
+    sortedBooks = sortFilters[$appState.books.sort].sort(structuredClone(searchedBooks), $appState.books.reverse);
   }
 
   function search() {
     console.log("searching");
     // search through what is already filtered, then sort
-    searchedBooks = searchBooks(structuredClone(filteredBooks), currentSearch);
+    searchedBooks = searchBooks(structuredClone(filteredBooks), $appState.books.search);
     sort();
   }
 
   function filter() {
     console.log("filtering");
     // filter by recent first
-    let books: Book[] = recentFilters[currentRecent].filter(structuredClone(allBooks));
+    let books: Book[] = recentFilters[$appState.books.recent].filter(structuredClone(allBooks));
     // then by either predefined filter or user tag filter
-    if (currentFilter) {
-      books = catFilters[currentFilter].filter(books);
-    } else if (currentTagFilter) {
-      books = filterByTag(books, currentTagFilter);
+    if ($appState.books.filter) {
+      books = catFilters[$appState.books.filter].filter(books);
+    } else if ($appState.books.tag) {
+      books = filterByTag(books, $appState.books.tag);
     }
     filteredBooks = books;
     // then search and sort
@@ -91,14 +74,12 @@
   // -- User action functions --
 
   function sortFilter(s: string) {
-    currentSort = s;
-    window.appState.books.sort = currentSort;
+    $appState.books.sort = s;
     sort();
   }
 
   function sortReverse() {
-    currentSortReverse = !currentSortReverse;
-    window.appState.books.reverse = currentSortReverse;
+    $appState.books.reverse = !$appState.books.reverse;
     sortedBooks = sortedBooks.reverse();
   }
 
@@ -110,46 +91,40 @@
   }
 
   function catFilter(f: string) {
-    currentFilter = f;
-    currentTagFilter = "";
-    window.appState.books.filter = currentFilter;
-    window.appState.books.tag = currentTagFilter;
+    $appState.books.filter = f;
+    $appState.books.tag = "";
     filter();
   }
 
   function tagFilter(tag: string) {
-    currentFilter = "";
-    currentTagFilter = tag;
-    window.appState.books.filter = currentFilter;
-    window.appState.books.tag = currentTagFilter;
+    $appState.books.filter = "";
+    $appState.books.tag = tag;
     filter();
   }
 
   function recentFilter(f: string) {
-    currentRecent = f;
-    window.appState.books.recent = currentRecent;
+    $appState.books.recent = f;
     filter();
   }
 
   function zoom(z: string) {
-    zoomLevel = z;
-    window.appState.books.zoom = zoomLevel;
+    $appState.books.zoom = z;
   }
 </script>
 
 <div class="pageNav">
   <h2 class="pageNav__header">Books</h2>
   <div class="pageNav__search">
-    <MagnifyingGlass /><input type="text" bind:value={currentSearch} on:keydown={searchFilter} />
+    <MagnifyingGlass /><input type="text" bind:value={$appState.books.search} on:keydown={searchFilter} />
   </div>
   <div class="pageNav__actions">
     <div class="zoom">
       <div class="resizeIcon">
         <FrameCorners size={22} />
       </div>
-      <button on:click={() => zoom("s")} class:selected={zoomLevel === "s"}>S</button>
-      <button on:click={() => zoom("m")} class:selected={zoomLevel === "m"}>M</button>
-      <button on:click={() => zoom("l")} class:selected={zoomLevel === "l"}>L</button>
+      <button on:click={() => zoom("s")} class:selected={$appState.books.zoom === "s"}>S</button>
+      <button on:click={() => zoom("m")} class:selected={$appState.books.zoom === "m"}>M</button>
+      <button on:click={() => zoom("l")} class:selected={$appState.books.zoom === "l"}>L</button>
     </div>
 
     <AddBook />
@@ -162,11 +137,11 @@
     <span>Sort:</span>
     {#each Object.entries(sortFilters) as [i, s]}
       {#if !s.hidden}
-        <button on:click={() => sortFilter(i)} class:selected={currentSort === i}>{s.name}</button>
+        <button on:click={() => sortFilter(i)} class:selected={$appState.books.sort === i}>{s.name}</button>
       {/if}
     {/each}
     <button class="sortDirection" on:click={sortReverse}>
-      {#if currentSortReverse}
+      {#if $appState.books.reverse}
         <SortDescending size={22} />
       {:else}
         <SortAscending size={22} />
@@ -178,22 +153,24 @@
     <span>Filter:</span>
     <div class="customFilter">
       <button class="customFilter__selected">
-        {#if filterTags && currentTagFilter}
-          {currentTagFilter}
+        {#if filterTags && $appState.books.tag}
+          {$appState.books.tag}
         {:else}
-          {catFilters[currentFilter].name}
+          {catFilters[$appState.books.filter].name}
         {/if}
       </button>
       <div class="customFilter__dropdown">
         {#each Object.entries(catFilters) as [i, f]}
-          <button on:click={() => catFilter(i)} class="customFilter__opt" class:selected={currentFilter === i}
+          <button on:click={() => catFilter(i)} class="customFilter__opt" class:selected={$appState.books.filter === i}
             >{f.name}</button
           >
         {/each}
         {#if filterTags}
           {#each filterTags as tag}
-            <button on:click={() => tagFilter(tag)} class="customFilter__opt" class:selected={currentTagFilter === tag}
-              >{tag}</button
+            <button
+              on:click={() => tagFilter(tag)}
+              class="customFilter__opt"
+              class:selected={$appState.books.tag === tag}>{tag}</button
             >
           {/each}
         {/if}
@@ -205,12 +182,14 @@
     <span>Read:</span>
     <div class="recentFilter">
       <button class="recentFilter__selected">
-        {recentFilters[currentRecent].name}
+        {recentFilters[$appState.books.recent].name}
       </button>
       <div class="recentFilter__dropdown">
         {#each Object.entries(recentFilters) as [i, f]}
-          <button on:click={() => recentFilter(i)} class="recentFilter__opt" class:selected={i === currentRecent}
-            >{f.name}</button
+          <button
+            on:click={() => recentFilter(i)}
+            class="recentFilter__opt"
+            class:selected={i === $appState.books.recent}>{f.name}</button
           >
         {/each}
       </div>
@@ -231,7 +210,7 @@
 
 <div class="bookList">
   {#each sortedBooks as book}
-    <div class="book" class:zoomSmall={zoomLevel === "s"} class:zoomLarge={zoomLevel === "l"}>
+    <div class="book" class:zoomSmall={$appState.books.zoom === "s"} class:zoomLarge={$appState.books.zoom === "l"}>
       {#if book.images.hasImage}
         <a href={`#/book/${book.cache.filepath}`} class="book__inner book__inner--image">
           <Bookimage {book} overlay />

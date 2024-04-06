@@ -4,16 +4,12 @@
   import Menu from "@components/menu.svelte";
   import UpdateAvailable from "@components/updateavailable.svelte";
   import { onMount } from "svelte";
-  import { AppState, UserSettings } from "types/global";
   import { settings } from "@stores/settings";
 
   let updateAvailable: string = "";
 
   onMount(() => {
     settings.fetch();
-    window.appState = {
-      books: {},
-    } as AppState;
 
     const removeUpdateListener = window.electronAPI.updateAvailable((latestVersion: string) => {
       updateAvailable = latestVersion;
