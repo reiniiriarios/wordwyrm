@@ -5,6 +5,7 @@
   import Hash from "phosphor-svelte/lib/Hash";
   import Calendar from "phosphor-svelte/lib/Calendar";
   import { settings } from "@stores/settings";
+  import { books } from "@stores/books";
   import Hoverinfo from "@components/hoverinfo.svelte";
   import Rating from "@components/rating.svelte";
   import ImageSearch from "./imagesearch.svelte";
@@ -49,6 +50,7 @@
 
     const removeSavedListener = window.electronAPI.bookSaved((savedBook: Book) => {
       saving = false;
+      books.updateBook(savedBook);
       // hacky fix to maybe beat race condition on saving image
       // would rather go ahead and change the page than beat it
       setTimeout(() => push(`#/book/${savedBook.cache.filepath}`), 250);

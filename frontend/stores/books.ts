@@ -53,6 +53,18 @@ function createBooks() {
     fetch: () => {
       window.electronAPI.readAllBooks();
     },
+    updateBook: (updatedBook: Book) => {
+      update((s) => {
+        s.allBooks = s.allBooks.map((b) => {
+          if (b.cache.filepath === updatedBook.cache.filepath) {
+            return updatedBook;
+          }
+          return b;
+        });
+        return s;
+      });
+      books.applyFilter();
+    },
     sort: (method?: string) => {
       console.log("sorting");
       // sort what is already filtered, then searched through
