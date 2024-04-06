@@ -5,27 +5,23 @@
   import UpdateAvailable from "@components/updateavailable.svelte";
   import { onMount } from "svelte";
   import { AppState, UserSettings } from "types/global";
+  import { settings } from "@stores/settings";
 
   let updateAvailable: string = "";
 
   onMount(() => {
-    window.userSettings = {} as UserSettings;
-    window.electronAPI.loadSettings();
+    settings.fetch();
     window.appState = {
       books: {},
     } as AppState;
-
-    const removeSettingsListener = window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
-      window.userSettings = loadedSettings;
-    });
 
     const removeUpdateListener = window.electronAPI.updateAvailable((latestVersion: string) => {
       updateAvailable = latestVersion;
     });
 
     return () => {
-      removeSettingsListener();
       removeUpdateListener();
+      settings.destroy();
     };
   });
 </script>

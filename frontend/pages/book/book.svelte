@@ -6,6 +6,7 @@
   import Moreinfo from "./moreinfo.svelte";
   import { sortFilters } from "@pages/books/sortBooks";
   import Rating from "./rating.svelte";
+  import { settings } from "@stores/settings";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
@@ -66,7 +67,7 @@
 <div class="pageNav">
   <h2 class="pageNav__header">Book</h2>
   <div class="pageNav__actions">
-    {#if book && window.userSettings.googleApiKey && window.userSettings.googleSearchEngineId}
+    {#if book && $settings.googleApiKey && $settings.googleSearchEngineId}
       <ImageSearch bind:book />
     {/if}
     <a class="btn" href={`#/book/${params.author}/${params.book}/edit`}>Edit <PencilSimple /></a>

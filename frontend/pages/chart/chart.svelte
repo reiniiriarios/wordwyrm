@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { settings } from "@stores/settings";
   import Chart from "chart.js/auto";
   import { onMount } from "svelte";
 
-  let startYear = window.userSettings.chartStartYear ?? 2020;
+  let startYear = $settings.chartStartYear ?? 2020;
   const startDate = new Date(startYear, 1, 1);
   const endDate = new Date();
   let allBooks: Book[] = [];

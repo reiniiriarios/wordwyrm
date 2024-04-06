@@ -3,38 +3,29 @@
   import { UserSettings } from "types/global";
   import ArrowSquareOut from "phosphor-svelte/lib/ArrowSquareOut";
   import Hoverinfo from "@components/hoverinfo.svelte";
+  import { settings } from "@stores/settings";
 
-  let settings: UserSettings = {} as UserSettings;
+  let editSettings: UserSettings = {} as UserSettings;
   let saved: boolean = false;
   let seOpenLibrary: boolean;
   let seGoogleBooks: boolean;
+  $: seOpenLibrary = $settings.searchEngines?.includes("openLibrary");
+  $: seGoogleBooks = $settings.searchEngines?.includes("googleBooks");
 
   onMount(() => {
-    settings = structuredClone(window.userSettings);
-    if (!settings.chartStartYear) {
-      settings.chartStartYear = 2020;
-    }
-    if (!settings.searchEngines?.length) {
-      settings.searchEngines = ["openLibrary"];
-    }
-    seOpenLibrary = settings.searchEngines?.includes("openLibrary");
-    seGoogleBooks = settings.searchEngines?.includes("googleBooks");
+    editSettings = structuredClone($settings);
 
     const removeSettingsListener = window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
-      settings = loadedSettings;
-      window.userSettings = loadedSettings;
+      editSettings = loadedSettings;
       if (!loadedSettings.searchEngines.length) {
-        settings.searchEngines = ["openLibrary"];
+        editSettings.searchEngines = ["openLibrary"];
       }
       seOpenLibrary = loadedSettings.searchEngines.includes("openLibrary");
       seGoogleBooks = loadedSettings.searchEngines.includes("googleBooks");
-      saved = true;
-      setTimeout(() => (saved = false), 1500);
     });
 
     const removeDirListener = window.electronAPI.dirSelected((path: string) => {
-      settings.booksDir = path;
-      window.userSettings.booksDir = path;
+      editSettings.booksDir = path;
     });
 
     return () => {
@@ -45,27 +36,27 @@
 
   function toggleSearchEngine(engine: string) {
     if (engine === "googleBooks") {
-      if (!settings.googleApiKey?.length) {
+      if (!editSettings.googleApiKey?.length) {
         return;
       }
       seGoogleBooks = !seGoogleBooks;
     } else if (engine === "openLibrary") {
       seOpenLibrary = !seOpenLibrary;
     }
-    if (settings.searchEngines.includes(engine)) {
-      settings.searchEngines = settings.searchEngines.filter((e) => e !== engine);
+    if (editSettings.searchEngines.includes(engine)) {
+      editSettings.searchEngines = editSettings.searchEngines.filter((e) => e !== engine);
       // Ensure at least one is selected.
-      if (!settings.searchEngines.length) {
+      if (!editSettings.searchEngines.length) {
         if (engine === "googleBooks") {
-          settings.searchEngines.push("openLibrary");
+          editSettings.searchEngines.push("openLibrary");
           seOpenLibrary = true;
         } else {
-          settings.searchEngines.push("googleBooks");
+          editSettings.searchEngines.push("googleBooks");
           seGoogleBooks = true;
         }
       }
     } else {
-      settings.searchEngines.push(engine);
+      editSettings.searchEngines.push(engine);
     }
   }
 
@@ -76,7 +67,9 @@
 
   function save(e: MouseEvent | KeyboardEvent) {
     e.preventDefault();
-    window.electronAPI.saveSettings(settings);
+    settings.save(editSettings);
+    saved = true;
+    setTimeout(() => (saved = false), 1500);
   }
 </script>
 
@@ -88,23 +81,23 @@
   <label class="field field--fullwidth">
     Book Data Directory <Hoverinfo details="Select a directory in a cloud drive to share your data between devices." />
     <div class="fileSelect">
-      <input type="text" readonly on:click={selectDataDir} bind:value={settings.booksDir} />
+      <input type="text" readonly on:click={selectDataDir} bind:value={editSettings.booksDir} />
       <button class="btn btn--light" on:click={selectDataDir}>Select</button>
     </div>
   </label>
 
   <label class="field field--fullwidth">
     Chart Default Start Year <Hoverinfo details="Sets the default start year for the chart page." />
-    <input type="text" bind:value={settings.chartStartYear} />
+    <input type="text" bind:value={editSettings.chartStartYear} />
   </label>
 
   <label class="field field--fullwidth">
     Tags for Filtering <Hoverinfo details="Tags should be comma-separated." />
-    <input type="text" bind:value={settings.filterTags} maxlength="255" />
+    <input type="text" bind:value={editSettings.filterTags} maxlength="255" />
   </label>
   <label class="field field--fullwidth">
     Common Tags for Editing <Hoverinfo details="Tags should be comma-separated." />
-    <input type="text" bind:value={settings.commonTags} maxlength="1024" />
+    <input type="text" bind:value={editSettings.commonTags} maxlength="1024" />
   </label>
 
   <div class="field field--fullwidth">
@@ -118,7 +111,7 @@
       <button
         class="btn btn--option"
         class:selected={seGoogleBooks}
-        disabled={!settings.googleApiKey?.length}
+        disabled={!editSettings.googleApiKey?.length}
         on:click={() => toggleSearchEngine("googleBooks")}>Google Books</button
       >
     </div>
@@ -126,13 +119,13 @@
 
   <label class="field field--fullwidth">
     Google Cloud API Key <Hoverinfo details="Optional. Enables searching for book data via Google Books." />
-    <input type="text" bind:value={settings.googleApiKey} />
+    <input type="text" bind:value={editSettings.googleApiKey} />
   </label>
   <label class="field field--fullwidth">
     Google Custom Search Engine ID <Hoverinfo
       details="Optional. Along with API Key, enables searching for cover images via Google Image Search."
     />
-    <input type="text" bind:value={settings.googleSearchEngineId} />
+    <input type="text" bind:value={editSettings.googleSearchEngineId} />
   </label>
   <div class="actions">
     <button class="btn" on:click={save}>Save</button>
@@ -143,8 +136,8 @@
 </fieldset>
 
 <div class="footer">
-  {#if settings.appVersion}
-    <div>Version: {settings.appVersion}</div>
+  {#if $settings.appVersion}
+    <div>Version: {$settings.appVersion}</div>
   {/if}
   <div><a href="https://github.com/reiniiriarios/book-tracker" target="_blank">GitHub <ArrowSquareOut /></a></div>
 </div>

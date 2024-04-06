@@ -23,7 +23,7 @@
       "@components/*": ["frontend/components/*"],
       "@pages/*": ["frontend/pages/*"],
       "@core/*": ["frontend/core/*"],
-      "@data/*": ["frontend/data/*"],
+      "@stores/*": ["frontend/stores/*"],
       "@style/*": ["frontend/style/*"],
       "@api/*": ["backend/*"],
       "@app/*": ["frontend/*"]

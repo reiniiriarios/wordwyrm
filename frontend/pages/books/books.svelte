@@ -9,6 +9,7 @@
   import FrameCorners from "phosphor-svelte/lib/FrameCorners";
   import Bookimage from "@components/bookimage.svelte";
   import { UserSettings } from "types/global";
+  import { settings } from "@stores/settings";
 
   let allBooks: Book[] = [];
   let filteredBooks: Book[] = [];
@@ -22,7 +23,7 @@
   let currentSearch: string = "";
   let zoomLevel: string = window.appState?.books?.zoom ?? "m";
   let filterTags: string[] = [];
-  $: filterTags = window.userSettings?.filterTags?.split(",").map((t) => t.trim());
+  $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());
 
   // -- Init --
 

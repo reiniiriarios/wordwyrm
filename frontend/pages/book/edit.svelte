@@ -10,6 +10,7 @@
   import Crop from "./crop.svelte";
   import Delete from "./delete.svelte";
   import Rating from "./rating.svelte";
+  import { settings } from "@stores/settings";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
 
@@ -26,8 +27,8 @@
   onMount(() => {
     window.electronAPI.readBook(params.author, params.book);
 
-    if (window.userSettings?.commonTags?.length) {
-      commonTags = window.userSettings.commonTags.split(",").map((t) => t.trim());
+    if ($settings.commonTags?.length) {
+      commonTags = $settings.commonTags.split(",").map((t) => t.trim());
     } else {
       commonTags = ["Fiction", "Fantasy", "Science Fiction", "Romance", "Non-Fiction", "Historical"];
     }
@@ -38,8 +39,8 @@
       oFilename = b.cache.filename ?? "";
       authors = book.authors.map((a) => a.name).join(", ");
       tags = book.tags?.join(", ") ?? "";
-      if (book.images.hasImage && window.userSettings.booksDir) {
-        let booksDir = window.userSettings.booksDir.replace(/\\/g, "/").replace(/ /g, "%20");
+      if (book.images.hasImage && $settings.booksDir) {
+        let booksDir = $settings.booksDir.replace(/\\/g, "/").replace(/ /g, "%20");
         if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
         imagePath = `${booksDir}/${book.cache.urlpath}.jpg?t=${book.images.imageUpdated}`;
       }
@@ -133,7 +134,7 @@
       </div>
       <div class="imageActions">
         {#if book}
-          {#if window.userSettings.googleApiKey && window.userSettings.googleSearchEngineId}
+          {#if $settings.googleApiKey && $settings.googleSearchEngineId}
             <ImageSearch {book} />
           {/if}
           <Crop bind:book />
