@@ -5,6 +5,7 @@
   import ImageSearch from "./imagesearch.svelte";
   import Moreinfo from "./moreinfo.svelte";
   import Hoverinfo from "@components/hoverinfo.svelte";
+  import Crop from "./crop.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
 
@@ -35,7 +36,7 @@
       if (book.images.hasImage && window.userSettings.booksDir) {
         let booksDir = window.userSettings.booksDir.replace(/\\/g, "/").replace(/ /g, "%20");
         if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
-        imagePath = `${booksDir}/${book.cache.urlpath}.jpg`;
+        imagePath = `${booksDir}/${book.cache.urlpath}.jpg?t=${book.images.imageUpdated}`;
       }
     });
 
@@ -120,9 +121,12 @@
           {/if}
         </Dropzone>
       </div>
-      <div class="searchButton">
-        {#if book && window.userSettings.googleApiKey && window.userSettings.googleSearchEngineId}
-          <ImageSearch {book} />
+      <div class="imageActions">
+        {#if book}
+          {#if window.userSettings.googleApiKey && window.userSettings.googleSearchEngineId}
+            <ImageSearch {book} />
+          {/if}
+          <Crop bind:book />
         {/if}
       </div>
     </div>
@@ -231,9 +235,12 @@
     }
   }
 
-  .searchButton {
+  .imageActions {
     padding: 1rem;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
   }
 
   .commonTags {

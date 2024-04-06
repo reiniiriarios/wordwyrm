@@ -4,7 +4,7 @@ import * as path from "path";
 import { getGoogleBook, searchGoogleBooks } from "../backend/googlebooks";
 import { imageSearch } from "../backend/googleimagesearch";
 import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
-import { addBookImage, readAllBooks, readBook, saveBook } from "../backend/bookdata";
+import { addBookImage, addBookImageBase64, readAllBooks, readBook, saveBook } from "../backend/bookdata";
 import { checkForUpdate } from "../backend/updates";
 import packageJson from "../package.json";
 import { UserSettings } from "../types/global";
@@ -202,6 +202,10 @@ app.on("ready", () => {
 
   ipcMain.on("addBookImage", (event, book: Book, url: string) => {
     addBookImage(settings.booksDir, book, url).then(() => event.reply("bookImageAdded"));
+  });
+
+  ipcMain.on("addBookImageBase64", (event, book: Book, base64: string) => {
+    addBookImageBase64(settings.booksDir, book, base64).then(() => event.reply("bookImageBase64Added"));
   });
 
   // ------- End Bridge -------

@@ -68,6 +68,24 @@ export async function addBookImage(dir: string, book: Book, url: string) {
   saveYaml(path.join(dir, book.cache.authorDir, `${book.cache.filename}.yaml`), book);
 }
 
+export async function addBookImageBase64(dir: string, book: Book, base64: string) {
+  try {
+    if (!book.cache.authorDir) {
+      book.cache.authorDir = authorsToDir(book.authors);
+    }
+    if (!book.cache.filepath) {
+      book.cache.authorDir = authorsToDir(book.authors);
+      book.cache.filename = titleToDir(book.title);
+      book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
+    }
+    fs.writeFileSync(path.join(dir, book.cache.filepath + ".jpg"), Buffer.from(base64, "base64"), { flag: "w" });
+    book.images.imageUpdated = new Date().getTime();
+    saveYaml(path.join(dir, book.cache.authorDir, `${book.cache.filename}.yaml`), book);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFilename?: string): Promise<Book> {
   initBookDirs(dir);
 
