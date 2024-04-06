@@ -152,7 +152,11 @@ export async function imageSearch(
       q: keywords,
     }).toString();
 
-    let response: GoogleSearchResponse = await fetch(`${endpoint}?${params}`).then((res) => res.json());
+    let response: GoogleSearchResponse = await fetch(`${endpoint}?${params}`)
+      .then((res) => res.json())
+      .catch((e) => {
+        throw e;
+      });
 
     if (response.items?.length) {
       response.items.forEach((item) => {
