@@ -125,7 +125,7 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
     book.tags = book.tags.filter((t) => t.trim().length);
   }
 
-  const filepath = path.join(authorPath, `${newFilename}.yaml`);
+  const filepath = path.join(dir, `${book.cache.filepath}.yaml`);
   if (!book.timestampAdded && !fs.existsSync(filepath)) {
     book.timestampAdded = new Date().getTime();
   }
