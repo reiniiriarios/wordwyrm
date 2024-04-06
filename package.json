@@ -2,7 +2,7 @@
   "name": "book-tracker",
   "displayName": "Book Tracker",
   "description": "A cross-platform desktop app for tracking what books you've read and when.",
-  "version": "1.10.0",
+  "version": "1.14.0",
   "main": "dist/electron/electron/main.js",
   "publishConfig": {
     "access": "public"
