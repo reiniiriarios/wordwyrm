@@ -22,17 +22,43 @@
   }
 
   &__search {
-    svg {
-      width: 1rem;
-      height: 1rem;
-      position: relative;
-      left: 1.5rem;
-      top: 0.2rem;
+    position: relative;
+
+    .glass,
+    .x {
+      svg {
+        width: 1rem;
+        height: 1rem;
+        position: absolute;
+        top: 0.4rem;
+      }
+    }
+
+    .glass {
+      svg {
+        left: 0.5rem;
+      }
+    }
+
+    .x {
+      cursor: pointer;
+
+      svg {
+        right: 0.5rem;
+        color: $fgColorDark;
+      }
+
+      &:hover {
+        svg {
+          color: $fgColorMuted;
+        }
+      }
     }
 
     input[type="text"] {
       border-radius: 1rem;
       padding-left: 1.75rem;
+      padding-right: 1.75rem;
     }
   }
 

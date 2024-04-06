@@ -7,6 +7,7 @@
   import SortDescending from "phosphor-svelte/lib/SortDescending";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
   import FrameCorners from "phosphor-svelte/lib/FrameCorners";
+  import X from "phosphor-svelte/lib/X";
   import Bookimage from "@components/bookimage.svelte";
   import { settings } from "@stores/settings";
   import { appState } from "@stores/appState";
@@ -90,6 +91,12 @@
     }
   }
 
+  function clearSearch() {
+    $appState.books.search = "";
+    searchedBooks = structuredClone(filteredBooks);
+    sort();
+  }
+
   function catFilter(f: string) {
     $appState.books.filter = f;
     $appState.books.tag = "";
@@ -115,7 +122,15 @@
 <div class="pageNav">
   <h2 class="pageNav__header">Books</h2>
   <div class="pageNav__search">
-    <MagnifyingGlass /><input type="text" bind:value={$appState.books.search} on:keydown={searchFilter} />
+    <span class="glass">
+      <MagnifyingGlass />
+    </span>
+    <input type="text" bind:value={$appState.books.search} on:keydown={searchFilter} on:change={search} />
+    {#if $appState.books.search.length}
+      <div class="x" role="button" tabindex="0" on:click={clearSearch} on:keypress={clearSearch}>
+        <X />
+      </div>
+    {/if}
   </div>
   <div class="pageNav__actions">
     <div class="zoom">
