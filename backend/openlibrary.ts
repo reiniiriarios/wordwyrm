@@ -139,7 +139,12 @@ export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLi
 export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | null> {
   try {
     const work: OpenLibrarySearchResult = await fetch(`${endpoint}/search.json?isbn=${isbn}`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status !== 200) {
+          throw res.statusText;
+        }
+        return res.json();
+      })
       .then((json: OpenLibrarySearchResponse) => {
         if (!json.numFound) throw new Error("No results");
         return json.docs[0];
