@@ -4,13 +4,13 @@
   import { push } from "svelte-spa-router";
   import Hash from "phosphor-svelte/lib/Hash";
   import Calendar from "phosphor-svelte/lib/Calendar";
+  import { settings } from "@stores/settings";
   import Hoverinfo from "@components/hoverinfo.svelte";
+  import Rating from "@components/rating.svelte";
   import ImageSearch from "./imagesearch.svelte";
   import Moreinfo from "./moreinfo.svelte";
   import Crop from "./crop.svelte";
   import Delete from "./delete.svelte";
-  import Rating from "./rating.svelte";
-  import { settings } from "@stores/settings";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
 

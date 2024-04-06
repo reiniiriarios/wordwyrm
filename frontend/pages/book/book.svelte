@@ -5,13 +5,12 @@
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
   import Bookimage from "@components/bookimage.svelte";
+  import Rating from "@components/rating.svelte";
   import ImageSearch from "./imagesearch.svelte";
   import Moreinfo from "./moreinfo.svelte";
-  import Rating from "./rating.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
-  let allBooks: Book[] = [];
   let seriesBooks: Book[] = [];
 
   onMount(() => {
