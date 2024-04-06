@@ -44,8 +44,23 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
       books.sort((x, y) => {
         let xA = x.authors[0].name.split(" ").pop();
         let yA = y.authors[0].name.split(" ").pop();
-        if (reverse) return (yA ?? "").localeCompare(xA ?? "");
-        return (xA ?? "").localeCompare(yA ?? "");
+        let lc = reverse ? (yA ?? "").localeCompare(xA ?? "") : (xA ?? "").localeCompare(yA ?? "");
+        if (lc !== 0) return lc;
+        // then publish date
+        let xD = (
+          x.datePublished?.match(/^\-?\d+$/) ? new Date(+x.datePublished, 1, 1) : new Date(x.datePublished ?? "")
+        ).getTime();
+        let yD = (
+          y.datePublished?.match(/^\-?\d+$/) ? new Date(+y.datePublished, 1, 1) : new Date(y.datePublished ?? "")
+        ).getTime();
+        if (reverse) {
+          if (xD > yD) return -1;
+          if (xD < yD) return 1;
+        } else {
+          if (xD < yD) return -1;
+          if (xD > yD) return 1;
+        }
+        return 0;
       });
       return books;
     },
@@ -100,8 +115,23 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
         // ratings are often similar, go to author name after that
         let xA = x.authors[0].name.split(" ").pop();
         let yA = y.authors[0].name.split(" ").pop();
-        if (reverse) return (yA ?? "").localeCompare(xA ?? "");
-        return (xA ?? "").localeCompare(yA ?? "");
+        let lc = reverse ? (yA ?? "").localeCompare(xA ?? "") : (xA ?? "").localeCompare(yA ?? "");
+        if (lc !== 0) return lc;
+        // then publish date
+        let xD = (
+          x.datePublished?.match(/^\-?\d+$/) ? new Date(+x.datePublished, 1, 1) : new Date(x.datePublished ?? "")
+        ).getTime();
+        let yD = (
+          y.datePublished?.match(/^\-?\d+$/) ? new Date(+y.datePublished, 1, 1) : new Date(y.datePublished ?? "")
+        ).getTime();
+        if (reverse) {
+          if (xD > yD) return -1;
+          if (xD < yD) return 1;
+        } else {
+          if (xD < yD) return -1;
+          if (xD > yD) return 1;
+        }
+        return 0;
       });
       return books;
     },
@@ -114,8 +144,23 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
         let yS = y.series?.replace(/^(?:A|An|The) /i, "") ?? "";
         if (xS && !yS) return -1;
         if (!xS && yS) return 1;
-        if (reverse) return yS.localeCompare(xS);
-        return xS.localeCompare(yS);
+        let lc = reverse ? (yS ?? "").localeCompare(xS ?? "") : (xS ?? "").localeCompare(yS ?? "");
+        if (lc !== 0) return lc;
+        // then publish date
+        let xD = (
+          x.datePublished?.match(/^\-?\d+$/) ? new Date(+x.datePublished, 1, 1) : new Date(x.datePublished ?? "")
+        ).getTime();
+        let yD = (
+          y.datePublished?.match(/^\-?\d+$/) ? new Date(+y.datePublished, 1, 1) : new Date(y.datePublished ?? "")
+        ).getTime();
+        if (reverse) {
+          if (xD > yD) return -1;
+          if (xD < yD) return 1;
+        } else {
+          if (xD < yD) return -1;
+          if (xD > yD) return 1;
+        }
+        return 0;
       });
       return books;
     },
