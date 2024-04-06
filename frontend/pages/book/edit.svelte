@@ -229,6 +229,9 @@
 
     &__info {
       padding: 1rem;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: $bgColorLightest transparent;
     }
 
     &__actions {
