@@ -1,121 +1,37 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import AddBook from "./add.svelte";
-  import SearchBook from "./search.svelte";
-  import { catFilters, sortFilters, recentFilters, searchBooks, filterByTag } from "./sortBooks";
   import SortAscending from "phosphor-svelte/lib/SortAscending";
   import SortDescending from "phosphor-svelte/lib/SortDescending";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
   import FrameCorners from "phosphor-svelte/lib/FrameCorners";
   import X from "phosphor-svelte/lib/X";
-  import Bookimage from "@components/bookimage.svelte";
+  import { catFilters, sortFilters, recentFilters } from "@scripts/sortBooks";
   import { settings } from "@stores/settings";
-  import { appState } from "@stores/appState";
+  import { books } from "@stores/books";
+  import Bookimage from "@components/bookimage.svelte";
+  import AddBook from "./add.svelte";
+  import SearchBook from "./search.svelte";
 
-  let allBooks: Book[] = [];
-  let filteredBooks: Book[] = [];
-  let searchedBooks: Book[] = [];
-  let sortedBooks: Book[] = [];
   let filterTags: string[] = [];
   $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());
 
-  // -- Init --
-
   onMount(() => {
     console.log("mounted");
-    if (!allBooks.length) {
+    if (!$books.allBooks.length) {
       console.log("sending for books");
-      window.electronAPI.readAllBooks();
+      books.fetch();
     }
-
-    const removeReceiveListener = window.electronAPI.receiveAllBooks((books: Book[]) => {
-      console.log("received");
-      allBooks = books;
-      filteredBooks = books;
-      searchedBooks = books;
-      filter();
-    });
-
-    return () => {
-      removeReceiveListener();
-    };
   });
 
-  // -- Filter functions --
-
-  function sort() {
-    console.log("sorting");
-    // sort what is already filtered, then searched through
-    sortedBooks = sortFilters[$appState.books.sort].sort(structuredClone(searchedBooks), $appState.books.reverse);
-  }
-
-  function search() {
-    console.log("searching");
-    // search through what is already filtered, then sort
-    searchedBooks = searchBooks(structuredClone(filteredBooks), $appState.books.search);
-    sort();
-  }
-
-  function filter() {
-    console.log("filtering");
-    // filter by recent first
-    let books: Book[] = recentFilters[$appState.books.recent].filter(structuredClone(allBooks));
-    // then by either predefined filter or user tag filter
-    if ($appState.books.filter) {
-      books = catFilters[$appState.books.filter].filter(books);
-    } else if ($appState.books.tag) {
-      books = filterByTag(books, $appState.books.tag);
-    }
-    filteredBooks = books;
-    // then search and sort
-    search();
-    sort();
-  }
-
-  // -- User action functions --
-
-  function sortFilter(s: string) {
-    $appState.books.sort = s;
-    sort();
-  }
-
-  function sortReverse() {
-    $appState.books.reverse = !$appState.books.reverse;
-    sortedBooks = sortedBooks.reverse();
-  }
-
-  function searchFilter(e: KeyboardEvent) {
+  function search(e: KeyboardEvent) {
     if (["\n", "Enter"].includes(e.key)) {
       // currentSearch is bound
-      search();
+      books.search();
     }
   }
 
-  function clearSearch() {
-    $appState.books.search = "";
-    searchedBooks = structuredClone(filteredBooks);
-    sort();
-  }
-
-  function catFilter(f: string) {
-    $appState.books.filter = f;
-    $appState.books.tag = "";
-    filter();
-  }
-
-  function tagFilter(tag: string) {
-    $appState.books.filter = "";
-    $appState.books.tag = tag;
-    filter();
-  }
-
-  function recentFilter(f: string) {
-    $appState.books.recent = f;
-    filter();
-  }
-
-  function zoom(z: string) {
-    $appState.books.zoom = z;
+  function zoom(z: "s" | "m" | "l") {
+    $books.view.zoom = z;
   }
 </script>
 
@@ -125,9 +41,9 @@
     <span class="glass">
       <MagnifyingGlass />
     </span>
-    <input type="text" bind:value={$appState.books.search} on:keydown={searchFilter} on:change={search} />
-    {#if $appState.books.search.length}
-      <div class="x" role="button" tabindex="0" on:click={clearSearch} on:keypress={clearSearch}>
+    <input type="text" bind:value={$books.filters.search} on:keydown={search} on:change={books.search} />
+    {#if $books.filters.search.length}
+      <div class="x" role="button" tabindex="0" on:click={books.clearSearch} on:keypress={books.clearSearch}>
         <X />
       </div>
     {/if}
@@ -137,9 +53,9 @@
       <div class="resizeIcon">
         <FrameCorners size={22} />
       </div>
-      <button on:click={() => zoom("s")} class:selected={$appState.books.zoom === "s"}>S</button>
-      <button on:click={() => zoom("m")} class:selected={$appState.books.zoom === "m"}>M</button>
-      <button on:click={() => zoom("l")} class:selected={$appState.books.zoom === "l"}>L</button>
+      <button on:click={() => zoom("s")} class:selected={$books.view.zoom === "s"}>S</button>
+      <button on:click={() => zoom("m")} class:selected={$books.view.zoom === "m"}>M</button>
+      <button on:click={() => zoom("l")} class:selected={$books.view.zoom === "l"}>L</button>
     </div>
 
     <AddBook />
@@ -152,11 +68,11 @@
     <span>Sort:</span>
     {#each Object.entries(sortFilters) as [i, s]}
       {#if !s.hidden}
-        <button on:click={() => sortFilter(i)} class:selected={$appState.books.sort === i}>{s.name}</button>
+        <button on:click={() => books.sort(i)} class:selected={$books.filters.sort === i}>{s.name}</button>
       {/if}
     {/each}
-    <button class="sortDirection" on:click={sortReverse}>
-      {#if $appState.books.reverse}
+    <button class="sortDirection" on:click={books.sortReverse}>
+      {#if $books.filters.reverse}
         <SortDescending size={22} />
       {:else}
         <SortAscending size={22} />
@@ -168,24 +84,26 @@
     <span>Filter:</span>
     <div class="customFilter">
       <button class="customFilter__selected">
-        {#if filterTags && $appState.books.tag}
-          {$appState.books.tag}
+        {#if filterTags && $books.filters.tag}
+          {$books.filters.tag}
         {:else}
-          {catFilters[$appState.books.filter].name}
+          {catFilters[$books.filters.filter].name}
         {/if}
       </button>
       <div class="customFilter__dropdown">
         {#each Object.entries(catFilters) as [i, f]}
-          <button on:click={() => catFilter(i)} class="customFilter__opt" class:selected={$appState.books.filter === i}
-            >{f.name}</button
+          <button
+            on:click={() => books.catFilter(i)}
+            class="customFilter__opt"
+            class:selected={$books.filters.filter === i}>{f.name}</button
           >
         {/each}
         {#if filterTags}
           {#each filterTags as tag}
             <button
-              on:click={() => tagFilter(tag)}
+              on:click={() => books.tagFilter(tag)}
               class="customFilter__opt"
-              class:selected={$appState.books.tag === tag}>{tag}</button
+              class:selected={$books.filters.tag === tag}>{tag}</button
             >
           {/each}
         {/if}
@@ -197,14 +115,14 @@
     <span>Read:</span>
     <div class="recentFilter">
       <button class="recentFilter__selected">
-        {recentFilters[$appState.books.recent].name}
+        {recentFilters[$books.filters.recent].name}
       </button>
       <div class="recentFilter__dropdown">
         {#each Object.entries(recentFilters) as [i, f]}
           <button
-            on:click={() => recentFilter(i)}
+            on:click={() => books.recentFilter(i)}
             class="recentFilter__opt"
-            class:selected={i === $appState.books.recent}>{f.name}</button
+            class:selected={i === $books.filters.recent}>{f.name}</button
           >
         {/each}
       </div>
@@ -213,19 +131,19 @@
 
   <div class="filter filter--right">
     <div class="bookCount">
-      {#if allBooks.length > 0}
-        {#if sortedBooks.length < allBooks.length}
-          {sortedBooks.length} <span class="bookCount__sep">/</span>
+      {#if $books.allBooks.length > 0}
+        {#if $books.sortedBooks.length < $books.allBooks.length}
+          {$books.sortedBooks.length} <span class="bookCount__sep">/</span>
         {/if}
-        <span class:mute={sortedBooks.length < allBooks.length}>{allBooks.length}</span> Books
+        <span class:mute={$books.sortedBooks.length < $books.allBooks.length}>{$books.allBooks.length}</span> Books
       {/if}
     </div>
   </div>
 </div>
 
 <div class="bookList">
-  {#each sortedBooks as book}
-    <div class="book" class:zoomSmall={$appState.books.zoom === "s"} class:zoomLarge={$appState.books.zoom === "l"}>
+  {#each $books.sortedBooks as book}
+    <div class="book" class:zoomSmall={$books.view.zoom === "s"} class:zoomLarge={$books.view.zoom === "l"}>
       {#if book.images.hasImage}
         <a href={`#/book/${book.cache.filepath}`} class="book__inner book__inner--image">
           <Bookimage {book} overlay />

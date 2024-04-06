@@ -1,12 +1,13 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import PencilSimple from "phosphor-svelte/lib/PencilSimple";
+  import { sortFilters } from "@scripts/sortBooks";
+  import { settings } from "@stores/settings";
+  import { books } from "@stores/books";
   import Bookimage from "@components/bookimage.svelte";
   import ImageSearch from "./imagesearch.svelte";
   import Moreinfo from "./moreinfo.svelte";
-  import { sortFilters } from "@pages/books/sortBooks";
   import Rating from "./rating.svelte";
-  import { settings } from "@stores/settings";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
@@ -19,23 +20,17 @@
 
     const removeReceiveListener = window.electronAPI.receiveBook((b: Book) => {
       book = b;
-      getSeries();
+      filterSeries();
     });
 
     const removeSaveListener = window.electronAPI.bookSaved((b: Book) => {
       book = b;
-      getSeries();
-    });
-
-    const removeAllListener = window.electronAPI.receiveAllBooks((books: Book[]) => {
-      allBooks = books;
       filterSeries();
     });
 
     return () => {
       removeReceiveListener();
       removeSaveListener();
-      removeAllListener();
     };
   });
 
@@ -43,19 +38,9 @@
     window.electronAPI.readBook(a, b);
   }
 
-  function getSeries() {
-    if (book.series.length) {
-      if (!allBooks.length) {
-        window.electronAPI.readAllBooks();
-      } else {
-        filterSeries();
-      }
-    }
-  }
-
   function filterSeries() {
     seriesBooks = [];
-    allBooks.forEach((b) => {
+    $books.allBooks.forEach((b) => {
       if (b.series === book.series) {
         seriesBooks.push(b);
       }

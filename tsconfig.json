@@ -24,6 +24,7 @@
       "@pages/*": ["frontend/pages/*"],
       "@core/*": ["frontend/core/*"],
       "@stores/*": ["frontend/stores/*"],
+      "@scripts/*": ["frontend/scripts/*"],
       "@style/*": ["frontend/style/*"],
       "@api/*": ["backend/*"],
       "@app/*": ["frontend/*"]

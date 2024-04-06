@@ -1,107 +1,39 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { catFilters, filterByTag, recentFilters, searchBooks, sortFilters } from "@pages/books/sortBooks";
+  import { push } from "svelte-spa-router";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
   import X from "phosphor-svelte/lib/X";
   import CaretUp from "phosphor-svelte/lib/CaretUp";
   import CaretDown from "phosphor-svelte/lib/CaretDown";
-  import { push } from "svelte-spa-router";
-  import { appState } from "@stores/appState";
+  import { catFilters, recentFilters } from "@scripts/sortBooks";
   import { settings } from "@stores/settings";
+  import { books } from "@stores/books";
 
-  let allBooks: Book[] = [];
-  let filteredBooks: Book[] = [];
-  let searchedBooks: Book[] = [];
-  let sortedBooks: Book[] = [];
   let filterTags: string[] = [];
   $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());
 
-  // -- Init --
-
   onMount(() => {
-    if (!allBooks.length) {
-      window.electronAPI.readAllBooks();
+    console.log("mounted");
+    if (!$books.allBooks.length) {
+      console.log("sending for books");
+      books.fetch();
     }
-
-    const removeReceiveListener = window.electronAPI.receiveAllBooks((books: Book[]) => {
-      allBooks = books;
-      filteredBooks = books;
-      searchedBooks = books;
-      sortedBooks = sortFilters.author.sort(books, false);
-    });
-
-    return () => {
-      removeReceiveListener();
-    };
   });
 
-  // -- Filter functions --
-
-  function sort() {
-    // sort what is already filtered, then searched through
-    sortedBooks = sortFilters[$appState.books.sort].sort(structuredClone(searchedBooks), $appState.books.reverse);
-  }
-
-  function search() {
-    // search through what is already filtered, then sort
-    searchedBooks = searchBooks(structuredClone(filteredBooks), $appState.books.search);
-    sort();
-  }
-
-  function filter() {
-    // filter by recent first
-    let books: Book[] = recentFilters[$appState.books.recent].filter(structuredClone(allBooks));
-    // then by either predefined filter or user tag filter
-    if ($appState.books.filter) {
-      books = catFilters[$appState.books.filter].filter(books);
-    } else if ($appState.books.tag) {
-      books = filterByTag(books, $appState.books.tag);
-    }
-    filteredBooks = books;
-    // then search and sort
-    search();
-    sort();
-  }
-
-  // -- User action functions --
-
-  function sortFilter(s: string) {
-    if (s === $appState.books.sort) {
-      $appState.books.reverse = !$appState.books.reverse;
-    } else {
-      $appState.books.reverse = false;
-    }
-    $appState.books.sort = s;
-    sort();
-  }
-
-  function searchFilter(e: KeyboardEvent) {
+  function search(e: KeyboardEvent) {
     if (["\n", "Enter"].includes(e.key)) {
       // currentSearch is bound
-      search();
+      books.search();
     }
   }
 
-  function clearSearch() {
-    $appState.books.search = "";
-    searchedBooks = structuredClone(filteredBooks);
-    sort();
-  }
-
-  function catFilter(f: string) {
-    $appState.books.filter = f;
-    $appState.books.tag = "";
-    filter();
-  }
-  function tagFilter(tag: string) {
-    $appState.books.filter = "";
-    $appState.books.tag = tag;
-    filter();
-  }
-
-  function recentFilter(f: string) {
-    $appState.books.recent = f;
-    filter();
+  function sortFilter(s: string) {
+    if (s === $books.filters.sort) {
+      $books.filters.reverse = !$books.filters.reverse;
+    } else {
+      $books.filters.reverse = false;
+    }
+    books.sort(s);
   }
 </script>
 
@@ -111,10 +43,10 @@
     <span class="glass">
       <MagnifyingGlass />
     </span>
-    <input type="text" bind:value={$appState.books.search} on:keydown={searchFilter} />
+    <input type="text" bind:value={$books.filters.search} on:keydown={search} on:change={books.search} />
 
-    {#if $appState.books.search.length}
-      <div class="x" role="button" tabindex="0" on:click={clearSearch} on:keypress={clearSearch}>
+    {#if $books.filters.search.length}
+      <div class="x" role="button" tabindex="0" on:click={books.clearSearch} on:keypress={books.clearSearch}>
         <X />
       </div>
     {/if}
@@ -124,26 +56,26 @@
       <span>Filter:</span>
       <div class="customFilter">
         <button class="customFilter__selected">
-          {#if filterTags && $appState.books.tag}
-            {$appState.books.tag}
+          {#if filterTags && $books.filters.tag}
+            {$books.filters.tag}
           {:else}
-            {catFilters[$appState.books.filter].name}
+            {catFilters[$books.filters.filter].name}
           {/if}
         </button>
         <div class="customFilter__dropdown">
           {#each Object.entries(catFilters) as [i, f]}
             <button
-              on:click={() => catFilter(i)}
+              on:click={() => books.catFilter(i)}
               class="customFilter__opt"
-              class:selected={$appState.books.filter === i}>{f.name}</button
+              class:selected={$books.filters.filter === i}>{f.name}</button
             >
           {/each}
           {#if filterTags}
             {#each filterTags as tag}
               <button
-                on:click={() => tagFilter(tag)}
+                on:click={() => books.tagFilter(tag)}
                 class="customFilter__opt"
-                class:selected={$appState.books.tag === tag}>{tag}</button
+                class:selected={$books.filters.tag === tag}>{tag}</button
               >
             {/each}
           {/if}
@@ -154,14 +86,14 @@
       <span>Read:</span>
       <div class="recentFilter">
         <button class="recentFilter__selected">
-          {recentFilters[$appState.books.recent].name}
+          {recentFilters[$books.filters.recent].name}
         </button>
         <div class="recentFilter__dropdown">
           {#each Object.entries(recentFilters) as [i, f]}
             <button
-              on:click={() => recentFilter(i)}
+              on:click={() => books.recentFilter(i)}
               class="recentFilter__opt"
-              class:selected={i === $appState.books.recent}>{f.name}</button
+              class:selected={i === $books.filters.recent}>{f.name}</button
             >
           {/each}
         </div>
@@ -174,10 +106,10 @@
   <table>
     <thead>
       {#each ["title", "author", "series", "tags", "published", "read"] as h}
-        <th on:click={() => sortFilter(h)} class:selected={$appState.books.sort === h}
+        <th on:click={() => sortFilter(h)} class:selected={$books.filters.sort === h}
           >{h.charAt(0).toUpperCase()}{h.slice(1)}
-          {#if $appState.books.sort === h}
-            {#if $appState.books.reverse}
+          {#if $books.filters.sort === h}
+            {#if $books.filters.reverse}
               <CaretDown size={12} />
             {:else}
               <CaretUp size={12} />
@@ -187,7 +119,7 @@
       {/each}
     </thead>
     <tbody>
-      {#each sortedBooks as book}
+      {#each $books.sortedBooks as book}
         <tr on:click={() => push(`#/book/${book.cache.filepath}`)}>
           <td>{book.title}</td>
           <td>{book.authors.map((a) => a.name).join(", ")}</td>
