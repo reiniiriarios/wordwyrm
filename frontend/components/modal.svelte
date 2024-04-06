@@ -68,6 +68,9 @@
 
 <style lang="scss">
   .modal {
+    --header-height: 2.5rem;
+    --footer-height: 3.25rem;
+
     position: absolute;
     top: 0;
     left: 0;
@@ -97,18 +100,20 @@
     }
 
     &__header {
+      height: var(--header-height);
       font-size: 1.125rem;
       padding: 0.5rem;
       border-bottom: 1px solid var(--bg-color-lighter);
     }
 
     &__body {
+      height: calc(100% - var(--header-height) - var(--footer-height));
       font-size: 1rem;
       padding: 0.75rem 0.5rem;
-      height: 85%;
     }
 
     &__actions {
+      height: var(--footer-height);
       border-top: 1px solid var(--bg-color-lighter);
       padding: 0.5rem;
       text-align: right;
