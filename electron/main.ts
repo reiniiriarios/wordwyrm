@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { app, BrowserWindow, dialog, ipcMain, net, protocol, shell } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, net, protocol, shell } from "electron";
 import * as path from "path";
 import { getGoogleBook, searchGoogleBooks } from "../backend/googlebooks";
 import { imageSearch } from "../backend/googleimagesearch";
@@ -17,6 +17,8 @@ const APP_VERSION = packageJson.version;
 let settings: UserSettings;
 
 function createWindow(): BrowserWindow {
+  nativeTheme.themeSource = "dark";
+
   const mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
