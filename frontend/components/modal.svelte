@@ -122,7 +122,9 @@
       height: var(--footer-height);
       border-top: 1px solid var(--bg-color-lighter);
       padding: 0.5rem;
-      text-align: right;
+      display: flex;
+      justify-content: right;
+      align-items: center;
     }
 
     &__button {
