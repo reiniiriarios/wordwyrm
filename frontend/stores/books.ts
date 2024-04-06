@@ -53,6 +53,13 @@ function createBooks() {
     fetch: () => {
       window.electronAPI.readAllBooks();
     },
+    addBook: (newBook: Book) => {
+      update((s) => {
+        s.allBooks.push(newBook);
+        return s;
+      });
+      books.applyFilter();
+    },
     updateBook: (updatedBook: Book) => {
       update((s) => {
         s.allBooks = s.allBooks.map((b) => {

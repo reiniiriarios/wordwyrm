@@ -2,6 +2,7 @@
   import Modal from "@components/modal.svelte";
   import { onMount, tick } from "svelte";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
+  import { books } from "@stores/books";
 
   let addBookOpen: boolean = false;
   let selectedBook: Book = {} as Book;
@@ -58,16 +59,19 @@
 
     const removeReceiveListener = window.electronAPI.receiveBookData((book: Book) => {
       window.electronAPI.saveBook(book);
+    });
+
+    const removeSavedListener = window.electronAPI.bookSaved((book: Book) => {
       addBookOpen = false;
       adding = false;
-      // stupid hack to avoid race condition
-      setTimeout(window.electronAPI.readAllBooks, 1000);
+      books.addBook(book);
     });
 
     return () => {
       window.removeEventListener("keydown", searchKey);
       removeSearchListener();
       removeReceiveListener();
+      removeSavedListener();
     };
   });
 
