@@ -85,7 +85,12 @@ type OpenLibraryEditions = {
 // @todo: conform
 export async function getOpenLibraryWork(olid: string): Promise<OpenLibraryWork | null> {
   try {
-    const work: OpenLibraryWork = await fetch(`${endpoint}/works/${olid}.json`)
+    const work: OpenLibraryWork = await fetch(`${endpoint}/works/${olid}.json`, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    })
       .then((res) => res.json())
       .then((json: OpenLibraryWork) => json)
       .catch((e) => {
@@ -101,7 +106,12 @@ export async function getOpenLibraryWork(olid: string): Promise<OpenLibraryWork 
 // @todo: conform
 export async function getOpenLibraryEditions(olid: string): Promise<OpenLibraryEdition[] | null> {
   try {
-    const editions: OpenLibraryEdition[] = await fetch(`${endpoint}/works/${olid}/editions.json`)
+    const editions: OpenLibraryEdition[] = await fetch(`${endpoint}/works/${olid}/editions.json`, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    })
       .then((res) => res.json())
       .then((json: OpenLibraryEditions) => {
         if (!json.size) throw new Error("No results");
@@ -120,7 +130,12 @@ export async function getOpenLibraryEditions(olid: string): Promise<OpenLibraryE
 // @todo: conform
 export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLibraryEdition[] | null> {
   try {
-    const editions: OpenLibraryEdition[] = await fetch(`${endpoint}/isbn/${isbn}.json`)
+    const editions: OpenLibraryEdition[] = await fetch(`${endpoint}/isbn/${isbn}.json`, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    })
       .then((res) => res.json())
       .then((json: OpenLibraryEditions) => {
         if (!json.size) throw new Error("No results");
@@ -138,7 +153,12 @@ export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLi
 
 export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | null> {
   try {
-    const work: OpenLibrarySearchResult = await fetch(`${endpoint}/search.json?isbn=${isbn}`)
+    const work: OpenLibrarySearchResult = await fetch(`${endpoint}/search.json?isbn=${isbn}`, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    })
       .then((res) => {
         if (res.status !== 200) {
           throw res.statusText;
@@ -161,7 +181,12 @@ export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | 
 
 export async function searchOpenLibrary(search: string): Promise<Book[]> {
   try {
-    const works: OpenLibrarySearchResult[] = await fetch(`${endpoint}/search.json?q=${search}`)
+    const works: OpenLibrarySearchResult[] = await fetch(`${endpoint}/search.json?q=${search}`, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    })
       .then((res) => res.json())
       .then((json: OpenLibrarySearchResponse) => {
         if (!json.numFound) throw new Error("No results");
