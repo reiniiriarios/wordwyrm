@@ -181,15 +181,23 @@ function conformBook(v: Volume): Book {
     book.images.hasImage = true;
   }
 
+  // Categories are in BISAC Heading format
+  // e.g. https://www.bisg.org/fiction
+  const splitCategories = (cat: string) => cat.split("/").map((c) => c.trim());
+  const mergeCategories = (a: string[], b: string[], predicate = (a: string, b: string) => a === b): string[] => {
+    const c = [...a]; // copy to avoid side effects
+    // add all items from B to copy C if they're not already present
+    b.forEach((bItem) => (c.some((cItem) => predicate(bItem, cItem)) ? null : c.push(bItem)));
+    return c;
+  };
+
   book.tags = [];
   if (v.volumeInfo?.mainCategory) {
-    book.tags.push(v.volumeInfo.mainCategory);
+    book.tags = splitCategories(v.volumeInfo.mainCategory);
   }
   if (v.volumeInfo?.categories) {
     v.volumeInfo.categories.forEach((cat) => {
-      if (cat !== v.volumeInfo.mainCategory) {
-        book.tags.push(cat);
-      }
+      book.tags = mergeCategories(book.tags, splitCategories(cat));
     });
   }
 
