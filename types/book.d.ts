@@ -10,6 +10,7 @@ type Book = {
   authors: Author[];
   tags: string[];
   series: string;
+  seriesNumber: string; // rarely, this is 0.5 or 1.5; a string is more permissive
   datePublished: string;
   dateRead: string;
   timestampAdded: number; // ms

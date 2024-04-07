@@ -106,8 +106,8 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
         let xR = x.rating ?? 0;
         let yR = y.rating ?? 0;
         if (reverse) {
-          if (xR > yR) return -1;
-          if (xR < yR) return 1;
+          if (xR < yR) return -1;
+          if (xR > yR) return 1;
         } else {
           if (xR > yR) return -1;
           if (xR < yR) return 1;
@@ -146,6 +146,16 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
         if (!xS && yS) return 1;
         let lc = reverse ? (yS ?? "").localeCompare(xS ?? "") : (xS ?? "").localeCompare(yS ?? "");
         if (lc !== 0) return lc;
+        // then series number
+        let xN = +x.seriesNumber;
+        let yN = +y.seriesNumber;
+        if (reverse) {
+          if (xN > yN) return -1;
+          if (xN < yN) return 1;
+        } else {
+          if (xN < yN) return -1;
+          if (xN > yN) return 1;
+        }
         // then publish date
         let xD = (
           x.datePublished?.match(/^\-?\d+$/) ? new Date(+x.datePublished, 1, 1) : new Date(x.datePublished ?? "")

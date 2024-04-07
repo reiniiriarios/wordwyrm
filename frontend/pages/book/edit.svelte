@@ -178,9 +178,14 @@
           Date Read
           <input type="date" bind:value={book.dateRead} />
         </label>
-        <label class="field field--fullwidth">
+
+        <label class="field">
           Series
           <input type="text" bind:value={book.series} />
+        </label>
+        <label class="field">
+          Series Number
+          <input type="text" bind:value={book.seriesNumber} />
         </label>
 
         <div class="field field--fullwidth">

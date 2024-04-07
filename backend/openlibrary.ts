@@ -226,6 +226,7 @@ function conformOpenLibrarySearchResult(work: OpenLibrarySearchResult, isbn?: st
     notes: "",
     tags: [],
     series: "",
+    seriesNumber: "",
     images: {
       hasImage: false,
     },

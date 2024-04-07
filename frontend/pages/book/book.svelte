@@ -77,7 +77,11 @@
         </div>
       {/if}
       {#if book.series}
-        <div class="series">Series: {book.series}</div>
+        <div class="series">
+          <div class="dataTitle">Series</div>
+          {book.series}
+          {book.seriesNumber ? "#" + book.seriesNumber : ""}
+        </div>
         {#if seriesBooks.length}
           <div class="seriesList">
             {#each seriesBooks as sb}

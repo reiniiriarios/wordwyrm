@@ -107,7 +107,7 @@
         <tr on:click={() => push(`#/book/${book.cache.filepath}`)}>
           <td>{book.title}</td>
           <td>{book.authors.map((a) => a.name).join(", ")}</td>
-          <td>{book.series ?? ""}</td>
+          <td>{book.series ?? ""}{book.seriesNumber ? " #" + book.seriesNumber : ""}</td>
           <td>
             <div class="tags">
               {#each book.tags as tag}

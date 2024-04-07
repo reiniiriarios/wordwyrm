@@ -133,6 +133,7 @@ function conformBook(v: Volume): Book {
     dateRead: "",
     tags: [],
     series: "",
+    seriesNumber: "",
     timestampAdded: 0,
     rating: 0,
     notes: "",
