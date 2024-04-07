@@ -86,7 +86,19 @@ export async function addBookImageBase64(dir: string, book: Book, base64: string
 export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFilename?: string): Promise<Book> {
   initBookDirs(dir);
 
+  // Trim, default values.
+  book.title = book.title.trim();
+  book.series = book.series?.trim() ?? "";
+  book.seriesNumber = book.seriesNumber?.trim() ?? "";
+  book.datePublished = book.datePublished?.trim() ?? "";
+  book.dateRead = book.dateRead?.trim() ?? "";
+  book.notes = book.notes?.trim() ?? "";
   if (!book.cache) book.cache = {};
+  if (!book.images) {
+    book.images = {
+      hasImage: false,
+    };
+  }
 
   // Paths
   book.cache.authorDir = authorsToDir(book.authors);
@@ -101,12 +113,6 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
   book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
   book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
 
-  if (!book.images) {
-    book.images = {
-      hasImage: false,
-    };
-  }
-
   // Use the image variable to save the image, then delete the variable.
   let newImage = false;
   // [sic], not checking the hasImage variable, checking if there's a new image
@@ -117,13 +123,8 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
     book.images.imageUpdated = new Date().getTime();
   }
 
-  book.datePublished = book.datePublished?.trim() ?? "";
-  book.dateRead = book.dateRead?.trim() ?? "";
-
   if (!book.tags) book.tags = [];
-  else {
-    book.tags = book.tags.filter((t) => t.trim().length);
-  }
+  else book.tags = book.tags.filter((t) => t.trim().length);
 
   const filepath = path.join(dir, `${book.cache.filepath}.yaml`);
   if (!book.timestampAdded && !fs.existsSync(filepath)) {
