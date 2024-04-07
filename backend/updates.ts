@@ -13,8 +13,11 @@ export async function checkForUpdate(currentVersion: string): Promise<string | n
       }
       const latestVersion = tag.slice(1);
       if (latestVersion !== currentVersion) {
+        console.log(`Update available: ${latestVersion}`);
         return latestVersion;
       }
+      console.log(`Running latest version: ${currentVersion}`);
+      return null;
     })
     .catch((err) => {
       console.error(err);

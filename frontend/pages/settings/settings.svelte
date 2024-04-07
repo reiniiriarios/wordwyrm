@@ -9,11 +9,17 @@
   let saved: boolean = false;
   let seOpenLibrary: boolean;
   let seGoogleBooks: boolean;
+  let updateAvailable: string = "";
   $: seOpenLibrary = $settings.searchEngines?.includes("openLibrary");
   $: seGoogleBooks = $settings.searchEngines?.includes("googleBooks");
 
   onMount(() => {
     editSettings = structuredClone($settings);
+
+    window.electronAPI.checkVersion();
+    const removeUpdateListener = window.electronAPI.updateAvailable((latestVersion: string) => {
+      updateAvailable = latestVersion;
+    });
 
     const removeSettingsListener = window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
       editSettings = loadedSettings;
@@ -31,6 +37,7 @@
     return () => {
       removeSettingsListener();
       removeDirListener();
+      removeUpdateListener();
     };
   });
 
@@ -139,7 +146,16 @@
   {#if $settings.appVersion}
     <div>Version: {$settings.appVersion}</div>
   {/if}
-  <div><a href="https://github.com/reiniiriarios/book-tracker" target="_blank">GitHub <ArrowSquareOut /></a></div>
+  <div>
+    <a class="hideme" href="https://github.com/reiniiriarios/book-tracker" target="_blank">GitHub <ArrowSquareOut /></a>
+  </div>
+  {#if updateAvailable}
+    <div>
+      Update Available: <a href="https://github.com/reiniiriarios/book-tracker/releases/latest" target="_blank">
+        Download v{updateAvailable}
+      </a>
+    </div>
+  {/if}
 </div>
 
 <style lang="scss">
@@ -175,13 +191,8 @@
       }
     }
 
-    a {
+    a.hideme {
       color: var(--fg-color-muted);
-
-      &:hover {
-        color: var(--accent-color);
-        text-decoration: none;
-      }
     }
   }
 </style>

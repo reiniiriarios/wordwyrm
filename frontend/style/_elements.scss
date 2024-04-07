@@ -37,6 +37,14 @@ a {
     color: var(--accent-color-light);
     text-decoration: underline;
   }
+
+  &.hideme {
+    color: var(--fg-color);
+
+    &:hover {
+      color: var(--accent-color);
+    }
+  }
 }
 
 *:focus-visible {

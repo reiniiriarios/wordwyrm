@@ -40,35 +40,17 @@ function createWindow(): BrowserWindow {
     mainWindow.loadFile(path.join(__dirname, "../../index.html"));
   }
 
-  // Intercept a click on anchor with `target="_blank"`.
-  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith("http:") || url.startsWith("https:")) {
-      try {
-        shell.openExternal(url);
-      } catch (error: unknown) {
-        console.error(`Failed to open url: ${error}`);
-      }
-    }
-    return { action: "deny" };
-  });
-
-  // Check if app is latest version.
-  mainWindow.webContents.once("dom-ready", () => {
-    mainWindow.webContents.send("check-version");
-    ipcMain.once("check-version", (event) => {
-      checkForUpdate(APP_VERSION).then((updateAvailable) => {
-        if (updateAvailable) {
-          event.reply("updateAvailable", updateAvailable);
-        }
-      });
-    });
-  });
-
   return mainWindow;
 }
 
 app.on("ready", () => {
   let window = createWindow();
+
+  app.on("activate", function () {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      window = createWindow();
+    }
+  });
 
   protocol.handle("localfile", (request) => {
     let url = request.url.slice("localfile://".length).replace(/\\/g, "/").replace(/ /g, "%20");
@@ -84,10 +66,16 @@ app.on("ready", () => {
     return net.fetch("file://" + url);
   });
 
-  app.on("activate", function () {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      window = createWindow();
+  // Intercept a click on anchor with `target="_blank"`.
+  window.webContents.setWindowOpenHandler(({ url }) => {
+    if (url.startsWith("http:") || url.startsWith("https:")) {
+      try {
+        shell.openExternal(url);
+      } catch (error: unknown) {
+        console.error(`Failed to open url: ${error}`);
+      }
     }
+    return { action: "deny" };
   });
 
   // Create user data directories if not already present.
@@ -96,6 +84,14 @@ app.on("ready", () => {
   settings.appVersion = APP_VERSION;
 
   // --------- Bridge ---------
+
+  ipcMain.on("checkVersion", (event) => {
+    checkForUpdate(APP_VERSION).then((updateAvailable) => {
+      if (updateAvailable) {
+        event.reply("updateAvailable", updateAvailable);
+      }
+    });
+  });
 
   ipcMain.on("getBookData", async (event, book: Book) => {
     // If using both search engines, get the Google Books data, then supplement with OpenLibrary.

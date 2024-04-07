@@ -11,6 +11,7 @@
   onMount(() => {
     settings.fetch();
 
+    window.electronAPI.checkVersion();
     const removeUpdateListener = window.electronAPI.updateAvailable((latestVersion: string) => {
       updateAvailable = latestVersion;
     });

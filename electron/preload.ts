@@ -14,6 +14,7 @@ export const api = {
   saveSettings: (newSettings: UserSettings) => ipcRenderer.send("saveSettings", newSettings),
   settingsLoaded: (callback: Function) => ipcCallback("settingsLoaded", callback),
 
+  checkVersion: () => ipcRenderer.send("checkVersion"),
   updateAvailable: (callback: Function) => ipcCallback("updateAvailable", callback),
 
   getBookData: (book: Book) => ipcRenderer.send("getBookData", book),
