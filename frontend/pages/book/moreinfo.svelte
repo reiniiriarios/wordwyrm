@@ -33,7 +33,6 @@
       OpenLibrary
       <span class="icon"><ArrowSquareOut /></span>
     </a>
-    <ArrowSquareOut />
   {/if}
 </div>
 
