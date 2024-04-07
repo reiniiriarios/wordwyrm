@@ -11,6 +11,7 @@ type UserSettings = {
   filterTags: string;
   commonTags: string;
   appVersion: string;
+  dateFormat: string;
 };
 
 declare global {

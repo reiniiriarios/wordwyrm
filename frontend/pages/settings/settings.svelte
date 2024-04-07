@@ -4,6 +4,8 @@
   import ArrowSquareOut from "phosphor-svelte/lib/ArrowSquareOut";
   import Hoverinfo from "@components/hoverinfo.svelte";
   import { settings } from "@stores/settings";
+  import { formatDate } from "@scripts/formatDate";
+  import Select from "@components/select.svelte";
 
   let editSettings: UserSettings = {} as UserSettings;
   let saved: boolean = false;
@@ -93,7 +95,23 @@
     </div>
   </label>
 
-  <label class="field field--fullwidth">
+  <div class="field">
+    Date Format <Hoverinfo details="Based on device locale settings." />
+    <div class="selectField">
+      <Select
+        width="14rem"
+        bind:value={editSettings.dateFormat}
+        options={{
+          "local-long": formatDate(new Date(), "local-long"),
+          "local-medium": formatDate(new Date(), "local-medium"),
+          "local-short": formatDate(new Date(), "local-short"),
+          "yyyy-mm-dd": formatDate(new Date(), "yyyy-mm-dd"),
+        }}
+      />
+    </div>
+  </div>
+
+  <label class="field">
     Chart Default Start Year <Hoverinfo details="Sets the default start year for the chart page." />
     <input type="text" bind:value={editSettings.chartStartYear} />
   </label>
@@ -161,6 +179,10 @@
 <style lang="scss">
   .settings {
     padding: 0.5rem 1rem;
+  }
+
+  .selectField {
+    margin-top: 0.2rem;
   }
 
   .actions {

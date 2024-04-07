@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import PencilSimple from "phosphor-svelte/lib/PencilSimple";
   import { sortFilters } from "@scripts/sortBooks";
+  import { formatDate } from "@scripts/formatDate";
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
   import Bookimage from "@components/bookimage.svelte";
@@ -69,22 +70,7 @@
     <div class="bookPage__info">
       <h2>{book.title}</h2>
       <h3><span>by</span> {book.authors.map((a) => a.name).join(", ")}</h3>
-      <h4>
-        {#if !book.datePublished}
-          No publish date
-        {:else if book.datePublished.match(/^\d+\-\d+\-\d+$/)}
-          {new Date(book.datePublished).toLocaleDateString("en-US", {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-            timeZone: "UTC",
-          })}
-        {:else if book.datePublished.match(/^\-\d+$/)}
-          {Math.abs(+book.datePublished)} BCE
-        {:else}
-          {book.datePublished}
-        {/if}
-      </h4>
+      <h4>{book.datePublished ? formatDate(book.datePublished) : "No publish date"}</h4>
       {#if book.rating}
         <div class="rating">
           <Rating rating={book.rating} />
@@ -130,12 +116,7 @@
       <div class="read">
         {#if book.dateRead}
           <div class="dataTitle">Read</div>
-          {new Date(book.dateRead).toLocaleDateString("en-US", {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-            timeZone: "UTC",
-          })}
+          {formatDate(book.dateRead)}
         {:else}
           <span class="unread">Unread</span>
         {/if}

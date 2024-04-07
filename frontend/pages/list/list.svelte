@@ -3,10 +3,11 @@
   import { push } from "svelte-spa-router";
   import CaretUp from "phosphor-svelte/lib/CaretUp";
   import CaretDown from "phosphor-svelte/lib/CaretDown";
+  import Searchbar from "@components/searchbar.svelte";
   import { catFilters, recentFilters } from "@scripts/sortBooks";
+  import { formatDate } from "@scripts/formatDate";
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
-  import Searchbar from "@components/searchbar.svelte";
 
   let filterTags: string[] = [];
   $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());
@@ -114,15 +115,9 @@
               {/each}
             </div>
           </td>
-          <td class="date">
-            {#if book.datePublished?.match(/^\-\d+$/)}
-              {Math.abs(+book.datePublished)} BCE
-            {:else}
-              {book.datePublished ?? ""}
-            {/if}
-          </td>
-          <td class="date">{book.dateRead ?? ""}</td>
-          <td class="date">{book.timestampAdded ?? 0}</td>
+          <td class="date">{formatDate(book.datePublished)}</td>
+          <td class="date">{formatDate(book.dateRead)}</td>
+          <td class="date">{formatDate(book.timestampAdded)}</td>
         </tr>
       {/each}
     </tbody>
