@@ -88,7 +88,7 @@
 <div class="list">
   <table>
     <thead>
-      {#each ["title", "author", "series", "tags", "published", "read"] as h}
+      {#each ["title", "author", "series", "tags", "published", "read", "added"] as h}
         <th on:click={() => sortFilter(h)} class:selected={$books.filters.sort === h}
           >{h.charAt(0).toUpperCase()}{h.slice(1)}
           {#if $books.filters.sort === h}
@@ -122,6 +122,7 @@
             {/if}
           </td>
           <td class="date">{book.dateRead ?? ""}</td>
+          <td class="date">{book.timestampAdded ?? 0}</td>
         </tr>
       {/each}
     </tbody>
