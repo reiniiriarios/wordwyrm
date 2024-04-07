@@ -1,9 +1,10 @@
 <script lang="ts">
-  import Modal from "@components/modal.svelte";
+  import { onMount } from "svelte";
   import { push } from "svelte-spa-router";
   import ImageSquare from "phosphor-svelte/lib/ImageSquare";
   import { SearchResult } from "@api/googleimagesearch";
-  import { onMount } from "svelte";
+  import { books } from "@stores/books";
+  import Modal from "@components/modal.svelte";
 
   export let book: Book = {} as Book;
   export let selectedImageUrl: string = "";
@@ -47,6 +48,7 @@
       saving = false;
       book.images.imageUpdated = new Date().getTime();
       book.images.hasImage = true;
+      books.updateBook(book);
       push(`#/book/${book.cache.filepath}`);
     });
 
