@@ -97,43 +97,53 @@ app.on("ready", () => {
 
   // --------- Bridge ---------
 
-  ipcMain.on("getBookData", (event, book: Book) => {
+  ipcMain.on("getBookData", async (event, book: Book) => {
     // If using both search engines, get the Google Books data, then supplement with OpenLibrary.
     if (settings.searchEngines.includes("googleBooks") && settings.searchEngines.includes("openLibrary")) {
-      getGoogleBook(book.ids.googleBooksId, settings.googleApiKey).then((updatedBook) => {
-        if (!updatedBook) {
-          // we already have some data, so save what we've already fetched
-          event.reply("receiveBookData", book);
-        } else if (updatedBook.ids.isbn) {
-          searchOpenLibraryWorkByISBN(updatedBook.ids.isbn).then((olBook) => {
-            if (olBook) {
-              // OpenLibrary accurate to original publish date
-              if (olBook.datePublished) updatedBook.datePublished = olBook.datePublished;
-              updatedBook.ids.openLibraryId = olBook.ids.openLibraryId;
-              updatedBook.ids.amazonId = olBook.ids.amazonId;
-              updatedBook.ids.goodreadsId = olBook.ids.goodreadsId;
-              updatedBook.ids.internetArchiveId = olBook.ids.internetArchiveId;
-              updatedBook.ids.libraryThingId = olBook.ids.libraryThingId;
-              updatedBook.ids.oclcId = olBook.ids.oclcId;
-              updatedBook.ids.wikidataId = olBook.ids.wikidataId;
-            }
-            event.reply("receiveBookData", updatedBook);
-          });
-        } else {
-          event.reply("receiveBookData", updatedBook);
-        }
-      });
+      let googleBookP: Promise<Book>;
+      let olBookP: Promise<Book>;
+      let googleBook: Book | null = null;
+      let olBook: Book | null = null;
+
+      // Run first two queries async.
+      if (book.ids.googleBooksId) googleBookP = getGoogleBook(book.ids.googleBooksId, settings.googleApiKey);
+      if (book.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(book.ids.isbn);
+
+      // Wait for data.
+      if (book.ids.googleBooksId) googleBook = await googleBookP;
+      if (book.ids.isbn) olBook = await olBookP;
+
+      // If we didn't have either of the necessary ids, run those async.
+      if (!olBook && googleBook.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(googleBook.ids.isbn);
+      if (!googleBook && olBook.ids.googleBooksId)
+        googleBookP = getGoogleBook(olBook.ids.googleBooksId, settings.googleApiKey);
+
+      // Wait on secondary data if any.
+      if (!olBook && googleBook.ids.isbn) olBook = await olBookP;
+      if (!googleBook && olBook.ids.googleBooksId) googleBook = await googleBookP;
+
+      if (googleBook) book = googleBook;
+      if (olBook) {
+        // OpenLibrary accurate to original publish date
+        if (olBook.datePublished) book.datePublished = olBook.datePublished;
+        if (!book.ids.googleBooksId && olBook.ids.googleBooksId) book.ids.googleBooksId = olBook.ids.googleBooksId;
+        book.ids.openLibraryId = olBook.ids.openLibraryId;
+        book.ids.amazonId = olBook.ids.amazonId;
+        book.ids.goodreadsId = olBook.ids.goodreadsId;
+        book.ids.internetArchiveId = olBook.ids.internetArchiveId;
+        book.ids.libraryThingId = olBook.ids.libraryThingId;
+        book.ids.oclcId = olBook.ids.oclcId;
+        book.ids.wikidataId = olBook.ids.wikidataId;
+      }
     }
     // If just using Google Books, fetch full data.
     else if (settings.searchEngines.includes("googleBooks")) {
-      getGoogleBook(book.ids.googleBooksId, settings.googleApiKey).then((updatedBook) =>
-        event.reply("receiveBookData", updatedBook),
-      );
+      getGoogleBook(book.ids.googleBooksId, settings.googleApiKey).then((updatedBook) => {
+        if (updatedBook) book = updatedBook;
+      });
     }
     // If just using OpenLibrary, there's no more data to get.
-    else {
-      event.reply("receiveBookData", book);
-    }
+    event.reply("receiveBookData", book);
   });
 
   ipcMain.on("searchBook", (event, q: string) => {
