@@ -3,6 +3,7 @@
   import { push } from "svelte-spa-router";
   import TrashSimple from "phosphor-svelte/lib/TrashSimple";
   import { onMount } from "svelte";
+  import { books } from "@stores/books";
 
   export let book: Book;
 
@@ -14,6 +15,7 @@
 
   onMount(() => {
     const removeDelListener = window.electronAPI.bookDeleted(() => {
+      books.deleteBook(book);
       push("#/");
     });
 

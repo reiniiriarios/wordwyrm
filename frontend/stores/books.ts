@@ -72,6 +72,13 @@ function createBooks() {
       });
       books.applyFilter();
     },
+    deleteBook: (removeBook: Book) => {
+      update((s) => {
+        s.allBooks = s.allBooks.filter((b) => b.cache.filepath !== removeBook.cache.filepath);
+        return s;
+      });
+      books.applyFilter();
+    },
     sort: (method?: string) => {
       console.log("sorting");
       // sort what is already filtered, then searched through
