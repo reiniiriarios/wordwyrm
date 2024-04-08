@@ -52,9 +52,6 @@
 <div class="pageNav">
   <h2 class="pageNav__header">Book</h2>
   <div class="pageNav__actions">
-    {#if book && $settings.googleApiKey && $settings.googleSearchEngineId}
-      <ImageSearch bind:book />
-    {/if}
     <a class="btn" href={`#/book/${params.author}/${params.book}/edit`}
       >Edit <span class="icon"><PencilSimple /></span></a
     >
