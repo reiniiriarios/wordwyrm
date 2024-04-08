@@ -1,8 +1,8 @@
 <script lang="ts">
   import Router from "svelte-spa-router";
   import routes from "@core/routes";
-  import Menu from "@components/menu.svelte";
-  import UpdateAvailable from "@components/updateavailable.svelte";
+  import Menu from "@components/Menu.svelte";
+  import UpdateAvailable from "@components/UpdateAvailable.svelte";
   import { onMount } from "svelte";
   import { settings } from "@stores/settings";
 

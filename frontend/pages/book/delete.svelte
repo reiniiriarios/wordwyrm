@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Modal from "@components/modal.svelte";
+  import Modal from "@components/Modal.svelte";
   import { push } from "svelte-spa-router";
   import TrashSimple from "phosphor-svelte/lib/TrashSimple";
   import { onMount } from "svelte";

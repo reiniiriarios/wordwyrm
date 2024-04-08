@@ -3,10 +3,10 @@
   import { push } from "svelte-spa-router";
   import CaretUp from "phosphor-svelte/lib/CaretUp";
   import CaretDown from "phosphor-svelte/lib/CaretDown";
-  import Searchbar from "@components/searchbar.svelte";
+  import SearchBar from "@components/SearchBar.svelte";
   import FilterCats from "@components/FilterCats.svelte";
   import FilterRead from "@components/FilterRead.svelte";
-  import GettingStarted from "@components/gettingstarted.svelte";
+  import GettingStarted from "@components/GettingStarted.svelte";
   import { catFilters, recentFilters } from "@scripts/sortBooks";
   import { formatDate } from "@scripts/formatDate";
   import { settings } from "@stores/settings";
@@ -37,7 +37,7 @@
   <h2 class="pageNav__header">List</h2>
   <div class="pageNav__search">
     {#if $books.allBooks.length}
-      <Searchbar />
+      <SearchBar />
     {/if}
   </div>
   <div class="pageNav__actions">

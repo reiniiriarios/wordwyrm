@@ -2,10 +2,10 @@
   import { onMount } from "svelte";
   import { UserSettings } from "types/global";
   import ArrowSquareOut from "phosphor-svelte/lib/ArrowSquareOut";
-  import Hoverinfo from "@components/hoverinfo.svelte";
+  import HoverInfo from "@components/HoverInfo.svelte";
   import { settings } from "@stores/settings";
   import { formatDate } from "@scripts/formatDate";
-  import Select from "@components/select.svelte";
+  import Select from "@components/Select.svelte";
 
   let editSettings: UserSettings = {} as UserSettings;
   let saved: boolean = false;
@@ -88,7 +88,7 @@
 </div>
 <fieldset class="settings">
   <label class="field field--fullwidth">
-    Book Data Directory <Hoverinfo details="Select a directory in a cloud drive to share your data between devices." />
+    Book Data Directory <HoverInfo details="Select a directory in a cloud drive to share your data between devices." />
     <div class="fileSelect">
       <input type="text" readonly on:click={selectDataDir} bind:value={editSettings.booksDir} />
       <button class="btn btn--light" on:click={selectDataDir}>Select</button>
@@ -96,7 +96,7 @@
   </label>
 
   <div class="field">
-    Date Format <Hoverinfo details="Based on device locale settings." />
+    Date Format <HoverInfo details="Based on device locale settings." />
     <div class="selectField">
       <Select
         width="14rem"
@@ -112,21 +112,21 @@
   </div>
 
   <label class="field">
-    Chart Default Start Year <Hoverinfo details="Sets the default start year for the chart page." />
+    Chart Default Start Year <HoverInfo details="Sets the default start year for the chart page." />
     <input type="text" bind:value={editSettings.chartStartYear} />
   </label>
 
   <label class="field field--fullwidth">
-    Tags for Filtering <Hoverinfo details="Tags should be comma-separated." />
+    Tags for Filtering <HoverInfo details="Tags should be comma-separated." />
     <input type="text" bind:value={editSettings.filterTags} maxlength="255" />
   </label>
   <label class="field field--fullwidth">
-    Common Tags for Editing <Hoverinfo details="Tags should be comma-separated." />
+    Common Tags for Editing <HoverInfo details="Tags should be comma-separated." />
     <input type="text" bind:value={editSettings.commonTags} maxlength="1024" />
   </label>
 
   <div class="field field--fullwidth">
-    Search Engine <Hoverinfo
+    Search Engine <HoverInfo
       details="Engine used to search for book data. Add Google Cloud API Key to use Google Books for data. Google Books data will be supplemented with OpenLibrary data."
     />
     <div class="btnOptions">
@@ -143,11 +143,11 @@
   </div>
 
   <label class="field field--fullwidth">
-    Google Cloud API Key <Hoverinfo details="Optional. Enables searching for book data via Google Books." />
+    Google Cloud API Key <HoverInfo details="Optional. Enables searching for book data via Google Books." />
     <input type="text" bind:value={editSettings.googleApiKey} />
   </label>
   <label class="field field--fullwidth">
-    Google Custom Search Engine ID <Hoverinfo
+    Google Custom Search Engine ID <HoverInfo
       details="Optional. Along with API Key, enables searching for cover images via Google Image Search."
     />
     <input type="text" bind:value={editSettings.googleSearchEngineId} />

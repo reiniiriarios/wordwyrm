@@ -6,8 +6,8 @@
   import Calendar from "phosphor-svelte/lib/Calendar";
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
-  import Hoverinfo from "@components/hoverinfo.svelte";
-  import Rating from "@components/rating.svelte";
+  import HoverInfo from "@components/HoverInfo.svelte";
+  import Rating from "@components/Rating.svelte";
   import ImageSearch from "./imagesearch.svelte";
   import Moreinfo from "./moreinfo.svelte";
   import Crop from "./crop.svelte";
@@ -194,12 +194,12 @@
         </div>
 
         <label class="field field--fullwidth">
-          Tag(s) <Hoverinfo details="Tags should be comma-separated." />
+          Tag(s) <HoverInfo details="Tags should be comma-separated." />
           <input type="text" bind:value={tags} on:change={setTags} />
         </label>
         <div class="field field--fullwidth commonTags">
           <div class="commonTags__title">
-            Common Tags <Hoverinfo details="Click to add. Change tags displayed in Settings." />
+            Common Tags <HoverInfo details="Click to add. Change tags displayed in Settings." />
           </div>
           <div class="commonTags__tags">
             {#each commonTags as tag}
@@ -218,15 +218,15 @@
           <input type="text" bind:value={book.ids.isbn} />
         </label>
         <label class="field field">
-          Google Books ID <Hoverinfo position="left" details="Format is alphanumeric plus _ and -." />
+          Google Books ID <HoverInfo position="left" details="Format is alphanumeric plus _ and -." />
           <input type="text" bind:value={book.ids.googleBooksId} />
         </label>
         <label class="field field">
-          OpenLibrary ID <Hoverinfo details="Format should be /works/id or /books/id, where id is alphanumeric." />
+          OpenLibrary ID <HoverInfo details="Format should be /works/id or /books/id, where id is alphanumeric." />
           <input type="text" bind:value={book.ids.openLibraryId} />
         </label>
         <label class="field field">
-          Goodreads ID <Hoverinfo position="left" details="Format is numeric." />
+          Goodreads ID <HoverInfo position="left" details="Format is numeric." />
           <input type="text" bind:value={book.ids.goodreadsId} />
         </label>
       </fieldset>

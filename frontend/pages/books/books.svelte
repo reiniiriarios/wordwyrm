@@ -8,10 +8,10 @@
   import FilterCats from "@components/FilterCats.svelte";
   import FilterRead from "@components/FilterRead.svelte";
   import BookCount from "@components/BookCount.svelte";
-  import Bookimage from "@components/bookimage.svelte";
-  import Searchbar from "@components/searchbar.svelte";
-  import Rating from "@components/rating.svelte";
-  import GettingStarted from "@components/gettingstarted.svelte";
+  import Bookimage from "@components/BookImage.svelte";
+  import SearchBar from "@components/SearchBar.svelte";
+  import Rating from "@components/Rating.svelte";
+  import GettingStarted from "@components/GettingStarted.svelte";
   import AddBook from "./add.svelte";
   import SearchBook from "./search.svelte";
 
@@ -32,7 +32,7 @@
   <h2 class="pageNav__header">Books</h2>
   <div class="pageNav__search">
     {#if $books.allBooks.length}
-      <Searchbar />
+      <SearchBar />
     {/if}
   </div>
   <div class="pageNav__actions">

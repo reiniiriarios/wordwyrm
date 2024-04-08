@@ -1,6 +1,6 @@
 <script lang="ts">
   import Dropzone from "svelte-file-dropzone";
-  import Modal from "@components/modal.svelte";
+  import Modal from "@components/Modal.svelte";
   import Plus from "phosphor-svelte/lib/Plus";
 
   let addBookOpen: boolean = false;

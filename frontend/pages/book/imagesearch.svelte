@@ -4,7 +4,7 @@
   import ImageSquare from "phosphor-svelte/lib/ImageSquare";
   import { SearchResult } from "@api/googleimagesearch";
   import { books } from "@stores/books";
-  import Modal from "@components/modal.svelte";
+  import Modal from "@components/Modal.svelte";
 
   export let book: Book = {} as Book;
   export let selectedImageUrl: string = "";
