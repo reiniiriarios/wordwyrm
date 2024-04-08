@@ -8,6 +8,7 @@
   import { books } from "@stores/books";
   import Bookimage from "@components/bookimage.svelte";
   import Searchbar from "@components/searchbar.svelte";
+  import Rating from "@components/rating.svelte";
   import AddBook from "./add.svelte";
   import SearchBook from "./search.svelte";
 
@@ -131,7 +132,13 @@
       {#if book.images.hasImage}
         <a href={`#/book/${book.cache.filepath}`} class="book__inner book__inner--image">
           <Bookimage {book} overlay />
-          {#if !book.dateRead}
+          {#if $books.filters.sort === "rating"}
+            {#if book.rating}
+              <span class="book__rating">
+                <Rating rating={book.rating} />
+              </span>
+            {/if}
+          {:else if !book.dateRead}
             <span class="unread">Unread</span>
           {/if}
         </a>
@@ -266,6 +273,16 @@
         box-shadow: rgb(0, 0, 0, 0.3) 0.05rem 0.05rem 0.5rem 0.2rem;
         z-index: 20;
       }
+    }
+
+    &__rating {
+      position: absolute;
+      width: 10rem;
+      overflow: hidden;
+      bottom: -0.5rem;
+      right: -0.75rem;
+      z-index: 20;
+      filter: drop-shadow(0.05rem 0.05rem 0.25rem rgba(0, 0, 0, 0.33));
     }
   }
 </style>
