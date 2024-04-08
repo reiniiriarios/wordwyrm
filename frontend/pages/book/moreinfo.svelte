@@ -1,6 +1,31 @@
 <script lang="ts">
+  import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
   import ArrowSquareOut from "phosphor-svelte/lib/ArrowSquareOut";
   export let book: Book = {} as Book;
+  let searchTitle: string;
+  let searchAuthor: string;
+  let googleSearch: string;
+  $: searchTitle = encodeURIComponent(book.title).replace(/%20/g, "+");
+  $: searchAuthor = encodeURIComponent(book.authors.map((a) => a.name).join(", ")).replace(/%20/g, "+");
+  $: if (!book.ids.googleBooksId) {
+    googleSearch =
+      "intitle:" +
+      book.title
+        .trim()
+        .split(" ")
+        .map((t) => encodeURIComponent(t))
+        .join("+intitle:") +
+      "+inauthor:" +
+      book.authors
+        .map((a) =>
+          a.name
+            .trim()
+            .split(" ")
+            .map((n) => encodeURIComponent(n))
+            .join("+inauthor:"),
+        )
+        .join("+inauthor:");
+  }
 </script>
 
 <div class="moreinfo">
@@ -9,10 +34,10 @@
       Google Books
       <span class="icon"><ArrowSquareOut /></span>
     </a>
-  {:else if book.ids.isbn}
-    <a class="btn" href={`https://www.google.com/search?tbo=p&tbm=bks&q=isbn:${book.ids.isbn}`} target="_blank">
-      Google Books
-      <span class="icon"><ArrowSquareOut /></span>
+  {:else}
+    <a class="btn" href={`https://www.google.com/search?tbo=p&tbm=bks&q=${googleSearch}`} target="_blank">
+      Search Google Books
+      <span class="icon"><MagnifyingGlass /></span>
     </a>
   {/if}
 
@@ -21,10 +46,10 @@
       Goodreads
       <span class="icon"><ArrowSquareOut /></span>
     </a>
-  {:else if book.ids.isbn}
-    <a class="btn" href={`https://goodreads.com/search?q=${book.ids.isbn}`} target="_blank">
-      Goodreads
-      <span class="icon"><ArrowSquareOut /></span>
+  {:else}
+    <a class="btn" href={`https://goodreads.com/search?q=${searchTitle}+by+${searchAuthor}`} target="_blank">
+      Search Goodreads
+      <span class="icon"><MagnifyingGlass /></span>
     </a>
   {/if}
 
@@ -32,6 +57,11 @@
     <a class="btn" href={`https://openlibrary.org/${book.ids.openLibraryId}`} target="_blank">
       OpenLibrary
       <span class="icon"><ArrowSquareOut /></span>
+    </a>
+  {:else}
+    <a class="btn" href={`https://openlibrary.org/search?title=${searchTitle}&author=${searchAuthor}`} target="_blank">
+      Search OpenLibrary
+      <span class="icon"><MagnifyingGlass /></span>
     </a>
   {/if}
 </div>
