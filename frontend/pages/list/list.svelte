@@ -4,6 +4,8 @@
   import CaretUp from "phosphor-svelte/lib/CaretUp";
   import CaretDown from "phosphor-svelte/lib/CaretDown";
   import Searchbar from "@components/searchbar.svelte";
+  import FilterCats from "@components/FilterCats.svelte";
+  import FilterRead from "@components/FilterRead.svelte";
   import GettingStarted from "@components/gettingstarted.svelte";
   import { catFilters, recentFilters } from "@scripts/sortBooks";
   import { formatDate } from "@scripts/formatDate";
@@ -40,53 +42,8 @@
   </div>
   <div class="pageNav__actions">
     {#if $books.allBooks.length}
-      <div class="filter">
-        <span>Filter:</span>
-        <div class="customFilter">
-          <button class="customFilter__selected">
-            {#if filterTags && $books.filters.tag}
-              {$books.filters.tag}
-            {:else}
-              {catFilters[$books.filters.filter].name}
-            {/if}
-          </button>
-          <div class="customFilter__dropdown">
-            {#each Object.entries(catFilters) as [i, f]}
-              <button
-                on:click={() => books.catFilter(i)}
-                class="customFilter__opt"
-                class:selected={$books.filters.filter === i}>{f.name}</button
-              >
-            {/each}
-            {#if filterTags}
-              {#each filterTags as tag}
-                <button
-                  on:click={() => books.tagFilter(tag)}
-                  class="customFilter__opt"
-                  class:selected={$books.filters.tag === tag}>{tag}</button
-                >
-              {/each}
-            {/if}
-          </div>
-        </div>
-      </div>
-      <div class="filter">
-        <span>Read:</span>
-        <div class="recentFilter">
-          <button class="recentFilter__selected">
-            {recentFilters[$books.filters.recent].name}
-          </button>
-          <div class="recentFilter__dropdown">
-            {#each Object.entries(recentFilters) as [i, f]}
-              <button
-                on:click={() => books.recentFilter(i)}
-                class="recentFilter__opt"
-                class:selected={i === $books.filters.recent}>{f.name}</button
-              >
-            {/each}
-          </div>
-        </div>
-      </div>
+      <FilterCats />
+      <FilterRead />
     {/if}
   </div>
 </div>

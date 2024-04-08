@@ -1,20 +1,19 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import SortAscending from "phosphor-svelte/lib/SortAscending";
-  import SortDescending from "phosphor-svelte/lib/SortDescending";
   import FrameCorners from "phosphor-svelte/lib/FrameCorners";
   import { catFilters, sortFilters, recentFilters } from "@scripts/sortBooks";
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
+  import FilterSort from "@components/FilterSort.svelte";
+  import FilterCats from "@components/FilterCats.svelte";
+  import FilterRead from "@components/FilterRead.svelte";
+  import BookCount from "@components/BookCount.svelte";
   import Bookimage from "@components/bookimage.svelte";
   import Searchbar from "@components/searchbar.svelte";
   import Rating from "@components/rating.svelte";
   import GettingStarted from "@components/gettingstarted.svelte";
   import AddBook from "./add.svelte";
   import SearchBook from "./search.svelte";
-
-  let filterTags: string[] = [];
-  $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());
 
   onMount(() => {
     console.log("mounted");
@@ -57,80 +56,11 @@
 
 {#if $books.allBooks.length}
   <div class="listFilter">
-    <div class="filter">
-      <span>Sort:</span>
-      {#each Object.entries(sortFilters) as [i, s]}
-        {#if !s.hidden}
-          <button on:click={() => books.sort(i)} class:selected={$books.filters.sort === i}>{s.name}</button>
-        {/if}
-      {/each}
-      <button class="sortDirection" on:click={books.sortReverse}>
-        {#if $books.filters.reverse}
-          <SortDescending size={22} />
-        {:else}
-          <SortAscending size={22} />
-        {/if}
-      </button>
-    </div>
-
-    <div class="filter">
-      <span>Filter:</span>
-      <div class="customFilter">
-        <button class="customFilter__selected">
-          {#if filterTags && $books.filters.tag}
-            {$books.filters.tag}
-          {:else}
-            {catFilters[$books.filters.filter].name}
-          {/if}
-        </button>
-        <div class="customFilter__dropdown">
-          {#each Object.entries(catFilters) as [i, f]}
-            <button
-              on:click={() => books.catFilter(i)}
-              class="customFilter__opt"
-              class:selected={$books.filters.filter === i}>{f.name}</button
-            >
-          {/each}
-          {#if filterTags}
-            {#each filterTags as tag}
-              <button
-                on:click={() => books.tagFilter(tag)}
-                class="customFilter__opt"
-                class:selected={$books.filters.tag === tag}>{tag}</button
-              >
-            {/each}
-          {/if}
-        </div>
-      </div>
-    </div>
-
-    <div class="filter">
-      <span>Read:</span>
-      <div class="recentFilter">
-        <button class="recentFilter__selected">
-          {recentFilters[$books.filters.recent].name}
-        </button>
-        <div class="recentFilter__dropdown">
-          {#each Object.entries(recentFilters) as [i, f]}
-            <button
-              on:click={() => books.recentFilter(i)}
-              class="recentFilter__opt"
-              class:selected={i === $books.filters.recent}>{f.name}</button
-            >
-          {/each}
-        </div>
-      </div>
-    </div>
-
+    <FilterSort />
+    <FilterCats />
+    <FilterRead />
     <div class="filter filter--right">
-      <div class="bookCount">
-        {#if $books.allBooks.length > 0}
-          {#if $books.sortedBooks.length < $books.allBooks.length}
-            {$books.sortedBooks.length} <span class="bookCount__sep">/</span>
-          {/if}
-          <span class:mute={$books.sortedBooks.length < $books.allBooks.length}>{$books.allBooks.length}</span> Books
-        {/if}
-      </div>
+      <BookCount />
     </div>
   </div>
 
@@ -189,19 +119,6 @@
       &.selected {
         background-color: var(--bg-color-lighter);
       }
-    }
-  }
-
-  .bookCount {
-    font-size: 1rem;
-
-    &__sep {
-      color: var(--fg-color-muted);
-      opacity: 0.8;
-    }
-
-    .mute {
-      color: var(--fg-color-muted);
     }
   }
 

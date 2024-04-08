@@ -39,8 +39,7 @@
   }
 }
 
-.customFilter,
-.recentFilter {
+.dropdownFilter {
   position: relative;
   display: inline-block;
 
@@ -70,14 +69,12 @@
   }
 
   &:hover {
-    .customFilter__selected,
-    .recentFilter__selected {
+    .dropdownFilter__selected {
       border-bottom-left-radius: 0 !important;
       border-bottom-right-radius: 0 !important;
     }
 
-    .customFilter__dropdown,
-    .recentFilter__dropdown {
+    .dropdownFilter__dropdown {
       display: block;
     }
   }
