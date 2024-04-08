@@ -9,6 +9,7 @@
   import Bookimage from "@components/bookimage.svelte";
   import Searchbar from "@components/searchbar.svelte";
   import Rating from "@components/rating.svelte";
+  import GettingStarted from "@components/gettingstarted.svelte";
   import AddBook from "./add.svelte";
   import SearchBook from "./search.svelte";
 
@@ -31,127 +32,137 @@
 <div class="pageNav">
   <h2 class="pageNav__header">Books</h2>
   <div class="pageNav__search">
-    <Searchbar />
+    {#if $books.allBooks.length}
+      <Searchbar />
+    {/if}
   </div>
   <div class="pageNav__actions">
-    <div class="zoom">
-      <div class="resizeIcon">
-        <FrameCorners size={22} />
+    {#if $books.allBooks.length}
+      <div class="zoom">
+        <div class="resizeIcon">
+          <FrameCorners size={22} />
+        </div>
+        <button on:click={() => zoom("s")} class:selected={$books.view.zoom === "s"}>S</button>
+        <button on:click={() => zoom("m")} class:selected={$books.view.zoom === "m"}>M</button>
+        <button on:click={() => zoom("l")} class:selected={$books.view.zoom === "l"}>L</button>
       </div>
-      <button on:click={() => zoom("s")} class:selected={$books.view.zoom === "s"}>S</button>
-      <button on:click={() => zoom("m")} class:selected={$books.view.zoom === "m"}>M</button>
-      <button on:click={() => zoom("l")} class:selected={$books.view.zoom === "l"}>L</button>
-    </div>
+    {/if}
 
-    <AddBook />
-    <SearchBook />
+    {#if $settings.booksDir}
+      <AddBook />
+      <SearchBook />
+    {/if}
   </div>
 </div>
 
-<div class="listFilter">
-  <div class="filter">
-    <span>Sort:</span>
-    {#each Object.entries(sortFilters) as [i, s]}
-      {#if !s.hidden}
-        <button on:click={() => books.sort(i)} class:selected={$books.filters.sort === i}>{s.name}</button>
-      {/if}
-    {/each}
-    <button class="sortDirection" on:click={books.sortReverse}>
-      {#if $books.filters.reverse}
-        <SortDescending size={22} />
-      {:else}
-        <SortAscending size={22} />
-      {/if}
-    </button>
-  </div>
-
-  <div class="filter">
-    <span>Filter:</span>
-    <div class="customFilter">
-      <button class="customFilter__selected">
-        {#if filterTags && $books.filters.tag}
-          {$books.filters.tag}
+{#if $books.allBooks.length}
+  <div class="listFilter">
+    <div class="filter">
+      <span>Sort:</span>
+      {#each Object.entries(sortFilters) as [i, s]}
+        {#if !s.hidden}
+          <button on:click={() => books.sort(i)} class:selected={$books.filters.sort === i}>{s.name}</button>
+        {/if}
+      {/each}
+      <button class="sortDirection" on:click={books.sortReverse}>
+        {#if $books.filters.reverse}
+          <SortDescending size={22} />
         {:else}
-          {catFilters[$books.filters.filter].name}
+          <SortAscending size={22} />
         {/if}
       </button>
-      <div class="customFilter__dropdown">
-        {#each Object.entries(catFilters) as [i, f]}
-          <button
-            on:click={() => books.catFilter(i)}
-            class="customFilter__opt"
-            class:selected={$books.filters.filter === i}>{f.name}</button
-          >
-        {/each}
-        {#if filterTags}
-          {#each filterTags as tag}
+    </div>
+
+    <div class="filter">
+      <span>Filter:</span>
+      <div class="customFilter">
+        <button class="customFilter__selected">
+          {#if filterTags && $books.filters.tag}
+            {$books.filters.tag}
+          {:else}
+            {catFilters[$books.filters.filter].name}
+          {/if}
+        </button>
+        <div class="customFilter__dropdown">
+          {#each Object.entries(catFilters) as [i, f]}
             <button
-              on:click={() => books.tagFilter(tag)}
+              on:click={() => books.catFilter(i)}
               class="customFilter__opt"
-              class:selected={$books.filters.tag === tag}>{tag}</button
+              class:selected={$books.filters.filter === i}>{f.name}</button
             >
           {/each}
-        {/if}
-      </div>
-    </div>
-  </div>
-
-  <div class="filter">
-    <span>Read:</span>
-    <div class="recentFilter">
-      <button class="recentFilter__selected">
-        {recentFilters[$books.filters.recent].name}
-      </button>
-      <div class="recentFilter__dropdown">
-        {#each Object.entries(recentFilters) as [i, f]}
-          <button
-            on:click={() => books.recentFilter(i)}
-            class="recentFilter__opt"
-            class:selected={i === $books.filters.recent}>{f.name}</button
-          >
-        {/each}
-      </div>
-    </div>
-  </div>
-
-  <div class="filter filter--right">
-    <div class="bookCount">
-      {#if $books.allBooks.length > 0}
-        {#if $books.sortedBooks.length < $books.allBooks.length}
-          {$books.sortedBooks.length} <span class="bookCount__sep">/</span>
-        {/if}
-        <span class:mute={$books.sortedBooks.length < $books.allBooks.length}>{$books.allBooks.length}</span> Books
-      {/if}
-    </div>
-  </div>
-</div>
-
-<div class="bookList">
-  {#each $books.sortedBooks as book}
-    <div class="book" class:zoomSmall={$books.view.zoom === "s"} class:zoomLarge={$books.view.zoom === "l"}>
-      {#if book.images.hasImage}
-        <a href={`#/book/${book.cache.filepath}`} class="book__inner book__inner--image">
-          <Bookimage {book} overlay />
-          {#if $books.filters.sort === "rating"}
-            {#if book.rating}
-              <span class="book__rating">
-                <Rating rating={book.rating} />
-              </span>
-            {/if}
-          {:else if !book.dateRead}
-            <span class="unread">Unread</span>
+          {#if filterTags}
+            {#each filterTags as tag}
+              <button
+                on:click={() => books.tagFilter(tag)}
+                class="customFilter__opt"
+                class:selected={$books.filters.tag === tag}>{tag}</button
+              >
+            {/each}
           {/if}
-        </a>
-      {:else}
-        <a href={`#/book/${book.cache.filepath}`} class="book__inner book__inner--noimage">
-          <span>{book.title}</span>
-          <span>by</span>
-          <span>{book.authors.map((a) => a.name).join(", ")}</span>
-        </a>
-      {/if}
+        </div>
+      </div>
     </div>
-  {/each}
-</div>
+
+    <div class="filter">
+      <span>Read:</span>
+      <div class="recentFilter">
+        <button class="recentFilter__selected">
+          {recentFilters[$books.filters.recent].name}
+        </button>
+        <div class="recentFilter__dropdown">
+          {#each Object.entries(recentFilters) as [i, f]}
+            <button
+              on:click={() => books.recentFilter(i)}
+              class="recentFilter__opt"
+              class:selected={i === $books.filters.recent}>{f.name}</button
+            >
+          {/each}
+        </div>
+      </div>
+    </div>
+
+    <div class="filter filter--right">
+      <div class="bookCount">
+        {#if $books.allBooks.length > 0}
+          {#if $books.sortedBooks.length < $books.allBooks.length}
+            {$books.sortedBooks.length} <span class="bookCount__sep">/</span>
+          {/if}
+          <span class:mute={$books.sortedBooks.length < $books.allBooks.length}>{$books.allBooks.length}</span> Books
+        {/if}
+      </div>
+    </div>
+  </div>
+
+  <div class="bookList">
+    {#each $books.sortedBooks as book}
+      <div class="book" class:zoomSmall={$books.view.zoom === "s"} class:zoomLarge={$books.view.zoom === "l"}>
+        {#if book.images.hasImage}
+          <a href={`#/book/${book.cache.filepath}`} class="book__inner book__inner--image">
+            <Bookimage {book} overlay />
+            {#if $books.filters.sort === "rating"}
+              {#if book.rating}
+                <span class="book__rating">
+                  <Rating rating={book.rating} />
+                </span>
+              {/if}
+            {:else if !book.dateRead}
+              <span class="unread">Unread</span>
+            {/if}
+          </a>
+        {:else}
+          <a href={`#/book/${book.cache.filepath}`} class="book__inner book__inner--noimage">
+            <span>{book.title}</span>
+            <span>by</span>
+            <span>{book.authors.map((a) => a.name).join(", ")}</span>
+          </a>
+        {/if}
+      </div>
+    {/each}
+  </div>
+{:else}
+  <GettingStarted />
+{/if}
 
 <style lang="scss">
   .zoom {

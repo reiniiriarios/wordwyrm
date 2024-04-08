@@ -4,6 +4,7 @@
   import CaretUp from "phosphor-svelte/lib/CaretUp";
   import CaretDown from "phosphor-svelte/lib/CaretDown";
   import Searchbar from "@components/searchbar.svelte";
+  import GettingStarted from "@components/gettingstarted.svelte";
   import { catFilters, recentFilters } from "@scripts/sortBooks";
   import { formatDate } from "@scripts/formatDate";
   import { settings } from "@stores/settings";
@@ -33,96 +34,104 @@
 <div class="pageNav">
   <h2 class="pageNav__header">List</h2>
   <div class="pageNav__search">
-    <Searchbar />
+    {#if $books.allBooks.length}
+      <Searchbar />
+    {/if}
   </div>
   <div class="pageNav__actions">
-    <div class="filter">
-      <span>Filter:</span>
-      <div class="customFilter">
-        <button class="customFilter__selected">
-          {#if filterTags && $books.filters.tag}
-            {$books.filters.tag}
-          {:else}
-            {catFilters[$books.filters.filter].name}
-          {/if}
-        </button>
-        <div class="customFilter__dropdown">
-          {#each Object.entries(catFilters) as [i, f]}
-            <button
-              on:click={() => books.catFilter(i)}
-              class="customFilter__opt"
-              class:selected={$books.filters.filter === i}>{f.name}</button
-            >
-          {/each}
-          {#if filterTags}
-            {#each filterTags as tag}
+    {#if $books.allBooks.length}
+      <div class="filter">
+        <span>Filter:</span>
+        <div class="customFilter">
+          <button class="customFilter__selected">
+            {#if filterTags && $books.filters.tag}
+              {$books.filters.tag}
+            {:else}
+              {catFilters[$books.filters.filter].name}
+            {/if}
+          </button>
+          <div class="customFilter__dropdown">
+            {#each Object.entries(catFilters) as [i, f]}
               <button
-                on:click={() => books.tagFilter(tag)}
+                on:click={() => books.catFilter(i)}
                 class="customFilter__opt"
-                class:selected={$books.filters.tag === tag}>{tag}</button
+                class:selected={$books.filters.filter === i}>{f.name}</button
               >
             {/each}
-          {/if}
+            {#if filterTags}
+              {#each filterTags as tag}
+                <button
+                  on:click={() => books.tagFilter(tag)}
+                  class="customFilter__opt"
+                  class:selected={$books.filters.tag === tag}>{tag}</button
+                >
+              {/each}
+            {/if}
+          </div>
         </div>
       </div>
-    </div>
-    <div class="filter">
-      <span>Read:</span>
-      <div class="recentFilter">
-        <button class="recentFilter__selected">
-          {recentFilters[$books.filters.recent].name}
-        </button>
-        <div class="recentFilter__dropdown">
-          {#each Object.entries(recentFilters) as [i, f]}
-            <button
-              on:click={() => books.recentFilter(i)}
-              class="recentFilter__opt"
-              class:selected={i === $books.filters.recent}>{f.name}</button
-            >
-          {/each}
+      <div class="filter">
+        <span>Read:</span>
+        <div class="recentFilter">
+          <button class="recentFilter__selected">
+            {recentFilters[$books.filters.recent].name}
+          </button>
+          <div class="recentFilter__dropdown">
+            {#each Object.entries(recentFilters) as [i, f]}
+              <button
+                on:click={() => books.recentFilter(i)}
+                class="recentFilter__opt"
+                class:selected={i === $books.filters.recent}>{f.name}</button
+              >
+            {/each}
+          </div>
         </div>
       </div>
-    </div>
+    {/if}
   </div>
 </div>
 
-<div class="list">
-  <table>
-    <thead>
-      {#each ["title", "author", "series", "tags", "published", "read", "added"] as h}
-        <th on:click={() => sortFilter(h)} class:selected={$books.filters.sort === h}
-          >{h.charAt(0).toUpperCase()}{h.slice(1)}
-          {#if $books.filters.sort === h}
-            {#if $books.filters.reverse}
-              <CaretDown size={12} />
-            {:else}
-              <CaretUp size={12} />
+{#if $books.allBooks.length}
+  <div class="list">
+    <table>
+      <thead>
+        {#each ["title", "author", "series", "tags", "published", "read", "added"] as h}
+          <th on:click={() => sortFilter(h)} class:selected={$books.filters.sort === h}
+            >{h.charAt(0).toUpperCase()}{h.slice(1)}
+            {#if $books.filters.sort === h}
+              {#if $books.filters.reverse}
+                <CaretDown size={12} />
+              {:else}
+                <CaretUp size={12} />
+              {/if}
             {/if}
-          {/if}
-        </th>
-      {/each}
-    </thead>
-    <tbody>
-      {#each $books.sortedBooks as book}
-        <tr on:click={() => push(`#/book/${book.cache.filepath}`)}>
-          <td>{book.title}</td>
-          <td>{book.authors.map((a) => a.name).join(", ")}</td>
-          <td>{book.series ?? ""}{book.seriesNumber ? " #" + book.seriesNumber : ""}</td>
-          <td>
-            <div class="tags">
-              {#each book.tags as tag}
-                <span class="tag">{tag}</span>
-              {/each}
-            </div>
-          </td>
-          <td class="date">{formatDate(book.datePublished)}</td>
-          <td class="date">{formatDate(book.dateRead)}</td>
-          <td class="date">{formatDate(book.timestampAdded)}</td>
-        </tr>
-      {/each}
-    </tbody>
-  </table>
-</div>
+          </th>
+        {/each}
+      </thead>
+      <tbody>
+        {#each $books.sortedBooks as book}
+          <tr on:click={() => push(`#/book/${book.cache.filepath}`)}>
+            <td>{book.title}</td>
+            <td>{book.authors.map((a) => a.name).join(", ")}</td>
+            <td>{book.series ?? ""}{book.seriesNumber ? " #" + book.seriesNumber : ""}</td>
+            <td>
+              <div class="tags">
+                {#each book.tags as tag}
+                  <span class="tag">{tag}</span>
+                {/each}
+              </div>
+            </td>
+            <td class="date">{formatDate(book.datePublished)}</td>
+            <td class="date">{formatDate(book.dateRead)}</td>
+            <td class="date">{formatDate(book.timestampAdded)}</td>
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  </div>
+{:else}
+  <GettingStarted />
+{/if}
 
 <style lang="scss">
   .list {
