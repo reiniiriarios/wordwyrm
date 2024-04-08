@@ -2,10 +2,11 @@
   import { onMount } from "svelte";
   import { UserSettings } from "types/global";
   import ArrowSquareOut from "phosphor-svelte/lib/ArrowSquareOut";
+
+  import Select from "@components/Select.svelte";
   import HoverInfo from "@components/HoverInfo.svelte";
   import { settings } from "@stores/settings";
   import { formatDate } from "@scripts/formatDate";
-  import Select from "@components/Select.svelte";
 
   let editSettings: UserSettings = {} as UserSettings;
   let saved: boolean = false;

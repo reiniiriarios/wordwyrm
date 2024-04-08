@@ -1,10 +1,10 @@
-import NotFound from "@pages/404/404.svelte";
-import Books from "@pages/books/Books.svelte";
-import Book from "@pages/book/Book.svelte";
-import EditBook from "@pages/book/Edit.svelte";
-import Settings from "@pages/settings/Settings.svelte";
-import Chart from "@pages/chart/Chart.svelte";
-import List from "@pages/list/List.svelte";
+import NotFound from "@pages/404.svelte";
+import Books from "@pages/Books.svelte";
+import Book from "@pages/Book.svelte";
+import EditBook from "@pages/Edit.svelte";
+import Settings from "@pages/Settings.svelte";
+import Chart from "@pages/Chart.svelte";
+import List from "@pages/List.svelte";
 
 export default {
   "/": Books,

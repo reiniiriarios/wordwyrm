@@ -3,14 +3,15 @@
   import { push } from "svelte-spa-router";
   import CaretUp from "phosphor-svelte/lib/CaretUp";
   import CaretDown from "phosphor-svelte/lib/CaretDown";
+
   import SearchBar from "@components/SearchBar.svelte";
   import FilterCats from "@components/FilterCats.svelte";
   import FilterRead from "@components/FilterRead.svelte";
   import GettingStarted from "@components/GettingStarted.svelte";
-  import { catFilters, recentFilters } from "@scripts/sortBooks";
-  import { formatDate } from "@scripts/formatDate";
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
+  import { catFilters, recentFilters } from "@scripts/sortBooks";
+  import { formatDate } from "@scripts/formatDate";
 
   let filterTags: string[] = [];
   $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());

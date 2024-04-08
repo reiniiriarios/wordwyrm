@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+  import Chart from "chart.js/auto";
+
   import { books } from "@stores/books";
   import { settings } from "@stores/settings";
-  import Chart from "chart.js/auto";
-  import { onMount } from "svelte";
 
   let startYear = $settings.chartStartYear ?? 2020;
   const startDate = new Date(startYear, 1, 1);

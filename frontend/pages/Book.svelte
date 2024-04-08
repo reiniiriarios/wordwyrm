@@ -1,14 +1,15 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import PencilSimple from "phosphor-svelte/lib/PencilSimple";
-  import { sortFilters } from "@scripts/sortBooks";
-  import { formatDate } from "@scripts/formatDate";
+
+  import BookImage from "@components/BookImage.svelte";
+  import Rating from "@components/Rating.svelte";
+  import ImageSearch from "@components/ImageSearch.svelte";
+  import MoreInfo from "@components/MoreInfo.svelte";
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
-  import Bookimage from "@components/BookImage.svelte";
-  import Rating from "@components/Rating.svelte";
-  import ImageSearch from "./ImageSearch.svelte";
-  import MoreInfo from "./MoreInfo.svelte";
+  import { sortFilters } from "@scripts/sortBooks";
+  import { formatDate } from "@scripts/formatDate";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
@@ -61,7 +62,7 @@
   <div class="bookPage">
     {#if book.images.hasImage}
       <div class="bookPage__image">
-        <Bookimage {book} overlay pageHeight />
+        <BookImage {book} overlay pageHeight />
       </div>
     {/if}
     <div class="bookPage__info">
@@ -89,7 +90,7 @@
                     on:click={() => readBook(sb.cache.authorDir ?? "", sb.cache.filename ?? "")}
                     class="seriesList__inner seriesList__inner--image"
                   >
-                    <Bookimage book={sb} overlay />
+                    <BookImage book={sb} overlay />
                   </a>
                 {:else}
                   <a

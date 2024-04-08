@@ -1,9 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import FrameCorners from "phosphor-svelte/lib/FrameCorners";
-  import { catFilters, sortFilters, recentFilters } from "@scripts/sortBooks";
-  import { settings } from "@stores/settings";
-  import { books } from "@stores/books";
+
   import FilterSort from "@components/FilterSort.svelte";
   import FilterCats from "@components/FilterCats.svelte";
   import FilterRead from "@components/FilterRead.svelte";
@@ -12,11 +10,13 @@
   import SearchBar from "@components/SearchBar.svelte";
   import Rating from "@components/Rating.svelte";
   import GettingStarted from "@components/GettingStarted.svelte";
-  import AddBook from "./Add.svelte";
-  import SearchBook from "./Search.svelte";
+  import AddBook from "@components/AddBook.svelte";
+  import SearchApi from "@components/SearchApi.svelte";
+  import { settings } from "@stores/settings";
+  import { books } from "@stores/books";
+  import { catFilters, sortFilters, recentFilters } from "@scripts/sortBooks";
 
   onMount(() => {
-    console.log("mounted");
     if (!$books.allBooks.length) {
       console.log("sending for books");
       books.fetch();
@@ -49,7 +49,7 @@
 
     {#if $settings.booksDir}
       <AddBook />
-      <SearchBook />
+      <SearchApi />
     {/if}
   </div>
 </div>

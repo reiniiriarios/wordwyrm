@@ -4,14 +4,15 @@
   import { push } from "svelte-spa-router";
   import Hash from "phosphor-svelte/lib/Hash";
   import Calendar from "phosphor-svelte/lib/Calendar";
-  import { settings } from "@stores/settings";
-  import { books } from "@stores/books";
+
   import HoverInfo from "@components/HoverInfo.svelte";
   import Rating from "@components/Rating.svelte";
-  import ImageSearch from "./ImageSearch.svelte";
-  import MoreInfo from "./MoreInfo.svelte";
-  import Crop from "./Crop.svelte";
-  import Delete from "./Delete.svelte";
+  import ImageSearch from "@components/ImageSearch.svelte";
+  import MoreInfo from "@components/MoreInfo.svelte";
+  import CropCover from "@components/CropCover.svelte";
+  import DeleteBook from "@components/DeleteBook.svelte";
+  import { settings } from "@stores/settings";
+  import { books } from "@stores/books";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
 
@@ -139,7 +140,7 @@
           {#if $settings.googleApiKey && $settings.googleSearchEngineId}
             <ImageSearch {book} />
           {/if}
-          <Crop bind:book />
+          <CropCover bind:book />
         {/if}
       </div>
     </div>
@@ -232,7 +233,7 @@
       </fieldset>
       <div class="bookPage__actions">
         <div class="left">
-          <Delete {book} />
+          <DeleteBook {book} />
         </div>
         <a class="btn" href={`#/book/${params.author}/${params.book}`}>Cancel</a>
         <button class="btn" disabled={saving} on:click={saveBook}>Save</button>
