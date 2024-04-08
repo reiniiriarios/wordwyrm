@@ -73,8 +73,8 @@
     &::before {
       content: "";
       position: absolute;
-      left: 0.25rem;
-      top: 0.25rem;
+      left: 0.33rem;
+      top: 0.5rem;
       background-color: var(--bg-color);
       width: 1.25rem;
       height: 1.25rem;
@@ -84,8 +84,8 @@
       &::after {
         content: "✓";
         position: absolute;
-        left: 0.4rem;
-        top: 0;
+        left: 0.5rem;
+        top: 0.25rem;
         color: var(--fg-color);
         font-size: 1.25rem;
       }
