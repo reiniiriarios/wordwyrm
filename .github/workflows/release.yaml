@@ -21,50 +21,44 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Client
-        run: npm run build:client
-
-      - name: Build Electron App
-        run: npm run build:electron
+      - name: Build
+        run: |
+          npm run build:client
+          npm run build:electron
 
       # macos
-      - name: Build for macos
+      - name: Build for macOS
         if: matrix.platform == 'macos-latest'
         run: |
           npm run build:mac
           mv $PWD/build/BookTracker-*.dmg ./
 
-      - name: Upload macos files
+      - name: Upload macOS files
         if: matrix.platform == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
           name: release-macos
-          path: BookTracker-${{ github.ref_name }}-*
+          path: BookTracker-*.dmg
           retention-days: 2
 
       # windows
-      - name: Build for windows (nsis)
-        if: matrix.platform == 'windows-latest'
-        run: |
-          npm run build:nsis
-          Move-Item -Path "$PWD\build\BookTracker-${{ github.ref_name }}-x64-installer.exe" -Destination "$PWD\BookTracker-${{ github.ref_name }}-x64-installer.exe"
-
-      - name: Build for windows (portable)
+      - name: Build for Windows
         if: matrix.platform == 'windows-latest'
         run: |
           npm run build:win
           Move-Item -Path "$PWD\build\BookTracker-${{ github.ref_name }}-x64.exe" -Destination "$PWD\BookTracker-${{ github.ref_name }}-x64.exe"
+          Move-Item -Path "$PWD\build\BookTracker-${{ github.ref_name }}-x64-installer.exe" -Destination "$PWD\BookTracker-${{ github.ref_name }}-x64-installer.exe"
 
-      - name: Upload windows files
+      - name: Upload Windows files
         if: matrix.platform == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: BookTracker-${{ github.ref_name }}-*
+          path: BookTracker-*.exe
           retention-days: 2
 
       # ubuntu
-      - name: Build for linux
+      - name: Build for Linux
         if: matrix.platform == 'ubuntu-latest'
         run: |
           npm run build:lnx
@@ -72,12 +66,15 @@ jobs:
           mv $PWD/build/BookTracker-*.rpm ./
           mv $PWD/build/BookTracker-*.deb ./
 
-      - name: Upload linux files
+      - name: Upload Linux files
         if: matrix.platform == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
           name: release-linux
-          path: BookTracker-${{ github.ref_name }}-*
+          path: |
+            BookTracker-*.AppImage
+            BookTracker-*.rpm
+            BookTracker-*.deb
           retention-days: 2
 
   release:

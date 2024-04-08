@@ -34,10 +34,8 @@
     "clean": "ts-node scripts/rmdist.ts",
     "build:icons": "npx png2icons assets/icons/512x512.png assets/icons/icon -allwe",
     "build:mac": "electron-builder --dir --mac dmg",
-    "build:win": "electron-builder --dir --win portable",
-    "build:nsis": "electron-builder --dir --win nsis",
+    "build:win": "electron-builder --dir --win portable nsis",
     "build:deb": "electron-builder --dir --linux deb",
-    "build:rpm": "electron-builder --dir --linux rpm",
     "build:lnx": "electron-builder --dir --linux appImage deb rpm",
     "newver": "ts-node scripts/updateVersion.ts",
     "prepare": "ts-patch install -s"
