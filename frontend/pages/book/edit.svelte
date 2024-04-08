@@ -8,10 +8,10 @@
   import { books } from "@stores/books";
   import HoverInfo from "@components/HoverInfo.svelte";
   import Rating from "@components/Rating.svelte";
-  import ImageSearch from "./imagesearch.svelte";
-  import Moreinfo from "./moreinfo.svelte";
-  import Crop from "./crop.svelte";
-  import Delete from "./delete.svelte";
+  import ImageSearch from "./ImageSearch.svelte";
+  import MoreInfo from "./MoreInfo.svelte";
+  import Crop from "./Crop.svelte";
+  import Delete from "./Delete.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
 
@@ -116,7 +116,7 @@
   <h2 class="pageNav__header">Edit Book</h2>
   <div class="pageNav__actions">
     {#if book}
-      <Moreinfo {book} />
+      <MoreInfo {book} />
     {/if}
   </div>
 </div>

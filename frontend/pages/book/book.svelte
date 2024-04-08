@@ -7,8 +7,8 @@
   import { books } from "@stores/books";
   import Bookimage from "@components/BookImage.svelte";
   import Rating from "@components/Rating.svelte";
-  import ImageSearch from "./imagesearch.svelte";
-  import Moreinfo from "./moreinfo.svelte";
+  import ImageSearch from "./ImageSearch.svelte";
+  import MoreInfo from "./MoreInfo.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
@@ -129,7 +129,7 @@
         </div>
       {/if}
       <div class="moreInfo">
-        <Moreinfo {book} />
+        <MoreInfo {book} />
       </div>
     </div>
   </div>

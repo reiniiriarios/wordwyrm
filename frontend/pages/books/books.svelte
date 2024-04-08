@@ -12,8 +12,8 @@
   import SearchBar from "@components/SearchBar.svelte";
   import Rating from "@components/Rating.svelte";
   import GettingStarted from "@components/GettingStarted.svelte";
-  import AddBook from "./add.svelte";
-  import SearchBook from "./search.svelte";
+  import AddBook from "./Add.svelte";
+  import SearchBook from "./Search.svelte";
 
   onMount(() => {
     console.log("mounted");
