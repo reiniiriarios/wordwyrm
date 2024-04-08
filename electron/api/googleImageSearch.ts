@@ -130,7 +130,7 @@ export type SearchResult = {
   thumbnail: string;
 };
 
-export async function imageSearch(
+export async function googleImageSearch(
   apiKey: string,
   engineId: string,
   title: string,

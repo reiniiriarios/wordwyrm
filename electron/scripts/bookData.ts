@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import fetch from "electron-fetch";
 import sharp from "sharp";
-import { readYaml, saveYaml } from "./userdata";
+import { readYaml, saveYaml } from "./userData";
 
 export function initBookDirs(dir: string) {
   if (!fs.existsSync(dir)) {

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as yaml from "js-yaml";
 import * as path from "path";
-import { UserSettings } from "../types/global";
+import { UserSettings } from "../../types/global";
 
 const USER_DATA_PATH =
   process.env.APPDATA ||

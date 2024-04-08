@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { app, BrowserWindow, dialog, ipcMain, nativeTheme, net, protocol, shell } from "electron";
 import * as path from "path";
-import { getGoogleBook, searchGoogleBooks } from "../backend/googlebooks";
-import { imageSearch } from "../backend/googleimagesearch";
-import { initUserDirs, loadSettings, saveSettings } from "../backend/userdata";
-import { addBookImage, addBookImageBase64, deleteBook, readAllBooks, readBook, saveBook } from "../backend/bookdata";
-import { checkForUpdate } from "../backend/updates";
 import packageJson from "../package.json";
 import { UserSettings } from "../types/global";
-import { searchOpenLibrary, searchOpenLibraryWorkByISBN } from "../backend/openlibrary";
+import { initUserDirs, loadSettings, saveSettings } from "./scripts/userData";
+import { addBookImage, addBookImageBase64, deleteBook, readAllBooks, readBook, saveBook } from "./scripts/bookData";
+import { checkForUpdate } from "./scripts/updates";
+import { getGoogleBook, searchGoogleBooks } from "./api/googleBooks";
+import { googleImageSearch } from "./api/googleImageSearch";
+import { searchOpenLibrary, searchOpenLibraryWorkByISBN } from "./api/openLibrary";
 
 const PORT = 5000;
 const DEBUG = process.env.DEBUG === "true";
@@ -202,7 +202,7 @@ app.on("ready", () => {
 
   ipcMain.on("imageSearch", (event, author: string, title: string, page: number) => {
     if (settings.googleApiKey && settings.googleSearchEngineId) {
-      imageSearch(settings.googleApiKey, settings.googleSearchEngineId, author, title, page).then((res) =>
+      googleImageSearch(settings.googleApiKey, settings.googleSearchEngineId, author, title, page).then((res) =>
         event.reply("imageSearchResults", res),
       );
     }
