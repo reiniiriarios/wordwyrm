@@ -2,6 +2,7 @@
   import Info from "phosphor-svelte/lib/Info";
 
   export let details: string = "";
+  export let position: "top" | "right" | "bottom" | "left" = "right";
 
   let visible: boolean = false;
   let timer: NodeJS.Timeout;
@@ -16,7 +17,7 @@
   }
 </script>
 
-<span role="tooltip" class="info" on:mouseenter={show} on:mouseleave={hide}>
+<span role="tooltip" class="info info--{position}" on:mouseenter={show} on:mouseleave={hide}>
   <span class="icon"><Info /></span>
   <div class="details" class:visible>
     <span class="bg"><Info size="3rem" /></span>
@@ -61,6 +62,42 @@
 
       &.visible {
         display: block;
+      }
+    }
+
+    &--top {
+      .details {
+        top: auto;
+        right: auto;
+        bottom: 1.25rem;
+        left: -9.5rem;
+      }
+    }
+
+    &--right {
+      .details {
+        top: -0.85rem;
+        right: auto;
+        bottom: auto;
+        left: 1.5rem;
+      }
+    }
+
+    &--bottom {
+      .details {
+        top: 1.25rem;
+        right: auto;
+        bottom: auto;
+        left: -9.5rem;
+      }
+    }
+
+    &--left {
+      .details {
+        top: -0.85rem;
+        right: 1.5rem;
+        bottom: auto;
+        left: auto;
       }
     }
   }

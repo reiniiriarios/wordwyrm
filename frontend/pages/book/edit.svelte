@@ -214,21 +214,19 @@
         </label>
 
         <label class="field field">
-          ISBN <Hoverinfo details="Enables quick-links to Google Books, LibraryThing, and Goodreads." />
+          ISBN
           <input type="text" bind:value={book.ids.isbn} />
         </label>
         <label class="field field">
-          Google Books ID <Hoverinfo details="Enables quick-link to Google Books." />
+          Google Books ID <Hoverinfo position="left" details="Format is alphanumeric plus _ and -." />
           <input type="text" bind:value={book.ids.googleBooksId} />
         </label>
         <label class="field field">
-          OpenLibrary ID <Hoverinfo
-            details="Enables quick-link to OpenLibrary. Format should be /works/id or /books/id."
-          />
+          OpenLibrary ID <Hoverinfo details="Format should be /works/id or /books/id, where id is alphanumeric." />
           <input type="text" bind:value={book.ids.openLibraryId} />
         </label>
         <label class="field field">
-          Goodreads ID <Hoverinfo details="Enables quick-link to Goodreads." />
+          Goodreads ID <Hoverinfo position="left" details="Format is numeric." />
           <input type="text" bind:value={book.ids.goodreadsId} />
         </label>
       </fieldset>
