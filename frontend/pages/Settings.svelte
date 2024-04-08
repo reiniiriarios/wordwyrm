@@ -6,6 +6,7 @@
   import Select from "@components/Select.svelte";
   import HoverInfo from "@components/HoverInfo.svelte";
   import { settings } from "@stores/settings";
+  import { books } from "@stores/books";
   import { formatDate } from "@scripts/formatDate";
 
   let editSettings: UserSettings = {} as UserSettings;
@@ -77,6 +78,7 @@
 
   function save(e: MouseEvent | KeyboardEvent) {
     e.preventDefault();
+    if (editSettings.booksDir !== $settings.booksDir) setTimeout(books.fetch, 500);
     settings.save(editSettings);
     saved = true;
     setTimeout(() => (saved = false), 1500);
