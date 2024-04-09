@@ -1,4 +1,4 @@
-# Book Tracker
+# <img src="assets/icons/32x32.png" alt="" /> Book Tracker
 
 A cross-platform desktop app for tracking what books you've read and when.
 
