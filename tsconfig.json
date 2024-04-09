@@ -24,8 +24,7 @@
       "@pages/*": ["frontend/pages/*"],
       "@core/*": ["frontend/core/*"],
       "@stores/*": ["frontend/stores/*"],
-      "@scripts/*": ["frontend/scripts/*"],
-      "@api/*": ["electron/api/*"]
+      "@scripts/*": ["frontend/scripts/*"]
     },
     "typeRoots": ["types", "frontend/**/types", "node_modules/@types"],
     "plugins": [
@@ -33,6 +32,15 @@
       { "transform": "typescript-transform-paths", "afterDeclarations": true }
     ]
   },
-  "include": ["frontend/**/*", "types"],
-  "exclude": ["node_modules/*", "build/*", "dist/*", "scripts/*", "electron/**/*"]
+  "include": ["frontend/**/*", "types", "electron/preload.ts"],
+  "exclude": [
+    "node_modules/*",
+    "build/*",
+    "dist/*",
+    "scripts/*",
+    "electron/api/*",
+    "electron/scripts/*",
+    "electron/main.ts",
+    "electron/*.json"
+  ]
 }

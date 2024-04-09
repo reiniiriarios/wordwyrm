@@ -2,12 +2,18 @@
   import { onMount } from "svelte";
   import { push } from "svelte-spa-router";
   import ImageSquare from "phosphor-svelte/lib/ImageSquare";
-  import { SearchResult } from "@api/googleimagesearch";
   import { books } from "@stores/books";
   import Modal from "@components/Modal.svelte";
 
   export let book: Book = {} as Book;
   export let selectedImageUrl: string = "";
+
+  type SearchResult = {
+    image: string;
+    width: number;
+    height: number;
+    thumbnail: string;
+  };
 
   let isOpen: boolean = false;
   let canAdd: boolean = false;
