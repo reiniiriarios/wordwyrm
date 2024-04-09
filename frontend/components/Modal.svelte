@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
-  import Spinner from "./spinner.svelte";
+  import Spinner from "@components/Spinner.svelte";
   const dispatch = createEventDispatcher();
 
   export let open: boolean = false;
