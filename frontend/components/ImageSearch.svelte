@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { push } from "svelte-spa-router";
+  import { createEventDispatcher, onMount } from "svelte";
   import ImageSquare from "phosphor-svelte/lib/ImageSquare";
   import { books } from "@stores/books";
   import Modal from "@components/Modal.svelte";
@@ -22,6 +21,8 @@
   let saving: boolean = false;
   let err: string = "";
   let page: number = 0;
+
+  const dispatch = createEventDispatcher();
 
   function openDialog() {
     isOpen = true;
@@ -54,8 +55,10 @@
       saving = false;
       book.images.imageUpdated = new Date().getTime();
       book.images.hasImage = true;
+      if (!book.cache.filepath) book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
+      if (!book.cache.urlpath) book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
       books.updateBook(book);
-      push(`#/book/${book.cache.filepath}`);
+      dispatch("add");
     });
 
     return () => {
@@ -92,7 +95,7 @@
 <Modal
   bind:open={isOpen}
   heading="Search for Book"
-  confirmWord="Add"
+  confirmWord="Save"
   on:confirm={addImage}
   bind:canConfirm={canAdd}
   loading={saving}

@@ -74,7 +74,7 @@
     book.tags = tags.split(",").map((t) => t.trim());
   }
 
-  function handleBookImage(e: CustomEvent<any>) {
+  function handleBookImageDropped(e: CustomEvent<any>) {
     const { acceptedFiles, fileRejections } = e.detail as {
       acceptedFiles: (File & { path: string })[];
       fileRejections: (File & { path: string })[];
@@ -87,6 +87,12 @@
       if (imagePath.charAt(0) !== "/") imagePath = "/" + imagePath;
       book.cache.image = imagePath;
     }
+  }
+
+  function handleImageSearchAdded(_: CustomEvent<any>) {
+    let booksDir = $settings.booksDir.replace(/\\/g, "/").replace(/ /g, "%20");
+    if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
+    imagePath = `${booksDir}/${book.cache.urlpath}.jpg?t=${book.images.imageUpdated}`;
   }
 
   function saveBook() {
@@ -126,7 +132,7 @@
     <div class="bookPage__image">
       <div class="field">
         Cover Image
-        <Dropzone accept="image/*" on:drop={handleBookImage}>
+        <Dropzone accept="image/*" on:drop={handleBookImageDropped}>
           {#if imagePath}
             <img src={`localfile://${imagePath}`} alt="" />
             <div class="dropzone__info">Drag or click here to replace image.</div>
@@ -138,7 +144,7 @@
       <div class="imageActions">
         {#if book}
           {#if $settings.googleApiKey && $settings.googleSearchEngineId}
-            <ImageSearch {book} />
+            <ImageSearch bind:book on:add={handleImageSearchAdded} />
           {/if}
           <CropCover bind:book />
         {/if}
