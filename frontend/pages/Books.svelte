@@ -14,11 +14,9 @@
   import SearchApi from "@components/SearchApi.svelte";
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
-  import { catFilters, sortFilters, recentFilters } from "@scripts/sortBooks";
 
   onMount(() => {
     if (!$books.allBooks.length) {
-      console.log("sending for books");
       books.fetch();
     }
   });
