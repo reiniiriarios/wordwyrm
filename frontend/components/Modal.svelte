@@ -96,7 +96,7 @@
       width: 75vw;
       height: 75vh;
       overflow-y: auto;
-      background-color: var(--bg-color-light);
+      background-color: var(--c-overlay);
       text-align: left;
       display: flex;
       flex-direction: column;
@@ -109,7 +109,7 @@
       height: var(--header-height);
       font-size: 1.125rem;
       padding: 0.5rem;
-      border-bottom: 1px solid var(--bg-color-lighter);
+      border-bottom: 1px solid var(--c-overlay-border);
     }
 
     &__body {
@@ -120,7 +120,7 @@
 
     &__actions {
       height: var(--footer-height);
-      border-top: 1px solid var(--bg-color-lighter);
+      border-top: 1px solid var(--c-overlay-border);
       padding: 0.5rem;
       display: flex;
       justify-content: right;

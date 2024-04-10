@@ -74,13 +74,13 @@
     .star {
       height: 2rem;
       width: 2rem;
-      background-color: var(--bg-color-lighter);
+      background-color: var(--c-muted);
       mask-image: url(star.svg);
       mask-mode: alpha;
       mask-size: 2rem 2rem;
 
       &.full {
-        background-color: #ffc400;
+        background-color: var(--c-rating);
       }
     }
 
@@ -90,7 +90,7 @@
 
         &.hover,
         &:focus-visible {
-          background-color: var(--accent-color);
+          background-color: var(--c-focus);
         }
       }
     }
@@ -105,7 +105,7 @@
 
       &:hover,
       &:focus-visible {
-        color: var(--accent-color);
+        color: var(--c-focus);
       }
     }
 

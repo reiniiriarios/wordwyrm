@@ -269,7 +269,7 @@
       padding: 1rem;
       overflow-y: auto;
       scrollbar-width: thin;
-      scrollbar-color: var(--bg-color-lightest) transparent;
+      scrollbar-color: var(--c-subtle) transparent;
     }
 
     &__actions {
@@ -307,7 +307,7 @@
   .commonTags {
     &__title {
       font-size: 0.9rem;
-      color: var(--fg-color-muted);
+      color: var(--c-text-muted);
     }
 
     &__tags {

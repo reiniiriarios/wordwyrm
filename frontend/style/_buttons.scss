@@ -7,8 +7,8 @@
 }
 
 .btn {
-  background-color: var(--bg-color-light);
-  color: var(--fg-color-muted);
+  background-color: var(--c-button);
+  color: var(--c-text-muted);
   padding: 0.5rem 0.75rem;
   border: 0;
   font-size: 1rem;
@@ -26,18 +26,18 @@
   }
 
   &:hover {
-    background-color: var(--bg-color-lighter);
-    color: var(--fg-color);
+    background-color: var(--c-button-hover);
+    color: var(--c-text);
     text-decoration: none;
   }
 
   &:active {
-    background-color: var(--bg-color-light);
+    background-color: var(--c-button);
   }
 
   &:disabled {
-    color: var(--fg-color-dark);
-    background-color: var(--bg-color-light);
+    color: var(--c-text-dark);
+    background-color: var(--c-button);
     cursor: default;
     opacity: 0.8;
   }
@@ -47,21 +47,21 @@
   }
 
   &--light {
-    background-color: var(--bg-color-lighter);
-    color: var(--fg-color-muted);
+    background-color: var(--c-button-light);
+    color: var(--c-text-muted);
 
     &:hover {
-      background-color: var(--bg-color-lightest);
-      color: var(--fg-color);
+      background-color: var(--c-button-light-hover);
+      color: var(--c-text);
     }
 
     &:active {
-      background-color: var(--bg-color-lighter);
+      background-color: var(--c-button-light);
     }
 
     &:disabled {
-      color: var(--fg-color-dark);
-      background-color: var(--bg-color-lighter);
+      color: var(--c-text-dark);
+      background-color: var(--c-button-light);
     }
   }
 
@@ -75,7 +75,7 @@
       position: absolute;
       left: 0.33rem;
       top: 0.5rem;
-      background-color: var(--bg-color);
+      background-color: var(--c-base);
       width: 1.25rem;
       height: 1.25rem;
     }
@@ -86,7 +86,7 @@
         position: absolute;
         left: 0.5rem;
         top: 0.25rem;
-        color: var(--fg-color);
+        color: var(--c-text);
         font-size: 1.25rem;
       }
     }
@@ -97,10 +97,10 @@
   }
 
   &--delete {
-    background-color: var(--bg-color-delete-fade);
+    background-color: var(--c-error-bg-muted);
 
     &:hover {
-      background-color: var(--bg-color-delete);
+      background-color: var(--c-error-bg);
     }
   }
 }
@@ -108,7 +108,7 @@
 .link {
   border: 0;
   background: none;
-  color: var(--accent-color);
+  color: var(--c-link);
   font-size: 1rem;
   display: inline-flex;
   align-items: center;
@@ -124,15 +124,15 @@
   }
 
   &:hover {
-    color: var(--accent-color-light);
+    color: var(--c-link-hover);
     text-decoration: underline;
   }
 
   &--delete {
-    color: var(--fg-color-delete-fade);
+    color: var(--c-error-muted);
 
     &:hover {
-      color: var(--fg-color-delete);
+      color: var(--c-error);
     }
   }
 }

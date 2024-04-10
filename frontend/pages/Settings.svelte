@@ -99,6 +99,27 @@
   </label>
 
   <div class="field">
+    App Theme
+    <div class="selectField">
+      <Select
+        width="14rem"
+        bind:value={editSettings.theme}
+        options={{
+          default: "Default",
+          harrow: "Harrow",
+          gideon: "Gideon",
+          nona: "Nona",
+          slate: "Slate",
+          rosepine: "Rosé Pine",
+          rosepineDawn: "Rosé Pine Dawn",
+          nord: "Nord",
+          nordLight: "Nord Bright",
+        }}
+      />
+    </div>
+  </div>
+
+  <div class="field">
     Date Format <HoverInfo details="Based on device locale settings." />
     <div class="selectField">
       <Select
@@ -114,11 +135,6 @@
     </div>
   </div>
 
-  <label class="field">
-    Chart Default Start Year <HoverInfo details="Sets the default start year for the chart page." />
-    <input type="text" bind:value={editSettings.chartStartYear} />
-  </label>
-
   <label class="field field--fullwidth">
     Tags for Filtering <HoverInfo details="Tags should be comma-separated." />
     <input type="text" bind:value={editSettings.filterTags} maxlength="255" />
@@ -126,6 +142,11 @@
   <label class="field field--fullwidth">
     Common Tags for Editing <HoverInfo details="Tags should be comma-separated." />
     <input type="text" bind:value={editSettings.commonTags} maxlength="1024" />
+  </label>
+
+  <label class="field">
+    Chart Default Start Year <HoverInfo details="Sets the default start year for the chart page." />
+    <input type="text" bind:value={editSettings.chartStartYear} />
   </label>
 
   <div class="field field--fullwidth">
@@ -202,7 +223,7 @@
     right: 0;
     padding: 1rem;
     font-size: 0.9rem;
-    color: var(--fg-color-muted);
+    color: var(--c-text-muted);
     display: flex;
     align-items: baseline;
     gap: 0.75rem;
@@ -217,7 +238,7 @@
     }
 
     a.hideme {
-      color: var(--fg-color-muted);
+      color: var(--c-text-muted);
     }
   }
 </style>

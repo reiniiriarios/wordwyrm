@@ -2,9 +2,9 @@ input[type="text"],
 input[type="number"],
 input[type="date"],
 textarea {
-  border: 1px solid var(--bg-color-lighter);
+  border: 1px solid var(--c-overlay-border);
   background-color: transparent;
-  color: var(--fg-color);
+  color: var(--c-text);
   padding: 0.25rem 0.5rem;
   font-size: 1rem;
   font-family: sans-serif;
@@ -12,14 +12,14 @@ textarea {
 
   &:focus {
     outline: none;
-    border-color: var(--accent-color);
+    border-color: var(--c-focus);
   }
 }
 
 .field {
   margin: 0.125rem 0 0.125rem;
   font-size: 0.9rem;
-  color: var(--fg-color-muted);
+  color: var(--c-text-muted);
 }
 
 fieldset {
@@ -33,7 +33,7 @@ fieldset {
   label {
     display: block;
     font-size: 0.9rem;
-    color: var(--fg-color-muted);
+    color: var(--c-text-muted);
 
     input[type="text"],
     input[type="number"],
@@ -69,10 +69,14 @@ fieldset {
 
 .dropzone {
   width: 100%;
-  background-color: var(--bg-color-light) !important;
-  border-color: var(--bg-color-lighter) !important;
-  color: var(--fg-color) !important;
+  background-color: var(--c-overlay) !important;
+  border-color: var(--c-overlay-border) !important;
+  color: var(--c-text) !important;
   cursor: pointer;
+
+  &:focus-visible {
+    border-color: var(--c-focus) !important;
+  }
 
   img {
     margin: 0 auto;
@@ -83,7 +87,7 @@ fieldset {
 
   &__info {
     font-size: 0.9rem;
-    color: var(--fg-color-muted);
+    color: var(--c-text-muted);
     padding: 1rem;
 
     img + & {

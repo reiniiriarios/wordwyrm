@@ -140,14 +140,14 @@
     overflow-y: auto;
     height: 90%;
     scrollbar-width: thin;
-    scrollbar-color: var(--bg-color-lightest) transparent;
+    scrollbar-color: var(--c-subtle) transparent;
   }
 
   .result {
     height: 14rem;
     cursor: pointer;
     background-color: transparent;
-    color: var(--fg-color);
+    color: var(--c-text);
     border: 0;
     padding: 0;
     margin: 0;
@@ -160,7 +160,7 @@
       img {
         max-width: 100%;
         max-height: 100%;
-        border: 2px solid transparent;
+        border: 3px solid transparent;
       }
     }
 
@@ -172,7 +172,7 @@
     &.selected {
       .image {
         img {
-          border-color: var(--accent-color);
+          border-color: var(--c-image-select);
         }
       }
     }

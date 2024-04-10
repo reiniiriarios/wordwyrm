@@ -40,7 +40,7 @@
       position: absolute;
       top: 0.67rem;
       right: 0.5rem;
-      color: var(--fg-color-muted);
+      color: var(--c-text-muted);
 
       &--up {
         display: none;
@@ -57,8 +57,8 @@
     &__selected,
     &__opt {
       padding: 0.5rem 1.75rem 0.5rem 0.75rem;
-      background-color: var(--bg-color-light);
-      color: var(--fg-color);
+      background-color: var(--c-overlay);
+      color: var(--c-text);
       border: 0;
       border-radius: 0.25rem;
       font-size: 1rem;
@@ -68,7 +68,7 @@
     &__opt {
       display: block;
       width: 100%;
-      border-top: 1px solid var(--bg-color);
+      border-top: 1px solid var(--c-base);
       border-radius: 0;
 
       &:last-child {
@@ -78,7 +78,7 @@
 
       &:hover,
       &.selected {
-        background-color: var(--bg-color-lighter);
+        background-color: var(--c-muted);
       }
     }
 

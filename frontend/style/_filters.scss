@@ -21,15 +21,16 @@
   }
 
   button {
-    background-color: var(--bg-color-light);
-    color: var(--fg-color);
+    background-color: var(--c-button);
+    color: var(--c-text);
     padding: 0.25rem 0.5rem;
     border: 0;
     border-radius: 0.25rem;
     cursor: pointer;
 
+    &:hover,
     &.selected {
-      background-color: var(--bg-color-lighter);
+      background-color: var(--c-button-hover);
     }
 
     &.sortDirection {
@@ -59,7 +60,7 @@
     display: block;
     width: 100%;
     padding: 0.33rem !important;
-    border-top: 1px solid var(--bg-color) !important;
+    border-top: 1px solid var(--c-base) !important;
     border-radius: 0 !important;
 
     &:last-child {

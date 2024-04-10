@@ -23,7 +23,7 @@
   });
 </script>
 
-<div class="container">
+<div id="appContainer" data-theme={$settings.theme}>
   <Menu />
   <div class="main">
     <Router {routes} />

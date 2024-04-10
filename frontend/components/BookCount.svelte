@@ -16,12 +16,12 @@
     font-size: 1rem;
 
     &__sep {
-      color: var(--fg-color-muted);
+      color: var(--c-text-muted);
       opacity: 0.8;
     }
 
     &__mute {
-      color: var(--fg-color-muted);
+      color: var(--c-text-muted);
     }
   }
 </style>

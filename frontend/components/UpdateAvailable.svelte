@@ -30,7 +30,7 @@
     right: 0;
     font-size: 0.9rem;
     padding: 0.5rem 0.75rem;
-    background-color: var(--bg-color-light);
+    background-color: var(--c-overlay);
     border-top-left-radius: 0.25rem;
     box-shadow: 0 0 0.5rem 0.25rem rgba(0, 0, 0, 0.4);
   }

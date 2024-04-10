@@ -155,7 +155,7 @@
 
       .dataTitle {
         font-size: 0.9rem;
-        color: var(--fg-color-dark);
+        color: var(--c-text-dark);
         margin: 0 0 0.2rem;
       }
 
@@ -213,7 +213,7 @@
           position: relative;
           cursor: pointer;
           text-decoration: none;
-          color: var(--fg-color);
+          color: var(--c-text);
 
           &--image {
             display: flex;
@@ -231,7 +231,7 @@
           &--noimage {
             width: calc(var(--book-width) - 0.5rem);
             height: calc(var(--book-height) - 0.5rem);
-            background-color: var(--bg-color-lightest);
+            background-color: var(--c-subtle);
             text-align: center;
             display: flex;
             align-items: center;
@@ -263,12 +263,7 @@
         padding: 0.5rem 0;
 
         .unread {
-          font-size: 0.9rem;
           margin: 0.25rem 0;
-          padding: 0.25rem 0.5rem;
-          border-radius: 1rem;
-          background: linear-gradient(0deg, rgb(5, 140, 8) 0%, rgb(10, 160, 15) 100%);
-          box-shadow: rgb(0, 0, 0, 0.3) 0.05rem 0.05rem 0.5rem 0.2rem;
         }
       }
 

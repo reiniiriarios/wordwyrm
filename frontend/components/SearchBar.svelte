@@ -41,10 +41,10 @@
       cursor: pointer;
 
       right: 0.5rem;
-      color: var(--fg-color-dark);
+      color: var(--c-text-dark);
 
       &:hover {
-        color: var(--fg-color-muted);
+        color: var(--c-text-muted);
       }
     }
 

@@ -12,6 +12,7 @@ type UserSettings = {
   commonTags: string;
   appVersion: string;
   dateFormat: string;
+  theme: string;
 };
 
 declare global {
