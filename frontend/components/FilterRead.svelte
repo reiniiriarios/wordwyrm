@@ -1,6 +1,13 @@
 <script lang="ts">
   import { books } from "@stores/books";
   import { recentFilters } from "@scripts/sortBooks";
+
+  function filter(e: MouseEvent | KeyboardEvent) {
+    let opt = e.target as HTMLButtonElement;
+    let val = opt.dataset.val ?? "";
+    books.recentFilter(val);
+    opt.blur();
+  }
 </script>
 
 <div class="filter">
@@ -11,10 +18,8 @@
     </button>
     <div class="dropdownFilter__dropdown">
       {#each Object.entries(recentFilters) as [i, f]}
-        <button
-          on:click={() => books.recentFilter(i)}
-          class="dropdownFilter__opt"
-          class:selected={i === $books.filters.recent}>{f.name}</button
+        <button on:click={filter} data-val={i} class="dropdownFilter__opt" class:selected={i === $books.filters.recent}
+          >{f.name}</button
         >
       {/each}
     </div>

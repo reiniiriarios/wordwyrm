@@ -5,6 +5,18 @@
 
   let filterTags: string[] = [];
   $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());
+
+  function filter(e: MouseEvent | KeyboardEvent) {
+    let opt = e.target as HTMLButtonElement;
+    let val = opt.dataset.val ?? "";
+    let type = opt.dataset.type ?? "";
+    if (type === "cat") {
+      books.catFilter(val);
+    } else {
+      books.tagFilter(val);
+    }
+    opt.blur();
+  }
 </script>
 
 <div class="filter">
@@ -20,7 +32,9 @@
     <div class="dropdownFilter__dropdown">
       {#each Object.entries(catFilters) as [i, f]}
         <button
-          on:click={() => books.catFilter(i)}
+          on:click={filter}
+          data-val={i}
+          data-type="cat"
           class="dropdownFilter__opt"
           class:selected={$books.filters.filter === i}>{f.name}</button
         >
@@ -28,7 +42,9 @@
       {#if filterTags}
         {#each filterTags as tag}
           <button
-            on:click={() => books.tagFilter(tag)}
+            on:click={filter}
+            data-val={tag}
+            data-type="tag"
             class="dropdownFilter__opt"
             class:selected={$books.filters.tag === tag}>{tag}</button
           >

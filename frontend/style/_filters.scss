@@ -69,7 +69,9 @@
     }
   }
 
-  &:hover {
+  &:hover,
+  &:focus-visible,
+  &:focus-within {
     .dropdownFilter__selected {
       border-bottom-left-radius: 0 !important;
       border-bottom-right-radius: 0 !important;
