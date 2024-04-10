@@ -280,3 +280,46 @@
   --c-chart-bar: #88c0d088;
   --c-chart-bar-border: #88c0d0;
 }
+
+#appContainer[data-theme="slate"] {
+  --c-green: #99b898;
+  --c-yellow: #feceab;
+  --c-orange: #ff847c;
+  --c-red: #e84a5f;
+  --c-slate: #2a363b;
+
+  --c-base: #1f282c;
+  --c-surface: var(--c-slate);
+  --c-overlay: #333f44;
+  --c-muted: #3e4a50;
+  --c-subtle: #4a565c;
+
+  --c-text: #fff;
+  --c-text-muted: #d8e2e7;
+  --c-text-dark: #c2d1d8;
+
+  --c-link: var(--c-green);
+  --c-link-hover: var(--c-orange);
+  --c-menu-hover: var(--c-yellow);
+  --c-image-select: var(--c-orange);
+  --c-table-hover: var(--c-green);
+  --c-focus: var(--c-orange);
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-muted);
+  --c-button-light: var(--c-muted);
+  --c-button-light-hover: var(--c-subtle);
+
+  --c-error: var(--c-red);
+  --c-error-muted: #c54455;
+  --c-error-bg: #a02c3b;
+  --c-error-bg-muted: #772b35;
+
+  --c-rating: var(--c-yellow);
+  --c-unread: #597c58;
+
+  --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: #ff008888;
+  --c-chart-bar-border: #ff0088;
+}

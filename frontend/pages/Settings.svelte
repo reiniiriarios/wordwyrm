@@ -106,6 +106,7 @@
         bind:value={editSettings.theme}
         options={{
           default: "Default",
+          slate: "Slate",
           rosepine: "Rosé Pine",
           rosepineDawn: "Rosé Pine Dawn",
           nord: "Nord",
