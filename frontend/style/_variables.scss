@@ -38,6 +38,9 @@
   --c-unread: #0aa00f;
 
   --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: #ff008888;
+  --c-chart-bar-border: #ff0088;
 }
 
 // Rosé Pine
@@ -84,6 +87,9 @@
   --c-unread: var(--c-pine);
 
   --c-overlay-border: var(--c-highlight-med);
+
+  --c-chart-bar: #9ccfd888;
+  --c-chart-bar-border: #9ccfd8;
 }
 
 // Rosé Pine Moon
@@ -150,6 +156,9 @@
   --c-unread: #adeaf5;
 
   --c-overlay-border: var(--c-highlight-med);
+
+  --c-chart-bar: #56949f88;
+  --c-chart-bar-border: #56949f;
 }
 
 // Nord
@@ -207,4 +216,7 @@
   --c-unread: #729654;
 
   --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: #88c0d088;
+  --c-chart-bar-border: #88c0d0;
 }

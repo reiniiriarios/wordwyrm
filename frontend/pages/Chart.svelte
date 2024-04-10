@@ -90,6 +90,14 @@
     days = initDays();
     parseBooks();
 
+    let barColor =
+      getComputedStyle(document.getElementById("appContainer") as HTMLDivElement).getPropertyValue("--c-chart-bar") ??
+      "#ff0088";
+    let barColorBorder =
+      getComputedStyle(document.getElementById("appContainer") as HTMLDivElement).getPropertyValue(
+        "--c-chart-bar-border",
+      ) ?? "#ff008888";
+
     // Wait for the canvas element to appear, THEN run chart code.
     new Promise((resolve) => {
       if (chartCanvas) {
@@ -115,8 +123,8 @@
               label: "Books Read",
               data: Object.values(months).map((m) => m.count),
               borderWidth: 1,
-              borderColor: "#ff0088",
-              backgroundColor: "#ff008888",
+              borderColor: barColorBorder,
+              backgroundColor: barColor,
             },
           ],
         },
@@ -172,6 +180,6 @@
     padding: 1rem;
   }
   .btn.selected {
-    background-color: var(--c-muted);
+    background-color: var(--c-button-hover);
   }
 </style>
