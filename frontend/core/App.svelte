@@ -4,7 +4,7 @@
   import Menu from "@components/Menu.svelte";
   import UpdateAvailable from "@components/UpdateAvailable.svelte";
   import { onMount } from "svelte";
-  import { settings } from "@stores/settings";
+  import { currentTheme, settings } from "@stores/settings";
 
   let updateAvailable: string = "";
 
@@ -23,7 +23,7 @@
   });
 </script>
 
-<div id="appContainer" data-theme={$settings.theme}>
+<div id="appContainer" data-theme={$currentTheme}>
   <Menu />
   <div class="main">
     <Router {routes} />

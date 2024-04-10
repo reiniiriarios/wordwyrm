@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import CaretDown from "phosphor-svelte/lib/CaretDown";
   import CaretUp from "phosphor-svelte/lib/CaretUp";
 
@@ -8,11 +9,14 @@
   export let width: string | number = "7rem";
   export let small: boolean = false;
 
+  const dispatch = createEventDispatcher();
+
   function select(e: MouseEvent | KeyboardEvent) {
     let btn = e.target as HTMLButtonElement;
     value = btn.dataset.val as string | number;
     onSelect(value);
     btn.blur();
+    dispatch("change", value);
   }
 
   const NO_SELECTION = "— Select —";

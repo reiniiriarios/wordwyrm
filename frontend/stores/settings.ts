@@ -13,6 +13,7 @@ function createSettings() {
       newSettings.chartStartYear = 2020;
     }
     set(newSettings);
+    currentTheme.set(newSettings.theme);
   });
 
   return {
@@ -30,3 +31,5 @@ function createSettings() {
   };
 }
 export const settings = createSettings();
+
+export const currentTheme = writable("");

@@ -5,7 +5,7 @@
 
   import Select from "@components/Select.svelte";
   import HoverInfo from "@components/HoverInfo.svelte";
-  import { settings } from "@stores/settings";
+  import { currentTheme, settings } from "@stores/settings";
   import { books } from "@stores/books";
   import { formatDate } from "@scripts/formatDate";
 
@@ -19,6 +19,9 @@
 
   onMount(() => {
     editSettings = structuredClone($settings);
+
+    // when loading, load the actual current theme
+    $currentTheme = editSettings.theme;
 
     window.electronAPI.checkVersion();
     const removeUpdateListener = window.electronAPI.updateAvailable((latestVersion: string) => {
@@ -42,8 +45,14 @@
       removeSettingsListener();
       removeDirListener();
       removeUpdateListener();
+      // when unloading, set the theme to the currently saved theme
+      $currentTheme = $settings.theme;
     };
   });
+
+  function previewTheme() {
+    $currentTheme = editSettings.theme;
+  }
 
   function toggleSearchEngine(engine: string) {
     if (engine === "googleBooks") {
@@ -115,6 +124,7 @@
           nord: "Nord",
           nordLight: "Nord Bright",
         }}
+        on:change={previewTheme}
       />
     </div>
   </div>
