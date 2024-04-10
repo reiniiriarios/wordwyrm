@@ -107,6 +107,8 @@
         options={{
           default: "Default",
           rosepine: "Rosé Pine",
+          rosepineDawn: "Rosé Pine Dawn",
+          nord: "Nord",
         }}
       />
     </div>

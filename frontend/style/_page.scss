@@ -44,3 +44,11 @@ button.tag {
     background-color: var(--c-button-hover);
   }
 }
+
+.unread {
+  font-size: 0.9rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+  background: linear-gradient(0deg, rgba(0 0 0 / 10%), transparent 100%), var(--c-unread);
+  box-shadow: rgb(0, 0, 0, 0.3) 0.05rem 0.05rem 0.5rem 0.2rem;
+}
