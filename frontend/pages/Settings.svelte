@@ -109,6 +109,7 @@
           rosepine: "Rosé Pine",
           rosepineDawn: "Rosé Pine Dawn",
           nord: "Nord",
+          nordLight: "Nord Bright",
         }}
       />
     </div>
