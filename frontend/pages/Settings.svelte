@@ -99,6 +99,20 @@
   </label>
 
   <div class="field">
+    App Theme
+    <div class="selectField">
+      <Select
+        width="14rem"
+        bind:value={editSettings.theme}
+        options={{
+          default: "Default",
+          rosepine: "Rosé Pine",
+        }}
+      />
+    </div>
+  </div>
+
+  <div class="field">
     Date Format <HoverInfo details="Based on device locale settings." />
     <div class="selectField">
       <Select
@@ -114,11 +128,6 @@
     </div>
   </div>
 
-  <label class="field">
-    Chart Default Start Year <HoverInfo details="Sets the default start year for the chart page." />
-    <input type="text" bind:value={editSettings.chartStartYear} />
-  </label>
-
   <label class="field field--fullwidth">
     Tags for Filtering <HoverInfo details="Tags should be comma-separated." />
     <input type="text" bind:value={editSettings.filterTags} maxlength="255" />
@@ -126,6 +135,11 @@
   <label class="field field--fullwidth">
     Common Tags for Editing <HoverInfo details="Tags should be comma-separated." />
     <input type="text" bind:value={editSettings.commonTags} maxlength="1024" />
+  </label>
+
+  <label class="field">
+    Chart Default Start Year <HoverInfo details="Sets the default start year for the chart page." />
+    <input type="text" bind:value={editSettings.chartStartYear} />
   </label>
 
   <div class="field field--fullwidth">
