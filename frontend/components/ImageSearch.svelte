@@ -160,7 +160,7 @@
       img {
         max-width: 100%;
         max-height: 100%;
-        border: 2px solid transparent;
+        border: 3px solid transparent;
       }
     }
 

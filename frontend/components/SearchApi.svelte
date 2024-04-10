@@ -219,7 +219,7 @@
         img {
           max-height: 100%;
           max-width: 9rem;
-          border: 2px solid transparent;
+          border: 3px solid transparent;
         }
 
         &:hover img {
@@ -230,7 +230,7 @@
       &--noimage {
         width: 9rem;
         background-color: var(--c-subtle);
-        border: 2px solid transparent;
+        border: 3px solid transparent;
 
         &:hover {
           border-color: var(--c-image-select);
