@@ -172,6 +172,6 @@
     padding: 1rem;
   }
   .btn.selected {
-    background-color: var(--bg-color-lighter);
+    background-color: var(--c-muted);
   }
 </style>

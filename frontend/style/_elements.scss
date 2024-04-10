@@ -4,9 +4,9 @@
 
 body {
   position: relative;
-  color: var(--fg-color);
+  color: var(--c-text);
   height: 100vh;
-  background: var(--bg-color);
+  background: var(--c-base);
   font-family: sans-serif;
   overflow-y: hidden;
   display: flex;
@@ -30,24 +30,24 @@ h3 {
 }
 
 a {
-  color: var(--accent-color);
+  color: var(--c-link);
   text-decoration: none;
 
   &:hover {
-    color: var(--accent-color-light);
+    color: var(--c-link-hover);
     text-decoration: underline;
   }
 
   &.hideme {
-    color: var(--fg-color);
+    color: var(--c-text);
 
     &:hover {
-      color: var(--accent-color);
+      color: var(--c-link); // [sic] not -hover
     }
   }
 }
 
 *:focus-visible {
   z-index: 1000;
-  outline: 1px solid var(--accent-color);
+  outline: 1px solid var(--c-focus);
 }

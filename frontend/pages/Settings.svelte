@@ -202,7 +202,7 @@
     right: 0;
     padding: 1rem;
     font-size: 0.9rem;
-    color: var(--fg-color-muted);
+    color: var(--c-text-muted);
     display: flex;
     align-items: baseline;
     gap: 0.75rem;
@@ -217,7 +217,7 @@
     }
 
     a.hideme {
-      color: var(--fg-color-muted);
+      color: var(--c-text-muted);
     }
   }
 </style>

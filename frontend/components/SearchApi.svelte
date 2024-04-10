@@ -168,7 +168,7 @@
     width: 100%;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: var(--bg-color-lightest) transparent;
+    scrollbar-color: var(--c-subtle) transparent;
 
     .shadow {
       position: sticky;
@@ -223,31 +223,31 @@
         }
 
         &:hover img {
-          border-color: var(--accent-color);
+          border-color: var(--c-image-select);
         }
       }
 
       &--noimage {
         width: 9rem;
-        background-color: var(--bg-color-lightest);
+        background-color: var(--c-subtle);
         border: 2px solid transparent;
 
         &:hover {
-          border-color: var(--accent-color);
+          border-color: var(--c-image-select);
         }
       }
     }
 
     &__meta {
       font-size: 0.9rem;
-      color: var(--fg-color-muted);
+      color: var(--c-text-muted);
     }
 
     &.selected {
       .book__inner {
         &--image img,
         &--noimage {
-          border-color: var(--accent-color);
+          border-color: var(--c-image-select);
         }
       }
     }

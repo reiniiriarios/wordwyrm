@@ -23,7 +23,7 @@
   });
 </script>
 
-<div class="container">
+<div id="appContainer" data-theme="rosepine">
   <Menu />
   <div class="main">
     <Router {routes} />

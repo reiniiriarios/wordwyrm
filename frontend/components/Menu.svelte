@@ -31,7 +31,7 @@
 <style lang="scss">
   nav {
     width: var(--tab-size);
-    background-color: var(--bg-color-light);
+    background-color: var(--c-overlay);
     height: 100vh;
 
     ul {
@@ -47,16 +47,16 @@
         align-items: center;
         width: var(--tab-size);
         height: var(--tab-size);
-        color: var(--fg-color-dark);
+        color: var(--c-text-dark);
         text-decoration: none;
 
         &:hover {
-          color: var(--accent-color);
+          color: var(--c-menu-hover);
         }
       }
 
       &.active a {
-        color: var(--fg-color);
+        color: var(--c-text);
       }
     }
   }

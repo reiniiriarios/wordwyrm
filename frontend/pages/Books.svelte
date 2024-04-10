@@ -101,21 +101,22 @@
     margin-right: 2rem;
 
     .resizeIcon {
-      color: var(--fg-color-muted);
+      color: var(--c-text-muted);
       opacity: 0.8;
     }
 
     button {
-      background-color: var(--bg-color-light);
-      color: var(--fg-color);
+      background-color: var(--c-button);
+      color: var(--c-text);
       padding: 0.25rem 0.5rem;
       border: 0;
       border-radius: 0.25rem;
       cursor: pointer;
       font-size: 0.75rem;
 
+      &:hover,
       &.selected {
-        background-color: var(--bg-color-lighter);
+        background-color: var(--c-button-hover);
       }
     }
   }
@@ -131,7 +132,7 @@
     width: 100%;
     height: calc(100vh - var(--page-nav-height) - var(--filter-height));
     scrollbar-width: thin;
-    scrollbar-color: var(--bg-color-lightest) transparent;
+    scrollbar-color: var(--c-subtle) transparent;
   }
 
   .book {
@@ -158,7 +159,7 @@
       position: relative;
       cursor: pointer;
       text-decoration: none;
-      color: var(--fg-color);
+      color: var(--c-text);
 
       &--image {
         display: flex;
@@ -176,7 +177,7 @@
       &--noimage {
         width: calc(var(--book-width) - 1rem);
         height: calc(var(--book-height) - 1rem);
-        background-color: var(--bg-color-lightest);
+        background-color: var(--c-subtle);
         text-align: center;
         display: flex;
         align-items: center;

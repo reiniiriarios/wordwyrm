@@ -37,7 +37,7 @@
 
     .details {
       display: none;
-      background-color: var(--bg-color-light);
+      background-color: var(--c-overlay);
       box-shadow: 0.125rem 0.125rem 0.4rem 0 rgba(0, 0, 0, 0.5);
       padding: 1rem 1.25rem 1rem 2.5rem;
       position: absolute;

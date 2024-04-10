@@ -1,7 +1,9 @@
-.container {
+#appContainer {
   height: 100vh;
   width: 100vw;
   display: flex;
+  color: var(--c-text);
+  background: var(--c-base);
 }
 
 .main {
@@ -28,8 +30,8 @@
 }
 
 .tag {
-  background-color: var(--bg-color-light);
-  color: var(--fg-color);
+  background-color: var(--c-button);
+  color: var(--c-text);
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
 }
@@ -37,4 +39,8 @@
 button.tag {
   border: 0;
   cursor: pointer;
+
+  &:hover {
+    background-color: var(--c-button-hover);
+  }
 }

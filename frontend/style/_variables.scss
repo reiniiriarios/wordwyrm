@@ -1,23 +1,4 @@
 :root {
-  --bg-color: #222;
-  --bg-color-hint: #262626;
-  --bg-color-light: #333;
-  --bg-color-lighter: #444;
-  --bg-color-lightest: #555;
-
-  --fg-color: #fff;
-  --fg-color-muted: #ccc;
-  --fg-color-dark: #aaa;
-
-  --accent-color: #ff0088;
-  --accent-color-light: #ff0d8e;
-  --accent-color-transparent: #ff00881a;
-
-  --bg-color-delete: #6f0000;
-  --bg-color-delete-fade: #531c1c;
-  --fg-color-delete: #c22424;
-  --fg-color-delete-fade: #b23434;
-
   --tab-size: 42px;
   --page-nav-height: 3rem;
   --filter-height: 3rem;
@@ -25,4 +6,141 @@
   @media screen and (max-width: 1150px) {
     --filter-height: 6rem;
   }
+
+  --c-base: #222;
+  --c-surface: #262626;
+  --c-overlay: #333;
+  --c-muted: #444;
+  --c-subtle: #555;
+
+  --c-text: #fff;
+  --c-text-muted: #ccc;
+  --c-text-dark: #aaa;
+
+  --c-link: #ff0088;
+  --c-link-hover: #ff0d8e;
+  --c-menu-hover: #ff0d8e;
+  --c-image-select: #ff0088;
+  --c-table-hover: #ff00881a;
+  --c-focus: #ff0088;
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-muted);
+  --c-button-light: var(--c-muted);
+  --c-button-light-hover: var(--c-subtle);
+
+  --c-error: #c22424;
+  --c-error-muted: #b23434;
+  --c-error-bg: #6f0000;
+  --c-error-bg-muted: #531c1c;
+
+  --c-rating: #ffc400;
+
+  --c-overlay-border: var(--c-muted);
+}
+
+// Rosé Pine
+// https://rosepinergba(102, 76, 90, 0.102)/palette
+#appContainer[data-theme="rosepine"] {
+  --c-base: #191724;
+  --c-surface: #1f1d2e;
+  --c-overlay: #26233a;
+  --c-muted: #6e6a86;
+  --c-subtle: #908caa;
+  --c-text: #e0def4;
+  --c-love: #eb6f92;
+  --c-love-d: #b4637a;
+  --c-gold: #f6c177;
+  --c-rose: #ebbcba;
+  --c-pine: #31748f;
+  --c-foam: #9ccfd8;
+  --c-iris: #c4a7e7;
+  --c-highlight-low: #21202e;
+  --c-highlight-med: #403d52;
+  --c-highlight-high: #524f67;
+
+  --c-text-muted: #cecacd;
+  --c-text-dark: #908caa;
+
+  --c-link: var(--c-iris);
+  --c-link-hover: var(--c-iris);
+  --c-menu-hover: var(--c-rose);
+  --c-image-select: var(--c-rose);
+  --c-table-hover: #ebbcba1a;
+  --c-focus: var(--c-foam);
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-highlight-med);
+  --c-button-light: var(--c-highlight-med);
+  --c-button-light-hover: var(--c-highlight-high);
+
+  --c-error: var(--c-love);
+  --c-error-muted: var(--c-love-d);
+  --c-error-bg: #7e3549;
+  --c-error-bg-muted: #66303f;
+
+  --c-rating: var(--c-gold);
+
+  --c-overlay-border: var(--c-highlight-med);
+}
+
+// Rosé Pine Moon
+// https://rosepinetheme.com/palette
+#appContainer[data-theme="rosepine-moon"] {
+  --c-base: #232136;
+  --c-surface: #2a273f;
+  --c-overlay: #393552;
+  --c-muted: #6e6a86;
+  --c-subtle: #908caa;
+  --c-text: #e0def4;
+  --c-love: #eb6f92;
+  --c-gold: #f6c177;
+  --c-rose: #ea9a97;
+  --c-pine: #3e8fb0;
+  --c-foam: #9ccfd8;
+  --c-iris: #c4a7e7;
+  --c-highlight-low: #2a283e;
+  --c-highlight-med: #44415a;
+  --c-highlight-high: #56526e;
+}
+
+// Rosé Pine Dawn
+// https://rosepinetheme.com/palette
+#appContainer[data-theme="rosepine-dawn"] {
+  --c-base: #faf4ed;
+  --c-surface: #fffaf3;
+  --c-overlay: #f2e9e1;
+  --c-muted: #9893a5;
+  --c-subtle: #797593;
+  --c-text: #575279;
+  --c-love: #b4637a;
+  --c-gold: #ea9d34;
+  --c-rose: #d7827e;
+  --c-pine: #286983;
+  --c-foam: #56949f;
+  --c-iris: #907aa9;
+  --c-highlight-low: #f4ede8;
+  --c-highlight-med: #dfdad9;
+  --c-highlight-high: #cecacd;
+}
+
+// Nord
+// https://www.nordtheme.com/docs/colors-and-palettes
+#appContainer[data-theme="nord"] {
+  --c-nord0: #2e3440;
+  --c-nord1: #3b4252;
+  --c-nord2: #434c5e;
+  --c-nord3: #4c566a;
+  --c-nord4: #d8dee9;
+  --c-nord5: #e5e9f0;
+  --c-nord6: #eceff4;
+  --c-nord7: #8fbcbb;
+  --c-nord8: #88c0d0;
+  --c-nord9: #81a1c1;
+  --c-nord10: #5e81ac;
+  --c-nord11: #bf616a;
+  --c-nord12: #d08770;
+  --c-nord13: #ebcb8b;
+  --c-nord14: #a3be8c;
+  --c-nord15: #b48ead;
 }

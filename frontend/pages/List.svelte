@@ -98,7 +98,7 @@
     width: 100%;
     height: calc(100vh - var(--page-nav-height) - 2rem);
     scrollbar-width: thin;
-    scrollbar-color: var(--bg-color-lightest) transparent;
+    scrollbar-color: var(--c-subtle) transparent;
     overflow: auto;
   }
 
@@ -115,20 +115,20 @@
 
   th {
     text-align: left;
-    background-color: var(--bg-color);
+    background-color: var(--c-base);
     position: sticky;
     top: 0;
     cursor: pointer;
-    color: var(--fg-color-muted);
+    color: var(--c-text-muted);
     vertical-align: bottom;
     white-space: nowrap;
 
     &:hover {
-      color: var(--fg-color);
+      color: var(--c-text);
     }
 
     &.selected {
-      color: var(--fg-color);
+      color: var(--c-text);
     }
   }
 
@@ -136,14 +136,14 @@
     cursor: pointer;
 
     &:nth-child(odd) {
-      background-color: var(--bg-color-hint);
+      background-color: var(--c-surface);
     }
 
     &:hover td {
-      background-color: var(--accent-color-transparent);
+      background-color: var(--c-table-hover);
 
       .tag {
-        background-color: var(--accent-color-transparent);
+        background-color: var(--c-table-hover);
       }
     }
   }
