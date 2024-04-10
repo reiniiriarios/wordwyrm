@@ -31,13 +31,14 @@
 
 <div class="rating" class:editable>
   {#each Array(5) as _, i}
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
       class="star"
-      class:full={rating > i}
+      class:full={!hovering && rating > i}
       class:hover={editable && hovering && showRating > i}
       data-i={i + 1}
-      role="button"
-      tabindex="0"
+      role={editable ? "button" : ""}
+      tabindex={editable ? 0 : -1}
       on:mouseenter={hoverStar}
       on:mouseleave={unHoverStar}
       on:focus={hoverStar}
@@ -47,10 +48,11 @@
     ></div>
   {/each}
   {#if editable}
+    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
       class="no"
-      role="button"
-      tabindex="0"
+      role={editable ? "button" : ""}
+      tabindex={editable ? 0 : -1}
       data-i="0"
       on:mouseenter={hoverStar}
       on:mouseleave={unHoverStar}
@@ -96,22 +98,25 @@
     }
 
     .no {
-      color: gray;
+      color: var(--c-muted);
       height: 2rem;
       width: 2rem;
       padding: 0.25rem;
       cursor: pointer;
-      visibility: hidden;
+      opacity: 0;
 
       &:hover,
       &:focus-visible {
         color: var(--c-focus);
+        opacity: 1;
+        outline: 0;
       }
     }
 
-    &:hover {
+    &:hover,
+    &:focus-within {
       .no {
-        visibility: visible;
+        opacity: 1;
       }
     }
   }
