@@ -8,9 +8,11 @@
   export let width: string | number = "7rem";
   export let small: boolean = false;
 
-  function select(val: string | number) {
-    value = val;
-    onSelect(val);
+  function select(e: MouseEvent | KeyboardEvent) {
+    let btn = e.target as HTMLButtonElement;
+    value = btn.dataset.val as string | number;
+    onSelect(value);
+    btn.blur();
   }
 
   const NO_SELECTION = "— Select —";
@@ -24,7 +26,7 @@
   </button>
   <div class="select__dropdown" style:width>
     {#each Object.entries(options) as [val, name]}
-      <button on:click={() => select(val)} class="select__opt" class:selected={value === val}>{name}</button>
+      <button data-val={val} on:click={select} class="select__opt" class:selected={value === val}>{name}</button>
     {/each}
   </div>
 </div>
@@ -81,7 +83,7 @@
     }
 
     &:hover,
-    &:focus,
+    &:focus-visible,
     &:focus-within {
       .select__arrow {
         &--down {
