@@ -13,6 +13,8 @@
   --c-muted: #444;
   --c-subtle: #555;
 
+  --c-menu: var(--c-overlay);
+
   --c-text: #fff;
   --c-text-muted: #ccc;
   --c-text-dark: #aaa;
@@ -65,6 +67,8 @@
 
   --c-text-muted: #cecacd;
   --c-text-dark: #908caa;
+
+  --c-menu: var(--c-overlay);
 
   --c-link: var(--c-iris);
   --c-link-hover: var(--c-iris);
@@ -135,6 +139,8 @@
   --c-text-muted: #666185;
   --c-text-dark: #645f81;
 
+  --c-menu: var(--c-overlay);
+
   --c-link: var(--c-iris);
   --c-link-hover: var(--c-iris);
   --c-menu-hover: var(--c-rose);
@@ -190,6 +196,8 @@
   --c-overlay: var(--c-nord2);
   --c-muted: var(--c-nord3);
   --c-subtle: #586277;
+
+  --c-menu: var(--c-overlay);
 
   --c-text: var(--c-nord6);
   --c-text-muted: var(--c-nord5);
@@ -251,6 +259,8 @@
   --c-muted: #c7cedb;
   --c-subtle: #adb6c7;
 
+  --c-menu: var(--c-overlay);
+
   --c-text: var(--c-nord0);
   --c-text-muted: var(--c-nord1);
   --c-text-dark: var(--c-nord2);
@@ -294,6 +304,8 @@
   --c-muted: #3e4a50;
   --c-subtle: #4a565c;
 
+  --c-menu: var(--c-overlay);
+
   --c-text: #fff;
   --c-text-muted: #d8e2e7;
   --c-text-dark: #c2d1d8;
@@ -302,7 +314,7 @@
   --c-link-hover: var(--c-orange);
   --c-menu-hover: var(--c-yellow);
   --c-image-select: var(--c-orange);
-  --c-table-hover: var(--c-green);
+  --c-table-hover: #99b8981a;
   --c-focus: var(--c-orange);
 
   --c-button: var(--c-overlay);
@@ -322,4 +334,199 @@
 
   --c-chart-bar: #ff008888;
   --c-chart-bar-border: #ff0088;
+}
+
+#appContainer[data-theme="nona"] {
+  --c-sky0: #0b0a10;
+  --c-sky1: #14141a;
+  --c-nebula0: #151b26;
+  --c-nebula1: #172236;
+  --c-nebula2: #212749;
+  --c-nebula3: #1b2e57;
+  --c-pink0: #7b5061;
+  --c-pink1: #ca7282;
+  --c-pink2: #f2748c;
+  --c-pink3: #f09f8c;
+  --c-pink4: #e2b099;
+  --c-gray0: #343f53;
+  --c-gray1: #415161;
+  --c-gray2: #454753;
+  --c-bone0: #faf1f2;
+  --c-bone1: #e6dbdf;
+  --c-bone2: #c3b9b0;
+  --c-bone3: #afa59f;
+  --c-lettuce: #578f32;
+  --c-tomato: #ad2313;
+
+  --c-base: var(--c-sky1);
+  --c-surface: var(--c-nebula0);
+  --c-overlay: var(--c-nebula1);
+  --c-muted: var(--c-nebula2);
+  --c-subtle: var(--c-nebula3);
+
+  --c-menu: var(--c-surface);
+
+  --c-text: var(--c-bone0);
+  --c-text-muted: var(--c-bone1);
+  --c-text-dark: var(--c-bone2);
+
+  --c-link: var(--c-pink1);
+  --c-link-hover: var(--c-pink2);
+  --c-menu-hover: var(--c-pink2);
+  --c-image-select: var(--c-pink2);
+  --c-table-hover: #f08cb51a;
+  --c-focus: var(--c-pink2);
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-muted);
+  --c-button-light: var(--c-muted);
+  --c-button-light-hover: var(--c-subtle);
+
+  --c-error: var(--c-tomato);
+  --c-error-muted: #96291d;
+  --c-error-bg: #631a12;
+  --c-error-bg-muted: #411b1b;
+
+  --c-rating: var(--c-pink3);
+  --c-unread: var(--c-lettuce);
+
+  --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: #f2748bc4;
+  --c-chart-bar-border: var(--c-pink2);
+}
+
+#appContainer[data-theme="harrow"] {
+  --c-cloak0: #0e0e0e;
+  --c-cloak1: #1a1a1a;
+  --c-cloak2: #282828;
+  --c-cloaki0: #0e0f10;
+  --c-cloaki1: #1a1b1d;
+  --c-cloaki2: #272829;
+  --c-mist0: #323337;
+  --c-mist1: #3f4346;
+  --c-mist2: #474a4f;
+  --c-mist3: #5e6369;
+  --c-armor0: #fcfafb;
+  --c-armor1: #eeede9;
+  --c-armor2: #c5c6c0;
+  --c-armor3: #bcbdb8;
+  --c-ice0: #212c40;
+  --c-ice1: #2a3747;
+  --c-ice2: #3e4f5e;
+  --c-ice3: #495661;
+  --c-ice4: #6d7c83;
+  --c-blue0: #0a357a;
+  --c-blue1: #3074b1;
+  --c-blue2: #58c9f5;
+  --c-blue3: #8ddefb;
+  --c-blue4: #c0f5fc;
+  --c-bone0: #f3eeea;
+  --c-bone1: #e2d9d2;
+  --c-bone2: #c6bcb3;
+  --c-bone3: #a59a98;
+
+  --c-base: var(--c-cloaki1);
+  --c-surface: var(--c-cloaki2);
+  --c-overlay: var(--c-ice1);
+  --c-muted: var(--c-ice2);
+  --c-subtle: var(--c-ice3);
+
+  --c-menu: var(--c-overlay);
+
+  --c-text: var(--c-armor0);
+  --c-text-muted: var(--c-armor1);
+  --c-text-dark: var(--c-armor2);
+
+  --c-link: var(--c-blue2);
+  --c-link-hover: var(--c-blue3);
+  --c-menu-hover: var(--c-blue2);
+  --c-image-select: var(--c-blue2);
+  --c-table-hover: #8db9fb1a;
+  --c-focus: var(--c-blue2);
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-muted);
+  --c-button-light: var(--c-muted);
+  --c-button-light-hover: var(--c-subtle);
+
+  --c-error: var(--c-bone2);
+  --c-error-muted: var(--c-bone3);
+  --c-error-bg: var(--c-mist3);
+  --c-error-bg-muted: var(--c-mist2);
+
+  --c-rating: var(--c-blue1);
+  --c-unread: var(--c-blue1);
+
+  --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: #58c9f5c4;
+  --c-chart-bar-border: var(--c-blue3);
+}
+
+#appContainer[data-theme="gideon"] {
+  --c-dust0: #0e0a0b;
+  --c-dust1: #201718;
+  --c-dust2: #312725;
+  --c-dust3: #372d2e;
+  --c-dust4: #3d3230;
+  --c-dust5: #4f4544;
+  --c-dust6: #544848;
+  --c-bone0: #fef9f6;
+  --c-bone1: #f8f5f0;
+  --c-bone2: #e4dad0;
+  --c-bone3: #d2cdc7;
+  --c-bone4: #b5b0aa;
+  --c-cloak0: #090909;
+  --c-cloak1: #121212;
+  --c-cloak2: #1e1d1b;
+  --c-cloak3: #222220;
+  --c-cloak4: #30302e;
+  --c-ginger0: #2c150f;
+  --c-ginger1: #491f0f;
+  --c-ginger2: #652911;
+  --c-ginger3: #762e18;
+  --c-ginger4: #974b34;
+  --c-ginger5: #b36855;
+  --c-ginger6: #b64c18;
+  --c-blood0: #2d1010;
+  --c-blood1: #3d1515;
+  --c-blood2: #531818;
+
+  --c-base: var(--c-dust0);
+  --c-surface: var(--c-dust1);
+  --c-overlay: var(--c-dust2);
+  --c-muted: var(--c-dust3);
+  --c-subtle: var(--c-dust4);
+
+  --c-menu: var(--c-dust1);
+
+  --c-text: var(--c-bone0);
+  --c-text-muted: var(--c-bone2);
+  --c-text-dark: var(--c-bone4);
+
+  --c-link: var(--c-ginger4);
+  --c-link-hover: var(--c-ginger6);
+  --c-menu-hover: var(--c-ginger6);
+  --c-image-select: var(--c-ginger6);
+  --c-table-hover: #b368551a;
+  --c-focus: var(--c-ginger6);
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-muted);
+  --c-button-light: var(--c-muted);
+  --c-button-light-hover: var(--c-subtle);
+
+  --c-error: #ad2121;
+  --c-error-muted: #922b2b;
+  --c-error-bg: var(--c-blood2);
+  --c-error-bg-muted: var(--c-blood1);
+
+  --c-rating: var(--c-ginger6);
+  --c-unread: var(--c-ginger5);
+
+  --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: #b64c18c4;
+  --c-chart-bar-border: var(--c-ginger6);
 }

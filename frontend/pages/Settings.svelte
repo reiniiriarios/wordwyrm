@@ -106,6 +106,9 @@
         bind:value={editSettings.theme}
         options={{
           default: "Default",
+          harrow: "Harrow",
+          gideon: "Gideon",
+          nona: "Nona",
           slate: "Slate",
           rosepine: "Rosé Pine",
           rosepineDawn: "Rosé Pine Dawn",

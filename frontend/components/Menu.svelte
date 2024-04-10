@@ -31,7 +31,7 @@
 <style lang="scss">
   nav {
     width: var(--tab-size);
-    background-color: var(--c-overlay);
+    background-color: var(--c-menu);
     height: 100vh;
 
     ul {
