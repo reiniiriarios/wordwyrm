@@ -125,6 +125,7 @@
       display: flex;
       justify-content: right;
       align-items: center;
+      gap: 0.5rem;
     }
 
     &__button {
