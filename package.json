@@ -32,7 +32,7 @@
     "start": "sirv dist",
     "start:electron": "electron ./dist/electron/electron/main.js",
     "clean": "ts-node scripts/rmdist.ts",
-    "build:icons": "npx png2icons assets/icons/512x512.png assets/icons/icon -allwe",
+    "build:icons": "npx png2icons assets/icons/512x512.png assets/icons/icon -allwe -hm",
     "build:mac": "electron-builder --dir --mac dmg",
     "build:win": "electron-builder --dir --win portable nsis",
     "build:deb": "electron-builder --dir --linux deb",
