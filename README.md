@@ -1,11 +1,10 @@
 # <img src="assets/icons/32x32.png" alt="" /> Book Tracker
 
-A cross-platform desktop app for tracking what books you've read and when.
+A cross-platform desktop app for tracking what books you've read and when. The data is stored as
+YAML files and JPGs in author directories in a location of your choosing, so you're always in
+control of your data.
 
 ![](docs/screenshot-01-linux.png)
-
-This is a personal project to track books I've read. Being a personal project, the error handling
-is minimal and the UI may not always be obvious.
 
 ## Data :open_file_folder:
 
@@ -43,9 +42,12 @@ ids:
 
 ## Google Cloud :cloud:
 
+The app functions just fine without Google Cloud keys, but these keys enable additional
+functionality, including searching Google Books for data and Google Image Search for book covers.
+
 ### Books API Key
 
-You will need a Google Cloud account to enable the Search functionality for Google Books.
+In order to enable searching Google Books, you will need a Google Cloud account.
 [Enable the Books API](https://console.cloud.google.com/apis/api/books.googleapis.com) and
 then [create an API key](https://console.cloud.google.com/apis/credentials) that has permissions to
 use the **Books API**.
@@ -54,8 +56,8 @@ more details.
 
 ### Custom Search Engine ID
 
-In order to enable image search for book covers, you will need a
+In order to enable image search for book covers, you will also need a
 [Programmable Search Engine](https://programmablesearchengine.google.com/) id. Enable
-"Image search" and "Search the entire web". The other settings can be left as default.
-Your [API Key](https://console.cloud.google.com/apis/credentials) will also need the
+"Image search" and "Search the entire web" in its settings. Your
+[API Key](https://console.cloud.google.com/apis/credentials) will also need the
 **Custom Search API** enabled.
