@@ -182,7 +182,7 @@ app.on("ready", () => {
         buttonLabel: "Choose",
       })
       .then((result) => {
-        if (result.filePaths[0].length) {
+        if (result.filePaths[0]?.length) {
           event.reply("dirSelected", result.filePaths[0]);
         }
       });

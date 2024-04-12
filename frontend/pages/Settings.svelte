@@ -32,7 +32,7 @@
 
     const removeSettingsListener = window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
       editSettings = loadedSettings;
-      if (!loadedSettings.searchEngines.length) {
+      if (!loadedSettings.searchEngines?.length) {
         editSettings.searchEngines = ["openLibrary"];
       }
       seOpenLibrary = loadedSettings.searchEngines.includes("openLibrary");
@@ -69,7 +69,7 @@
     if (editSettings.searchEngines.includes(engine)) {
       editSettings.searchEngines = editSettings.searchEngines.filter((e) => e !== engine);
       // Ensure at least one is selected.
-      if (!editSettings.searchEngines.length) {
+      if (!editSettings.searchEngines?.length) {
         if (engine === "googleBooks") {
           editSettings.searchEngines.push("openLibrary");
           seOpenLibrary = true;
