@@ -24,10 +24,10 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "dev": "cross-env BROWSER=true DEBUG=true rollup -c -w",
-    "dev:electron": "tsc -p ./electron/tsconfig.json && cross-env DEBUG=true electron ./dist/electron/electron/main.js",
-    "build:client": "cross-env PRODUCTION=true rollup -c",
-    "build:electron": "tsc -p ./electron/tsconfig.json",
+    "dev": "cross-env WYRM_ENV=dev rollup -c -w",
+    "dev:electron": "cross-env WYRM_ENV=dev tsc -p ./electron/tsconfig.json && cross-env WYRM_ENV=dev electron ./dist/electron/electron/main.js",
+    "build:client": "cross-env WYRM_ENV=prod rollup -c",
+    "build:electron": "cross-env WYRM_ENV=prod tsc -p ./electron/tsconfig.json",
     "build:prod": "ts-node scripts/rmdist.ts && npm run build:client && npm run build:electron",
     "start": "sirv dist",
     "start:electron": "electron ./dist/electron/electron/main.js",

@@ -1,5 +1,7 @@
 import fetch from "electron-fetch";
 
+const DEV = process.env.WYRM_ENV === "dev";
+
 const user = "reiniiriarios";
 const repo = "wordwyrm";
 
@@ -13,7 +15,11 @@ export async function checkForUpdate(currentVersion: string): Promise<string | n
       }
       const latestVersion = tag.slice(1);
       if (latestVersion !== currentVersion) {
-        console.log(`Update available: ${latestVersion}, running ${currentVersion}`);
+        if (DEV) {
+          console.log(`Version mismatch: latest is ${latestVersion}, running ${currentVersion}`);
+        } else {
+          console.log(`Update available: ${latestVersion}, running ${currentVersion}`);
+        }
         return latestVersion;
       }
       console.log(`Running latest version: ${currentVersion}`);

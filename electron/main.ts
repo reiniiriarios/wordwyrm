@@ -11,7 +11,7 @@ import { googleImageSearch } from "./api/googleImageSearch";
 import { searchOpenLibrary, searchOpenLibraryWorkByISBN } from "./api/openLibrary";
 
 const PORT = 5000;
-const DEBUG = process.env.DEBUG === "true";
+const DEV_MODE = process.env.WYRM_ENV === "dev";
 const APP_VERSION = packageJson.version;
 
 let settings: UserSettings;
@@ -33,7 +33,7 @@ function createWindow(): BrowserWindow {
   mainWindow.maximize();
   mainWindow.removeMenu();
 
-  if (DEBUG) {
+  if (DEV_MODE) {
     mainWindow.loadURL(`http://localhost:${PORT}`);
     mainWindow.webContents.openDevTools();
   } else {
