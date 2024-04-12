@@ -47,6 +47,12 @@ export const api = {
 
   deleteBook: (book: Book) => ipcRenderer.send("deleteBook", book),
   bookDeleted: (callback: Function) => ipcCallback("bookDeleted", callback),
+
+  getPlatform: () => ipcRenderer.send("getPlatform"),
+  platform: (callback: Function) => ipcCallback("platform", callback),
+
+  openSettingsDir: () => ipcRenderer.send("openSettingsDir"),
+  openBooksDir: () => ipcRenderer.send("openBooksDir"),
 };
 
 contextBridge.exposeInMainWorld("electronAPI", api);

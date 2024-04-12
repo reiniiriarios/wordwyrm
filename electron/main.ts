@@ -3,7 +3,7 @@ import { app, BrowserWindow, dialog, ipcMain, nativeTheme, net, protocol, shell 
 import * as path from "path";
 import packageJson from "../package.json";
 import { UserSettings } from "../types/global";
-import { initUserDirs, loadSettings, saveSettings } from "./scripts/userData";
+import { DATA_PATH, initUserDirs, loadSettings, saveSettings } from "./scripts/userData";
 import { addBookImage, addBookImageBase64, deleteBook, readAllBooks, readBook, saveBook } from "./scripts/bookData";
 import { checkForUpdate } from "./scripts/updates";
 import { getGoogleBook, searchGoogleBooks } from "./api/googleBooks";
@@ -218,6 +218,20 @@ app.on("ready", () => {
 
   ipcMain.on("deleteBook", (event, book: Book) => {
     deleteBook(settings.booksDir, book).then(() => event.reply("bookDeleted"));
+  });
+
+  ipcMain.on("openBooksDir", (_event) => {
+    if (settings.booksDir) {
+      shell.openPath(settings.booksDir);
+    }
+  });
+
+  ipcMain.on("openSettingsDir", (_event) => {
+    shell.openPath(DATA_PATH);
+  });
+
+  ipcMain.on("getPlatform", (event) => {
+    event.reply("platform", process.platform);
   });
 
   // ------- End Bridge -------

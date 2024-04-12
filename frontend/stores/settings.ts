@@ -33,3 +33,22 @@ function createSettings() {
 export const settings = createSettings();
 
 export const currentTheme = writable("");
+
+function createPlatform() {
+  const { subscribe, set } = writable("");
+
+  const removeListener = window.electronAPI.platform((p: string) => {
+    set(p);
+  });
+
+  return {
+    subscribe,
+    destroy: () => {
+      removeListener();
+    },
+    fetch: () => {
+      window.electronAPI.getPlatform();
+    },
+  };
+}
+export const platform = createPlatform();

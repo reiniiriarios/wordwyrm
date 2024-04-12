@@ -6,7 +6,7 @@ import { UserSettings } from "../../types/global";
 const USER_DATA_PATH =
   process.env.APPDATA ||
   (process.platform == "darwin" ? process.env.HOME + "/Library/Preferences" : process.env.HOME + "/.local/share");
-const DATA_PATH = path.join(USER_DATA_PATH, "me.reinii.wordwyrm");
+export const DATA_PATH = path.join(USER_DATA_PATH, "me.reinii.wordwyrm");
 
 export function initUserDirs() {
   if (!fs.existsSync(DATA_PATH)) {

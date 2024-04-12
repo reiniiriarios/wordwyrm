@@ -5,7 +5,7 @@
 
   import Select from "@components/Select.svelte";
   import HoverInfo from "@components/HoverInfo.svelte";
-  import { currentTheme, settings } from "@stores/settings";
+  import { currentTheme, platform, settings } from "@stores/settings";
   import { books } from "@stores/books";
   import { formatDate } from "@scripts/formatDate";
 
@@ -16,6 +16,8 @@
   let updateAvailable: string = "";
   $: seOpenLibrary = $settings.searchEngines?.includes("openLibrary");
   $: seGoogleBooks = $settings.searchEngines?.includes("googleBooks");
+  let openDirWord: string = "File Manager";
+  $: openDirWord = $platform === "darwin" ? "Finder" : $platform === "win32" ? "File Explorer" : "File Manager";
 
   onMount(() => {
     editSettings = structuredClone($settings);
@@ -38,6 +40,7 @@
     });
 
     const removeDirListener = window.electronAPI.dirSelected((path: string) => {
+      console.log("new dir", path);
       editSettings.booksDir = path;
     });
 
@@ -81,8 +84,13 @@
   }
 
   function selectDataDir(e: MouseEvent | KeyboardEvent) {
+    console.log("looking");
     e.preventDefault();
     window.electronAPI.selectDataDir();
+  }
+
+  function openBooksDir() {
+    window.electronAPI.openBooksDir();
   }
 
   function save(e: MouseEvent | KeyboardEvent) {
@@ -100,10 +108,21 @@
 </div>
 <fieldset class="settings">
   <label class="field field--fullwidth">
-    Book Data Directory <HoverInfo details="Select a directory in a cloud drive to share your data between devices." />
-    <div class="fileSelect">
-      <input type="text" readonly on:click={selectDataDir} bind:value={editSettings.booksDir} />
-      <button class="btn btn--light" on:click={selectDataDir}>Select</button>
+    <div class="dataDir">
+      <div class="dataDir__input">
+        Book Data Directory <HoverInfo
+          details="Select a directory in a cloud drive to share your data between devices."
+        />
+        <div class="fileSelect">
+          <input type="text" readonly on:click={selectDataDir} bind:value={editSettings.booksDir} />
+          <button class="btn btn--light" on:click={selectDataDir}>Select</button>
+        </div>
+      </div>
+      <div class="dataDir__open">
+        {#if $settings.booksDir}
+          <button class="btn" on:click={openBooksDir}>Open in {openDirWord}</button>
+        {/if}
+      </div>
     </div>
   </label>
 
@@ -217,6 +236,22 @@
 
   .selectField {
     margin-top: 0.2rem;
+  }
+
+  .dataDir {
+    display: flex;
+    gap: 1rem;
+    align-items: end;
+
+    &__input {
+      width: 100%;
+    }
+
+    &__open {
+      margin-left: auto;
+      white-space: nowrap;
+      flex-basis: min-content;
+    }
   }
 
   .actions {

@@ -4,12 +4,13 @@
   import Menu from "@components/Menu.svelte";
   import UpdateAvailable from "@components/UpdateAvailable.svelte";
   import { onMount } from "svelte";
-  import { currentTheme, settings } from "@stores/settings";
+  import { currentTheme, platform, settings } from "@stores/settings";
 
   let updateAvailable: string = "";
 
   onMount(() => {
     settings.fetch();
+    platform.fetch();
 
     window.electronAPI.checkVersion();
     const removeUpdateListener = window.electronAPI.updateAvailable((latestVersion: string) => {
