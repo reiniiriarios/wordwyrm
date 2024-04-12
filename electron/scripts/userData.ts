@@ -41,13 +41,19 @@ export function loadSettings(): UserSettings {
     return {} as UserSettings;
   }
   let settings: UserSettings = readYaml(sf);
+
+  // Defaults
   if (!settings.searchEngines) {
-    settings.searchEngines = [];
+    settings.searchEngines = ["openLibrary"];
   }
   // Verify we have the API Key to search with the Google Books engine.
   else if (!settings.googleApiKey?.length && settings.searchEngines.includes("googleBooks")) {
     settings.searchEngines.filter((e) => e !== "googleBooks");
   }
+  if (!settings.theme) {
+    settings.theme = "default";
+  }
+
   return settings;
 }
 
