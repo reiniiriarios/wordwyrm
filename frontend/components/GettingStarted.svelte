@@ -43,7 +43,7 @@
     <h3>More Info</h3>
     <p>
       You can find more information on the <a
-        href="https://github.com/reiniiriarios/book-tracker#readme"
+        href="https://github.com/reiniiriarios/wordwyrm#readme"
         target="_blank">GitHub Repo</a
       > for this app.
     </p>

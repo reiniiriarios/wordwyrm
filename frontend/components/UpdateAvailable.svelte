@@ -12,7 +12,7 @@
 
 {#if show}
   <div class="update">
-    Update Available: <a href="https://github.com/reiniiriarios/book-tracker/releases/latest" target="_blank">
+    Update Available: <a href="https://github.com/reiniiriarios/wordwyrm/releases/latest" target="_blank">
       Download
       {#if latestVersion}
         v{latestVersion}

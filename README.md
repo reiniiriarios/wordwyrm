@@ -1,4 +1,4 @@
-# <img src="assets/icons/32x32.png" alt="" /> Book Tracker
+# <img src="assets/icons/32x32.png" alt="" /> Wordwyrm
 
 A cross-platform desktop app for tracking what books you've read and when. The data is stored as
 YAML files and JPGs in author directories in a location of your choosing, so you're always in

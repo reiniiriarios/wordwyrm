@@ -199,11 +199,11 @@
     <div>Version: {$settings.appVersion}</div>
   {/if}
   <div>
-    <a class="hideme" href="https://github.com/reiniiriarios/book-tracker" target="_blank">GitHub <ArrowSquareOut /></a>
+    <a class="hideme" href="https://github.com/reiniiriarios/wordwyrm" target="_blank">GitHub <ArrowSquareOut /></a>
   </div>
   {#if updateAvailable}
     <div>
-      Update Available: <a href="https://github.com/reiniiriarios/book-tracker/releases/latest" target="_blank">
+      Update Available: <a href="https://github.com/reiniiriarios/wordwyrm/releases/latest" target="_blank">
         Download v{updateAvailable}
       </a>
     </div>

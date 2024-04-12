@@ -1,6 +1,6 @@
 {
-  "name": "book-tracker",
-  "displayName": "Book Tracker",
+  "name": "wordwyrm",
+  "displayName": "Wordwyrm",
   "description": "A cross-platform desktop app for tracking what books you've read and when.",
   "version": "1.21.0",
   "main": "dist/electron/electron/main.js",
@@ -12,13 +12,13 @@
     "name": "Emma Litwa-Vulcu",
     "email": "80431903+reiniiriarios@users.noreply.github.com"
   },
-  "homepage": "https://github.com/reiniiriarios/book-tracker#readme",
+  "homepage": "https://github.com/reiniiriarios/wordwyrm#readme",
   "bugs": {
-    "url": "https://github.com/reiniiriarios/book-tracker/issues"
+    "url": "https://github.com/reiniiriarios/wordwyrm/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reiniiriarios/book-tracker.git"
+    "url": "git+https://github.com/reiniiriarios/wordwyrm.git"
   },
   "engines": {
     "node": ">=18.0.0"
@@ -96,9 +96,9 @@
     "typescript-transform-paths": "^3.4.7"
   },
   "build": {
-    "productName": "Book Tracker",
-    "appId": "com.electron.book-tracker",
-    "artifactName": "BookTracker-v${version}-${arch}.${ext}",
+    "productName": "Wordwyrm",
+    "appId": "com.electron.wordwyrm",
+    "artifactName": "Wordwyrm-v${version}-${arch}.${ext}",
     "icon": "./icons/512x512.png",
     "directories": {
       "output": "build",
@@ -120,7 +120,7 @@
       "category": "public.app-category.lifestyle"
     },
     "nsis": {
-      "artifactName": "BookTracker-v${version}-${arch}-installer.${ext}",
+      "artifactName": "Wordwyrm-v${version}-${arch}-installer.${ext}",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true

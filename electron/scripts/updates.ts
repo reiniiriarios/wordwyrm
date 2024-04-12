@@ -1,7 +1,7 @@
 import fetch from "electron-fetch";
 
 const user = "reiniiriarios";
-const repo = "book-tracker";
+const repo = "wordwyrm";
 
 export async function checkForUpdate(currentVersion: string): Promise<string | null> {
   return await fetch(`https://api.github.com/repos/${user}/${repo}/releases?per_page=1`)

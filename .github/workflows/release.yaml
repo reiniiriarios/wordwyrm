@@ -31,14 +31,14 @@ jobs:
         if: matrix.platform == 'macos-latest'
         run: |
           npm run build:mac
-          mv $PWD/build/BookTracker-*.dmg ./
+          mv $PWD/build/Wordwyrm-*.dmg ./
 
       - name: Upload macOS files
         if: matrix.platform == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
           name: release-macos
-          path: BookTracker-*.dmg
+          path: Wordwyrm-*.dmg
           retention-days: 2
 
       # windows
@@ -46,15 +46,15 @@ jobs:
         if: matrix.platform == 'windows-latest'
         run: |
           npm run build:win
-          Move-Item -Path "$PWD\build\BookTracker-${{ github.ref_name }}-x64.exe" -Destination "$PWD\BookTracker-${{ github.ref_name }}-x64.exe"
-          Move-Item -Path "$PWD\build\BookTracker-${{ github.ref_name }}-x64-installer.exe" -Destination "$PWD\BookTracker-${{ github.ref_name }}-x64-installer.exe"
+          Move-Item -Path "$PWD\build\Wordwyrm-${{ github.ref_name }}-x64.exe" -Destination "$PWD\Wordwyrm-${{ github.ref_name }}-x64.exe"
+          Move-Item -Path "$PWD\build\Wordwyrm-${{ github.ref_name }}-x64-installer.exe" -Destination "$PWD\Wordwyrm-${{ github.ref_name }}-x64-installer.exe"
 
       - name: Upload Windows files
         if: matrix.platform == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: BookTracker-*.exe
+          path: Wordwyrm-*.exe
           retention-days: 2
 
       # ubuntu
@@ -62,9 +62,9 @@ jobs:
         if: matrix.platform == 'ubuntu-latest'
         run: |
           npm run build:lnx
-          mv $PWD/build/BookTracker-*.AppImage ./
-          mv $PWD/build/BookTracker-*.rpm ./
-          mv $PWD/build/BookTracker-*.deb ./
+          mv $PWD/build/Wordwyrm-*.AppImage ./
+          mv $PWD/build/Wordwyrm-*.rpm ./
+          mv $PWD/build/Wordwyrm-*.deb ./
 
       - name: Upload Linux files
         if: matrix.platform == 'ubuntu-latest'
@@ -72,9 +72,9 @@ jobs:
         with:
           name: release-linux
           path: |
-            BookTracker-*.AppImage
-            BookTracker-*.rpm
-            BookTracker-*.deb
+            Wordwyrm-*.AppImage
+            Wordwyrm-*.rpm
+            Wordwyrm-*.deb
           retention-days: 2
 
   release:
@@ -100,9 +100,9 @@ jobs:
           draft: true
           prerelease: false
           files: |
-            ${{steps.artifact.outputs.download-path}}/release-macos/BookTracker-${{ github.ref_name }}-x64.dmg
-            ${{steps.artifact.outputs.download-path}}/release-windows/BookTracker-${{ github.ref_name }}-x64.exe
-            ${{steps.artifact.outputs.download-path}}/release-windows/BookTracker-${{ github.ref_name }}-x64-installer.exe
-            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-amd64.deb
-            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-x86_64.rpm
-            ${{steps.artifact.outputs.download-path}}/release-linux/BookTracker-${{ github.ref_name }}-x86_64.AppImage
+            ${{steps.artifact.outputs.download-path}}/release-macos/Wordwyrm-${{ github.ref_name }}-x64.dmg
+            ${{steps.artifact.outputs.download-path}}/release-windows/Wordwyrm-${{ github.ref_name }}-x64.exe
+            ${{steps.artifact.outputs.download-path}}/release-windows/Wordwyrm-${{ github.ref_name }}-x64-installer.exe
+            ${{steps.artifact.outputs.download-path}}/release-linux/Wordwyrm-${{ github.ref_name }}-amd64.deb
+            ${{steps.artifact.outputs.download-path}}/release-linux/Wordwyrm-${{ github.ref_name }}-x86_64.rpm
+            ${{steps.artifact.outputs.download-path}}/release-linux/Wordwyrm-${{ github.ref_name }}-x86_64.AppImage
