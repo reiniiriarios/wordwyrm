@@ -145,7 +145,7 @@
   .searchArea {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: start;
     align-items: center;
     height: 100%;
   }
