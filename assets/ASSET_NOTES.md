@@ -43,4 +43,12 @@ To generate icns and ico files, run `npm run build:icons`.
 | LargeTile.png         | 310x310 | 1240x1240 | no       |
 | SplashScreen.png      | 620x300 | 2480x1200 | no       |
 
+## Windows Store Images
+
+| File            | Size      | Max Size  | Description                                                                      |
+| --------------- | --------- | --------- | -------------------------------------------------------------------------------- |
+| 9:16 Poster     | 720x1080  | 1440x2160 | Main logo for Windows 10, required for Xbox.                                     |
+| 1:1 Box art     | 1080x1080 | 2160x2160 | May be used in various Store layouts. Main logo if 9:16 Poster art not provided. |
+| 16:9 Super hero | 1920x1080 | 3840x2160 | Top of store listing for Windows 10.                                             |
+
 Updated Info: [Construct your Windows app's icon](https://learn.microsoft.com/en-us/windows/apps/design/style/iconography/app-icon-construction)
