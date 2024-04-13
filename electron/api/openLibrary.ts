@@ -18,13 +18,25 @@ type OpenLibrarySearchResult = {
   publish_year: number[];
   cover_edition_key: string;
   cover_i: number;
-  ia: string[];
-  oclc: string[];
-  id_librarything: string[];
-  id_goodreads: string[];
-  id_amazon: string[];
-  id_google: string[];
-  id_wikidata: string[];
+  ratings_average: number;
+  ratings_sortable: number;
+  ratings_count: number;
+  ia: string[]; // internet archive
+  oclc?: string[];
+  ddc?: string[]; // dewey decimal
+  ddc_sort?: string;
+  lcc?: string[]; // library of congress classification
+  lcc_sort?: string;
+  lccn?: string[]; // library of congress control number
+  id_librarything?: string[];
+  id_goodreads?: string[];
+  id_amazon?: string[];
+  id_google?: string[];
+  id_wikidata?: string[];
+  id_overdrive?: string[];
+  id_depósito_legal?: string[];
+  id_paperback_swap?: string[];
+  id_alibris_id?: string[];
 };
 
 type OpenLibrarySearchResponse = {
