@@ -195,6 +195,11 @@
           <input type="text" bind:value={book.seriesNumber} />
         </label>
 
+        <label class="field field--fullwidth">
+          Description
+          <textarea rows="4" bind:value={book.description} />
+        </label>
+
         <div class="field field--fullwidth">
           Rating
           <Rating bind:rating={book.rating} editable />

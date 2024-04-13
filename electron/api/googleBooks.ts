@@ -1,3 +1,5 @@
+import { NodeHtmlMarkdown } from "node-html-markdown";
+
 const ENDPOINT = "https://www.googleapis.com/books/v1";
 
 export type Volume = {
@@ -136,6 +138,7 @@ function conformBook(v: Volume): Book {
     seriesNumber: "",
     timestampAdded: 0,
     rating: 0,
+    description: v.volumeInfo?.description?.length ? NodeHtmlMarkdown.translate(v.volumeInfo.description) : "",
     notes: "",
     images: {
       hasImage: false,

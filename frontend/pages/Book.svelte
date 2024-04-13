@@ -4,9 +4,7 @@
 
   import BookImage from "@components/BookImage.svelte";
   import Rating from "@components/Rating.svelte";
-  import ImageSearch from "@components/ImageSearch.svelte";
   import MoreInfo from "@components/MoreInfo.svelte";
-  import { settings } from "@stores/settings";
   import { books } from "@stores/books";
   import { sortFilters } from "@scripts/sortBooks";
   import { formatDate } from "@scripts/formatDate";
@@ -123,6 +121,12 @@
           <span class="unread">Unread</span>
         {/if}
       </div>
+      {#if book.description}
+        <div class="description">
+          <div class="dataTitle">Description</div>
+          {book.description}
+        </div>
+      {/if}
       {#if book.notes}
         <div class="notes">
           <div class="dataTitle">Notes</div>
@@ -253,9 +257,11 @@
         justify-content: left;
       }
 
-      .notes {
+      .notes,
+      .description {
         font-size: 1rem;
         padding: 0.5rem 0;
+        white-space: pre-line;
       }
 
       .read {

@@ -18,6 +18,7 @@ type Book = {
   dateRead: string;
   timestampAdded: number; // ms
   rating: number;
+  description: string;
   notes: string;
   images: {
     hasImage: boolean;

@@ -249,6 +249,7 @@ function conformOpenLibrarySearchResult(work: OpenLibrarySearchResult, isbn?: st
     dateRead: "",
     timestampAdded: 0,
     rating: 0,
+    description: "",
     notes: "",
     tags: [],
     series: "",
