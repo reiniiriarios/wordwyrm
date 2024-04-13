@@ -32,8 +32,10 @@
   }
 
   function search() {
-    searching = true;
-    window.electronAPI.searchBook(searchString);
+    if (searchString) {
+      searching = true;
+      window.electronAPI.searchBook(searchString);
+    }
   }
 
   function searchKey(e: KeyboardEvent) {
