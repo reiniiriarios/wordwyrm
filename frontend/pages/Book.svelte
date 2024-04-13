@@ -144,10 +144,12 @@
   .bookPage {
     display: flex;
     height: calc(100vh - var(--page-nav-height));
+    padding: 0 1rem;
 
     &__image {
       height: 95%;
-      width: 50vw;
+      min-width: 35vw;
+      max-width: 40vw;
       padding: 1rem;
       display: flex;
       justify-content: center;
