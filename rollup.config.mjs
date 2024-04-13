@@ -80,7 +80,8 @@ export default {
     copy({
       targets: [
         { src: "public/**/*", dest: "dist" },
-        { src: "assets/**/*", dest: "dist" },
+        { src: "assets/icons/*", dest: "dist" },
+        { src: "assets/images/*", dest: "dist" },
       ],
     }),
     nodePolyfills(),

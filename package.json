@@ -35,7 +35,10 @@
     "build:icons": "npx png2icons assets/icons/512x512.png assets/icons/icon -allwe -hm",
     "build:mac": "electron-builder --dir --mac dmg",
     "build:win": "electron-builder --dir --win portable nsis",
+    "build:nsis": "electron-builder --dir --win nsis",
+    "build:appx": "electron-builder --dir --win appx",
     "build:deb": "electron-builder --dir --linux deb",
+    "build:snap": "electron-builder --dir --linux snap",
     "build:lnx": "electron-builder --dir --linux appImage deb rpm",
     "newver": "ts-node scripts/updateVersion.ts",
     "prepare": "ts-patch install -s"
@@ -124,7 +127,8 @@
       "artifactName": "Wordwyrm-v${version}-${arch}-installer.${ext}",
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true
+      "createDesktopShortcut": true,
+      "installerSidebar": "./dist/installerSidebar.bmp"
     },
     "dmg": {
       "contents": [
@@ -151,6 +155,14 @@
       "desktop": {
         "StartupWMClass": "${productName}"
       }
+    },
+    "snap": {
+      "summary": "${description}"
+    },
+    "appx": {
+      "publisherDisplayName": "Emma Litwa-Vulcu",
+      "backgroundColor": "#831c3b",
+      "showNameOnTiles": true
     }
   },
   "keywords": [
