@@ -47,6 +47,7 @@ To generate icns and ico files, run `npm run build:icons`.
 
 | File            | Size      | Max Size  | Description                                                                      |
 | --------------- | --------- | --------- | -------------------------------------------------------------------------------- |
+| Screenshots     | 1366x768  | 3840x2160 | -                                                                                |
 | 9:16 Poster     | 720x1080  | 1440x2160 | Main logo for Windows 10, required for Xbox.                                     |
 | 1:1 Box art     | 1080x1080 | 2160x2160 | May be used in various Store layouts. Main logo if 9:16 Poster art not provided. |
 | 16:9 Super hero | 1920x1080 | 3840x2160 | Top of store listing for Windows 10.                                             |
