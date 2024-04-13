@@ -2,8 +2,6 @@
   import { onMount } from "svelte";
   import Dropzone from "svelte-file-dropzone";
   import { push } from "svelte-spa-router";
-  import Hash from "phosphor-svelte/lib/Hash";
-  import Calendar from "phosphor-svelte/lib/Calendar";
 
   import HoverInfo from "@components/HoverInfo.svelte";
   import Rating from "@components/Rating.svelte";
@@ -11,6 +9,7 @@
   import MoreInfo from "@components/MoreInfo.svelte";
   import CropCover from "@components/CropCover.svelte";
   import DeleteBook from "@components/DeleteBook.svelte";
+  import FlexibleDate from "@components/FlexibleDate.svelte";
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
 
@@ -24,7 +23,6 @@
   let imagePath: string = "";
   let commonTags: string[] = [];
   let saving: boolean = false;
-  let datePublishedIsDate: boolean = true;
 
   onMount(() => {
     window.electronAPI.readBook(params.author, params.book);
@@ -46,7 +44,6 @@
         if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
         imagePath = `${booksDir}/${book.cache.urlpath}.jpg?t=${book.images.imageUpdated}`;
       }
-      datePublishedIsDate = !!book.datePublished?.match(/^\d+\-\d+\-\d+$/);
     });
 
     const removeSavedListener = window.electronAPI.bookSaved((savedBook: Book) => {
@@ -101,10 +98,6 @@
     window.electronAPI.editBook(book, oAuthorDir, oFilename);
   }
 
-  function validateDatePublished() {
-    book.datePublished = book.datePublished?.replace(/[^\-0-9]/, "") ?? "";
-  }
-
   function addCommonTag(tag: string) {
     if (tag) {
       if (!book.tags) book.tags = [];
@@ -112,10 +105,6 @@
       if (tags.length) tags += ", ";
       tags += tag;
     }
-  }
-
-  function switchDatePublished() {
-    datePublishedIsDate = !datePublishedIsDate;
   }
 </script>
 
@@ -157,29 +146,13 @@
           <input type="text" bind:value={book.title} required />
         </label>
         <label class="field field--fullwidth">
-          Author(s)
+          Author(s) <HoverInfo details="Authors should be comma-separated." />
           <input type="text" bind:value={authors} on:change={setAuthors} required />
         </label>
+        <!-- svelte-ignore a11y-label-has-associated-control -->
         <label class="field">
           Date Published
-          <div class="datePublished">
-            {#if datePublishedIsDate}
-              <input type="date" bind:value={book.datePublished} />
-              <div role="button" tabindex="0" on:click={switchDatePublished} on:keypress={switchDatePublished}>
-                <Hash size="1.25rem" />
-              </div>
-            {:else}
-              <input
-                type="text"
-                on:keypress={validateDatePublished}
-                on:change={validateDatePublished}
-                bind:value={book.datePublished}
-              />
-              <div role="button" tabindex="0" on:click={switchDatePublished} on:keypress={switchDatePublished}>
-                <Calendar size="1.25rem" />
-              </div>
-            {/if}
-          </div>
+          <FlexibleDate bind:value={book.datePublished} />
         </label>
         <label class="field">
           Date Read
@@ -296,17 +269,6 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
-  }
-
-  .datePublished {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    > div {
-      margin: 0.2rem 0 0 0.5rem;
-      cursor: pointer;
-    }
   }
 
   .commonTags {

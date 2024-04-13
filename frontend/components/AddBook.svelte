@@ -1,6 +1,8 @@
 <script lang="ts">
   import Dropzone from "svelte-file-dropzone";
   import Modal from "@components/Modal.svelte";
+  import HoverInfo from "@components/HoverInfo.svelte";
+  import FlexibleDate from "@components/FlexibleDate.svelte";
   import Plus from "phosphor-svelte/lib/Plus";
 
   let addBookOpen: boolean = false;
@@ -62,23 +64,32 @@
       <input type="text" bind:value={book.title} required />
     </label>
     <label class="field field--fullwidth">
-      Author(s)
+      Author(s) <HoverInfo details="Authors should be comma-separated." />
       <input type="text" bind:value={authors} on:change={setAuthors} required />
     </label>
+    <!-- svelte-ignore a11y-label-has-associated-control -->
     <label class="field">
       Date Published
-      <input type="date" bind:value={book.datePublished} />
+      <FlexibleDate />
     </label>
     <label class="field">
       Date Read
       <input type="date" bind:value={book.dateRead} />
     </label>
-    <label class="field field--fullwidth">
+    <label class="field">
       Series
       <input type="text" bind:value={book.series} />
     </label>
+    <label class="field">
+      Series Number
+      <input type="text" bind:value={book.seriesNumber} />
+    </label>
     <label class="field field--fullwidth">
-      Tag(s)
+      Description
+      <textarea rows="4" bind:value={book.description} />
+    </label>
+    <label class="field field--fullwidth">
+      Tag(s) <HoverInfo details="Tags should be comma-separated." />
       <input type="text" bind:value={tags} on:change={setTags} />
     </label>
     <div class="field field--fullwidth">
