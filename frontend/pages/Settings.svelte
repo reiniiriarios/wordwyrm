@@ -106,184 +106,197 @@
   <h2 class="pageNav__header">Settings</h2>
   <div class="pageNav__actions"></div>
 </div>
-<fieldset class="settings">
-  <label class="field field--fullwidth">
-    <div class="dataDir">
-      <div class="dataDir__input">
-        Book Data Directory <HoverInfo
-          details="Select a directory in a cloud drive to share your data between devices."
-        />
-        <div class="fileSelect">
-          <input type="text" readonly on:click={selectDataDir} bind:value={editSettings.booksDir} />
-          <button class="btn btn--light" on:click={selectDataDir}>Select</button>
+<div class="settingsPage">
+  <fieldset class="settings">
+    <label class="field field--fullwidth">
+      <div class="dataDir">
+        <div class="dataDir__input">
+          Book Data Directory <HoverInfo
+            details="Select a directory in a cloud drive to share your data between devices."
+          />
+          <div class="fileSelect">
+            <input type="text" readonly on:click={selectDataDir} bind:value={editSettings.booksDir} />
+            <button class="btn btn--light" on:click={selectDataDir}>Select</button>
+          </div>
+        </div>
+        <div class="dataDir__open">
+          {#if $settings.booksDir}
+            <button class="btn" on:click={openBooksDir}>Open in {openDirWord}</button>
+          {/if}
         </div>
       </div>
-      <div class="dataDir__open">
-        {#if $settings.booksDir}
-          <button class="btn" on:click={openBooksDir}>Open in {openDirWord}</button>
-        {/if}
+    </label>
+
+    <div class="field">
+      App Theme
+      <div class="selectField">
+        <Select
+          width="14rem"
+          bind:value={editSettings.theme}
+          options={{
+            default: "Default",
+            harrow: "Harrow",
+            gideon: "Gideon",
+            nona: "Nona",
+            slate: "Slate",
+            rosepine: "Rosé Pine",
+            rosepineDawn: "Rosé Pine Dawn",
+            nord: "Nord",
+            nordLight: "Nord Bright",
+          }}
+          on:change={previewTheme}
+        />
       </div>
     </div>
-  </label>
 
-  <div class="field">
-    App Theme
-    <div class="selectField">
-      <Select
-        width="14rem"
-        bind:value={editSettings.theme}
-        options={{
-          default: "Default",
-          harrow: "Harrow",
-          gideon: "Gideon",
-          nona: "Nona",
-          slate: "Slate",
-          rosepine: "Rosé Pine",
-          rosepineDawn: "Rosé Pine Dawn",
-          nord: "Nord",
-          nordLight: "Nord Bright",
-        }}
-        on:change={previewTheme}
+    <div class="field">
+      Date Format <HoverInfo details="Based on device locale settings." />
+      <div class="selectField">
+        <Select
+          width="14rem"
+          bind:value={editSettings.dateFormat}
+          options={{
+            "local-long": formatDate(new Date(), "local-long"),
+            "local-medium": formatDate(new Date(), "local-medium"),
+            "local-short": formatDate(new Date(), "local-short"),
+            "yyyy-mm-dd": formatDate(new Date(), "yyyy-mm-dd"),
+          }}
+        />
+      </div>
+    </div>
+
+    <label class="field field--fullwidth">
+      Tags for Filtering <HoverInfo details="Tags should be comma-separated." />
+      <input type="text" bind:value={editSettings.filterTags} maxlength="255" />
+    </label>
+    <label class="field field--fullwidth">
+      Common Tags for Editing <HoverInfo details="Tags should be comma-separated." />
+      <input type="text" bind:value={editSettings.commonTags} maxlength="1024" />
+    </label>
+
+    <label class="field">
+      Chart Default Start Year <HoverInfo details="Sets the default start year for the chart page." />
+      <input type="text" bind:value={editSettings.chartStartYear} />
+    </label>
+
+    <div class="field field--fullwidth">
+      Search Engine <HoverInfo
+        details="Engine used to search for book data. Add Google Cloud API Key to use Google Books for data. Google Books data will be supplemented with OpenLibrary data."
       />
+      <div class="btnOptions">
+        <button
+          class="btn btn--option"
+          class:selected={seOpenLibrary}
+          on:click={() => toggleSearchEngine("openLibrary")}>OpenLibrary</button
+        >
+        <button
+          class="btn btn--option"
+          class:selected={seGoogleBooks}
+          disabled={!editSettings.googleApiKey?.length}
+          on:click={() => toggleSearchEngine("googleBooks")}>Google Books</button
+        >
+      </div>
     </div>
-  </div>
 
-  <div class="field">
-    Date Format <HoverInfo details="Based on device locale settings." />
-    <div class="selectField">
-      <Select
-        width="14rem"
-        bind:value={editSettings.dateFormat}
-        options={{
-          "local-long": formatDate(new Date(), "local-long"),
-          "local-medium": formatDate(new Date(), "local-medium"),
-          "local-short": formatDate(new Date(), "local-short"),
-          "yyyy-mm-dd": formatDate(new Date(), "yyyy-mm-dd"),
-        }}
+    <label class="field field">
+      Google Cloud API Key <HoverInfo details="Optional. Enables searching for book data via Google Books." />
+      <input type="text" bind:value={editSettings.googleApiKey} />
+    </label>
+    <label class="field field">
+      Google Custom Search Engine ID <HoverInfo
+        details="Optional. Along with API Key, enables searching for cover images via Google Image Search."
       />
+      <input type="text" bind:value={editSettings.googleSearchEngineId} />
+    </label>
+    <div class="actions">
+      <button class="btn" on:click={save}>Save</button>
+      {#if saved}
+        <div>Saved!</div>
+      {/if}
     </div>
-  </div>
+  </fieldset>
 
-  <label class="field field--fullwidth">
-    Tags for Filtering <HoverInfo details="Tags should be comma-separated." />
-    <input type="text" bind:value={editSettings.filterTags} maxlength="255" />
-  </label>
-  <label class="field field--fullwidth">
-    Common Tags for Editing <HoverInfo details="Tags should be comma-separated." />
-    <input type="text" bind:value={editSettings.commonTags} maxlength="1024" />
-  </label>
-
-  <label class="field">
-    Chart Default Start Year <HoverInfo details="Sets the default start year for the chart page." />
-    <input type="text" bind:value={editSettings.chartStartYear} />
-  </label>
-
-  <div class="field field--fullwidth">
-    Search Engine <HoverInfo
-      details="Engine used to search for book data. Add Google Cloud API Key to use Google Books for data. Google Books data will be supplemented with OpenLibrary data."
-    />
-    <div class="btnOptions">
-      <button class="btn btn--option" class:selected={seOpenLibrary} on:click={() => toggleSearchEngine("openLibrary")}
-        >OpenLibrary</button
-      >
-      <button
-        class="btn btn--option"
-        class:selected={seGoogleBooks}
-        disabled={!editSettings.googleApiKey?.length}
-        on:click={() => toggleSearchEngine("googleBooks")}>Google Books</button
-      >
+  <div class="footer">
+    {#if $settings.appVersion}
+      <div>Version: {$settings.appVersion}</div>
+    {/if}
+    <div>
+      <a class="hideme" href="https://github.com/reiniiriarios/wordwyrm" target="_blank">GitHub <ArrowSquareOut /></a>
     </div>
-  </div>
-
-  <label class="field field--fullwidth">
-    Google Cloud API Key <HoverInfo details="Optional. Enables searching for book data via Google Books." />
-    <input type="text" bind:value={editSettings.googleApiKey} />
-  </label>
-  <label class="field field--fullwidth">
-    Google Custom Search Engine ID <HoverInfo
-      details="Optional. Along with API Key, enables searching for cover images via Google Image Search."
-    />
-    <input type="text" bind:value={editSettings.googleSearchEngineId} />
-  </label>
-  <div class="actions">
-    <button class="btn" on:click={save}>Save</button>
-    {#if saved}
-      <div>Saved!</div>
+    {#if updateAvailable}
+      <div>
+        Update Available: <a href="https://github.com/reiniiriarios/wordwyrm/releases/latest" target="_blank">
+          Download v{updateAvailable}
+        </a>
+      </div>
     {/if}
   </div>
-</fieldset>
-
-<div class="footer">
-  {#if $settings.appVersion}
-    <div>Version: {$settings.appVersion}</div>
-  {/if}
-  <div>
-    <a class="hideme" href="https://github.com/reiniiriarios/wordwyrm" target="_blank">GitHub <ArrowSquareOut /></a>
-  </div>
-  {#if updateAvailable}
-    <div>
-      Update Available: <a href="https://github.com/reiniiriarios/wordwyrm/releases/latest" target="_blank">
-        Download v{updateAvailable}
-      </a>
-    </div>
-  {/if}
 </div>
 
 <style lang="scss">
-  .settings {
-    padding: 0.5rem 1rem;
-  }
+  .settingsPage {
+    --settings-footer-height: 3rem;
 
-  .selectField {
-    margin-top: 0.2rem;
-  }
-
-  .dataDir {
-    display: flex;
-    gap: 1rem;
-    align-items: end;
-
-    &__input {
-      width: 100%;
+    .settings {
+      max-height: calc(100vh - var(--page-nav-height) - var(--settings-footer-height));
+      padding: 0.5rem 1rem;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--c-subtle) transparent;
     }
 
-    &__open {
-      margin-left: auto;
-      white-space: nowrap;
-      flex-basis: min-content;
+    .selectField {
+      margin-top: 0.2rem;
     }
-  }
 
-  .actions {
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    gap: 2rem;
-    font-size: 1rem;
-  }
+    .dataDir {
+      display: flex;
+      gap: 1rem;
+      align-items: end;
 
-  .footer {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding: 1rem;
-    font-size: 0.9rem;
-    color: var(--c-text-muted);
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
+      &__input {
+        width: 100%;
+      }
 
-    > div:not(:first-child) {
-      &::before {
-        content: "·";
-        position: relative;
-        left: -0.375rem;
-        opacity: 0.3;
+      &__open {
+        margin-left: auto;
+        white-space: nowrap;
+        flex-basis: min-content;
       }
     }
 
-    a.hideme {
+    .actions {
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      gap: 2rem;
+      font-size: 1rem;
+    }
+
+    .footer {
+      height: var(--settings-footer-height);
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      padding: 1rem;
+      font-size: 0.9rem;
       color: var(--c-text-muted);
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+
+      > div:not(:first-child) {
+        &::before {
+          content: "·";
+          position: relative;
+          left: -0.375rem;
+          opacity: 0.3;
+        }
+      }
+
+      a.hideme {
+        color: var(--c-text-muted);
+      }
     }
   }
 </style>
