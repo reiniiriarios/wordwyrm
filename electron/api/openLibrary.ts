@@ -227,10 +227,24 @@ function setFirstId(ids: string[] | undefined | null, callback: (id: string) => 
 }
 
 function conformOpenLibrarySearchResult(work: OpenLibrarySearchResult, isbn?: string): Book {
+  let authors: Author[] = [];
+  let names = new Set<string>();
+  for (let i = 0; i < work.author_name?.length; i++) {
+    if (!names.has(work.author_name[i])) {
+      names.add(work.author_name[i]);
+      authors.push({
+        name: work.author_name[i],
+        ids: {
+          openLibraryId: work.author_key?.[i] ?? "",
+        },
+      });
+    }
+  }
+
   const book: Book = {
     version: "2",
     title: work.title,
-    authors: work.author_name?.map((name) => ({ name })) ?? [],
+    authors,
     datePublished: (work.first_publish_year ?? work.publish_year?.sort()[0] ?? "").toString(),
     dateRead: "",
     timestampAdded: 0,

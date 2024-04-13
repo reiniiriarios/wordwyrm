@@ -2,6 +2,9 @@ type Author = {
   name: string;
   birth?: string;
   death?: string;
+  ids?: {
+    openLibraryId?: string;
+  };
 };
 
 type Book = {

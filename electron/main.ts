@@ -120,8 +120,11 @@ app.on("ready", () => {
 
       if (googleBook) book = googleBook;
       if (olBook) {
+        // OpenLibrary author data also has IDs
+        book.authors = olBook.authors;
         // OpenLibrary accurate to original publish date
         if (olBook.datePublished) book.datePublished = olBook.datePublished;
+        // Ids
         if (!book.ids.googleBooksId && olBook.ids.googleBooksId) book.ids.googleBooksId = olBook.ids.googleBooksId;
         book.ids.openLibraryId = olBook.ids.openLibraryId;
         book.ids.amazonId = olBook.ids.amazonId;
