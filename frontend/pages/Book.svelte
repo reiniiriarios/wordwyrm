@@ -40,7 +40,10 @@
   function filterSeries() {
     seriesBooks = [];
     $books.allBooks.forEach((b) => {
-      if (b.series === book.series) {
+      if (
+        b.authors.map((a) => a.name).join(",") === book.authors.map((a) => a.name).join(",") &&
+        b.series === book.series
+      ) {
         seriesBooks.push(b);
       }
     });

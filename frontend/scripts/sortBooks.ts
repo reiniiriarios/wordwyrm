@@ -146,6 +146,11 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
         if (!xS && yS) return 1;
         let lc = reverse ? (yS ?? "").localeCompare(xS ?? "") : (xS ?? "").localeCompare(yS ?? "");
         if (lc !== 0) return lc;
+        // then author
+        let xA = x.authors[0].name.split(" ").pop();
+        let yA = y.authors[0].name.split(" ").pop();
+        let lca = reverse ? (yA ?? "").localeCompare(xA ?? "") : (xA ?? "").localeCompare(yA ?? "");
+        if (lca !== 0) return lca;
         // then series number
         let xN = +x.seriesNumber;
         let yN = +y.seriesNumber;
