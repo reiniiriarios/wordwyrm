@@ -45,10 +45,8 @@
       </div>
     {/if}
 
-    {#if $settings.booksDir}
-      <AddBook />
-      <SearchApi />
-    {/if}
+    <AddBook />
+    <SearchApi />
   </div>
 </div>
 

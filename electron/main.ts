@@ -56,7 +56,9 @@ function createWindow(): BrowserWindow {
     // use default size for screenshot mode
     if (settings && !SCREENSHOT_MODE) {
       settings.bounds = mainWindow.getBounds();
-      saveSettings(settings);
+      saveSettings(settings, {}, (err) => {
+        if (err) console.error(err);
+      });
     }
   });
 
@@ -64,6 +66,11 @@ function createWindow(): BrowserWindow {
 }
 
 app.on("ready", () => {
+  console.log("Starting in " + (DEV_MODE ? "dev" : "prod") + " mode");
+  if (SCREENSHOT_MODE) {
+    console.log("Screenshot mode active");
+  }
+
   let window = createWindow();
 
   app.on("activate", function () {
@@ -169,27 +176,19 @@ app.on("ready", () => {
   });
 
   ipcMain.on("readAllBooks", (event) => {
-    if (settings.booksDir) {
-      readAllBooks(settings.booksDir).then((res) => event.reply("receiveAllBooks", res));
-    }
+    readAllBooks(settings.booksDir).then((res) => event.reply("receiveAllBooks", res));
   });
 
   ipcMain.on("readBook", (event, authorDir: string, filename: string) => {
-    if (settings.booksDir) {
-      readBook(settings.booksDir, authorDir, filename).then((res) => event.reply("receiveBook", res));
-    }
+    readBook(settings.booksDir, authorDir, filename).then((res) => event.reply("receiveBook", res));
   });
 
   ipcMain.on("saveBook", (event, book: Book) => {
-    if (settings.booksDir) {
-      saveBook(settings.booksDir, book).then((res) => event.reply("bookSaved", res));
-    }
+    saveBook(settings.booksDir, book).then((res) => event.reply("bookSaved", res));
   });
 
   ipcMain.on("editBook", (event, book: Book, authorDir: string, filename: string) => {
-    if (settings.booksDir) {
-      saveBook(settings.booksDir, book, authorDir, filename).then((res) => event.reply("bookSaved", res));
-    }
+    saveBook(settings.booksDir, book, authorDir, filename).then((res) => event.reply("bookSaved", res));
   });
 
   ipcMain.on("selectDataDir", async (event) => {
@@ -212,10 +211,15 @@ app.on("ready", () => {
     event.reply("settingsLoaded", settings);
   });
 
-  ipcMain.on("saveSettings", (event, newSettings: UserSettings) => {
-    settings = newSettings;
-    saveSettings(newSettings);
-    event.reply("settingsLoaded", settings);
+  ipcMain.on("saveSettings", (event, newSettings: UserSettings, moveData: boolean) => {
+    saveSettings(newSettings, { moveData, oldDir: settings.booksDir }, (err) => {
+      if (err) {
+        console.error(err);
+        event.reply("error", err.message);
+      }
+      settings = newSettings;
+      event.reply("settingsLoaded", settings);
+    });
   });
 
   ipcMain.on("imageSearch", (event, author: string, title: string, page: number) => {

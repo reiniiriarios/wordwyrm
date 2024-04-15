@@ -5,12 +5,14 @@
 
   import Select from "@components/Select.svelte";
   import HoverInfo from "@components/HoverInfo.svelte";
+  import Modal from "@components/Modal.svelte";
   import { currentTheme, platform, settings } from "@stores/settings";
   import { books } from "@stores/books";
   import { formatDate } from "@scripts/formatDate";
 
   let editSettings: UserSettings = {} as UserSettings;
   let saved: boolean = false;
+  let saving: boolean = false;
   let seOpenLibrary: boolean;
   let seGoogleBooks: boolean;
   let updateAvailable: string = "";
@@ -18,6 +20,13 @@
   $: seGoogleBooks = $settings.searchEngines?.includes("googleBooks");
   let openDirWord: string = "File Manager";
   $: openDirWord = $platform === "darwin" ? "Finder" : $platform === "win32" ? "File Explorer" : "File Manager";
+
+  let booksDir = {
+    changing: false,
+    showModal: false,
+    oldDir: "",
+    newDir: "",
+  };
 
   onMount(() => {
     editSettings = structuredClone($settings);
@@ -37,10 +46,19 @@
       }
       seOpenLibrary = loadedSettings.searchEngines.includes("openLibrary");
       seGoogleBooks = loadedSettings.searchEngines.includes("googleBooks");
+      booksDir.showModal = false;
+      setTimeout(() => {
+        saving = false;
+        saved = true;
+      }, 150);
+      setTimeout(() => (saved = false), 1500);
     });
 
     const removeDirListener = window.electronAPI.dirSelected((path: string) => {
       console.log("new dir", path);
+      if (path !== editSettings.booksDir) {
+        booksDir.changing = true;
+      }
       editSettings.booksDir = path;
     });
 
@@ -89,16 +107,30 @@
     window.electronAPI.selectDataDir();
   }
 
+  function moveBooksDir() {
+    save(undefined, true);
+  }
+
+  function newBooksDir() {
+    save();
+  }
+
   function openBooksDir() {
     window.electronAPI.openBooksDir();
   }
 
-  function save(e: MouseEvent | KeyboardEvent) {
-    e.preventDefault();
+  function save(e?: MouseEvent | KeyboardEvent, moveData: boolean = false) {
+    // If the books dir has changed, show the modal, turn the flag off, and don't save yet.
+    if (booksDir.changing) {
+      booksDir.showModal = true;
+      booksDir.changing = false;
+      return;
+    }
+
+    e?.preventDefault();
     if (editSettings.booksDir !== $settings.booksDir) setTimeout(books.fetch, 500);
-    settings.save(editSettings);
-    saved = true;
-    setTimeout(() => (saved = false), 1500);
+    settings.save(editSettings, moveData);
+    saving = true;
   }
 </script>
 
@@ -120,9 +152,7 @@
           </div>
         </div>
         <div class="dataDir__open">
-          {#if $settings.booksDir}
-            <button class="btn" on:click={openBooksDir}>Open in {openDirWord}</button>
-          {/if}
+          <button class="btn" on:click={openBooksDir}>Open in {openDirWord}</button>
         </div>
       </div>
     </label>
@@ -210,7 +240,9 @@
     </label>
     <div class="actions">
       <button class="btn" on:click={save}>Save</button>
-      {#if saved}
+      {#if saving}
+        <div>Saving...</div>
+      {:else if saved}
         <div>Saved!</div>
       {/if}
     </div>
@@ -232,6 +264,23 @@
     {/if}
   </div>
 </div>
+
+<Modal
+  heading="Move Data"
+  bind:open={booksDir.showModal}
+  loading={saving}
+  on:confirm={moveBooksDir}
+  on:cancel={newBooksDir}
+  confirmWord="Migrate Data"
+  cancelWord="No"
+  height="16rem"
+>
+  <div class="dirMsg">
+    Would you like to migrate your existing data from
+    <div class="dirMsg__dir"><strong>{$settings.booksDir}</strong> to</div>
+    <div class="dirMsg__dir"><strong>{editSettings.booksDir}</strong> ?</div>
+  </div>
+</Modal>
 
 <style lang="scss">
   .settingsPage {
@@ -297,6 +346,12 @@
       a.hideme {
         color: var(--c-text-muted);
       }
+    }
+  }
+
+  .dirMsg {
+    &__dir {
+      padding: 1rem 1rem 0;
     }
   }
 </style>

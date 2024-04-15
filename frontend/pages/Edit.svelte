@@ -39,7 +39,7 @@
       oFilename = b.cache.filename ?? "";
       authors = book.authors.map((a) => a.name).join(", ");
       tags = book.tags?.join(", ") ?? "";
-      if (book.images.hasImage && $settings.booksDir) {
+      if (book.images.hasImage) {
         let booksDir = $settings.booksDir.replace(/\\/g, "/").replace(/ /g, "%20");
         if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
         imagePath = `${booksDir}/${book.cache.urlpath}.jpg?t=${book.images.imageUpdated}`;

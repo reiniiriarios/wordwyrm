@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from "fs-extra";
 import * as yaml from "js-yaml";
 import * as path from "path";
 import { UserSettings } from "../../types/global";
@@ -56,13 +56,49 @@ export function loadSettings(): UserSettings {
     settings.theme = "default";
   }
 
-  if (SCREENSHOT_MODE) {
+  if (!settings.booksDir) {
+    settings.booksDir = path.join(DATA_PATH, "books");
+  } else if (SCREENSHOT_MODE) {
     settings.booksDir = path.join(DATA_PATH, "DEV-screenshot-mode");
   }
 
   return settings;
 }
 
-export function saveSettings(settings: UserSettings) {
-  return saveYaml(path.join(DATA_PATH, "settings.yaml"), settings);
+export function saveSettings(
+  settings: UserSettings,
+  options: { moveData?: boolean; oldDir?: string } = { moveData: false },
+  callback: (error?: Error) => void = () => {},
+) {
+  saveYaml(path.join(DATA_PATH, "settings.yaml"), settings);
+  if (!options.moveData) return callback();
+  moveDirectory(options.oldDir, settings.booksDir, (err) => {
+    if (err) return callback(err);
+    callback();
+  });
+}
+
+function moveDirectory(oldDir: string, newDir: string, callback: (error?: Error) => void) {
+  // Read each author directory
+  fs.readdir(oldDir, { withFileTypes: true })
+    .then((files) => {
+      for (let file of files) {
+        if (file.isDirectory()) {
+          // Move each directory
+          const od = path.join(oldDir, file.name);
+          const nd = path.join(newDir, file.name);
+          try {
+            fs.moveSync(od, nd);
+          } catch (err) {
+            console.error(err);
+            return callback(new Error("Error moving data"));
+          }
+        }
+      }
+      return callback();
+    })
+    .catch((err) => {
+      console.error(err);
+      return callback(new Error("Error reading data"));
+    });
 }

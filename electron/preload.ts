@@ -10,8 +10,11 @@ function ipcCallback(channel: string, callback: Function) {
 }
 
 export const api = {
+  error: (callback: Function) => ipcCallback("error", callback),
+
   loadSettings: () => ipcRenderer.send("loadSettings"),
-  saveSettings: (newSettings: UserSettings) => ipcRenderer.send("saveSettings", newSettings),
+  saveSettings: (newSettings: UserSettings, moveData: boolean) =>
+    ipcRenderer.send("saveSettings", newSettings, moveData),
   settingsLoaded: (callback: Function) => ipcCallback("settingsLoaded", callback),
 
   checkVersion: () => ipcRenderer.send("checkVersion"),

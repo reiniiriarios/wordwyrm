@@ -24,9 +24,9 @@ function createSettings() {
     fetch: () => {
       window.electronAPI.loadSettings();
     },
-    save: async (newSettings: UserSettings) => {
+    save: async (newSettings: UserSettings, moveData: boolean = false) => {
       set(newSettings);
-      window.electronAPI.saveSettings(newSettings);
+      window.electronAPI.saveSettings(newSettings, moveData);
     },
   };
 }

@@ -7,20 +7,23 @@
   export let canCancel: boolean = true;
   export let canConfirm: boolean = true;
   export let confirmWord: string = "Okay";
+  export let cancelWord: string = "Cancel";
   export let heading: string;
   export let height: string = "";
   export let warning: boolean = false;
   export let loading: boolean = false;
 
-  function confirm() {
+  function confirm(e?: MouseEvent | KeyboardEvent) {
+    e?.preventDefault();
     if (open) {
       window.removeEventListener("keydown", modalKey);
       dispatch("confirm");
     }
   }
 
-  function close() {
-    if (open) {
+  function close(e?: MouseEvent | KeyboardEvent) {
+    e?.preventDefault();
+    if (open && !loading) {
       window.removeEventListener("keydown", modalKey);
       open = false;
       dispatch("cancel");
@@ -32,7 +35,7 @@
       if (canCancel && ["Escape"].includes(e.key)) {
         console.log("cancel modal");
         close();
-      } else if (["\n", "Enter"].includes(e.key) && canConfirm) {
+      } else if (canConfirm && ["\n", "Enter"].includes(e.key)) {
         console.log("confirm modal");
         confirm();
       }
@@ -53,7 +56,7 @@
     <div class="modal__body"><slot /></div>
     <div class="modal__actions">
       {#if canCancel}
-        <button type="button" class="btn modal__button" on:click={close}>Cancel</button>
+        <button type="button" class="btn modal__button" on:click={close}>{cancelWord}</button>
       {/if}
       <button
         type="button"

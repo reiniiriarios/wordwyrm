@@ -1,7 +1,5 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import Gear from "phosphor-svelte/lib/Gear";
-  import { settings } from "@stores/settings";
 
   let canShow: boolean = false;
 
@@ -15,14 +13,7 @@
 {#if canShow}
   <div class="gettingstarted">
     <h2>Welcome!</h2>
-    {#if $settings.booksDir}
-      <p>To get started, you can add books manually or by search.</p>
-    {:else}
-      <p>
-        To get started, you should first choose a directory to save your data in <a href="#/settings">Settings</a>.
-        After that, you can add books manually or by search.
-      </p>
-    {/if}
+    <p>To get started, you can add books manually or by search.</p>
     <h3>API Keys</h3>
     <p>
       By default, search uses the <a href="https://openlibrary.org/" target="_blank">OpenLibrary</a> API. If you add an
@@ -42,9 +33,8 @@
     </p>
     <h3>More Info</h3>
     <p>
-      You can find more information on the <a
-        href="https://github.com/reiniiriarios/wordwyrm#readme"
-        target="_blank">GitHub Repo</a
+      You can find more information on the <a href="https://github.com/reiniiriarios/wordwyrm#readme" target="_blank"
+        >GitHub Repo</a
       > for this app.
     </p>
   </div>
