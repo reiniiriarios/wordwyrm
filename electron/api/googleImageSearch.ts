@@ -137,7 +137,7 @@ export async function googleImageSearch(
   author: string,
   page: number = 0,
 ): Promise<SearchResult[] | string> {
-  let keywords = `${title} by ${author} book cover`;
+  let keywords = `"${title}" by ${author} book cover`;
   let results: SearchResult[] = [];
 
   try {
