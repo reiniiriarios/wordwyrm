@@ -6,16 +6,7 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
     name: "Date Read",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
-        let xD = !x.dateRead ? 9999999999999 : new Date(x.dateRead).getTime();
-        let yD = !y.dateRead ? 9999999999999 : new Date(y.dateRead).getTime();
-        if (reverse) {
-          if (xD < yD) return -1;
-          if (xD > yD) return 1;
-        } else {
-          if (xD > yD) return -1;
-          if (xD < yD) return 1;
-        }
-        return 0;
+        return sortValueRead(x, y, reverse);
       });
       return books;
     },
@@ -24,16 +15,7 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
     name: "Date Added",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
-        let xD = x.timestampAdded ?? 0;
-        let yD = y.timestampAdded ?? 0;
-        if (reverse) {
-          if (xD < yD) return -1;
-          if (xD > yD) return 1;
-        } else {
-          if (xD > yD) return -1;
-          if (xD < yD) return 1;
-        }
-        return 0;
+        return sortValueN(x.timestampAdded, y.timestampAdded, !reverse); // reverse reverse
       });
       return books;
     },
@@ -42,25 +24,9 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
     name: "Author",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
-        let xA = x.authors[0].name.split(" ").pop();
-        let yA = y.authors[0].name.split(" ").pop();
-        let lc = reverse ? (yA ?? "").localeCompare(xA ?? "") : (xA ?? "").localeCompare(yA ?? "");
-        if (lc !== 0) return lc;
-        // then publish date
-        let xD = (
-          x.datePublished?.match(/^\-?\d+$/) ? new Date(+x.datePublished, 1, 1) : new Date(x.datePublished ?? "")
-        ).getTime();
-        let yD = (
-          y.datePublished?.match(/^\-?\d+$/) ? new Date(+y.datePublished, 1, 1) : new Date(y.datePublished ?? "")
-        ).getTime();
-        if (reverse) {
-          if (xD > yD) return -1;
-          if (xD < yD) return 1;
-        } else {
-          if (xD < yD) return -1;
-          if (xD > yD) return 1;
-        }
-        return 0;
+        let a = sortValueAuthors(x, y, reverse);
+        if (a !== 0) return a;
+        return sortValueDatePublished(x, y, reverse);
       });
       return books;
     },
@@ -69,10 +35,9 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
     name: "Title",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
-        let xT = x.title.replace(/^(?:A|An|The) /i, "");
-        let yT = y.title.replace(/^(?:A|An|The) /i, "");
-        if (reverse) return yT.localeCompare(xT);
-        return xT.localeCompare(yT);
+        let t = sortValueTitle(x, y, reverse);
+        if (t !== 0) return t;
+        return sortValueAuthors(x, y, reverse);
       });
       return books;
     },
@@ -81,20 +46,9 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
     name: "Publish Date",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
-        let xD = (
-          x.datePublished?.match(/^\-?\d+$/) ? new Date(+x.datePublished, 1, 1) : new Date(x.datePublished ?? "")
-        ).getTime();
-        let yD = (
-          y.datePublished?.match(/^\-?\d+$/) ? new Date(+y.datePublished, 1, 1) : new Date(y.datePublished ?? "")
-        ).getTime();
-        if (reverse) {
-          if (xD > yD) return -1;
-          if (xD < yD) return 1;
-        } else {
-          if (xD < yD) return -1;
-          if (xD > yD) return 1;
-        }
-        return 0;
+        let d = sortValueDatePublished(x, y, reverse);
+        if (d !== 0) return d;
+        return sortValueAuthors(x, y, reverse);
       });
       return books;
     },
@@ -103,35 +57,11 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
     name: "Rating",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
-        let xR = x.rating ?? 0;
-        let yR = y.rating ?? 0;
-        if (reverse) {
-          if (xR < yR) return -1;
-          if (xR > yR) return 1;
-        } else {
-          if (xR > yR) return -1;
-          if (xR < yR) return 1;
-        }
-        // ratings are often similar, go to author name after that
-        let xA = x.authors[0].name.split(" ").pop();
-        let yA = y.authors[0].name.split(" ").pop();
-        let lc = reverse ? (yA ?? "").localeCompare(xA ?? "") : (xA ?? "").localeCompare(yA ?? "");
-        if (lc !== 0) return lc;
-        // then publish date
-        let xD = (
-          x.datePublished?.match(/^\-?\d+$/) ? new Date(+x.datePublished, 1, 1) : new Date(x.datePublished ?? "")
-        ).getTime();
-        let yD = (
-          y.datePublished?.match(/^\-?\d+$/) ? new Date(+y.datePublished, 1, 1) : new Date(y.datePublished ?? "")
-        ).getTime();
-        if (reverse) {
-          if (xD > yD) return -1;
-          if (xD < yD) return 1;
-        } else {
-          if (xD < yD) return -1;
-          if (xD > yD) return 1;
-        }
-        return 0;
+        let n = sortValueN(x.rating, y.rating, !reverse); // reverse reverse
+        if (n !== 0) return n;
+        let a = sortValueAuthors(x, y, reverse);
+        if (a !== 0) return a;
+        return sortValueDatePublished(x, y, reverse);
       });
       return books;
     },
@@ -140,42 +70,13 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
     name: "Series",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
-        let xS = x.series?.replace(/^(?:A|An|The) /i, "") ?? "";
-        let yS = y.series?.replace(/^(?:A|An|The) /i, "") ?? "";
-        if (xS && !yS) return -1;
-        if (!xS && yS) return 1;
-        let lc = reverse ? (yS ?? "").localeCompare(xS ?? "") : (xS ?? "").localeCompare(yS ?? "");
-        if (lc !== 0) return lc;
-        // then author
-        let xA = x.authors[0].name.split(" ").pop();
-        let yA = y.authors[0].name.split(" ").pop();
-        let lca = reverse ? (yA ?? "").localeCompare(xA ?? "") : (xA ?? "").localeCompare(yA ?? "");
-        if (lca !== 0) return lca;
-        // then series number
-        let xN = +x.seriesNumber;
-        let yN = +y.seriesNumber;
-        if (reverse) {
-          if (xN > yN) return -1;
-          if (xN < yN) return 1;
-        } else {
-          if (xN < yN) return -1;
-          if (xN > yN) return 1;
-        }
-        // then publish date
-        let xD = (
-          x.datePublished?.match(/^\-?\d+$/) ? new Date(+x.datePublished, 1, 1) : new Date(x.datePublished ?? "")
-        ).getTime();
-        let yD = (
-          y.datePublished?.match(/^\-?\d+$/) ? new Date(+y.datePublished, 1, 1) : new Date(y.datePublished ?? "")
-        ).getTime();
-        if (reverse) {
-          if (xD > yD) return -1;
-          if (xD < yD) return 1;
-        } else {
-          if (xD < yD) return -1;
-          if (xD > yD) return 1;
-        }
-        return 0;
+        let s = sortValueSeries(x, y, reverse);
+        if (s !== 0) return s;
+        let a = sortValueAuthors(x, y, reverse);
+        if (a !== 0) return a;
+        let n = sortValueN(x.seriesNumber, y.seriesNumber, reverse);
+        if (n !== 0) return n;
+        return sortValueDatePublished(x, y, reverse);
       });
       return books;
     },
@@ -185,17 +86,7 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
     name: "Tags",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
-        if (reverse) {
-          if (x.tags.length < y.tags.length) return -1;
-          if (x.tags.length > y.tags.length) return 1;
-        } else {
-          if (x.tags.length > y.tags.length) return -1;
-          if (x.tags.length < y.tags.length) return 1;
-        }
-        let xT = x.tags.join(" ");
-        let yT = y.tags.join(" ");
-        if (reverse) return yT.localeCompare(xT);
-        return xT.localeCompare(yT);
+        return sortValueTags(x, y, reverse);
       });
       return books;
     },
@@ -230,17 +121,6 @@ export function filterByTag(books: Book[], tag: string): Book[] {
   return books.filter((book) => {
     let tags = book.tags.map((t) => t.toLowerCase());
     return tags.includes(tag.toLowerCase());
-  });
-}
-
-function yearsAgo(books: Book[], years: number, reverse: boolean = false): Book[] {
-  let yearsAgo = new Date();
-  yearsAgo.setFullYear(yearsAgo.getFullYear() - years);
-  let timeAgo = yearsAgo.getTime();
-  return books.filter((book) => {
-    if (!book.dateRead) return false;
-    let diff = new Date(book.dateRead).getTime() - timeAgo;
-    return reverse ? diff < 0 : diff > 0;
   });
 }
 
@@ -303,4 +183,92 @@ export function searchBooks(books: Book[], search: string): Book[] {
       b.series?.toLowerCase().includes(search)
     );
   });
+}
+
+function yearsAgo(books: Book[], years: number, reverse: boolean = false): Book[] {
+  let yearsAgo = new Date();
+  yearsAgo.setFullYear(yearsAgo.getFullYear() - years);
+  let timeAgo = yearsAgo.getTime();
+  return books.filter((book) => {
+    if (!book.dateRead) return false;
+    let diff = new Date(book.dateRead).getTime() - timeAgo;
+    return reverse ? diff < 0 : diff > 0;
+  });
+}
+
+function sortValueN(a: number | string, b: number | string, reverse: boolean): number {
+  let xN = a ? +a : 0;
+  let yN = b ? +b : 0;
+  if (reverse) {
+    if (xN > yN) return -1;
+    if (xN < yN) return 1;
+  } else {
+    if (xN < yN) return -1;
+    if (xN > yN) return 1;
+  }
+  return 0;
+}
+
+function sortValueRead(x: Book, y: Book, reverse: boolean): number {
+  let xD = !x.dateRead ? 9999999999999 : new Date(x.dateRead).getTime();
+  let yD = !y.dateRead ? 9999999999999 : new Date(y.dateRead).getTime();
+  if (reverse) {
+    if (xD < yD) return -1;
+    if (xD > yD) return 1;
+  } else {
+    if (xD > yD) return -1;
+    if (xD < yD) return 1;
+  }
+  return 0;
+}
+
+function sortValueTitle(x: Book, y: Book, reverse: boolean): number {
+  let xT = x.title.replace(/^(?:A|An|The) /i, "");
+  let yT = y.title.replace(/^(?:A|An|The) /i, "");
+  return reverse ? (yT ?? "").localeCompare(xT ?? "") : (xT ?? "").localeCompare(yT ?? "");
+}
+
+function sortValueSeries(x: Book, y: Book, reverse: boolean): number {
+  let xS = x.series?.replace(/^(?:A|An|The) /i, "") ?? "";
+  let yS = y.series?.replace(/^(?:A|An|The) /i, "") ?? "";
+  if (xS && !yS) return -1;
+  if (!xS && yS) return 1;
+  return reverse ? (yS ?? "").localeCompare(xS ?? "") : (xS ?? "").localeCompare(yS ?? "");
+}
+
+function sortValueAuthors(x: Book, y: Book, reverse: boolean): number {
+  let xA = x.authors?.[0].name.split(" ").pop();
+  let yA = y.authors?.[0].name.split(" ").pop();
+  return reverse ? (yA ?? "").localeCompare(xA ?? "") : (xA ?? "").localeCompare(yA ?? "");
+}
+
+function sortValueDatePublished(x: Book, y: Book, reverse: boolean): number {
+  let xD = (
+    x.datePublished?.match(/^\-?\d+$/) ? new Date(+x.datePublished, 1, 1) : new Date(x.datePublished ?? "")
+  ).getTime();
+  let yD = (
+    y.datePublished?.match(/^\-?\d+$/) ? new Date(+y.datePublished, 1, 1) : new Date(y.datePublished ?? "")
+  ).getTime();
+  if (reverse) {
+    if (xD > yD) return -1;
+    if (xD < yD) return 1;
+  } else {
+    if (xD < yD) return -1;
+    if (xD > yD) return 1;
+  }
+  return 0;
+}
+
+function sortValueTags(x: Book, y: Book, reverse: boolean): number {
+  if (reverse) {
+    if (x.tags.length < y.tags.length) return -1;
+    if (x.tags.length > y.tags.length) return 1;
+  } else {
+    if (x.tags.length > y.tags.length) return -1;
+    if (x.tags.length < y.tags.length) return 1;
+  }
+  let xT = x.tags.join(" ");
+  let yT = y.tags.join(" ");
+  if (reverse) return yT.localeCompare(xT);
+  return xT.localeCompare(yT);
 }
