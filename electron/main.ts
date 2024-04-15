@@ -12,6 +12,7 @@ import { searchOpenLibrary, searchOpenLibraryWorkByISBN } from "./api/openLibrar
 
 const PORT = 5000;
 const DEV_MODE = process.env.WYRM_ENV === "dev";
+const SCREENSHOT_MODE = process.env.WYRM_PREV === "true";
 const APP_VERSION = packageJson.version;
 
 let settings: UserSettings;
@@ -20,7 +21,7 @@ function createWindow(): BrowserWindow {
   nativeTheme.themeSource = "dark";
 
   const mainWindow = new BrowserWindow({
-    width: 1415,
+    width: 1445,
     height: 815,
     minWidth: 1200,
     minHeight: 600,
@@ -34,7 +35,9 @@ function createWindow(): BrowserWindow {
 
   if (DEV_MODE) {
     mainWindow.loadURL(`http://localhost:${PORT}`);
-    mainWindow.webContents.openDevTools();
+    if (!SCREENSHOT_MODE) {
+      mainWindow.webContents.openDevTools();
+    }
   } else {
     mainWindow.loadFile(path.join(__dirname, "../../index.html"));
   }
@@ -44,11 +47,14 @@ function createWindow(): BrowserWindow {
   settings = loadSettings();
   settings.appVersion = APP_VERSION;
 
-  mainWindow.setBounds(settings.bounds);
+  if (!SCREENSHOT_MODE) {
+    mainWindow.setBounds(settings.bounds);
+  }
 
   mainWindow.on("close", function () {
     // only if already loaded, thx
-    if (settings) {
+    // use default size for screenshot mode
+    if (settings && !SCREENSHOT_MODE) {
       settings.bounds = mainWindow.getBounds();
       saveSettings(settings);
     }

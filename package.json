@@ -26,6 +26,7 @@
   "scripts": {
     "dev": "cross-env WYRM_ENV=dev rollup -c -w",
     "dev:electron": "cross-env WYRM_ENV=dev tsc -p ./electron/tsconfig.json && cross-env WYRM_ENV=dev electron ./dist/electron/electron/main.js",
+    "dev:electron:ss": "cross-env WYRM_ENV=dev tsc -p ./electron/tsconfig.json && cross-env WYRM_ENV=dev WYRM_PREV=true electron ./dist/electron/electron/main.js",
     "build:client": "cross-env WYRM_ENV=prod rollup -c",
     "build:electron": "cross-env WYRM_ENV=prod tsc -p ./electron/tsconfig.json",
     "build:prod": "ts-node scripts/rmdist.ts && npm run build:client && npm run build:electron",

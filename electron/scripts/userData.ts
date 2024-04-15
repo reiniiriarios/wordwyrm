@@ -8,6 +8,8 @@ const USER_DATA_PATH =
   (process.platform == "darwin" ? process.env.HOME + "/Library/Preferences" : process.env.HOME + "/.local/share");
 export const DATA_PATH = path.join(USER_DATA_PATH, "me.reinii.wordwyrm");
 
+const SCREENSHOT_MODE = process.env.WYRM_PREV === "true";
+
 export function initUserDirs() {
   if (!fs.existsSync(DATA_PATH)) {
     fs.mkdirSync(DATA_PATH, { recursive: true });
@@ -52,6 +54,10 @@ export function loadSettings(): UserSettings {
   }
   if (!settings.theme) {
     settings.theme = "default";
+  }
+
+  if (SCREENSHOT_MODE) {
+    settings.booksDir = path.join(DATA_PATH, "DEV-screenshot-mode");
   }
 
   return settings;
