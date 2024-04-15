@@ -20,8 +20,8 @@ function createWindow(): BrowserWindow {
   nativeTheme.themeSource = "dark";
 
   const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1415,
+    height: 815,
     minWidth: 1200,
     minHeight: 600,
     webPreferences: {
@@ -30,7 +30,6 @@ function createWindow(): BrowserWindow {
     },
     icon: "assets/icons/512x512.png",
   });
-  mainWindow.maximize();
   mainWindow.removeMenu();
 
   if (DEV_MODE) {
@@ -39,6 +38,21 @@ function createWindow(): BrowserWindow {
   } else {
     mainWindow.loadFile(path.join(__dirname, "../../index.html"));
   }
+
+  // Create user data directories if not already present.
+  initUserDirs();
+  settings = loadSettings();
+  settings.appVersion = APP_VERSION;
+
+  mainWindow.setBounds(settings.bounds);
+
+  mainWindow.on("close", function () {
+    // only if already loaded, thx
+    if (settings) {
+      settings.bounds = mainWindow.getBounds();
+      saveSettings(settings);
+    }
+  });
 
   return mainWindow;
 }
@@ -77,11 +91,6 @@ app.on("ready", () => {
     }
     return { action: "deny" };
   });
-
-  // Create user data directories if not already present.
-  initUserDirs();
-  settings = loadSettings();
-  settings.appVersion = APP_VERSION;
 
   // --------- Bridge ---------
 

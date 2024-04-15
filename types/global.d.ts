@@ -13,6 +13,12 @@ type UserSettings = {
   appVersion: string;
   dateFormat: string;
   theme: string;
+  bounds: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
 };
 
 declare global {
