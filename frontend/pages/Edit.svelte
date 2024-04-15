@@ -48,7 +48,7 @@
 
     const removeSavedListener = window.electronAPI.bookSaved((savedBook: Book) => {
       saving = false;
-      books.updateBook(savedBook);
+      books.updateBook(savedBook, book.cache.filepath ?? "");
       // hacky fix to maybe beat race condition on saving image
       // would rather go ahead and change the page than beat it
       setTimeout(() => push(`#/book/${savedBook.cache.filepath}`), 250);

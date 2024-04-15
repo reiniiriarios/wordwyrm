@@ -113,8 +113,14 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
   book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
   book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
 
+  const changedAuthor = oAuthorDir && oAuthorDir !== book.cache.authorDir;
+  const changedTitle = oFilename && oFilename !== newFilename;
+  const oAuthorPath = path.join(dir, oAuthorDir);
+  const oFilepath = path.join(oAuthorPath, oFilename);
+
   // Use the image variable to save the image, then delete the variable.
   let newImage = false;
+  let oldImage = book.images.hasImage;
   // [sic], not checking the hasImage variable, checking if there's a new image
   if (book.cache.image) {
     await saveBookImage(dir, book, book.cache.image);
@@ -133,15 +139,29 @@ export async function saveBook(dir: string, book: Book, oAuthorDir?: string, oFi
 
   saveYaml(filepath, book);
 
-  // After saving everything else, delete old data if present.
-  if (oAuthorDir && path.join(dir, oAuthorDir) !== authorPath) {
-    fs.rmSync(path.join(dir, oAuthorDir), { recursive: true, force: true });
-  } else if (oFilename && oFilename !== newFilename) {
-    fs.rmSync(path.join(authorPath, oFilename + ".yaml"), { force: true });
+  // Handle old data
+
+  if (oldImage && (changedAuthor || changedTitle) && fs.existsSync(oFilepath + ".jpg")) {
     if (newImage) {
-      fs.rmSync(path.join(authorPath, oFilename + ".jpg"), { force: true });
+      console.log("Deleting old image");
+      fs.rmSync(oFilepath + ".jpg", { force: true });
     } else {
-      fs.renameSync(path.join(authorPath, oFilename + ".jpg"), path.join(authorPath, newFilename + ".jpg"));
+      console.log("Moving image");
+      fs.renameSync(oFilepath + ".jpg", path.join(authorPath, newFilename + ".jpg"));
+    }
+  }
+
+  if ((changedAuthor || changedTitle) && fs.existsSync(oFilepath + ".yaml")) {
+    console.log("Deleting old yaml");
+    fs.rmSync(oFilepath + ".yaml", { force: true });
+  }
+
+  if (changedAuthor && fs.existsSync(oAuthorPath)) {
+    // If we moved the author dir and the old one is empty, delete it.
+    const oldAuthorDir = fs.readdirSync(oAuthorPath);
+    if (!oldAuthorDir.length) {
+      console.log("Deleting empty old author dir");
+      fs.rmSync(oAuthorPath, { recursive: true, force: true });
     }
   }
 
