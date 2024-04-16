@@ -1,6 +1,7 @@
 import log from "electron-log/main";
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import WyrmError from "../error";
+import fetch from "electron-fetch";
 
 const ENDPOINT = "https://www.googleapis.com/books/v1";
 
