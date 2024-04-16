@@ -4,7 +4,7 @@ A cross-platform desktop app for tracking what books you've read and when. The d
 YAML files and JPGs in author directories in a location of your choosing, so you're always in
 control of your data.
 
-![](docs/screenshot-01-linux.png)
+![](docs/screenshot-02-windows.png)
 
 ## Data :open_file_folder:
 
