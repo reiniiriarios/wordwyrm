@@ -160,6 +160,7 @@
       }
     },
     "snap": {
+      "artifactName": "wordwyrm-${version}-${arch}.${ext}",
       "summary": "${description}"
     },
     "appx": {
