@@ -2,6 +2,11 @@ import { NodeHtmlMarkdown } from "node-html-markdown";
 
 const ENDPOINT = "https://www.googleapis.com/books/v1";
 
+/**
+ * Google Books Volume
+ *
+ * @see https://developers.google.com/books/docs/v1/reference/volumes#resource
+ */
 export type Volume = {
   kind: "books#volume";
   id: string;
@@ -93,11 +98,21 @@ export type Volume = {
   };
 };
 
+/**
+ * Search results for looking up a Volume.
+ */
 export type VolumeSearch = {
   kind: "books#volumes";
   items: Volume[];
 };
 
+/**
+ * Search Google Books for a volume.
+ *
+ * @param q Query
+ * @param apiKey API Key
+ * @returns VolumeSearch or null if error.
+ */
 async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch | null> {
   try {
     return fetch(`${ENDPOINT}/volumes?q=${q}&key=${apiKey}`)
@@ -112,6 +127,14 @@ async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch | n
   return null;
 }
 
+/**
+ * Get a specific volume from Google Books.
+ *
+ * @param v Volume ID
+ * @param apiKey API Key
+ * @param lite Fetch only "lite" data
+ * @returns Volume or null if error.
+ */
 async function getVolume(v: string, apiKey: string, lite: boolean = false): Promise<Volume | null> {
   try {
     return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}&key=${apiKey}`)
@@ -126,6 +149,12 @@ async function getVolume(v: string, apiKey: string, lite: boolean = false): Prom
   return null;
 }
 
+/**
+ * Conform Google Books Volume data to Book datatype.
+ *
+ * @param {Volume} v Google Books Volume
+ * @returns {Book} Book
+ */
 function conformBook(v: Volume): Book {
   let book: Book = {
     version: "2",
@@ -216,6 +245,13 @@ function conformBook(v: Volume): Book {
   return book;
 }
 
+/**
+ * Search Google Books for a volume.
+ *
+ * @param q Search Query
+ * @param apiKey API Key
+ * @returns {Book[]} Array of Books
+ */
 export async function searchGoogleBooks(q: string, apiKey: string): Promise<Book[]> {
   return searchVolume(q, apiKey).then((volumeSearch) => {
     if (!volumeSearch) return [];
@@ -227,6 +263,13 @@ export async function searchGoogleBooks(q: string, apiKey: string): Promise<Book
   });
 }
 
+/**
+ * Get specific book from Google Books.
+ *
+ * @param gid Google Books ID
+ * @param apiKey API Key
+ * @returns Book or null if error or not found
+ */
 export async function getGoogleBook(gid: string, apiKey: string): Promise<Book | null> {
   return getVolume(gid, apiKey).then((v) => (v ? conformBook(v) : null));
 }

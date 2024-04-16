@@ -1,11 +1,14 @@
 import fetch from "electron-fetch";
 
-// https://openlibrary.org/dev/docs/api/search
-
 const endpoint = "https://openlibrary.org/";
 const imgEndpoint = "https://covers.openlibrary.org/b/";
 // authorEndpoint: https://covers.openlibrary.org/a/olid/
 
+/**
+ * Open Library Search Result
+ *
+ * @see https://openlibrary.org/dev/docs/api/search
+ */
 type OpenLibrarySearchResult = {
   key: string;
   title: string;
@@ -39,6 +42,11 @@ type OpenLibrarySearchResult = {
   id_alibris_id?: string[];
 };
 
+/**
+ * Open Library Search Response
+ *
+ * @see https://openlibrary.org/dev/docs/api/search
+ */
 type OpenLibrarySearchResponse = {
   numFound: number;
   start: number;
@@ -46,6 +54,12 @@ type OpenLibrarySearchResponse = {
   docs: OpenLibrarySearchResult[];
 };
 
+/**
+ * Open Library Work
+ *
+ * @see https://openlibrary.org/dev/docs/api/books
+ * @see https://openlibrary.org/dev/docs/api/search
+ */
 type OpenLibraryWork = {
   title: string;
   key: string;
@@ -61,6 +75,12 @@ type OpenLibraryWork = {
   covers: number[];
 };
 
+/**
+ * Open Library Edition
+ *
+ * @see https://openlibrary.org/dev/docs/api/books
+ * @see https://openlibrary.org/dev/docs/api/search
+ */
 type OpenLibraryEdition = {
   key: string;
   title: string;
@@ -84,6 +104,12 @@ type OpenLibraryEdition = {
   covers: number[];
 };
 
+/**
+ * Open Library Editions List
+ *
+ * @see https://openlibrary.org/dev/docs/api/books
+ * @see https://openlibrary.org/dev/docs/api/search
+ */
 type OpenLibraryEditions = {
   links: {
     self: string;
@@ -94,7 +120,14 @@ type OpenLibraryEditions = {
   entries: OpenLibraryEdition[];
 };
 
-// @todo: conform
+/**
+ * Get specific Work from Open Library
+ *
+ * @param olid Open Library Work ID
+ * @returns Work or null if error
+ *
+ * @todo Conform data
+ */
 export async function getOpenLibraryWork(olid: string): Promise<OpenLibraryWork | null> {
   try {
     const work: OpenLibraryWork = await fetch(`${endpoint}/works/${olid}.json`, {
@@ -115,7 +148,14 @@ export async function getOpenLibraryWork(olid: string): Promise<OpenLibraryWork 
   return null;
 }
 
-// @todo: conform
+/**
+ * Get Editions of Work from Open Library
+ *
+ * @param olid Open Library Work ID
+ * @returns Edition array or null if error
+ *
+ * @todo Conform data
+ */
 export async function getOpenLibraryEditions(olid: string): Promise<OpenLibraryEdition[] | null> {
   try {
     const editions: OpenLibraryEdition[] = await fetch(`${endpoint}/works/${olid}/editions.json`, {
@@ -139,7 +179,14 @@ export async function getOpenLibraryEditions(olid: string): Promise<OpenLibraryE
   return null;
 }
 
-// @todo: conform
+/**
+ * Get Editions of Work from Open Library by ISBN
+ *
+ * @param isbn ISBN
+ * @returns Edition array or null if error
+ *
+ * @todo Conform data
+ */
 export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLibraryEdition[] | null> {
   try {
     const editions: OpenLibraryEdition[] = await fetch(`${endpoint}/isbn/${isbn}.json`, {
@@ -163,6 +210,12 @@ export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLi
   return null;
 }
 
+/**
+ * Search Open Library for Work by ISBN
+ *
+ * @param isbn ISBN
+ * @returns Book or null if error
+ */
 export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | null> {
   try {
     const work: OpenLibrarySearchResult = await fetch(`${endpoint}/search.json?isbn=${isbn}`, {
@@ -191,6 +244,12 @@ export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | 
   return null;
 }
 
+/**
+ * Search Open Library for Work by query
+ *
+ * @param search Query
+ * @returns Array of Books
+ */
 export async function searchOpenLibrary(search: string): Promise<Book[]> {
   try {
     const works: OpenLibrarySearchResult[] = await fetch(`${endpoint}/search.json?q=${search}`, {
@@ -216,6 +275,12 @@ export async function searchOpenLibrary(search: string): Promise<Book[]> {
   return [];
 }
 
+/**
+ * Shortcut a la pop()
+ *
+ * @param ids Array of ids
+ * @param callback
+ */
 function setFirstId(ids: string[] | undefined | null, callback: (id: string) => void) {
   ids?.every((id) => {
     if (id) {
@@ -226,6 +291,13 @@ function setFirstId(ids: string[] | undefined | null, callback: (id: string) => 
   });
 }
 
+/**
+ * Conform Open Library Work to Book data
+ *
+ * @param work Open Library Work from Search Result
+ * @param {string} [isbn] If ISBN provided, will use this in data rather than one from Open Library
+ * @returns Book
+ */
 function conformOpenLibrarySearchResult(work: OpenLibrarySearchResult, isbn?: string): Book {
   let authors: Author[] = [];
   let names = new Set<string>();

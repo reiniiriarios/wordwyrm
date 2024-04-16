@@ -4,8 +4,11 @@ import fetch from "electron-fetch";
 
 const endpoint = "https://customsearch.googleapis.com/customsearch/v1";
 
-// https://developers.google.com/custom-search/v1/reference/rest/v1/Search
-
+/**
+ * Google Search Result Page
+ *
+ * @see https://developers.google.com/custom-search/v1/reference/rest/v1/Search
+ */
 type GoogleSearchResultPage = {
   title: string;
   totalResults: string;
@@ -45,6 +48,11 @@ type GoogleSearchResultPage = {
   imgDominantColor: string;
 };
 
+/**
+ * Google Search Result Promotion
+ *
+ * @see https://developers.google.com/custom-search/v1/reference/rest/v1/Search
+ */
 type GoogleSearchResultPromotion = {
   title: string;
   htmlTitle: string;
@@ -65,6 +73,11 @@ type GoogleSearchResultPromotion = {
   };
 };
 
+/**
+ * Google Search Result
+ *
+ * @see https://developers.google.com/custom-search/v1/reference/rest/v1/Search
+ */
 type GoogleSearchResult = {
   kind: string;
   title: string;
@@ -97,6 +110,11 @@ type GoogleSearchResult = {
   ];
 };
 
+/**
+ * Google Search Results Response
+ *
+ * @see https://developers.google.com/custom-search/v1/reference/rest/v1/Search
+ */
 type GoogleSearchResponse = {
   kind: string;
   url: {
@@ -123,6 +141,11 @@ type GoogleSearchResponse = {
   items: GoogleSearchResult[];
 };
 
+/**
+ * Search Result
+ *
+ * Simplified from Google data.
+ */
 export type SearchResult = {
   image: string;
   width: number;
@@ -130,6 +153,16 @@ export type SearchResult = {
   thumbnail: string;
 };
 
+/**
+ * Search Google Images for a specific book cover.
+ *
+ * @param apiKey Google Cloud API Key
+ * @param engineId Google Programmable Search Engine ID
+ * @param title Book title
+ * @param author Book author(s)
+ * @param page Page of results
+ * @returns
+ */
 export async function googleImageSearch(
   apiKey: string,
   engineId: string,

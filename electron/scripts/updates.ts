@@ -5,6 +5,12 @@ const DEV = process.env.WYRM_ENV === "dev";
 const user = "reiniiriarios";
 const repo = "wordwyrm";
 
+/**
+ * Check for app updates.
+ *
+ * @param {string} currentVersion
+ * @returns Returns new version if available or null if up to date.
+ */
 export async function checkForUpdate(currentVersion: string): Promise<string | null> {
   return await fetch(`https://api.github.com/repos/${user}/${repo}/releases?per_page=1`)
     .then((res) => res.json())

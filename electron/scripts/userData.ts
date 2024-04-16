@@ -25,6 +25,11 @@ export const DATA_PATH = path.join(dataPath, dataDir);
 
 const SCREENSHOT_MODE = process.env.WYRM_PREV === "true";
 
+/**
+ * Create user data directories if not already present.
+ *
+ * @returns {boolean} data directory moved
+ */
 export function initUserDirs(): boolean {
   if (!fs.existsSync(DATA_PATH)) {
     console.log("Data directory not found, creating");
@@ -48,6 +53,14 @@ export function initUserDirs(): boolean {
   return false;
 }
 
+/**
+ * Read YAML from file into object.
+ *
+ * @param {string} filename
+ * @returns object
+ *
+ * @todo Use `unknown` and type guarding.
+ */
 export function readYaml(filename: string): any {
   try {
     const doc = yaml.load(fs.readFileSync(filename, "utf8"));
@@ -57,6 +70,14 @@ export function readYaml(filename: string): any {
   }
 }
 
+/**
+ * Save object to YAML file.
+ *
+ * @param {string} filename
+ * @param data object
+ *
+ * @todo Use `unknown` and type guarding.
+ */
 export function saveYaml(filename: string, data: any) {
   try {
     let toWrite = structuredClone(data);
@@ -68,6 +89,12 @@ export function saveYaml(filename: string, data: any) {
   }
 }
 
+/**
+ * Load settings, validate, and parse for current version compatibility.
+ *
+ * @param args
+ * @returns {UserSettings} settings
+ */
 export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
   const sf = path.join(DATA_PATH, "settings.yaml");
   if (!fs.existsSync(sf)) {
@@ -103,6 +130,14 @@ export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
   return settings;
 }
 
+/**
+ * Save user settings object to user data file.
+ *
+ * @param {UserSettings} settings
+ * @param options
+ * @param callback
+ * @returns
+ */
 export function saveSettings(
   settings: UserSettings,
   options: { moveData?: boolean; oldDir?: string } = { moveData: false },
@@ -116,6 +151,13 @@ export function saveSettings(
   });
 }
 
+/**
+ * Move contents of directory with copy fallback in case of error or different drive.
+ *
+ * @param {string} oldDir
+ * @param {string} newDir
+ * @param callback
+ */
 function moveDirectory(oldDir: string, newDir: string, callback: (error?: Error) => void) {
   // Read each author directory
   fs.readdir(oldDir, { withFileTypes: true })
