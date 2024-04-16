@@ -13,9 +13,9 @@ export default class WyrmError extends Error {
     } else if (Array.isArray(details)) {
       this.details = details.map((d) => d.toString()).join("\n");
     } else if (details) {
-      this.details = details.toString();
+      this.details = details.stack ?? details.toString();
     } else if (typeof error !== "string") {
-      this.details = error.toString();
+      this.details = error.stack ?? error.toString();
     }
   }
 
