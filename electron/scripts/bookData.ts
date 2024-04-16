@@ -179,8 +179,8 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
 
     const changedAuthor = oAuthorDir && oAuthorDir !== book.cache.authorDir;
     const changedTitle = oFilename && oFilename !== newFilename;
-    const oAuthorPath = path.join(booksDir, oAuthorDir);
-    const oFilepath = path.join(oAuthorPath, oFilename);
+    const oAuthorPath = oAuthorDir ? path.join(booksDir, oAuthorDir) : authorPath;
+    const oFilepath = path.join(oAuthorPath, oFilename ?? book.cache.filename);
 
     // Use the image variable to save the image, then delete the variable.
     let newImage = false;
