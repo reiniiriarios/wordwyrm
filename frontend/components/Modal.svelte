@@ -98,6 +98,7 @@
 
     &__window {
       width: 75vw;
+      max-width: 60rem;
       height: 75vh;
       overflow-y: auto;
       background-color: var(--c-overlay);
