@@ -1,4 +1,5 @@
 import fetch from "electron-fetch";
+import WyrmError from "../error";
 
 const endpoint = "https://openlibrary.org/";
 const imgEndpoint = "https://covers.openlibrary.org/b/";
@@ -124,11 +125,12 @@ type OpenLibraryEditions = {
  * Get specific Work from Open Library
  *
  * @param olid Open Library Work ID
- * @returns Work or null if error
+ * @returns Work
+ * @throws WyrmError
  *
  * @todo Conform data
  */
-export async function getOpenLibraryWork(olid: string): Promise<OpenLibraryWork | null> {
+export async function getOpenLibraryWork(olid: string): Promise<OpenLibraryWork> {
   try {
     const work: OpenLibraryWork = await fetch(`${endpoint}/works/${olid}.json`, {
       method: "GET",
@@ -144,19 +146,20 @@ export async function getOpenLibraryWork(olid: string): Promise<OpenLibraryWork 
     return work;
   } catch (e) {
     console.error("getOpenLibraryWork", e);
+    throw new WyrmError("Error fetching Work data from Open Library.", e);
   }
-  return null;
 }
 
 /**
  * Get Editions of Work from Open Library
  *
  * @param olid Open Library Work ID
- * @returns Edition array or null if error
+ * @returns Edition array
+ * @throws WyrmError
  *
  * @todo Conform data
  */
-export async function getOpenLibraryEditions(olid: string): Promise<OpenLibraryEdition[] | null> {
+export async function getOpenLibraryEditions(olid: string): Promise<OpenLibraryEdition[]> {
   try {
     const editions: OpenLibraryEdition[] = await fetch(`${endpoint}/works/${olid}/editions.json`, {
       method: "GET",
@@ -166,7 +169,7 @@ export async function getOpenLibraryEditions(olid: string): Promise<OpenLibraryE
     })
       .then((res) => res.json())
       .then((json: OpenLibraryEditions) => {
-        if (!json.size) throw new Error("No results");
+        if (!json.size) return [];
         return json.entries;
       })
       .catch((e) => {
@@ -175,19 +178,20 @@ export async function getOpenLibraryEditions(olid: string): Promise<OpenLibraryE
     return editions;
   } catch (e) {
     console.error("getOpenLibraryEditions", e);
+    throw new WyrmError("Error fetching Edition data from Open Library.", e);
   }
-  return null;
 }
 
 /**
  * Get Editions of Work from Open Library by ISBN
  *
  * @param isbn ISBN
- * @returns Edition array or null if error
+ * @returns Edition array
+ * @throws WyrmError
  *
  * @todo Conform data
  */
-export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLibraryEdition[] | null> {
+export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLibraryEdition[]> {
   try {
     const editions: OpenLibraryEdition[] = await fetch(`${endpoint}/isbn/${isbn}.json`, {
       method: "GET",
@@ -197,7 +201,7 @@ export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLi
     })
       .then((res) => res.json())
       .then((json: OpenLibraryEditions) => {
-        if (!json.size) throw new Error("No results");
+        if (!json.size) return [];
         return json.entries;
       })
       .catch((e) => {
@@ -206,15 +210,16 @@ export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLi
     return editions;
   } catch (e) {
     console.error("getOpenLibraryEditionsByISBN", e);
+    throw new WyrmError("Error fetching Edition data from Open Library.", e);
   }
-  return null;
 }
 
 /**
  * Search Open Library for Work by ISBN
  *
  * @param isbn ISBN
- * @returns Book or null if error
+ * @returns Book or null if no results
+ * @throws WyrmError
  */
 export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | null> {
   try {
@@ -231,7 +236,7 @@ export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | 
         return res.json();
       })
       .then((json: OpenLibrarySearchResponse) => {
-        if (!json.numFound) throw new Error("No results");
+        if (!json.numFound) return null;
         return json.docs[0];
       })
       .catch((e) => {
@@ -240,8 +245,8 @@ export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | 
     return conformOpenLibrarySearchResult(work, isbn);
   } catch (e) {
     console.error("searchOpenLibraryWorkByISBN", e);
+    throw new WyrmError("Error fetching Work data from Open Library.", e);
   }
-  return null;
 }
 
 /**
@@ -249,6 +254,7 @@ export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | 
  *
  * @param search Query
  * @returns Array of Books
+ * @throws WyrmError
  */
 export async function searchOpenLibrary(search: string): Promise<Book[]> {
   try {
@@ -260,7 +266,7 @@ export async function searchOpenLibrary(search: string): Promise<Book[]> {
     })
       .then((res) => res.json())
       .then((json: OpenLibrarySearchResponse) => {
-        if (!json.numFound) throw new Error("No results");
+        if (!json.numFound) return [];
         return json.docs;
       })
       .catch((e) => {
@@ -271,6 +277,7 @@ export async function searchOpenLibrary(search: string): Promise<Book[]> {
     }
   } catch (e) {
     console.error("searchOpenLibrary", e);
+    throw new WyrmError("Error searching Open Library.", e);
   }
   return [];
 }

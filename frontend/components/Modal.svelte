@@ -12,6 +12,7 @@
   export let height: string = "";
   export let warning: boolean = false;
   export let loading: boolean = false;
+  export let small: boolean = false;
 
   function confirm(e?: MouseEvent | KeyboardEvent) {
     e?.preventDefault();
@@ -50,7 +51,7 @@
 
 <!-- keyboard interaction handled above -->
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-<div class="modal" class:open on:click|self={close}>
+<div class="modal" class:open class:small on:click|self={close}>
   <div class="modal__window" role="dialog" style:height>
     <div class="modal__header">{heading}</div>
     <div class="modal__body"><slot /></div>
@@ -106,6 +107,12 @@
       justify-content: space-between;
       z-index: 110;
       box-shadow: rgba(0, 0, 0, 0.2) 0.1rem 0.1rem 0.4rem 0.2rem;
+    }
+
+    &.small {
+      .modal__window {
+        max-width: 40rem;
+      }
     }
 
     &__header {

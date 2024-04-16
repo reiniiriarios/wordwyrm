@@ -1,4 +1,5 @@
 import fetch from "electron-fetch";
+import WyrmError from "../error";
 
 const DEV = process.env.WYRM_ENV === "dev";
 
@@ -10,6 +11,7 @@ const repo = "wordwyrm";
  *
  * @param {string} currentVersion
  * @returns Returns new version if available or null if up to date.
+ * @throws WyrmError
  */
 export async function checkForUpdate(currentVersion: string): Promise<string | null> {
   return await fetch(`https://api.github.com/repos/${user}/${repo}/releases?per_page=1`)
@@ -33,6 +35,6 @@ export async function checkForUpdate(currentVersion: string): Promise<string | n
     })
     .catch((err) => {
       console.error(err);
-      return null;
+      throw new WyrmError("Error checking for updates.", err);
     });
 }

@@ -9,6 +9,7 @@ import { checkForUpdate } from "./scripts/updates";
 import { getGoogleBook, searchGoogleBooks } from "./api/googleBooks";
 import { googleImageSearch } from "./api/googleImageSearch";
 import { searchOpenLibrary, searchOpenLibraryWorkByISBN } from "./api/openLibrary";
+import { parseErr } from "./error";
 
 const PORT = 5000;
 const DEV_MODE = process.env.WYRM_ENV === "dev";
@@ -43,7 +44,7 @@ function createWindow(): BrowserWindow {
 
   // Create user data directories if not already present.
   let migrateData = initUserDirs();
-  settings = loadSettings({ migrateData });
+  settings = loadSettings({ migrateData }); // throws error, app hasn't started yet though
   settings.appVersion = APP_VERSION;
   setWindowTheme(settings.theme);
 
@@ -116,11 +117,13 @@ app.on("ready", () => {
   // --------- Bridge ---------
 
   ipcMain.on("checkVersion", (event) => {
-    checkForUpdate(APP_VERSION).then((updateAvailable) => {
-      if (updateAvailable) {
-        event.reply("updateAvailable", updateAvailable);
-      }
-    });
+    checkForUpdate(APP_VERSION)
+      .then((updateAvailable) => {
+        if (updateAvailable) {
+          event.reply("updateAvailable", updateAvailable);
+        }
+      })
+      .catch((e) => event.reply("error", parseErr(e)));
   });
 
   ipcMain.on("getBookData", async (event, book: Book) => {
@@ -131,18 +134,22 @@ app.on("ready", () => {
       let googleBook: Book | null = null;
       let olBook: Book | null = null;
 
-      // Run first two queries async.
-      if (book.ids.googleBooksId) googleBookP = getGoogleBook(book.ids.googleBooksId, settings.googleApiKey);
-      if (book.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(book.ids.isbn);
+      try {
+        // Run first two queries async.
+        if (book.ids.googleBooksId) googleBookP = getGoogleBook(book.ids.googleBooksId, settings.googleApiKey);
+        if (book.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(book.ids.isbn);
 
-      // Wait for data.
-      if (book.ids.googleBooksId) googleBook = await googleBookP;
-      if (book.ids.isbn) olBook = await olBookP;
+        // Wait for data.
+        if (book.ids.googleBooksId) googleBook = await googleBookP;
+        if (book.ids.isbn) olBook = await olBookP;
 
-      // If we didn't have either of the necessary ids, run those async.
-      if (!olBook && googleBook.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(googleBook.ids.isbn);
-      if (!googleBook && olBook.ids.googleBooksId)
-        googleBookP = getGoogleBook(olBook.ids.googleBooksId, settings.googleApiKey);
+        // If we didn't have either of the necessary ids, run those async.
+        if (!olBook && googleBook.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(googleBook.ids.isbn);
+        if (!googleBook && olBook.ids.googleBooksId)
+          googleBookP = getGoogleBook(olBook.ids.googleBooksId, settings.googleApiKey);
+      } catch (e) {
+        event.reply("error", parseErr(e));
+      }
 
       // Wait on secondary data if any.
       if (!olBook && googleBook.ids.isbn) olBook = await olBookP;
@@ -167,9 +174,11 @@ app.on("ready", () => {
     }
     // If just using Google Books, fetch full data.
     else if (settings.searchEngines.includes("googleBooks")) {
-      getGoogleBook(book.ids.googleBooksId, settings.googleApiKey).then((updatedBook) => {
-        if (updatedBook) book = updatedBook;
-      });
+      getGoogleBook(book.ids.googleBooksId, settings.googleApiKey)
+        .then((updatedBook) => {
+          if (updatedBook) book = updatedBook;
+        })
+        .catch((e) => event.reply("error", parseErr(e)));
     }
     // If just using OpenLibrary, there's no more data to get.
     event.reply("receiveBookData", book);
@@ -177,26 +186,38 @@ app.on("ready", () => {
 
   ipcMain.on("searchBook", (event, q: string) => {
     if (settings.searchEngines.includes("googleBooks")) {
-      searchGoogleBooks(q, settings.googleApiKey).then((res) => event.reply("searchBookResults", res));
+      searchGoogleBooks(q, settings.googleApiKey)
+        .then((res) => event.reply("searchBookResults", res))
+        .catch((e) => event.reply("error", parseErr(e)));
     } else {
-      searchOpenLibrary(q).then((res) => event.reply("searchBookResults", res));
+      searchOpenLibrary(q)
+        .then((res) => event.reply("searchBookResults", res))
+        .catch((e) => event.reply("error", parseErr(e)));
     }
   });
 
   ipcMain.on("readAllBooks", (event) => {
-    readAllBooks(settings.booksDir).then((res) => event.reply("receiveAllBooks", res));
+    readAllBooks(settings.booksDir)
+      .then((res) => event.reply("receiveAllBooks", res))
+      .catch((e) => event.reply("error", parseErr(e)));
   });
 
   ipcMain.on("readBook", (event, authorDir: string, filename: string) => {
-    readBook(settings.booksDir, authorDir, filename).then((res) => event.reply("receiveBook", res));
+    readBook(settings.booksDir, authorDir, filename)
+      .then((res) => event.reply("receiveBook", res))
+      .catch((e) => event.reply("error", parseErr(e)));
   });
 
   ipcMain.on("saveBook", (event, book: Book) => {
-    saveBook(settings.booksDir, book).then((res) => event.reply("bookSaved", res));
+    saveBook(settings.booksDir, book)
+      .then((res) => event.reply("bookSaved", res))
+      .catch((e) => event.reply("error", parseErr(e)));
   });
 
   ipcMain.on("editBook", (event, book: Book, authorDir: string, filename: string) => {
-    saveBook(settings.booksDir, book, authorDir, filename).then((res) => event.reply("bookSaved", res));
+    saveBook(settings.booksDir, book, authorDir, filename)
+      .then((res) => event.reply("bookSaved", res))
+      .catch((e) => event.reply("error", parseErr(e)));
   });
 
   ipcMain.on("selectDataDir", async (event) => {
@@ -214,17 +235,21 @@ app.on("ready", () => {
   });
 
   ipcMain.on("loadSettings", (event) => {
-    settings = loadSettings();
-    settings.appVersion = APP_VERSION;
-    event.reply("settingsLoaded", settings);
+    try {
+      settings = loadSettings();
+      settings.appVersion = APP_VERSION;
+      event.reply("settingsLoaded", settings);
+    } catch (e) {
+      event.reply("error", parseErr(e));
+    }
   });
 
   ipcMain.on("saveSettings", (event, newSettings: UserSettings, moveData: boolean) => {
     saveSettings(newSettings, { moveData, oldDir: settings.booksDir }, (err) => {
       if (err) {
-        console.error(err);
-        event.reply("error", err.message);
+        event.reply("error", parseErr(err));
       }
+      // Update local settings even if error saving them
       settings = newSettings;
       setWindowTheme(settings.theme);
       event.reply("settingsLoaded", settings);
@@ -233,22 +258,28 @@ app.on("ready", () => {
 
   ipcMain.on("imageSearch", (event, author: string, title: string, page: number) => {
     if (settings.googleApiKey && settings.googleSearchEngineId) {
-      googleImageSearch(settings.googleApiKey, settings.googleSearchEngineId, author, title, page).then((res) =>
-        event.reply("imageSearchResults", res),
-      );
+      googleImageSearch(settings.googleApiKey, settings.googleSearchEngineId, author, title, page)
+        .then((res) => event.reply("imageSearchResults", res))
+        .catch((e) => event.reply("error", parseErr(e)));
     }
   });
 
   ipcMain.on("addBookImage", (event, book: Book, url: string) => {
-    addBookImage(settings.booksDir, book, url).then(() => event.reply("bookImageAdded"));
+    addBookImage(settings.booksDir, book, url)
+      .then(() => event.reply("bookImageAdded"))
+      .catch((e) => event.reply("error", parseErr(e)));
   });
 
   ipcMain.on("addBookImageBase64", (event, book: Book, base64: string) => {
-    addBookImageBase64(settings.booksDir, book, base64).then(() => event.reply("bookImageBase64Added"));
+    addBookImageBase64(settings.booksDir, book, base64)
+      .then(() => event.reply("bookImageBase64Added"))
+      .catch((e) => event.reply("error", parseErr(e)));
   });
 
   ipcMain.on("deleteBook", (event, book: Book) => {
-    deleteBook(settings.booksDir, book).then(() => event.reply("bookDeleted"));
+    deleteBook(settings.booksDir, book)
+      .then(() => event.reply("bookDeleted"))
+      .catch((e) => event.reply("error", parseErr(e)));
   });
 
   ipcMain.on("openBooksDir", (_event) => {

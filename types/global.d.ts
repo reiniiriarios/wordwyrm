@@ -21,6 +21,11 @@ type UserSettings = {
   };
 };
 
+type WyrmErrorDetails = {
+  message: string;
+  details: string;
+};
+
 declare global {
   interface Window {
     electronAPI: typeof api;

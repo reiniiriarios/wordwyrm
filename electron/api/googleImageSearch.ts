@@ -1,4 +1,5 @@
 import fetch from "electron-fetch";
+import WyrmError from "../error";
 
 // https://programmablesearchengine.google.com/
 
@@ -161,7 +162,8 @@ export type SearchResult = {
  * @param title Book title
  * @param author Book author(s)
  * @param page Page of results
- * @returns
+ * @returns {SearchResult[]} Search results
+ * @throws WyrmError
  */
 export async function googleImageSearch(
   apiKey: string,
@@ -169,7 +171,7 @@ export async function googleImageSearch(
   title: string,
   author: string,
   page: number = 0,
-): Promise<SearchResult[] | string> {
+): Promise<SearchResult[]> {
   let keywords = `"${title}" by ${author} book cover`;
   let results: SearchResult[] = [];
 
@@ -205,8 +207,8 @@ export async function googleImageSearch(
     }
 
     return results;
-  } catch (error: any) {
-    console.error(error);
-    return error.toString();
+  } catch (e) {
+    console.error(e);
+    throw new WyrmError("Error searching Google Images.", e);
   }
 }

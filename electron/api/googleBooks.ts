@@ -1,4 +1,5 @@
 import { NodeHtmlMarkdown } from "node-html-markdown";
+import WyrmError from "../error";
 
 const ENDPOINT = "https://www.googleapis.com/books/v1";
 
@@ -111,9 +112,10 @@ export type VolumeSearch = {
  *
  * @param q Query
  * @param apiKey API Key
- * @returns VolumeSearch or null if error.
+ * @returns VolumeSearch.
+ * @throws WyrmError
  */
-async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch | null> {
+async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch> {
   try {
     return fetch(`${ENDPOINT}/volumes?q=${q}&key=${apiKey}`)
       .then((res) => res.json())
@@ -123,8 +125,8 @@ async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch | n
       });
   } catch (e) {
     console.error("searchVolume", e);
+    throw new WyrmError("Error searching Google Books.", e);
   }
-  return null;
 }
 
 /**
@@ -133,9 +135,10 @@ async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch | n
  * @param v Volume ID
  * @param apiKey API Key
  * @param lite Fetch only "lite" data
- * @returns Volume or null if error.
+ * @returns Volume
+ * @throws WyrmError
  */
-async function getVolume(v: string, apiKey: string, lite: boolean = false): Promise<Volume | null> {
+async function getVolume(v: string, apiKey: string, lite: boolean = false): Promise<Volume> {
   try {
     return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}&key=${apiKey}`)
       .then((res) => res.json())
@@ -145,8 +148,8 @@ async function getVolume(v: string, apiKey: string, lite: boolean = false): Prom
       });
   } catch (e) {
     console.error("getVolume", e);
+    throw new WyrmError("Error fetching volume data from Google Books.", e);
   }
-  return null;
 }
 
 /**
@@ -251,6 +254,7 @@ function conformBook(v: Volume): Book {
  * @param q Search Query
  * @param apiKey API Key
  * @returns {Book[]} Array of Books
+ * @throws WyrmError
  */
 export async function searchGoogleBooks(q: string, apiKey: string): Promise<Book[]> {
   return searchVolume(q, apiKey).then((volumeSearch) => {
@@ -269,6 +273,7 @@ export async function searchGoogleBooks(q: string, apiKey: string): Promise<Book
  * @param gid Google Books ID
  * @param apiKey API Key
  * @returns Book or null if error or not found
+ * @throws WyrmError
  */
 export async function getGoogleBook(gid: string, apiKey: string): Promise<Book | null> {
   return getVolume(gid, apiKey).then((v) => (v ? conformBook(v) : null));

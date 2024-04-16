@@ -3,6 +3,7 @@ import * as path from "path";
 import fetch from "electron-fetch";
 import sharp from "sharp";
 import { readYaml, saveYaml } from "./userData";
+import WyrmError from "../error";
 
 /**
  * Create full path to user books directory.
@@ -54,6 +55,7 @@ export function titleToFilename(title: string): string {
  * @param {string} booksDir Books directory
  * @param {Book} book Book
  * @param {string} url Url or local path to image.
+ * @throws WyrmError
  */
 async function saveBookImage(booksDir: string, book: Book, url: string) {
   try {
@@ -78,6 +80,7 @@ async function saveBookImage(booksDir: string, book: Book, url: string) {
     }
   } catch (e) {
     console.error(e);
+    throw new WyrmError("Error saving image.", e);
   }
 }
 
@@ -97,6 +100,7 @@ async function sharpImage(img: Buffer | string, filepath: string) {
  * @param {string} booksDir Books directory
  * @param {Book} book Book
  * @param {string} url Url or local path to image.
+ * @throws WyrmError
  */
 export async function addBookImage(booksDir: string, book: Book, url: string) {
   if (!book.cache.authorDir) {
@@ -114,6 +118,7 @@ export async function addBookImage(booksDir: string, book: Book, url: string) {
  * @param {string} booksDir Books directory
  * @param {Book} book Book
  * @param {string} base64 Base64-encoded image data (no data prefix, just raw data)
+ * @throws WyrmError
  */
 export async function addBookImageBase64(booksDir: string, book: Book, base64: string) {
   try {
@@ -127,6 +132,7 @@ export async function addBookImageBase64(booksDir: string, book: Book, base64: s
     saveYaml(path.join(booksDir, book.cache.authorDir, `${book.cache.filename}.yaml`), book);
   } catch (e) {
     console.error(e);
+    throw new WyrmError("Error saving image.", e);
   }
 }
 
@@ -137,7 +143,8 @@ export async function addBookImageBase64(booksDir: string, book: Book, base64: s
  * @param {Book} book Book
  * @param {string} [oAuthorDir] Existing author dir before saving
  * @param {string} [oFilename] Existing filename before saving
- * @returns
+ * @returns Book
+ * @throws WyrmError
  */
 export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string, oFilename?: string): Promise<Book> {
   initBookDirs(booksDir);
@@ -156,69 +163,73 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
     };
   }
 
-  // Paths
-  book.cache.authorDir = authorsToDir(book.authors);
-  const authorPath = path.join(booksDir, book.cache.authorDir);
-  if (!fs.existsSync(authorPath)) {
-    fs.mkdirSync(authorPath, { recursive: true });
-  }
-  const newFilename = titleToFilename(book.title);
-  if (book.cache.filename != newFilename) {
-    book.cache.filename = newFilename;
-  }
-  book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
-  book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
-
-  const changedAuthor = oAuthorDir && oAuthorDir !== book.cache.authorDir;
-  const changedTitle = oFilename && oFilename !== newFilename;
-  const oAuthorPath = path.join(booksDir, oAuthorDir);
-  const oFilepath = path.join(oAuthorPath, oFilename);
-
-  // Use the image variable to save the image, then delete the variable.
-  let newImage = false;
-  let oldImage = book.images.hasImage;
-  // [sic], not checking the hasImage variable, checking if there's a new image
-  if (book.cache.image) {
-    await saveBookImage(booksDir, book, book.cache.image);
-    newImage = true;
-    book.images.hasImage = true;
-    book.images.imageUpdated = new Date().getTime();
-  }
-
-  if (!book.tags) book.tags = [];
-  else book.tags = book.tags.filter((t) => t.trim().length);
-
-  const filepath = path.join(booksDir, `${book.cache.filepath}.yaml`);
-  if (!book.timestampAdded && !fs.existsSync(filepath)) {
-    book.timestampAdded = new Date().getTime();
-  }
-
-  saveYaml(filepath, book);
-
-  // Handle old data
-
-  if (oldImage && (changedAuthor || changedTitle) && fs.existsSync(oFilepath + ".jpg")) {
-    if (newImage) {
-      console.log("Deleting old image");
-      fs.rmSync(oFilepath + ".jpg", { force: true });
-    } else {
-      console.log("Moving image");
-      fs.renameSync(oFilepath + ".jpg", path.join(authorPath, newFilename + ".jpg"));
+  try {
+    // Paths
+    book.cache.authorDir = authorsToDir(book.authors);
+    const authorPath = path.join(booksDir, book.cache.authorDir);
+    if (!fs.existsSync(authorPath)) {
+      fs.mkdirSync(authorPath, { recursive: true });
     }
-  }
-
-  if ((changedAuthor || changedTitle) && fs.existsSync(oFilepath + ".yaml")) {
-    console.log("Deleting old yaml");
-    fs.rmSync(oFilepath + ".yaml", { force: true });
-  }
-
-  if (changedAuthor && fs.existsSync(oAuthorPath)) {
-    // If we moved the author dir and the old one is empty, delete it.
-    const oldAuthorDir = fs.readdirSync(oAuthorPath);
-    if (!oldAuthorDir.length) {
-      console.log("Deleting empty old author dir");
-      fs.rmSync(oAuthorPath, { recursive: true, force: true });
+    const newFilename = titleToFilename(book.title);
+    if (book.cache.filename != newFilename) {
+      book.cache.filename = newFilename;
     }
+    book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
+    book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
+
+    const changedAuthor = oAuthorDir && oAuthorDir !== book.cache.authorDir;
+    const changedTitle = oFilename && oFilename !== newFilename;
+    const oAuthorPath = path.join(booksDir, oAuthorDir);
+    const oFilepath = path.join(oAuthorPath, oFilename);
+
+    // Use the image variable to save the image, then delete the variable.
+    let newImage = false;
+    let oldImage = book.images.hasImage;
+    // [sic], not checking the hasImage variable, checking if there's a new image
+    if (book.cache.image) {
+      await saveBookImage(booksDir, book, book.cache.image);
+      newImage = true;
+      book.images.hasImage = true;
+      book.images.imageUpdated = new Date().getTime();
+    }
+
+    if (!book.tags) book.tags = [];
+    else book.tags = book.tags.filter((t) => t.trim().length);
+
+    const filepath = path.join(booksDir, `${book.cache.filepath}.yaml`);
+    if (!book.timestampAdded && !fs.existsSync(filepath)) {
+      book.timestampAdded = new Date().getTime();
+    }
+
+    saveYaml(filepath, book);
+
+    // Handle old data
+
+    if (oldImage && (changedAuthor || changedTitle) && fs.existsSync(oFilepath + ".jpg")) {
+      if (newImage) {
+        console.log("Deleting old image");
+        fs.rmSync(oFilepath + ".jpg", { force: true });
+      } else {
+        console.log("Moving image");
+        fs.renameSync(oFilepath + ".jpg", path.join(authorPath, newFilename + ".jpg"));
+      }
+    }
+
+    if ((changedAuthor || changedTitle) && fs.existsSync(oFilepath + ".yaml")) {
+      console.log("Deleting old yaml");
+      fs.rmSync(oFilepath + ".yaml", { force: true });
+    }
+
+    if (changedAuthor && fs.existsSync(oAuthorPath)) {
+      // If we moved the author dir and the old one is empty, delete it.
+      const oldAuthorDir = fs.readdirSync(oAuthorPath);
+      if (!oldAuthorDir.length) {
+        console.log("Deleting empty old author dir");
+        fs.rmSync(oAuthorPath, { recursive: true, force: true });
+      }
+    }
+  } catch (e) {
+    throw new WyrmError("Error saving book.", e);
   }
 
   return book;
@@ -229,6 +240,7 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
  *
  * @param {string} booksDir Books directory
  * @param {Book} book Book
+ * @throws WyrmError
  */
 export async function deleteBook(booksDir: string, book: Book) {
   try {
@@ -251,6 +263,7 @@ export async function deleteBook(booksDir: string, book: Book) {
     }
   } catch (e) {
     console.error(e);
+    throw new WyrmError("Error deleting book.", e);
   }
 }
 
@@ -258,35 +271,40 @@ export async function deleteBook(booksDir: string, book: Book) {
  * Read all book data.
  *
  * @param {string} booksDir Books directory
+ * @throws WyrmError
  */
 export async function readAllBooks(booksDir: string): Promise<Book[]> {
   initBookDirs(booksDir);
   let books: Book[] = [];
   // Read author dirs
-  fs.readdirSync(booksDir, { withFileTypes: true }).forEach((file) => {
-    if (file.isDirectory()) {
-      // Read yaml in author dirs
-      fs.readdirSync(path.join(file.path, file.name), { withFileTypes: true }).forEach((subFile) => {
-        if (subFile.isFile() && subFile.name.endsWith(".yaml")) {
-          // Get data for book
-          const pathname = path.join(subFile.path, subFile.name);
-          // Import
-          let book: BookImport = readYaml(pathname);
-          if (!book.version || book.version === "1") book = transformV1(book as Book_v1);
-          else if (book.version !== "2") return; // Unrecognized version, unable to parse.
-          // Build cache data
-          book.images.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
-          book.cache = {
-            authorDir: file.name,
-            filename: subFile.name.slice(0, -5),
-          };
-          book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
-          book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
-          books.push(book);
-        }
-      });
-    }
-  });
+  try {
+    fs.readdirSync(booksDir, { withFileTypes: true }).forEach((file) => {
+      if (file.isDirectory()) {
+        // Read yaml in author dirs
+        fs.readdirSync(path.join(file.path, file.name), { withFileTypes: true }).forEach((subFile) => {
+          if (subFile.isFile() && subFile.name.endsWith(".yaml")) {
+            // Get data for book
+            const pathname = path.join(subFile.path, subFile.name);
+            // Import
+            let book: BookImport = readYaml(pathname);
+            if (!book.version || book.version === "1") book = transformV1(book as Book_v1);
+            else if (book.version !== "2") return; // Unrecognized version, unable to parse.
+            // Build cache data
+            book.images.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
+            book.cache = {
+              authorDir: file.name,
+              filename: subFile.name.slice(0, -5),
+            };
+            book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
+            book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
+            books.push(book);
+          }
+        });
+      }
+    });
+  } catch (e) {
+    throw new WyrmError("Error reading book data.", e);
+  }
   return books;
 }
 
@@ -296,14 +314,15 @@ export async function readAllBooks(booksDir: string): Promise<Book[]> {
  * @param {string} booksDir Books directory
  * @param {string} authorDir Author directory name
  * @param {string} filename Filename from title (no extension)
+ * @throws WyrmError
  */
 export async function readBook(booksDir: string, authorDir: string, filename: string): Promise<Book | null> {
   const pathname = path.join(booksDir, authorDir, filename + ".yaml");
-  if (!fs.existsSync(pathname)) return null;
+  if (!fs.existsSync(pathname)) throw new WyrmError("Book data not found.", pathname);
   // Import
   let book: BookImport = readYaml(pathname);
   if (!book.version || book.version === "1") book = transformV1(book as Book_v1);
-  else if (book.version !== "2") return null; // Unrecognized version, unable to parse.
+  else if (book.version !== "2") throw new WyrmError("Unrecognized data.", "book.version != 2");
   // Build cache data
   book.images.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
   let filepath = authorDir + "/" + filename;

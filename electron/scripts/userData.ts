@@ -2,6 +2,7 @@ import * as fs from "fs-extra";
 import * as yaml from "js-yaml";
 import * as path from "path";
 import { UserSettings } from "../../types/global";
+import WyrmError from "../error";
 
 // Get platform-idiomatic user data directory.
 let dataPath: string;
@@ -94,40 +95,45 @@ export function saveYaml(filename: string, data: any) {
  *
  * @param args
  * @returns {UserSettings} settings
+ * @throws WyrmError
  */
 export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
-  const sf = path.join(DATA_PATH, "settings.yaml");
-  if (!fs.existsSync(sf)) {
-    saveYaml(sf, {});
-    return {} as UserSettings;
-  }
-  let settings: UserSettings = readYaml(sf);
-
-  // Defaults
-  if (!settings.searchEngines) {
-    settings.searchEngines = ["openLibrary"];
-  }
-  // Verify we have the API Key to search with the Google Books engine.
-  else if (!settings.googleApiKey?.length && settings.searchEngines.includes("googleBooks")) {
-    settings.searchEngines.filter((e) => e !== "googleBooks");
-  }
-  if (!settings.theme) {
-    settings.theme = "default";
-  }
-
-  if (!settings.booksDir) {
-    settings.booksDir = path.join(DATA_PATH, "books");
-  } else if (SCREENSHOT_MODE) {
-    settings.booksDir = path.join(DATA_PATH, "DEV-screenshot-mode");
-  } else if (args?.migrateData) {
-    // -- upgrade from 1.24.0 --
-    if (settings.booksDir.startsWith(path.join(dataPath, "me.reinii.wordwyrm"))) {
-      settings.booksDir = settings.booksDir.replace("me.reinii.wordwyrm", dataDir);
+  try {
+    const sf = path.join(DATA_PATH, "settings.yaml");
+    if (!fs.existsSync(sf)) {
+      saveYaml(sf, {});
+      return {} as UserSettings;
     }
-    // -- end --
-  }
+    let settings: UserSettings = readYaml(sf);
 
-  return settings;
+    // Defaults
+    if (!settings.searchEngines) {
+      settings.searchEngines = ["openLibrary"];
+    }
+    // Verify we have the API Key to search with the Google Books engine.
+    else if (!settings.googleApiKey?.length && settings.searchEngines.includes("googleBooks")) {
+      settings.searchEngines.filter((e) => e !== "googleBooks");
+    }
+    if (!settings.theme) {
+      settings.theme = "default";
+    }
+
+    if (!settings.booksDir) {
+      settings.booksDir = path.join(DATA_PATH, "books");
+    } else if (SCREENSHOT_MODE) {
+      settings.booksDir = path.join(DATA_PATH, "DEV-screenshot-mode");
+    } else if (args?.migrateData) {
+      // -- upgrade from 1.24.0 --
+      if (settings.booksDir.startsWith(path.join(dataPath, "me.reinii.wordwyrm"))) {
+        settings.booksDir = settings.booksDir.replace("me.reinii.wordwyrm", dataDir);
+      }
+      // -- end --
+    }
+
+    return settings;
+  } catch (e) {
+    throw new WyrmError("Error reading settings.", e);
+  }
 }
 
 /**
@@ -141,7 +147,7 @@ export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
 export function saveSettings(
   settings: UserSettings,
   options: { moveData?: boolean; oldDir?: string } = { moveData: false },
-  callback: (error?: Error) => void = () => {},
+  callback: (error?: WyrmError) => void = () => {},
 ) {
   saveYaml(path.join(DATA_PATH, "settings.yaml"), settings);
   if (!options.moveData) return callback();
@@ -158,7 +164,7 @@ export function saveSettings(
  * @param {string} newDir
  * @param callback
  */
-function moveDirectory(oldDir: string, newDir: string, callback: (error?: Error) => void) {
+function moveDirectory(oldDir: string, newDir: string, callback: (error?: WyrmError) => void) {
   // Read each author directory
   fs.readdir(oldDir, { withFileTypes: true })
     .then((files) => {
@@ -171,7 +177,7 @@ function moveDirectory(oldDir: string, newDir: string, callback: (error?: Error)
             fs.moveSync(od, nd);
           } catch (err) {
             console.error(err);
-            return callback(new Error("Error moving data"));
+            return callback(new WyrmError("Error moving data", err));
           }
         }
       }
@@ -179,6 +185,6 @@ function moveDirectory(oldDir: string, newDir: string, callback: (error?: Error)
     })
     .catch((err) => {
       console.error(err);
-      return callback(new Error("Error reading data"));
+      return callback(new WyrmError("Error reading data", err));
     });
 }
