@@ -62,6 +62,18 @@ function createWindow(): BrowserWindow {
     }
   });
 
+  // Intercept a click on anchor with `target="_blank"`.
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (url.startsWith("http:") || url.startsWith("https:")) {
+      try {
+        shell.openExternal(url);
+      } catch (error: unknown) {
+        console.error(`Failed to open url: ${error}`);
+      }
+    }
+    return { action: "deny" };
+  });
+
   return mainWindow;
 }
 
@@ -99,18 +111,6 @@ app.on("ready", () => {
       .replace(/ /g, "%20");
     if (url.charAt(0) !== "/") url = "/" + url;
     return net.fetch("file://" + url);
-  });
-
-  // Intercept a click on anchor with `target="_blank"`.
-  window.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith("http:") || url.startsWith("https:")) {
-      try {
-        shell.openExternal(url);
-      } catch (error: unknown) {
-        console.error(`Failed to open url: ${error}`);
-      }
-    }
-    return { action: "deny" };
   });
 
   // --------- Bridge ---------
