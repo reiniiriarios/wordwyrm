@@ -34,6 +34,7 @@ function createWindow(): BrowserWindow {
   if (DEV_MODE) {
     mainWindow.loadURL(`http://localhost:${PORT}`);
     if (!SCREENSHOT_MODE) {
+      console.log("Opening dev tools");
       mainWindow.webContents.openDevTools();
     }
   } else {
@@ -41,8 +42,8 @@ function createWindow(): BrowserWindow {
   }
 
   // Create user data directories if not already present.
-  initUserDirs();
-  settings = loadSettings();
+  let migrateData = initUserDirs();
+  settings = loadSettings({ migrateData });
   settings.appVersion = APP_VERSION;
   setWindowTheme(settings.theme);
 

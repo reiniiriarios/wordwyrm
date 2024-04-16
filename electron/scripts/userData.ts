@@ -3,17 +3,49 @@ import * as yaml from "js-yaml";
 import * as path from "path";
 import { UserSettings } from "../../types/global";
 
-const USER_DATA_PATH =
-  process.env.APPDATA ||
-  (process.platform == "darwin" ? process.env.HOME + "/Library/Preferences" : process.env.HOME + "/.local/share");
-export const DATA_PATH = path.join(USER_DATA_PATH, "me.reinii.wordwyrm");
+// Get platform-idiomatic user data directory.
+let dataPath: string;
+let dataDir: string;
+// Windows
+if (process.env.APPDATA) {
+  dataPath = process.env.APPDATA;
+  dataDir = "WordwyrmData"; // "Wordwyrm" is used for app data.
+}
+// macOS
+else if (process.platform === "darwin") {
+  dataPath = path.join(process.env.HOME, "/Library/Preferences");
+  dataDir = "me.reinii.wordwyrm";
+}
+// Linux
+else {
+  dataPath = path.join(process.env.HOME, "/.local/share");
+  dataDir = "wordwyrm";
+}
+export const DATA_PATH = path.join(dataPath, dataDir);
 
 const SCREENSHOT_MODE = process.env.WYRM_PREV === "true";
 
-export function initUserDirs() {
+export function initUserDirs(): boolean {
   if (!fs.existsSync(DATA_PATH)) {
+    console.log("Data directory not found, creating");
+    // -- upgrade from 1.24.0 --
+    // move data dir on window and linux
+    if (process.platform !== "darwin") {
+      const oldDir = path.join(dataPath, "me.reinii.wordwyrm");
+      if (fs.existsSync(oldDir)) {
+        console.log("Migrating old data directory (>1.24.0)");
+        try {
+          fs.moveSync(oldDir, DATA_PATH);
+          return true;
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    }
+    // -- end --
     fs.mkdirSync(DATA_PATH, { recursive: true });
   }
+  return false;
 }
 
 export function readYaml(filename: string): any {
@@ -36,7 +68,7 @@ export function saveYaml(filename: string, data: any) {
   }
 }
 
-export function loadSettings(): UserSettings {
+export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
   const sf = path.join(DATA_PATH, "settings.yaml");
   if (!fs.existsSync(sf)) {
     saveYaml(sf, {});
@@ -60,6 +92,12 @@ export function loadSettings(): UserSettings {
     settings.booksDir = path.join(DATA_PATH, "books");
   } else if (SCREENSHOT_MODE) {
     settings.booksDir = path.join(DATA_PATH, "DEV-screenshot-mode");
+  } else if (args?.migrateData) {
+    // -- upgrade from 1.24.0 --
+    if (settings.booksDir.startsWith(path.join(dataPath, "me.reinii.wordwyrm"))) {
+      settings.booksDir = settings.booksDir.replace("me.reinii.wordwyrm", dataDir);
+    }
+    // -- end --
   }
 
   return settings;
