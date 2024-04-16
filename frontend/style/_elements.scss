@@ -2,6 +2,11 @@
   box-sizing: border-box;
 }
 
+::selection {
+  color: var(--c-text);
+  background-color: var(--c-selection);
+}
+
 body {
   position: relative;
   color: var(--c-text);
