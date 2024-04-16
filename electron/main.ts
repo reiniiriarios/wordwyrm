@@ -18,8 +18,6 @@ const APP_VERSION = packageJson.version;
 let settings: UserSettings;
 
 function createWindow(): BrowserWindow {
-  nativeTheme.themeSource = "dark";
-
   const mainWindow = new BrowserWindow({
     width: 1445,
     height: 815,
@@ -46,6 +44,7 @@ function createWindow(): BrowserWindow {
   initUserDirs();
   settings = loadSettings();
   settings.appVersion = APP_VERSION;
+  setWindowTheme(settings.theme);
 
   if (!SCREENSHOT_MODE) {
     mainWindow.setBounds(settings.bounds);
@@ -63,6 +62,14 @@ function createWindow(): BrowserWindow {
   });
 
   return mainWindow;
+}
+
+function setWindowTheme(theme: string) {
+  if (["rosepineDawn", "nordLight"].includes(theme)) {
+    nativeTheme.themeSource = "light";
+  } else {
+    nativeTheme.themeSource = "dark";
+  }
 }
 
 app.on("ready", () => {
@@ -218,6 +225,7 @@ app.on("ready", () => {
         event.reply("error", err.message);
       }
       settings = newSettings;
+      setWindowTheme(settings.theme);
       event.reply("settingsLoaded", settings);
     });
   });
