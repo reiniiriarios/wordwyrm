@@ -119,6 +119,9 @@
       height: calc(100% - var(--header-height) - var(--footer-height));
       font-size: 1rem;
       padding: 0.75rem 0.5rem;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--c-subtle) transparent;
     }
 
     &__actions {
