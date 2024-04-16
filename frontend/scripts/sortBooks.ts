@@ -6,7 +6,9 @@ export const sortFilters: Record<string, { name: string; sort: sortFn; hidden?: 
     name: "Date Read",
     sort: (books: Book[], reverse: boolean): Book[] => {
       books.sort((x, y) => {
-        return sortValueRead(x, y, reverse);
+        let r = sortValueRead(x, y, reverse);
+        if (r !== 0) return r;
+        return sortValueDatePublished(x, y, !reverse);
       });
       return books;
     },
