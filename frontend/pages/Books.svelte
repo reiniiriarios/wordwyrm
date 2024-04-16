@@ -87,7 +87,7 @@
     {/each}
   </div>
 {:else}
-  <GettingStarted />
+  <GettingStarted arrows />
 {/if}
 
 <style lang="scss">
