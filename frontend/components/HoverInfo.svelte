@@ -13,7 +13,7 @@
   }
 
   function hide() {
-    timer = setTimeout(() => (visible = false), 500);
+    timer = setTimeout(() => (visible = false), 400);
   }
 </script>
 

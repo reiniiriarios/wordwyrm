@@ -229,12 +229,16 @@
     </div>
 
     <label class="field field">
-      Google Cloud API Key <HoverInfo details="Optional. Enables searching for book data via Google Books." />
+      Google Cloud API Key <HoverInfo
+        details="Optional. Enables searching for book data via Google Books."
+        position="top"
+      />
       <input type="text" bind:value={editSettings.googleApiKey} />
     </label>
     <label class="field field">
       Google Custom Search Engine ID <HoverInfo
         details="Optional. Along with API Key, enables searching for cover images via Google Image Search."
+        position="top"
       />
       <input type="text" bind:value={editSettings.googleSearchEngineId} />
     </label>
