@@ -53,3 +53,11 @@ To generate icns and ico files, run `npm run build:icons`.
 | 16:9 Super hero | 1920x1080 | 3840x2160 | Top of store listing for Windows 10.                                             |
 
 Updated Info: [Construct your Windows app's icon](https://learn.microsoft.com/en-us/windows/apps/design/style/iconography/app-icon-construction)
+
+## Snap Store Images
+
+| File            | Size    | Max Size  | Aspect Ratio        | Size Limit |
+| --------------- | ------- | --------- | ------------------- | ---------- |
+| Snap Icon       | 40x40   | 512x512   | 1:1                 | 256KB      |
+| Images          | 480x480 | 3840x2160 | Between 1:2 and 2:1 | 2MB        |
+| Featured Banner | 720x240 | 4320x1440 | 3:1                 | 2MB        |
