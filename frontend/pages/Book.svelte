@@ -161,6 +161,9 @@
 
     &__info {
       padding: 1rem;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--c-subtle) transparent;
 
       .dataTitle {
         font-size: 0.9rem;
