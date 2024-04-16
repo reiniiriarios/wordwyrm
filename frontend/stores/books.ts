@@ -63,7 +63,7 @@ function createBooks() {
       });
       books.applyFilter();
     },
-    updateBook: (updatedBook: Book, prevFilePath: string) => {
+    updateBook: (updatedBook: Book, prevFilePath?: string) => {
       console.log("updating book", updatedBook.title);
       update((s) => {
         s.allBooks = s.allBooks.map((b) => {
