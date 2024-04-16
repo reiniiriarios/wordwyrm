@@ -5,6 +5,7 @@ import EditBook from "@pages/Edit.svelte";
 import Settings from "@pages/Settings.svelte";
 import Chart from "@pages/Chart.svelte";
 import List from "@pages/List.svelte";
+import Help from "@pages/Help.svelte";
 
 export default {
   "/": Books,
@@ -14,5 +15,6 @@ export default {
   "/list": List,
   "/chart": Chart,
   "/settings": Settings,
+  "/help": Help,
   "*": NotFound,
 };

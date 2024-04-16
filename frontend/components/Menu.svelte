@@ -2,8 +2,9 @@
   import { location } from "svelte-spa-router";
   import Books from "phosphor-svelte/lib/Books";
   import ListDashes from "phosphor-svelte/lib/ListDashes";
-  import Gear from "phosphor-svelte/lib/Gear";
   import ChartLine from "phosphor-svelte/lib/ChartLine";
+  import Gear from "phosphor-svelte/lib/Gear";
+  import Info from "phosphor-svelte/lib/Info";
 </script>
 
 <nav>
@@ -24,6 +25,9 @@
     </li>
     <li class:active={$location === "/settings"}>
       <a href="#/settings"><Gear size={32} /></a>
+    </li>
+    <li class:active={$location === "/help"}>
+      <a href="#/help"><Info size={32} /></a>
     </li>
   </ul>
 </nav>
