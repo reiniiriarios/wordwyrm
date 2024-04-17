@@ -131,9 +131,11 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "installerSidebar": "./dist/installerSidebar.bmp"
+      "installerSidebar": "./dist/installerSidebar.bmp",
+      "differentialPackage": false
     },
     "dmg": {
+      "writeUpdateInfo": false,
       "contents": [
         {
           "x": 110,
