@@ -169,7 +169,7 @@
           "provider": "snapStore",
           "repo": "wordwyrm",
           "channels": [
-            "stable"
+            "edge"
           ]
         }
       ]
