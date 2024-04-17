@@ -60,11 +60,14 @@ jobs:
       # ubuntu
       - name: Build for Linux
         if: matrix.platform == 'ubuntu-latest'
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
         run: |
-          npm run build:lnx
+          npm run build:linux
           mv $PWD/build/Wordwyrm-*.AppImage ./
           mv $PWD/build/Wordwyrm-*.rpm ./
           mv $PWD/build/Wordwyrm-*.deb ./
+        # snap file is published, no need to attach here
 
       - name: Upload Linux files
         if: matrix.platform == 'ubuntu-latest'

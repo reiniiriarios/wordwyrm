@@ -40,7 +40,7 @@
     "build:appx": "electron-builder --dir --win appx",
     "build:deb": "electron-builder --dir --linux deb",
     "build:snap": "electron-builder --dir --linux snap",
-    "build:lnx": "electron-builder --dir --linux appImage deb rpm",
+    "build:linux": "electron-builder --dir --linux appImage deb rpm snap --publish onTag",
     "newver": "ts-node scripts/updateVersion.ts",
     "prepare": "ts-patch install -s"
   },
@@ -163,7 +163,16 @@
     },
     "snap": {
       "artifactName": "wordwyrm-${version}-${arch}.${ext}",
-      "summary": "${description}"
+      "summary": "${description}",
+      "publish": [
+        {
+          "provider": "snapStore",
+          "repo": "wordwyrm",
+          "channels": [
+            "stable"
+          ]
+        }
+      ]
     },
     "appx": {
       "applicationId": "Wordwyrm",
