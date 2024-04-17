@@ -26,86 +26,16 @@ jobs:
           npm run build:client
           npm run build:electron
 
-      # macos
       - name: Build for macOS
         if: matrix.platform == 'macos-latest'
-        run: |
-          npm run build:mac
-          mv $PWD/build/Wordwyrm-*.dmg ./
+        run: npm run build:mac
 
-      - name: Upload macOS files
-        if: matrix.platform == 'macos-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-macos
-          path: Wordwyrm-*.dmg
-          retention-days: 2
-
-      # windows
       - name: Build for Windows
         if: matrix.platform == 'windows-latest'
-        run: |
-          npm run build:win
-          Move-Item -Path "$PWD\build\Wordwyrm-${{ github.ref_name }}-x64.exe" -Destination "$PWD\Wordwyrm-${{ github.ref_name }}-x64.exe"
-          Move-Item -Path "$PWD\build\Wordwyrm-${{ github.ref_name }}-x64-installer.exe" -Destination "$PWD\Wordwyrm-${{ github.ref_name }}-x64-installer.exe"
+        run: npm run build:win
 
-      - name: Upload Windows files
-        if: matrix.platform == 'windows-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-windows
-          path: Wordwyrm-*.exe
-          retention-days: 2
-
-      # ubuntu
       - name: Build for Linux
         if: matrix.platform == 'ubuntu-latest'
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
-        run: |
-          npm run build:linux
-          mv $PWD/build/Wordwyrm-*.AppImage ./
-          mv $PWD/build/Wordwyrm-*.rpm ./
-          mv $PWD/build/Wordwyrm-*.deb ./
-        # snap file is published, no need to attach here
-
-      - name: Upload Linux files
-        if: matrix.platform == 'ubuntu-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-linux
-          path: |
-            Wordwyrm-*.AppImage
-            Wordwyrm-*.rpm
-            Wordwyrm-*.deb
-          retention-days: 2
-
-  release:
-    runs-on: ubuntu-latest
-    needs: build
-    name: Release
-    permissions:
-      contents: write
-    steps:
-      - name: Download all release pacakges
-        uses: actions/download-artifact@v4
-        id: artifact
-        with:
-          path: releases
-
-      - name: Create release
-        id: create_release
-        uses: softprops/action-gh-release@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          tag_name: ${{ github.ref_name }}
-          draft: true
-          prerelease: false
-          files: |
-            ${{steps.artifact.outputs.download-path}}/release-macos/Wordwyrm-${{ github.ref_name }}-x64.dmg
-            ${{steps.artifact.outputs.download-path}}/release-windows/Wordwyrm-${{ github.ref_name }}-x64.exe
-            ${{steps.artifact.outputs.download-path}}/release-windows/Wordwyrm-${{ github.ref_name }}-x64-installer.exe
-            ${{steps.artifact.outputs.download-path}}/release-linux/Wordwyrm-${{ github.ref_name }}-amd64.deb
-            ${{steps.artifact.outputs.download-path}}/release-linux/Wordwyrm-${{ github.ref_name }}-x86_64.rpm
-            ${{steps.artifact.outputs.download-path}}/release-linux/Wordwyrm-${{ github.ref_name }}-x86_64.AppImage
+        run: npm run build:linux
