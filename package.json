@@ -65,7 +65,6 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/croppie": "^2.6.4",
     "@types/js-yaml": "^4.0.9",
-    "@types/ncp": "^2.0.8",
     "@types/node": "^20.11.30",
     "@types/shelljs": "^0.8.15",
     "@types/yargs": "^17.0.32",
