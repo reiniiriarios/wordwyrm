@@ -236,12 +236,13 @@ export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | 
         return res.json();
       })
       .then((json: OpenLibrarySearchResponse) => {
-        if (!json.numFound) return null;
+        if (!json.numFound || !json.docs?.[0] || !json.docs?.[0]?.key) return null;
         return json.docs[0];
       })
       .catch((e) => {
         throw e;
       });
+    if (!work?.key) return null;
     return conformOpenLibrarySearchResult(work, isbn);
   } catch (e) {
     console.error("searchOpenLibraryWorkByISBN", e);
@@ -272,7 +273,7 @@ export async function searchOpenLibrary(search: string): Promise<Book[]> {
       .catch((e) => {
         throw e;
       });
-    if (works.length) {
+    if (works.length > 0) {
       return works.map((work) => conformOpenLibrarySearchResult(work));
     }
   } catch (e) {
