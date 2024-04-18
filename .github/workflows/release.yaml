@@ -38,4 +38,7 @@ jobs:
         if: matrix.platform == 'ubuntu-latest'
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
-        run: npm run build:linux
+          SNAPCRAFT_BUILD_ENVIRONMENT: host
+        run: |
+          sudo snap install snapcraft --classic
+          npm run build:linux
