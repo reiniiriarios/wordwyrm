@@ -181,10 +181,10 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
     book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
     book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
 
-    const changedAuthor = oAuthorDir && oAuthorDir !== book.cache.authorDir;
-    const changedTitle = oFilename && oFilename !== newFilename;
-    const oAuthorPath = oAuthorDir ? path.join(booksDir, oAuthorDir) : authorPath;
-    const oFilepath = path.join(oAuthorPath, oFilename ?? book.cache.filename);
+    const changedAuthor = !!oAuthorDir && oAuthorDir !== book.cache.authorDir;
+    const changedTitle = !!oFilename && oFilename !== newFilename;
+    const oAuthorPath = !!oAuthorDir ? path.join(booksDir, oAuthorDir) : authorPath;
+    const oFilepath = path.join(oAuthorPath, !!oFilename ? oFilename : book.cache.filename);
 
     // Use the image variable to save the image, then delete the variable.
     let newImage = false;
