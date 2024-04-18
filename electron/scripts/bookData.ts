@@ -26,7 +26,7 @@ export function initBookDirs(dir: string) {
  * @returns Directory name
  */
 export function authorsToDir(authors: Author[]): string {
-  return authors
+  let dir = authors
     .map((a) =>
       a.name
         .replace(/[\/\\\:\^\*\{\}\[\]\?`\|\"]/g, "_")
@@ -34,6 +34,8 @@ export function authorsToDir(authors: Author[]): string {
         .replace(/(?:_ | _)/g, " "),
     )
     .join(", ");
+  if (!dir) dir = "__unknown__";
+  return dir;
 }
 
 /**
@@ -43,10 +45,12 @@ export function authorsToDir(authors: Author[]): string {
  * @returns Filename
  */
 export function titleToFilename(title: string): string {
-  return title
+  let filename = title
     .replace(/[\/\\\:\^\*\{\}\[\]\?`\|\"]/g, "_")
     .replace(/_+/g, "_")
     .replace(/(?:_ | _)/g, " ");
+  if (!filename) filename = "__unknown__";
+  return filename;
 }
 
 /**
