@@ -1,4 +1,5 @@
 <script lang="ts">
+  import log from "electron-log/renderer";
   import Modal from "@components/Modal.svelte";
   import { onMount, tick } from "svelte";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
@@ -40,7 +41,7 @@
 
   function searchKey(e: KeyboardEvent) {
     if (["\n", "Enter"].includes(e.key) && !canAdd) {
-      console.log("searching api");
+      log.debug("searching api");
       search();
     }
   }

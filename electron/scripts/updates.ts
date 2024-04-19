@@ -1,3 +1,4 @@
+import log from "electron-log/main";
 import fetch from "electron-fetch";
 import WyrmError from "../error";
 
@@ -29,17 +30,17 @@ export async function checkForUpdate(currentVersion: string): Promise<string | n
       const latestVersion = tag.slice(1);
       if (latestVersion !== currentVersion) {
         if (DEV) {
-          console.log(`Version mismatch: latest is ${latestVersion}, running ${currentVersion}`);
+          log.info(`Version mismatch: latest is ${latestVersion}, running ${currentVersion}`);
         } else {
-          console.log(`Update available: ${latestVersion}, running ${currentVersion}`);
+          log.info(`Update available: ${latestVersion}, running ${currentVersion}`);
         }
         return latestVersion;
       }
-      console.log(`Running latest version: ${currentVersion}`);
+      log.info(`Running latest version: ${currentVersion}`);
       return null;
     })
     .catch((err) => {
-      console.error(err);
+      log.error(err);
       throw new WyrmError("Error checking for updates.", err);
     });
 }

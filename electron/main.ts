@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { app, BrowserWindow, dialog, ipcMain, nativeTheme, net, protocol, shell } from "electron";
+import log from "electron-log/main";
 import * as path from "path";
 import packageJson from "../package.json";
 import { UserSettings } from "../types/global";
@@ -10,9 +11,11 @@ import { getGoogleBook, searchGoogleBooks } from "./api/googleBooks";
 import { googleImageSearch } from "./api/googleImageSearch";
 import { searchOpenLibrary, searchOpenLibraryWorkByISBN } from "./api/openLibrary";
 import { parseErr } from "./error";
+import { LogMessage } from "electron-log";
 
 const PORT = 5000;
 const DEV_MODE = process.env.WYRM_ENV === "dev";
+const PKG = process.env.WYRM_PKG ?? "__none__";
 const SCREENSHOT_MODE = process.env.WYRM_PREV === "true";
 const APP_VERSION = packageJson.version;
 
@@ -35,7 +38,7 @@ function createWindow(): BrowserWindow {
   if (DEV_MODE) {
     mainWindow.loadURL(`http://localhost:${PORT}`);
     if (!SCREENSHOT_MODE) {
-      console.log("Opening dev tools");
+      log.info("Opening dev tools");
       mainWindow.webContents.openDevTools();
     }
   } else {
@@ -58,7 +61,7 @@ function createWindow(): BrowserWindow {
     if (settings && !SCREENSHOT_MODE) {
       settings.bounds = mainWindow.getBounds();
       saveSettings(settings, {}, (err) => {
-        if (err) console.error(err);
+        if (err) log.error(err);
       });
     }
   });
@@ -69,7 +72,7 @@ function createWindow(): BrowserWindow {
       try {
         shell.openExternal(url);
       } catch (error: unknown) {
-        console.error(`Failed to open url: ${error}`);
+        log.error(`Failed to open url: ${error}`);
       }
     }
     return { action: "deny" };
@@ -87,19 +90,42 @@ function setWindowTheme(theme: string) {
 }
 
 app.on("ready", () => {
-  console.log("Starting in " + (DEV_MODE ? "dev" : "prod") + " mode");
+  // Setup logging
+  log.transports.file.level = "debug";
+  log.transports.file.format = "{h}:{i}:{s}.{ms} › [{level}] {text}";
+  log.transports.console.level = "debug";
+  // log.transports.console.format = "{h}:{i}:{s}.{ms} › [{level}] {text}";
+  log.transports.console.format = ({ message }: { message: LogMessage }): any[] => {
+    const d = message.date || new Date();
+    const h = d.getHours().toString(10).padStart(2, "0");
+    const i = d.getMinutes().toString(10).padStart(2, "0");
+    const s = d.getSeconds().toString(10).padStart(2, "0");
+    const m = d.getMilliseconds().toString(10).padStart(3, "0");
+    const level = `[${message.level || "info"}]`.padEnd(7, " ");
+    const c = { debug: 34, info: 36, warn: 33, error: 31 }[message.level] ?? 35;
+    return [`\x1b[30m${h}:${i}:${s}.${m} \x1b[${c}m${level}\x1b[0m`, ...message.data];
+  };
+  log.transports.file.resolvePathFn = (variables) => {
+    return path.join(DATA_PATH, "logs", variables.fileName);
+  };
+  log.initialize();
+
+  // Start
+  log.info(`Starting in ${DEV_MODE ? "DEV" : "PRODUCTION"} mode`);
+  log.info(`Package: ${PKG}`);
   if (SCREENSHOT_MODE) {
-    console.log("Screenshot mode active");
+    log.info("SCREENSHOT mode active");
   }
 
+  // Create window
   let window = createWindow();
-
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) {
       window = createWindow();
     }
   });
 
+  // Protocol handlers
   protocol.handle("localfile", (request) => {
     let url = request.url.slice("localfile://".length).replace(/\\/g, "/").replace(/ /g, "%20");
     if (url.charAt(0) !== "/") url = "/" + url;

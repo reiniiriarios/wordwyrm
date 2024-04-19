@@ -1,4 +1,5 @@
 <script lang="ts">
+  import log from "electron-log/renderer";
   import { onMount } from "svelte";
   import PencilSimple from "phosphor-svelte/lib/PencilSimple";
 
@@ -14,7 +15,7 @@
   let seriesBooks: Book[] = [];
 
   onMount(() => {
-    console.log("book/", params);
+    log.debug("book/", params);
     readBook(params.author, params.book);
 
     const removeReceiveListener = window.electronAPI.receiveBook((b: Book) => {

@@ -1,6 +1,7 @@
 import * as fs from "fs-extra";
 import * as yaml from "js-yaml";
 import * as path from "path";
+import log from "electron-log/main";
 import { UserSettings } from "../../types/global";
 import WyrmError from "../error";
 
@@ -33,22 +34,24 @@ const SCREENSHOT_MODE = process.env.WYRM_PREV === "true";
  */
 export function initUserDirs(): boolean {
   if (!fs.existsSync(DATA_PATH)) {
-    console.log("Data directory not found, creating");
+    log.debug("Data directory not found.");
     // -- upgrade from 1.24.0 --
     // move data dir on window and linux
     if (process.platform !== "darwin") {
       const oldDir = path.join(dataPath, "me.reinii.wordwyrm");
       if (fs.existsSync(oldDir)) {
-        console.log("Migrating old data directory (>1.24.0)");
+        log.debug("Migrating old data directory (>1.24.0)");
+        log.debug(`${oldDir} >> ${DATA_PATH}`);
         try {
           fs.moveSync(oldDir, DATA_PATH);
           return true;
         } catch (err) {
-          console.error(err);
+          log.error(err);
         }
       }
     }
     // -- end --
+    log.debug(`Creating: ${DATA_PATH}`);
     fs.mkdirSync(DATA_PATH, { recursive: true });
   }
   return false;
@@ -67,7 +70,7 @@ export function readYaml(filename: string): any {
     const doc = yaml.load(fs.readFileSync(filename, "utf8"));
     return doc;
   } catch (e) {
-    console.error(e);
+    log.error(e);
   }
 }
 
@@ -86,7 +89,7 @@ export function saveYaml(filename: string, data: any) {
     const doc = yaml.dump(toWrite);
     fs.writeFileSync(filename, doc, { flag: "w", encoding: "utf8" });
   } catch (e) {
-    console.error(e);
+    log.error(e);
   }
 }
 
@@ -99,6 +102,7 @@ export function saveYaml(filename: string, data: any) {
  */
 export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
   try {
+    log.debug("Loading settings");
     const sf = path.join(DATA_PATH, "settings.yaml");
     if (!fs.existsSync(sf)) {
       saveYaml(sf, {});
@@ -152,6 +156,7 @@ export function saveSettings(
   options: { moveData?: boolean; oldDir?: string } = { moveData: false },
   callback: (error?: WyrmError) => void = () => {},
 ) {
+  log.debug("Saving settings");
   saveYaml(path.join(DATA_PATH, "settings.yaml"), settings);
   if (!options.moveData) return callback();
   moveDirectory(options.oldDir, settings.booksDir, (err) => {
@@ -179,7 +184,7 @@ function moveDirectory(oldDir: string, newDir: string, callback: (error?: WyrmEr
           try {
             fs.moveSync(od, nd);
           } catch (err) {
-            console.error(err);
+            log.error(err);
             return callback(new WyrmError("Error moving data", err));
           }
         }
@@ -187,7 +192,7 @@ function moveDirectory(oldDir: string, newDir: string, callback: (error?: WyrmEr
       return callback();
     })
     .catch((err) => {
-      console.error(err);
+      log.error(err);
       return callback(new WyrmError("Error reading data", err));
     });
 }

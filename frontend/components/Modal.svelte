@@ -34,10 +34,8 @@
   function modalKey(e: KeyboardEvent) {
     if (open) {
       if (canCancel && ["Escape"].includes(e.key)) {
-        console.log("cancel modal");
         close();
       } else if (canConfirm && ["\n", "Enter"].includes(e.key)) {
-        console.log("confirm modal");
         confirm();
       }
     }

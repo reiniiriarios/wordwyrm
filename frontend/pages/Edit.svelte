@@ -1,4 +1,5 @@
 <script lang="ts">
+  import log from "electron-log/renderer";
   import { onMount } from "svelte";
   import Dropzone from "svelte-file-dropzone";
   import { push } from "svelte-spa-router";
@@ -78,7 +79,7 @@
       fileRejections: (File & { path: string })[];
     };
     if (fileRejections.length) {
-      console.error("rejected files", fileRejections);
+      log.error("rejected files", fileRejections);
     }
     if (acceptedFiles.length) {
       imagePath = acceptedFiles[0].path.replace(/\\/g, "/").replace(/ /g, "%20");

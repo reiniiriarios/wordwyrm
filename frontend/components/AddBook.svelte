@@ -1,4 +1,5 @@
 <script lang="ts">
+  import log from "electron-log/renderer";
   import Dropzone from "svelte-file-dropzone";
   import Modal from "@components/Modal.svelte";
   import HoverInfo from "@components/HoverInfo.svelte";
@@ -46,10 +47,10 @@
       fileRejections: (File & { path: string })[];
     };
     if (fileRejections.length) {
-      console.error("rejected files", fileRejections);
+      log.error("rejected files", fileRejections);
     }
     if (acceptedFiles.length) {
-      console.log(acceptedFiles);
+      log.debug(acceptedFiles);
       addImagePath = acceptedFiles[0].path;
       book.cache.image = addImagePath;
     }

@@ -1,3 +1,4 @@
+import log from "electron-log/main";
 import fetch from "electron-fetch";
 import WyrmError from "../error";
 
@@ -175,6 +176,8 @@ export async function googleImageSearch(
   let keywords = `"${title}" by ${author} book cover`;
   let results: SearchResult[] = [];
 
+  log.info(`Searching Google Images for: ${keywords}`);
+
   try {
     // https://developers.google.com/custom-search/v1/reference/rest/v1/cse/list?apix=true
     var params = new URLSearchParams({
@@ -203,12 +206,12 @@ export async function googleImageSearch(
         });
       });
     } else {
-      console.log(response);
+      log.debug(response);
     }
 
     return results;
   } catch (e) {
-    console.error(e);
+    log.error(e);
     throw new WyrmError("Error searching Google Images.", e);
   }
 }

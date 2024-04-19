@@ -58,7 +58,6 @@
     });
 
     const removeDirListener = window.electronAPI.dirSelected((path: string) => {
-      console.log("new dir", path);
       if (path !== editSettings.booksDir) {
         booksDir.changing = true;
       }
@@ -103,11 +102,9 @@
 
   function imageSearchEngineChanged() {
     googleApiFieldsDisabled = editSettings.imageSearchEngine !== "google";
-    console.log(editSettings.imageSearchEngine, googleApiFieldsDisabled);
   }
 
   function selectDataDir(e: MouseEvent | KeyboardEvent) {
-    console.log("looking");
     e.preventDefault();
     window.electronAPI.selectDataDir();
   }

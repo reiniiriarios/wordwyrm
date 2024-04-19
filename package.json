@@ -48,6 +48,7 @@
     "chart.js": "^4.4.2",
     "croppie": "^2.6.5",
     "electron-fetch": "^1.9.1",
+    "electron-log": "^5.1.2",
     "fs-extra": "^11.2.0",
     "js-yaml": "^4.1.0",
     "json": "^11.0.0",

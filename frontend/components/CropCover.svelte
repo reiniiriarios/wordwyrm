@@ -1,4 +1,5 @@
 <script lang="ts">
+  import log from "electron-log/renderer";
   import Modal from "@components/Modal.svelte";
   import { push } from "svelte-spa-router";
   import Crop from "phosphor-svelte/lib/Crop";
@@ -55,7 +56,7 @@
 
   onMount(() => {
     const removeSaveListener = window.electronAPI.bookImageBase64Added(() => {
-      console.log("image crop saved");
+      log.debug("image crop saved");
       book.images.imageUpdated = new Date().getTime();
       setTimeout(() => push(`#/book/${book.cache.filepath}`), 50);
       isOpen = false;
@@ -68,9 +69,9 @@
 
   function saveImage() {
     canSave = false;
-    console.log("cropping");
+    log.debug("cropping");
     croppieInstance?.result({ type: "base64", size: "original", format: "jpeg" })?.then((res) => {
-      console.log("saving");
+      log.debug("saving");
       window.electronAPI.addBookImageBase64(book, res.slice("data:image/jpeg;base64,".length));
     });
   }

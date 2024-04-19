@@ -10,16 +10,13 @@
   import GettingStarted from "@components/GettingStarted.svelte";
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
-  import { catFilters, recentFilters } from "@scripts/sortBooks";
   import { formatDate } from "@scripts/formatDate";
 
   let filterTags: string[] = [];
   $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());
 
   onMount(() => {
-    console.log("mounted");
     if (!$books.allBooks.length) {
-      console.log("sending for books");
       books.fetch();
     }
   });

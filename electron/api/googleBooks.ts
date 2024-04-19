@@ -1,3 +1,4 @@
+import log from "electron-log/main";
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import WyrmError from "../error";
 
@@ -116,6 +117,7 @@ export type VolumeSearch = {
  */
 async function searchVolume(q: string): Promise<VolumeSearch> {
   try {
+    log.debug(`Searching for Google Volume: ${q}`);
     return fetch(`${ENDPOINT}/volumes?q=${q}`)
       .then((res) => res.json())
       .then((res) => res as VolumeSearch)
@@ -123,7 +125,7 @@ async function searchVolume(q: string): Promise<VolumeSearch> {
         throw e;
       });
   } catch (e) {
-    console.error("searchVolume", e);
+    log.error("searchVolume", e);
     throw new WyrmError("Error searching Google Books.", e);
   }
 }
@@ -138,6 +140,7 @@ async function searchVolume(q: string): Promise<VolumeSearch> {
  */
 async function getVolume(v: string, lite: boolean = false): Promise<Volume> {
   try {
+    log.debug(`Fetching Google Volume ${v}`);
     return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}`)
       .then((res) => res.json())
       .then((res) => res as Volume)
@@ -145,7 +148,7 @@ async function getVolume(v: string, lite: boolean = false): Promise<Volume> {
         throw e;
       });
   } catch (e) {
-    console.error("getVolume", e);
+    log.error("getVolume", e);
     throw new WyrmError("Error fetching volume data from Google Books.", e);
   }
 }

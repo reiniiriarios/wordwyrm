@@ -1,3 +1,4 @@
+import log from "electron-log/renderer";
 import { writable } from "svelte/store";
 import { catFilters, filterByTag, recentFilters, searchBooks, sortFilters } from "@scripts/sortBooks";
 
@@ -37,7 +38,7 @@ function createBooks() {
   });
 
   const rmListenerBooks = window.electronAPI.receiveAllBooks((b: Book[]) => {
-    console.log("received books");
+    log.debug("Books store: received books");
     update((s) => {
       s.allBooks = b;
       return s;
@@ -52,11 +53,11 @@ function createBooks() {
       rmListenerBooks();
     },
     fetch: () => {
-      console.log("fetching books");
+      log.debug("Books store: fetching books");
       window.electronAPI.readAllBooks();
     },
     addBook: (newBook: Book) => {
-      console.log("adding book", newBook.title);
+      log.debug("Books store: adding book", newBook.title);
       update((s) => {
         s.allBooks.push(newBook);
         return s;
@@ -64,7 +65,7 @@ function createBooks() {
       books.applyFilter();
     },
     updateBook: (updatedBook: Book, prevFilePath?: string) => {
-      console.log("updating book", updatedBook.title);
+      log.debug("Books store: updating book", updatedBook.title);
       update((s) => {
         s.allBooks = s.allBooks.map((b) => {
           if (b.cache.filepath === prevFilePath) {
@@ -77,7 +78,7 @@ function createBooks() {
       books.applyFilter();
     },
     deleteBook: (removeBook: Book) => {
-      console.log("deleteing book", removeBook.title);
+      log.debug("Books store: deleteing book", removeBook.title);
       update((s) => {
         s.allBooks = s.allBooks.filter((b) => b.cache.filepath !== removeBook.cache.filepath);
         return s;
@@ -85,7 +86,7 @@ function createBooks() {
       books.applyFilter();
     },
     sort: (method?: string) => {
-      console.log("sorting books");
+      log.debug("Books store: sorting books");
       // sort what is already filtered, then searched through
       update((s) => {
         if (method && !!sortFilters[method]) s.filters.sort = method;
@@ -95,7 +96,7 @@ function createBooks() {
       });
     },
     sortReverse: () => {
-      console.log("reversing books");
+      log.debug("Books store: reversing books");
       update((s) => {
         s.filters.reverse = !s.filters.reverse;
         s.sortedBooks = s.sortedBooks.reverse();
@@ -103,7 +104,7 @@ function createBooks() {
       });
     },
     search: () => {
-      console.log("searching books");
+      log.debug("Books store: searching books");
       update((s) => {
         s.searchedBooks = searchBooks(structuredClone(s.filteredBooks), s.filters.search);
         return s;
@@ -111,7 +112,7 @@ function createBooks() {
       books.sort();
     },
     clearSearch: () => {
-      console.log("clearing book search");
+      log.debug("Books store: clearing book search");
       update((s) => {
         s.filters.search = "";
         s.searchedBooks = structuredClone(s.filteredBooks);
@@ -145,7 +146,7 @@ function createBooks() {
       books.applyFilter();
     },
     applyFilter: () => {
-      console.log("applying books filter");
+      log.debug("Books store: applying books filter");
       update((s) => {
         let books: Book[] = recentFilters[s.filters.recent].filter(structuredClone(s.allBooks));
         if (s.filters.filter) {

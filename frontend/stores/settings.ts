@@ -1,3 +1,4 @@
+import log from "electron-log/renderer";
 import { writable } from "svelte/store";
 import { UserSettings } from "types/global";
 
@@ -39,6 +40,7 @@ function createPlatform() {
 
   const removeListener = window.electronAPI.platform((p: string) => {
     set(p);
+    log.debug(`Platform: ${p}`);
   });
 
   return {

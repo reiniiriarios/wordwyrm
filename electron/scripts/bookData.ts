@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
+import log from "electron-log/main";
 import fetch from "electron-fetch";
 import sharp from "sharp";
 import { readYaml, saveYaml } from "./userData";
@@ -83,7 +84,7 @@ async function saveBookImage(booksDir: string, book: Book, url: string) {
       await sharpImage(url, filepath);
     }
   } catch (e) {
-    console.error(e);
+    log.error(e);
     throw new WyrmError("Error saving image.", e);
   }
 }
@@ -135,7 +136,7 @@ export async function addBookImageBase64(booksDir: string, book: Book, base64: s
     book.images.imageUpdated = new Date().getTime();
     saveYaml(path.join(booksDir, book.cache.authorDir, `${book.cache.filename}.yaml`), book);
   } catch (e) {
-    console.error(e);
+    log.error(e);
     throw new WyrmError("Error saving image.", e);
   }
 }
@@ -211,16 +212,16 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
 
     if (oldImage && (changedAuthor || changedTitle) && fs.existsSync(oFilepath + ".jpg")) {
       if (newImage) {
-        console.log("Deleting old image");
+        log.debug("Deleting old image");
         fs.rmSync(oFilepath + ".jpg", { force: true });
       } else {
-        console.log("Moving image");
+        log.debug("Moving image");
         fs.renameSync(oFilepath + ".jpg", path.join(authorPath, newFilename + ".jpg"));
       }
     }
 
     if ((changedAuthor || changedTitle) && fs.existsSync(oFilepath + ".yaml")) {
-      console.log("Deleting old yaml");
+      log.debug("Deleting old yaml");
       fs.rmSync(oFilepath + ".yaml", { force: true });
     }
 
@@ -228,7 +229,7 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
       // If we moved the author dir and the old one is empty, delete it.
       const oldAuthorDir = fs.readdirSync(oAuthorPath);
       if (!oldAuthorDir.length) {
-        console.log("Deleting empty old author dir");
+        log.debug("Deleting empty old author dir");
         fs.rmSync(oAuthorPath, { recursive: true, force: true });
       }
     }
@@ -266,7 +267,7 @@ export async function deleteBook(booksDir: string, book: Book) {
       fs.rmSync(authorpath, { recursive: true, force: true });
     }
   } catch (e) {
-    console.error(e);
+    log.error(e);
     throw new WyrmError("Error deleting book.", e);
   }
 }

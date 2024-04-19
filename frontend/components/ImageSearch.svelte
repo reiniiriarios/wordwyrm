@@ -1,4 +1,5 @@
 <script lang="ts">
+  import log from "electron-log/renderer";
   import { createEventDispatcher, onMount } from "svelte";
   import ImageSquare from "phosphor-svelte/lib/ImageSquare";
   import { books } from "@stores/books";
@@ -37,7 +38,7 @@
 
   function search() {
     searching = true;
-    console.log("searching page", page);
+    log.debug("searching page", page);
     window.electronAPI.imageSearch(book.title, book.authors.map((a) => a.name).join(", "), page);
   }
 
