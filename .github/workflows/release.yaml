@@ -40,5 +40,6 @@ jobs:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
           SNAPCRAFT_BUILD_ENVIRONMENT: host
         run: |
-          sudo snap install snapcraft --classic
           npm run build:linux
+          sudo snap install snapcraft --classic
+          npm run build:snap
