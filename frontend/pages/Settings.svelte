@@ -77,9 +77,6 @@
 
   function toggleSearchEngine(engine: string) {
     if (engine === "googleBooks") {
-      if (!editSettings.googleApiKey?.length) {
-        return;
-      }
       seGoogleBooks = !seGoogleBooks;
     } else if (engine === "openLibrary") {
       seOpenLibrary = !seOpenLibrary;
@@ -222,7 +219,6 @@
         <button
           class="btn btn--option"
           class:selected={seGoogleBooks}
-          disabled={!editSettings.googleApiKey?.length}
           on:click={() => toggleSearchEngine("googleBooks")}>Google Books</button
         >
       </div>
@@ -230,7 +226,7 @@
 
     <label class="field field">
       Google Cloud API Key <HoverInfo
-        details="Optional. Enables searching for book data via Google Books."
+        details="Optional. Along with Engine ID, enables searching for cover images via Google Image Search."
         position="top"
       />
       <input type="text" bind:value={editSettings.googleApiKey} />

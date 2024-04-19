@@ -111,13 +111,12 @@ export type VolumeSearch = {
  * Search Google Books for a volume.
  *
  * @param q Query
- * @param apiKey API Key
  * @returns VolumeSearch.
  * @throws WyrmError
  */
-async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch> {
+async function searchVolume(q: string): Promise<VolumeSearch> {
   try {
-    return fetch(`${ENDPOINT}/volumes?q=${q}&key=${apiKey}`)
+    return fetch(`${ENDPOINT}/volumes?q=${q}`)
       .then((res) => res.json())
       .then((res) => res as VolumeSearch)
       .catch((e) => {
@@ -133,14 +132,13 @@ async function searchVolume(q: string, apiKey: string): Promise<VolumeSearch> {
  * Get a specific volume from Google Books.
  *
  * @param v Volume ID
- * @param apiKey API Key
  * @param lite Fetch only "lite" data
  * @returns Volume
  * @throws WyrmError
  */
-async function getVolume(v: string, apiKey: string, lite: boolean = false): Promise<Volume> {
+async function getVolume(v: string, lite: boolean = false): Promise<Volume> {
   try {
-    return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}&key=${apiKey}`)
+    return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}`)
       .then((res) => res.json())
       .then((res) => res as Volume)
       .catch((e) => {
@@ -252,12 +250,11 @@ function conformBook(v: Volume): Book {
  * Search Google Books for a volume.
  *
  * @param q Search Query
- * @param apiKey API Key
  * @returns {Book[]} Array of Books
  * @throws WyrmError
  */
-export async function searchGoogleBooks(q: string, apiKey: string): Promise<Book[]> {
-  return searchVolume(q, apiKey).then((volumeSearch) => {
+export async function searchGoogleBooks(q: string): Promise<Book[]> {
+  return searchVolume(q).then((volumeSearch) => {
     if (!volumeSearch) return [];
     let books: Book[] = [];
     volumeSearch.items?.forEach((v) => {
@@ -271,10 +268,9 @@ export async function searchGoogleBooks(q: string, apiKey: string): Promise<Book
  * Get specific book from Google Books.
  *
  * @param gid Google Books ID
- * @param apiKey API Key
  * @returns Book or null if error or not found
  * @throws WyrmError
  */
-export async function getGoogleBook(gid: string, apiKey: string): Promise<Book | null> {
-  return getVolume(gid, apiKey).then((v) => (v ? conformBook(v) : null));
+export async function getGoogleBook(gid: string): Promise<Book | null> {
+  return getVolume(gid).then((v) => (v ? conformBook(v) : null));
 }

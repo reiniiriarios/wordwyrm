@@ -40,23 +40,11 @@ ids:
   internetArchiveId: gideonninth0000muir
 ```
 
-## Google Cloud :cloud:
+## Google Cloud for Book Cover Images :cloud:
 
-The app functions just fine without Google Cloud keys, but these keys enable additional
-functionality, including searching Google Books for data and Google Image Search for book covers.
-
-### Books API Key
-
-In order to enable searching Google Books, you will need a Google Cloud account.
-[Enable the Books API](https://console.cloud.google.com/apis/api/books.googleapis.com) and
-then [create an API key](https://console.cloud.google.com/apis/credentials) that has permissions to
-use the **Books API**.
-See [Acquiring and using an API key](https://developers.google.com/books/docs/v1/using#APIKey) for
-more details.
-
-### Custom Search Engine ID
-
-In order to enable image search for book covers, you will also need a
+In order to enable Google Image Search for book covers in-app, you will need a Google Cloud account.
+[Create an API key](https://console.cloud.google.com/apis/credentials) that has permissions to
+use the **Custom Search API**. You will also need a
 [Programmable Search Engine](https://programmablesearchengine.google.com/) id. Enable
 "Image search" and "Search the entire web" in its settings. Your
 [API Key](https://console.cloud.google.com/apis/credentials) will also need the

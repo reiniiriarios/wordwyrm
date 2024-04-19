@@ -19,21 +19,15 @@
     <dt>API Keys</dt>
     <dd>
       <p>
-        By default, search uses the <a href="https://openlibrary.org/" target="_blank">OpenLibrary</a> API. If you add
-        an
-        <a href="https://developers.google.com/books/docs/v1/using#APIKey" target="_blank">API key for Google Books</a>
-        via
-        <a href="https://cloud.google.com/" target="_blank">Google Cloud</a>, you can use both to search.
-      </p>
-      <p>
-        You can also add a <a
+        You can add a <a href="https://cloud.google.com/" target="_blank">Google Cloud</a> API Key and
+        <a
           href="https://developers.google.com/custom-search/v1/introduction#create_programmable_search_engine"
           target="_blank">Google Programmable Search Engine ID</a
-        > along with your API key in order to enable Google Image Search for book covers.
+        > to enable Google Image Search for book covers.
       </p>
       <p>
-        As the Google Cloud APIs have a potential cost (albeit a small one), this functionality is not enabled by
-        default in order to keep the app free.
+        As Google Cloud has a cost (albeit a small one per user), this functionality is not enabled by default in order
+        to keep the app free.
       </p>
     </dd>
     <dt>More Info</dt>

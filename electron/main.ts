@@ -136,7 +136,7 @@ app.on("ready", () => {
 
       try {
         // Run first two queries async.
-        if (book.ids.googleBooksId) googleBookP = getGoogleBook(book.ids.googleBooksId, settings.googleApiKey);
+        if (book.ids.googleBooksId) googleBookP = getGoogleBook(book.ids.googleBooksId);
         if (book.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(book.ids.isbn);
 
         // Wait for data.
@@ -145,8 +145,7 @@ app.on("ready", () => {
 
         // If we didn't have either of the necessary ids, run those async.
         if (!olBook && googleBook.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(googleBook.ids.isbn);
-        if (!googleBook && olBook.ids.googleBooksId)
-          googleBookP = getGoogleBook(olBook.ids.googleBooksId, settings.googleApiKey);
+        if (!googleBook && olBook.ids.googleBooksId) googleBookP = getGoogleBook(olBook.ids.googleBooksId);
       } catch (e) {
         event.reply("error", parseErr(e));
       }
@@ -174,7 +173,7 @@ app.on("ready", () => {
     }
     // If just using Google Books, fetch full data.
     else if (settings.searchEngines.includes("googleBooks")) {
-      getGoogleBook(book.ids.googleBooksId, settings.googleApiKey)
+      getGoogleBook(book.ids.googleBooksId)
         .then((updatedBook) => {
           if (updatedBook) book = updatedBook;
         })
@@ -186,7 +185,7 @@ app.on("ready", () => {
 
   ipcMain.on("searchBook", (event, q: string) => {
     if (settings.searchEngines.includes("googleBooks")) {
-      searchGoogleBooks(q, settings.googleApiKey)
+      searchGoogleBooks(q)
         .then((res) => event.reply("searchBookResults", res))
         .catch((e) => event.reply("error", parseErr(e)));
     } else {
