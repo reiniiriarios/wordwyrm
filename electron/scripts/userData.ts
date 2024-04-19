@@ -110,6 +110,13 @@ export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
     if (!settings.searchEngines) {
       settings.searchEngines = ["openLibrary", "googleBooks"];
     }
+    if (!settings.imageSearchEngine) {
+      if (settings.googleApiKey && settings.googleSearchEngineId) {
+        settings.imageSearchEngine = "google";
+      } else {
+        settings.imageSearchEngine = "duckduckgo";
+      }
+    }
     if (!settings.theme) {
       settings.theme = "default";
     }

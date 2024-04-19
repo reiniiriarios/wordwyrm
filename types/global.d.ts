@@ -6,6 +6,7 @@ type UserSettings = {
   booksDir: string;
   chartStartYear: number;
   searchEngines: string[];
+  imageSearchEngine: "google" | "duckduckgo" | "bing" | "ecosia";
   googleApiKey: string;
   googleSearchEngineId: string;
   filterTags: string;

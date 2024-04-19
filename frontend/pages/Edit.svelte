@@ -6,6 +6,7 @@
   import HoverInfo from "@components/HoverInfo.svelte";
   import Rating from "@components/Rating.svelte";
   import ImageSearch from "@components/ImageSearch.svelte";
+  import ImageSearchLink from "@components/ImageSearchLink.svelte";
   import MoreInfo from "@components/MoreInfo.svelte";
   import CropCover from "@components/CropCover.svelte";
   import DeleteBook from "@components/DeleteBook.svelte";
@@ -132,8 +133,10 @@
       </div>
       <div class="imageActions">
         {#if book}
-          {#if $settings.googleApiKey && $settings.googleSearchEngineId}
+          {#if $settings.imageSearchEngine === "google" && $settings.googleApiKey && $settings.googleSearchEngineId}
             <ImageSearch bind:book on:add={handleImageSearchAdded} />
+          {:else}
+            <ImageSearchLink {book} />
           {/if}
           <CropCover bind:book />
         {/if}

@@ -21,6 +21,9 @@
   let openDirWord: string = "File Manager";
   $: openDirWord = $platform === "darwin" ? "Finder" : $platform === "win32" ? "File Explorer" : "File Manager";
 
+  let googleApiFieldsDisabled: boolean = false;
+  $: googleApiFieldsDisabled = $settings.imageSearchEngine !== "google";
+
   let booksDir = {
     changing: false,
     showModal: false,
@@ -96,6 +99,11 @@
     } else {
       editSettings.searchEngines.push(engine);
     }
+  }
+
+  function imageSearchEngineChanged() {
+    googleApiFieldsDisabled = editSettings.imageSearchEngine !== "google";
+    console.log(editSettings.imageSearchEngine, googleApiFieldsDisabled);
   }
 
   function selectDataDir(e: MouseEvent | KeyboardEvent) {
@@ -206,9 +214,11 @@
       <input type="text" bind:value={editSettings.chartStartYear} />
     </label>
 
-    <div class="field field--fullwidth">
-      Search Engine <HoverInfo
-        details="Engine used to search for book data. Add Google Cloud API Key to use Google Books for data. Google Books data will be supplemented with OpenLibrary data."
+    <div class="field"></div>
+
+    <div class="field">
+      Book Search Engines <HoverInfo
+        details="If both are selected, Google Books data will be supplemented with OpenLibrary data."
       />
       <div class="btnOptions">
         <button
@@ -224,19 +234,36 @@
       </div>
     </div>
 
-    <label class="field field">
+    <div class="field">
+      Image Search Engine
+      <div class="selectField">
+        <Select
+          width="14rem"
+          bind:value={editSettings.imageSearchEngine}
+          on:change={imageSearchEngineChanged}
+          options={{
+            google: "Google",
+            duckduckgo: "DuckDuckGo",
+            bing: "Bing",
+            ecosia: "Ecosia",
+          }}
+        />
+      </div>
+    </div>
+
+    <label class="field" class:disabled={googleApiFieldsDisabled}>
       Google Cloud API Key <HoverInfo
-        details="Optional. Along with Engine ID, enables searching for cover images via Google Image Search."
+        details="Optional. Along with Engine ID, enables Google Image Search in-app."
         position="top"
       />
-      <input type="text" bind:value={editSettings.googleApiKey} />
+      <input type="text" bind:value={editSettings.googleApiKey} disabled={googleApiFieldsDisabled} />
     </label>
     <label class="field field">
       Google Custom Search Engine ID <HoverInfo
-        details="Optional. Along with API Key, enables searching for cover images via Google Image Search."
+        details="Optional. Along with API Key, enables Google Image Search in-app."
         position="top"
       />
-      <input type="text" bind:value={editSettings.googleSearchEngineId} />
+      <input type="text" bind:value={editSettings.googleSearchEngineId} disabled={googleApiFieldsDisabled} />
     </label>
     <div class="actions">
       <button class="btn" on:click={save}>Save</button>
@@ -287,7 +314,7 @@
     --settings-footer-height: 3rem;
 
     .settings {
-      max-height: calc(100vh - var(--page-nav-height) - var(--settings-footer-height));
+      height: calc(100vh - var(--page-nav-height) - var(--settings-footer-height));
       padding: 0.5rem 1rem;
       overflow-y: auto;
       scrollbar-width: thin;

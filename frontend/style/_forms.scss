@@ -14,17 +14,27 @@ textarea {
     outline: none;
     border-color: var(--c-focus);
   }
+
+  &:disabled {
+    color: var(--c-text-muted);
+    opacity: 0.75;
+  }
 }
 
 .field {
   margin: 0.125rem 0 0.125rem;
   font-size: 0.9rem;
   color: var(--c-text-muted);
+
+  &.disabled {
+    color: var(--c-text-dark);
+  }
 }
 
 fieldset {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-content: start;
   gap: 1rem;
   border: 0;
   padding: 0 0.5rem;
