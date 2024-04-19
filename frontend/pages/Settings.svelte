@@ -18,8 +18,6 @@
   let updateAvailable: string = "";
   $: seOpenLibrary = $settings.searchEngines?.includes("openLibrary");
   $: seGoogleBooks = $settings.searchEngines?.includes("googleBooks");
-  let openDirWord: string = "File Manager";
-  $: openDirWord = $platform === "darwin" ? "Finder" : $platform === "win32" ? "File Explorer" : "File Manager";
 
   let googleApiFieldsDisabled: boolean = false;
   $: googleApiFieldsDisabled = $settings.imageSearchEngine !== "google";
@@ -154,7 +152,7 @@
           </div>
         </div>
         <div class="dataDir__open">
-          <button class="btn" on:click={openBooksDir}>Open in {openDirWord}</button>
+          <button class="btn" on:click={openBooksDir}>Open in {$platform.fileBrowser}</button>
         </div>
       </div>
     </label>

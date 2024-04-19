@@ -39,7 +39,7 @@
     "dist/*",
     "scripts/*",
     "electron/api/*",
-    "electron/scripts/*",
+    "electron/data/*",
     "electron/main.ts",
     "electron/*.json"
   ]

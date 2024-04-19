@@ -32,7 +32,9 @@ jobs:
 
       - name: Build for Windows
         if: matrix.platform == 'windows-latest'
-        run: npm run build:win
+        run: |
+          npm run build:win
+          npm run build:nsis
 
       - name: Build for Linux
         if: matrix.platform == 'ubuntu-latest'

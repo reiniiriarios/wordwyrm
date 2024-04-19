@@ -14,6 +14,7 @@ type UserSettings = {
   appVersion: string;
   dateFormat: string;
   theme: string;
+  autoUpdate: boolean;
   bounds: {
     x: number;
     y: number;

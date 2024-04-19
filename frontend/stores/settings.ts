@@ -35,12 +35,26 @@ export const settings = createSettings();
 
 export const currentTheme = writable("");
 
-function createPlatform() {
-  const { subscribe, set } = writable("");
+type PlatformInfo = {
+  platform: string;
+  arch: string;
+  pkg: string;
+  fileBrowser: string;
+};
 
-  const removeListener = window.electronAPI.platform((p: string) => {
+function createPlatform() {
+  const def: PlatformInfo = {
+    platform: "",
+    arch: "",
+    pkg: "",
+    fileBrowser: "",
+  };
+  const { subscribe, set } = writable(def);
+
+  const removeListener = window.electronAPI.platform((p: PlatformInfo) => {
+    p.fileBrowser = p.platform === "darwin" ? "Finder" : p.platform === "win32" ? "File Explorer" : "File Manager";
     set(p);
-    log.debug(`Platform: ${p}`);
+    log.info(`platform:${p.platform}, arch:${p.arch}, package:${p.pkg}`);
   });
 
   return {

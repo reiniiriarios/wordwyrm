@@ -35,8 +35,8 @@
     "clean": "ts-node scripts/rmdist.ts",
     "build:icons": "npx png2icons assets/icons/512x512.png assets/icons/icon -allwe -hm",
     "build:mac": "cross-env WYRM_PKG=darwin electron-builder --mac dmg",
-    "build:win": "cross-env WYRM_PKG=windows electron-builder --win portable nsis",
-    "build:nsis": "cross-env WYRM_PKG=windows electron-builder --win nsis",
+    "build:win": "cross-env WYRM_PKG=win electron-builder --win portable",
+    "build:nsis": "cross-env WYRM_PKG=nsis electron-builder --win nsis",
     "build:appx": "cross-env WYRM_PKG=appx electron-builder --dir --win appx",
     "build:deb": "cross-env WYRM_PKG=linux electron-builder --linux deb",
     "build:linux": "cross-env WYRM_PKG=linux electron-builder --linux appImage deb rpm",
@@ -49,6 +49,7 @@
     "croppie": "^2.6.5",
     "electron-fetch": "^1.9.1",
     "electron-log": "^5.1.2",
+    "electron-updater": "^6.1.8",
     "fs-extra": "^11.2.0",
     "js-yaml": "^4.1.0",
     "json": "^11.0.0",
@@ -132,11 +133,9 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "installerSidebar": "./dist/installerSidebar.bmp",
-      "differentialPackage": false
+      "installerSidebar": "./dist/installerSidebar.bmp"
     },
     "dmg": {
-      "writeUpdateInfo": false,
       "contents": [
         {
           "x": 110,

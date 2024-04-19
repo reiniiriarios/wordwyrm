@@ -15,10 +15,10 @@
   let seriesBooks: Book[] = [];
 
   onMount(() => {
-    log.debug("book/", params);
     readBook(params.author, params.book);
 
     const removeReceiveListener = window.electronAPI.receiveBook((b: Book) => {
+      log.debug("book/", params);
       book = b;
       filterSeries();
     });
