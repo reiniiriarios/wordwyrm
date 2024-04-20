@@ -6,13 +6,12 @@
   import FilterCats from "@components/FilterCats.svelte";
   import FilterRead from "@components/FilterRead.svelte";
   import BookCount from "@components/BookCount.svelte";
-  import Bookimage from "@components/BookImage.svelte";
+  import BookImage from "@components/BookImage.svelte";
   import SearchBar from "@components/SearchBar.svelte";
   import Rating from "@components/Rating.svelte";
   import GettingStarted from "@components/GettingStarted.svelte";
   import AddBook from "@components/AddBook.svelte";
   import SearchApi from "@components/SearchApi.svelte";
-  import { settings } from "@stores/settings";
   import { books } from "@stores/books";
 
   onMount(() => {
@@ -63,26 +62,18 @@
   <div class="bookList">
     {#each $books.sortedBooks as book}
       <div class="book" class:zoomSmall={$books.view.zoom === "s"} class:zoomLarge={$books.view.zoom === "l"}>
-        {#if book.images.hasImage}
-          <a href={`#/book/${book.cache.filepath}`} class="book__inner book__inner--image">
-            <Bookimage {book} overlay />
-            {#if $books.filters.sort === "rating"}
-              {#if book.rating}
-                <span class="book__rating">
-                  <Rating rating={book.rating} />
-                </span>
-              {/if}
-            {:else if !book.dateRead}
-              <span class="unread">Unread</span>
+        <a href={`#/book/${book.cache.filepath}`} class="book__inner">
+          <BookImage {book} overlay size={$books.view.zoom} />
+          {#if $books.filters.sort === "rating"}
+            {#if book.rating}
+              <span class="book__rating">
+                <Rating rating={book.rating} />
+              </span>
             {/if}
-          </a>
-        {:else}
-          <a href={`#/book/${book.cache.filepath}`} class="book__inner book__inner--noimage">
-            <span>{book.title}</span>
-            <span>by</span>
-            <span>{book.authors.map((a) => a.name).join(", ")}</span>
-          </a>
-        {/if}
+          {:else if !book.dateRead}
+            <span class="unread">Unread</span>
+          {/if}
+        </a>
       </div>
     {/each}
   </div>
@@ -165,34 +156,15 @@
       cursor: pointer;
       text-decoration: none;
       color: var(--c-text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: var(--book-width);
+      height: var(--book-height);
+      transition: 0.2s transform;
 
-      &--image {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: var(--book-width);
-        height: var(--book-height);
-        transition: 0.2s transform;
-
-        &:hover {
-          transform: scale(1.02);
-        }
-      }
-
-      &--noimage {
-        width: calc(var(--book-width) - 1rem);
-        height: calc(var(--book-height) - 1rem);
-        background-color: var(--c-subtle);
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        transition: 0.2s transform;
-
-        &:hover {
-          transform: scale(1.02);
-        }
+      &:hover {
+        transform: scale(1.02);
       }
 
       .unread {

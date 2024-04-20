@@ -1,35 +1,42 @@
 <script lang="ts">
+  import BookImagePlaceholder from "@components/BookImagePlaceholder.svelte";
+
   export let book: Book;
   export let overlay: boolean = false;
   export let pageHeight: boolean = false;
+  export let size: "xs" | "s" | "m" | "l" = "m";
+
   let src: string;
   $: src = book ? `bookimage://${book.cache.urlpath}.jpg?t=${book.images.imageUpdated ?? 0}` : "";
 </script>
 
-{#if book && book.images.hasImage}
+{#if book}
   {#key book.images.imageUpdated}
     {#if overlay}
       <div class="bookComposite" class:pageHeight>
-        <img {src} alt="" />
+        {#if book.images.hasImage}
+          <img {src} alt="" />
+        {:else}
+          <BookImagePlaceholder {book} {pageHeight} {size} />
+        {/if}
       </div>
-    {:else}
+    {:else if book.images.hasImage}
       <img {src} alt="" />
+    {:else}
+      <BookImagePlaceholder {book} {pageHeight} {size} />
     {/if}
   {/key}
 {/if}
 
 <style lang="scss">
-  img {
-    max-height: var(--book-height, 100%);
-    max-width: 100%;
-  }
-
   .bookComposite {
     position: relative;
     display: inline-block;
     max-height: var(--book-height, 100%);
 
     img {
+      max-height: var(--book-height, 100%);
+      max-width: 100%;
       display: block;
       box-shadow: rgb(0, 0, 0, 0.3) 0.14rem 0.14rem 0.6rem 0.2rem;
       border-radius: 2px;

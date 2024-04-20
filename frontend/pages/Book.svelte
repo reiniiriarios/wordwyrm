@@ -62,11 +62,9 @@
 </div>
 {#if book}
   <div class="pageWrapper bookPage">
-    {#if book.images.hasImage}
-      <div class="bookPage__image">
-        <BookImage {book} overlay pageHeight />
-      </div>
-    {/if}
+    <div class="bookPage__image">
+      <BookImage {book} overlay pageHeight />
+    </div>
     <div class="bookPage__info">
       <h2>{book.title}</h2>
       <h3><span>by</span> {book.authors.map((a) => a.name).join(", ")}</h3>
@@ -86,25 +84,13 @@
           <div class="seriesList">
             {#each seriesBooks as sb}
               <div class="seriesList__book">
-                {#if sb.images.hasImage}
-                  <a
-                    href={`#/book/${sb.cache.filepath}`}
-                    on:click={() => readBook(sb.cache.authorDir ?? "", sb.cache.filename ?? "")}
-                    class="seriesList__inner seriesList__inner--image"
-                  >
-                    <BookImage book={sb} overlay />
-                  </a>
-                {:else}
-                  <a
-                    href={`#/book/${sb.cache.filepath}`}
-                    on:click={() => readBook(sb.cache.authorDir ?? "", sb.cache.filename ?? "")}
-                    class="seriesList__inner seriesList__inner--noimage"
-                  >
-                    <span>{sb.title}</span>
-                    <span>by</span>
-                    <span>{sb.authors.map((a) => a.name).join(", ")}</span>
-                  </a>
-                {/if}
+                <a
+                  href={`#/book/${sb.cache.filepath}`}
+                  on:click={() => readBook(sb.cache.authorDir ?? "", sb.cache.filename ?? "")}
+                  class="seriesList__inner"
+                >
+                  <BookImage book={sb} overlay size="xs" />
+                </a>
               </div>
             {/each}
           </div>
@@ -228,34 +214,15 @@
           cursor: pointer;
           text-decoration: none;
           color: var(--c-text);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: var(--book-width);
+          height: var(--book-height);
+          transition: 0.2s transform;
 
-          &--image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: var(--book-width);
-            height: var(--book-height);
-            transition: 0.2s transform;
-
-            &:hover {
-              transform: scale(1.02);
-            }
-          }
-
-          &--noimage {
-            width: calc(var(--book-width) - 0.5rem);
-            height: calc(var(--book-height) - 0.5rem);
-            background-color: var(--c-subtle);
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            transition: 0.2s transform;
-
-            &:hover {
-              transform: scale(1.02);
-            }
+          &:hover {
+            transform: scale(1.02);
           }
         }
       }
