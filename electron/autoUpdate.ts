@@ -3,15 +3,15 @@ import { autoUpdater } from "electron-updater";
 import log from "electron-log/main";
 import packageJson from "../package.json";
 import WyrmError from "./error";
+import BUILD from "./build";
 
 const DEV = process.env.WYRM_ENV === "dev";
-const PKG = process.env.WYRM_PKG ?? "";
 
 const GH_USER = "reiniiriarios";
 const GH_REPO = "wordwyrm";
 
-const CAN_AUTO_UPDATE = ["dmg", "appImage", "deb", "rpm", "nsis", "linux"].includes(PKG);
-const USES_APP_STORE = ["mas", "appx", "snap"].includes(PKG);
+const CAN_AUTO_UPDATE = ["dmg", "appImage", "deb", "rpm", "nsis", "linux"].includes(BUILD.package);
+const USES_APP_STORE = ["mas", "appx", "snap"].includes(BUILD.package);
 
 /**
  * Updater (auto and manual).

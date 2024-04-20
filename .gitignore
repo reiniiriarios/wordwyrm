@@ -1,31 +1,17 @@
-# Compiled source #
-###################
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.so
+# App #
+/dist
+/build
+/electron/build.ts
 
-# Packages #
-############
-*.dmg
-*.gz
-*.iso
-*.tar
-*.zip
+# NodeJS #
+npm-debug.log
+/node_modules
 
 # Logs #
-########
 *.log
-*.sql
-*.sqlite
 *.lock
-yarn-debug.log
-yarn-error.log
 
 # OS generated files #
-######################
 .DS_Store
 .DS_Store?
 ._*
@@ -34,36 +20,15 @@ yarn-error.log
 ehthumbs.db
 Thumbs.db
 
-# Python #
-##########
-*.pyc
-*.pyo
-
 # Backup generated files #
-##########################
 *~
 *.swp
 *.bak
 *#
 
 # Runtime data #
-################
 pids
 *.pid
 *.seed
 *.pid.lock
 *.eslintcache
-
-# NodeJS #
-##########
-npm-debug.log
-/node_modules
-
-# App #
-#######
-.env
-.env.js
-.env.ts
-/extra
-/dist
-/build

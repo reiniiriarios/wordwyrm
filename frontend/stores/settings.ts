@@ -39,6 +39,7 @@ type PlatformInfo = {
   platform: string;
   arch: string;
   pkg: string;
+  buildPlatform: string;
   fileBrowser: string;
 };
 
@@ -47,6 +48,7 @@ function createPlatform() {
     platform: "",
     arch: "",
     pkg: "",
+    buildPlatform: "",
     fileBrowser: "",
   };
   const { subscribe, set } = writable(def);
@@ -54,7 +56,7 @@ function createPlatform() {
   const removeListener = window.electronAPI.platform((p: PlatformInfo) => {
     p.fileBrowser = p.platform === "darwin" ? "Finder" : p.platform === "win32" ? "File Explorer" : "File Manager";
     set(p);
-    log.info(`platform:${p.platform}, arch:${p.arch}, package:${p.pkg}`);
+    log.info(`platform: ${p.platform}, arch: ${p.arch}, buildPlatform:${p.buildPlatform}, package: ${p.pkg}`);
   });
 
   return {

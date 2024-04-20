@@ -2,6 +2,7 @@ import path from "path";
 import { BrowserWindow, dialog, ipcMain, nativeTheme, net, protocol, shell } from "electron";
 
 import packageJson from "../package.json";
+import BUILD from "./build";
 
 import { UserSettings } from "../types/global";
 import { parseErr } from "./error";
@@ -15,8 +16,6 @@ import { googleImageSearch } from "./api/googleImageSearch";
 import { searchOpenLibrary, searchOpenLibraryWorkByISBN } from "./api/openLibrary";
 
 import { DATA_PATH } from "./data/userData";
-
-const PKG = process.env.WYRM_PKG ?? "__none__";
 
 class Bridge {
   public currentWindow: BrowserWindow;
@@ -216,7 +215,8 @@ class Bridge {
       event.reply("platform", {
         platform: process.platform,
         arch: process.arch,
-        pkg: PKG,
+        pkg: BUILD.package,
+        buildPlatform: BUILD.platform,
       });
     });
   }

@@ -22,9 +22,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: |
-          npm run build:client
-          npm run build:electron
+        run: npm run build:client
 
       - name: Build for macOS
         if: matrix.platform == 'macos-latest'
