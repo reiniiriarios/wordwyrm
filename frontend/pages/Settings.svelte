@@ -21,7 +21,7 @@
   let googleApiFieldsDisabled: boolean = false;
   $: googleApiFieldsDisabled = $settings.imageSearchEngine !== "google";
 
-  let booksDir = {
+  const booksDir = {
     changing: false,
     showModal: false,
     oldDir: "",
@@ -120,7 +120,9 @@
     }
 
     e?.preventDefault();
-    if (editSettings.booksDir !== $settings.booksDir) setTimeout(books.fetch, 500);
+    if (editSettings.booksDir !== $settings.booksDir) {
+      setTimeout(books.fetch, 500);
+    }
     settings.save(editSettings, moveData);
     saving = true;
   }

@@ -5,8 +5,8 @@
   import { sortFilters } from "@scripts/sortBooks";
 
   function filter(e: MouseEvent | KeyboardEvent) {
-    let opt = e.target as HTMLButtonElement;
-    let val = opt.dataset.val ?? "";
+    const opt = e.target as HTMLButtonElement;
+    const val = opt.dataset.val ?? "";
     books.sort(val);
     // enable following if switching to dropdown
     // opt.blur();

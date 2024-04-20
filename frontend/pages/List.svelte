@@ -8,12 +8,8 @@
   import FilterCats from "@components/FilterCats.svelte";
   import FilterRead from "@components/FilterRead.svelte";
   import GettingStarted from "@components/GettingStarted.svelte";
-  import { settings } from "@stores/settings";
   import { books } from "@stores/books";
   import { formatDate } from "@scripts/formatDate";
-
-  let filterTags: string[] = [];
-  $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());
 
   onMount(() => {
     if (!$books.allBooks.length) {
@@ -70,7 +66,7 @@
           <tr on:click={() => push(`#/book/${book.cache.filepath}`)}>
             <td>{book.title}</td>
             <td>{book.authors.map((a) => a.name).join(", ")}</td>
-            <td>{book.series ?? ""}{book.seriesNumber ? " #" + book.seriesNumber : ""}</td>
+            <td>{book.series ?? ""}{book.seriesNumber ? ` #${book.seriesNumber}` : ""}</td>
             <td>
               <div class="tags">
                 {#each book.tags as tag}

@@ -44,9 +44,13 @@
 
   onMount(() => {
     const removeImageSearchListener = window.electronAPI.imageSearchResults((res: SearchResult[] | string) => {
-      if (typeof res === "string") err = res ?? "Unknown error";
-      else if (res && res.length > 0) results = res;
-      else err = "No results";
+      if (typeof res === "string") {
+        err = res ?? "Unknown error";
+      } else if (res && res.length > 0) {
+        results = res;
+      } else {
+        err = "No results";
+      }
       searching = false;
     });
 
@@ -56,8 +60,12 @@
       saving = false;
       book.images.imageUpdated = new Date().getTime();
       book.images.hasImage = true;
-      if (!book.cache.filepath) book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
-      if (!book.cache.urlpath) book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
+      if (!book.cache.filepath) {
+        book.cache.filepath = `${book.cache.authorDir}/${book.cache.filename}`;
+      }
+      if (!book.cache.urlpath) {
+        book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
+      }
       books.updateBook(book);
       dispatch("add");
     });

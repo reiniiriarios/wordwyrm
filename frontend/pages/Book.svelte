@@ -1,5 +1,4 @@
 <script lang="ts">
-  import log from "electron-log/renderer";
   import { onMount } from "svelte";
   import PencilSimple from "phosphor-svelte/lib/PencilSimple";
 
@@ -77,7 +76,7 @@
         <div class="series">
           <div class="dataTitle">Series</div>
           {book.series}
-          {book.seriesNumber ? "#" + book.seriesNumber : ""}
+          {book.seriesNumber ? `#${book.seriesNumber}` : ""}
         </div>
         {#if seriesBooks.length}
           <div class="seriesList">

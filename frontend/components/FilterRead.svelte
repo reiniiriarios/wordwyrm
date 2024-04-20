@@ -3,8 +3,8 @@
   import { recentFilters } from "@scripts/sortBooks";
 
   function filter(e: MouseEvent | KeyboardEvent) {
-    let opt = e.target as HTMLButtonElement;
-    let val = opt.dataset.val ?? "";
+    const opt = e.target as HTMLButtonElement;
+    const val = opt.dataset.val ?? "";
     books.recentFilter(val);
     opt.blur();
   }

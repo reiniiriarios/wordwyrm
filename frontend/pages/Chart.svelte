@@ -10,9 +10,9 @@
   const endDate = new Date();
 
   function initYears(): Record<number, number> {
-    let ys: Record<string, number> = {};
-    let startYear = startDate.getFullYear();
-    let endYear = endDate.getFullYear();
+    const ys: Record<string, number> = {};
+    const startYear = startDate.getFullYear();
+    const endYear = endDate.getFullYear();
     for (let y = startYear; y <= endYear; y++) {
       ys[y] = 0;
     }
@@ -21,14 +21,14 @@
 
   const mAbbr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   function initMonths(): Record<string, { display: string; count: number }> {
-    let ms: Record<string, { display: string; count: number }> = {};
-    let startYear = startDate.getFullYear();
-    let endYear = endDate.getFullYear();
+    const ms: Record<string, { display: string; count: number }> = {};
+    const startYear = startDate.getFullYear();
+    const endYear = endDate.getFullYear();
     for (let y = startYear; y <= endYear; y++) {
       for (let m = 0; m < 12; m++) {
-        let ym = y + "-" + m.toString().padStart(2, "0");
+        const ym = `${y}-${m.toString().padStart(2, "0")}`;
         ms[ym] = {
-          display: mAbbr[m] + " " + y,
+          display: `${mAbbr[m]} ${y}`,
           count: 0,
         };
       }
@@ -37,17 +37,15 @@
   }
 
   function initDays(): Record<string, number> {
-    let ds: Record<string, number> = {};
+    const ds: Record<string, number> = {};
     let currentDate = startDate;
     while (currentDate <= endDate) {
-      let ymd =
-        currentDate.getFullYear() +
-        "-" +
-        currentDate.getMonth().toString().padStart(2, "0") +
-        "-" +
-        currentDate.getDate().toString().padStart(2, "0");
+      const ymd = `${currentDate.getFullYear()}-${currentDate.getMonth().toString().padStart(2, "0")}-${currentDate
+        .getDate()
+        .toString()
+        .padStart(2, "0")}`;
       ds[ymd] = 0;
-      let newDate = new Date(currentDate);
+      const newDate = new Date(currentDate);
       newDate.setDate(currentDate.getDate() + 1);
       currentDate = newDate;
     }
@@ -64,13 +62,19 @@
   function parseBooks() {
     $books.allBooks.forEach((b) => {
       if (b.dateRead) {
-        let t = new Date(b.dateRead);
-        let y = t.getFullYear();
-        let m = y + "-" + t.getMonth().toString().padStart(2, "0");
-        let d = m + "-" + t.getDate().toString().padStart(2, "0");
-        if (typeof years[y] !== "undefined") years[y]++;
-        if (months[m]) months[m].count++;
-        if (typeof days[d] !== "undefined") days[d]++;
+        const t = new Date(b.dateRead);
+        const y = t.getFullYear();
+        const m = `${y}-${t.getMonth().toString().padStart(2, "0")}`;
+        const d = `${m}-${t.getDate().toString().padStart(2, "0")}`;
+        if (typeof years[y] !== "undefined") {
+          years[y]++;
+        }
+        if (months[m]) {
+          months[m].count++;
+        }
+        if (typeof days[d] !== "undefined") {
+          days[d]++;
+        }
       }
     });
   }
@@ -90,10 +94,10 @@
     days = initDays();
     parseBooks();
 
-    let barColor =
+    const barColor =
       getComputedStyle(document.getElementById("appContainer") as HTMLDivElement).getPropertyValue("--c-chart-bar") ??
       "#ff0088";
-    let barColorBorder =
+    const barColorBorder =
       getComputedStyle(document.getElementById("appContainer") as HTMLDivElement).getPropertyValue(
         "--c-chart-bar-border",
       ) ?? "#ff008888";

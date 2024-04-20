@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { app, BrowserWindow, shell } from "electron";
 import { LogMessage } from "electron-log";
 import log from "electron-log/main";

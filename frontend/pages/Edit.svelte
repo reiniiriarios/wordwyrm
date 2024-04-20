@@ -43,7 +43,9 @@
       tags = book.tags?.join(", ") ?? "";
       if (book.images.hasImage) {
         let booksDir = $settings.booksDir.replace(/\\/g, "/").replace(/ /g, "%20");
-        if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
+        if (booksDir.charAt(0) !== "/") {
+          booksDir = `/${booksDir}`;
+        }
         imagePath = `${booksDir}/${book.cache.urlpath}.jpg?t=${book.images.imageUpdated}`;
       }
     });
@@ -73,7 +75,7 @@
     book.tags = tags.split(",").map((t) => t.trim());
   }
 
-  function handleBookImageDropped(e: CustomEvent<any>) {
+  function handleBookImageDropped(e: CustomEvent) {
     const { acceptedFiles, fileRejections } = e.detail as {
       acceptedFiles: (File & { path: string })[];
       fileRejections: (File & { path: string })[];
@@ -83,14 +85,18 @@
     }
     if (acceptedFiles.length) {
       imagePath = acceptedFiles[0].path.replace(/\\/g, "/").replace(/ /g, "%20");
-      if (imagePath.charAt(0) !== "/") imagePath = "/" + imagePath;
+      if (imagePath.charAt(0) !== "/") {
+        imagePath = `/${imagePath}`;
+      }
       book.cache.image = imagePath;
     }
   }
 
-  function handleImageSearchAdded(_: CustomEvent<any>) {
+  function handleImageSearchAdded(_: CustomEvent) {
     let booksDir = $settings.booksDir.replace(/\\/g, "/").replace(/ /g, "%20");
-    if (booksDir.charAt(0) !== "/") booksDir = "/" + booksDir;
+    if (booksDir.charAt(0) !== "/") {
+      booksDir = `/${booksDir}`;
+    }
     imagePath = `${booksDir}/${book.cache.urlpath}.jpg?t=${book.images.imageUpdated}`;
   }
 
@@ -102,9 +108,13 @@
 
   function addCommonTag(tag: string) {
     if (tag) {
-      if (!book.tags) book.tags = [];
+      if (!book.tags) {
+        book.tags = [];
+      }
       book.tags.push(tag);
-      if (tags.length) tags += ", ";
+      if (tags.length) {
+        tags += ", ";
+      }
       tags += tag;
     }
   }

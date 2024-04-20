@@ -21,7 +21,7 @@ import autoUpdate from "./autoUpdate";
 
 import { getGoogleBook, searchGoogleBooks } from "./api/googleBooks";
 import { googleImageSearch } from "./api/googleImageSearch";
-import { searchOpenLibrary, searchOpenLibraryWorkByISBN } from "./api/openLibrary";
+import { searchOpenLibrary } from "./api/openLibrary";
 
 import { DATA_PATH } from "./data/userData";
 

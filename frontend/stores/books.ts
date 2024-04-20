@@ -89,8 +89,11 @@ function createBooks() {
       log.debug("Books store: sorting books");
       // sort what is already filtered, then searched through
       update((s) => {
-        if (method && !!sortFilters[method]) s.filters.sort = method;
-        else if (!sortFilters[s.filters.sort]) return s;
+        if (method && !!sortFilters[method]) {
+          s.filters.sort = method;
+        } else if (!sortFilters[s.filters.sort]) {
+          return s;
+        }
         s.sortedBooks = sortFilters[s.filters.sort].sort(structuredClone(s.searchedBooks), s.filters.reverse);
         return s;
       });
@@ -121,7 +124,9 @@ function createBooks() {
       books.sort();
     },
     catFilter: (cat: string) => {
-      if (!catFilters[cat]) return;
+      if (!catFilters[cat]) {
+        return;
+      }
       update((s) => {
         s.filters.filter = cat;
         s.filters.tag = "";
@@ -138,7 +143,9 @@ function createBooks() {
       books.applyFilter();
     },
     recentFilter: (r: string) => {
-      if (!recentFilters[r]) return;
+      if (!recentFilters[r]) {
+        return;
+      }
       update((s) => {
         s.filters.recent = r;
         return s;

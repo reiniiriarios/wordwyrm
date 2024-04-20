@@ -47,7 +47,7 @@
   }
 
   function resultsScroll() {
-    let currentScroll = elSearchResults.scrollTop / (elSearchResults.scrollHeight - elSearchResults.offsetHeight);
+    const currentScroll = elSearchResults.scrollTop / (elSearchResults.scrollHeight - elSearchResults.offsetHeight);
     shadowTopOpacity = currentScroll;
     shadowBottomOpacity = 1 - currentScroll;
   }
@@ -84,7 +84,9 @@
   }
 
   function addBook() {
-    if (!selectedBook.cache?.searchId) return;
+    if (!selectedBook.cache?.searchId) {
+      return;
+    }
     canAdd = false;
     adding = true;
     window.removeEventListener("keydown", searchKey);

@@ -41,7 +41,7 @@
     setTimeout(window.electronAPI.readAllBooks, 1000);
   }
 
-  function handleBookImage(e: CustomEvent<any>) {
+  function handleBookImage(e: CustomEvent) {
     const { acceptedFiles, fileRejections } = e.detail as {
       acceptedFiles: (File & { path: string })[];
       fileRejections: (File & { path: string })[];

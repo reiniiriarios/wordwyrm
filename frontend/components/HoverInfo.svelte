@@ -9,7 +9,9 @@
 
   function show() {
     visible = true;
-    if (timer) clearTimeout(timer);
+    if (timer) {
+      clearTimeout(timer);
+    }
   }
 
   function hide() {

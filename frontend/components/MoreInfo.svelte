@@ -8,23 +8,19 @@
   $: searchTitle = encodeURIComponent(book.title).replace(/%20/g, "+");
   $: searchAuthor = encodeURIComponent(book.authors.map((a) => a.name).join(", ")).replace(/%20/g, "+");
   $: if (!book.ids.googleBooksId) {
-    googleSearch =
-      "intitle:" +
-      book.title
-        .trim()
-        .split(" ")
-        .map((t) => encodeURIComponent(t))
-        .join("+intitle:") +
-      "+inauthor:" +
-      book.authors
-        .map((a) =>
-          a.name
-            .trim()
-            .split(" ")
-            .map((n) => encodeURIComponent(n))
-            .join("+inauthor:"),
-        )
-        .join("+inauthor:");
+    googleSearch = `intitle:${book.title
+      .trim()
+      .split(" ")
+      .map((t) => encodeURIComponent(t))
+      .join("+intitle:")}+inauthor:${book.authors
+      .map((a) =>
+        a.name
+          .trim()
+          .split(" ")
+          .map((n) => encodeURIComponent(n))
+          .join("+inauthor:"),
+      )
+      .join("+inauthor:")}`;
   }
 </script>
 

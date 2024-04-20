@@ -7,9 +7,9 @@
   $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());
 
   function filter(e: MouseEvent | KeyboardEvent) {
-    let opt = e.target as HTMLButtonElement;
-    let val = opt.dataset.val ?? "";
-    let type = opt.dataset.type ?? "";
+    const opt = e.target as HTMLButtonElement;
+    const val = opt.dataset.val ?? "";
+    const type = opt.dataset.type ?? "";
     if (type === "cat") {
       books.catFilter(val);
     } else {

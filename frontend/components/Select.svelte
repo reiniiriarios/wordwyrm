@@ -12,7 +12,7 @@
   const dispatch = createEventDispatcher();
 
   function select(e: MouseEvent | KeyboardEvent) {
-    let btn = e.target as HTMLButtonElement;
+    const btn = e.target as HTMLButtonElement;
     value = btn.dataset.val as string | number;
     onSelect(value);
     btn.blur();

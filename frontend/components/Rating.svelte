@@ -15,7 +15,7 @@
     }
   }
 
-  function unHoverStar(e: MouseEvent | FocusEvent) {
+  function unHoverStar(_e: MouseEvent | FocusEvent) {
     if (editable) {
       hovering = false;
     }

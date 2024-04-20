@@ -4,10 +4,10 @@
 
   export let value: string = "";
   let useDate: boolean = true;
-  $: useDate = !value || !!value.match(/^\d+\-\d+\-\d+$/);
+  $: useDate = !value || !!value.match(/^\d+-\d+-\d+$/);
 
   function validate() {
-    value = value?.replace(/[^\-0-9]/g, "").replace(/\-{2,}/g, "-") ?? "";
+    value = value?.replace(/[^\-0-9]/g, "").replace(/-{2,}/g, "-") ?? "";
   }
 
   function switchFormat() {
