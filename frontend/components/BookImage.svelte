@@ -15,13 +15,13 @@
     {#if overlay}
       <div class="bookComposite" class:pageHeight>
         {#if book.images.hasImage}
-          <img {src} alt="" />
+          <img {src} alt="" loading="lazy" decoding="async" />
         {:else}
           <BookImagePlaceholder {book} {pageHeight} {size} />
         {/if}
       </div>
     {:else if book.images.hasImage}
-      <img {src} alt="" />
+      <img {src} alt="" loading="lazy" decoding="async" />
     {:else}
       <BookImagePlaceholder {book} {pageHeight} {size} />
     {/if}
