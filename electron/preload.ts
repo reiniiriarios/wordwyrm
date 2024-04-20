@@ -1,8 +1,11 @@
 import { contextBridge, ipcRenderer } from "electron";
 import type { UserSettings } from "../types/global";
 
-function ipcCallback(channel: string, callback: Function) {
-  const subscription = (_event: any, ...args: any[]) => callback(...args);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Callback = (...args: any[]) => void;
+
+function ipcCallback(channel: string, callback: Callback) {
+  const subscription = (_event: Electron.IpcRendererEvent, ...args: unknown[]) => callback(...args);
   ipcRenderer.on(channel, subscription);
   return () => {
     ipcRenderer.removeListener(channel, subscription);
@@ -10,49 +13,49 @@ function ipcCallback(channel: string, callback: Function) {
 }
 
 export const api = {
-  error: (callback: Function) => ipcCallback("error", callback),
+  error: (callback: Callback) => ipcCallback("error", callback),
 
   loadSettings: () => ipcRenderer.send("loadSettings"),
   saveSettings: (newSettings: UserSettings, moveData: boolean) =>
     ipcRenderer.send("saveSettings", newSettings, moveData),
-  settingsLoaded: (callback: Function) => ipcCallback("settingsLoaded", callback),
+  settingsLoaded: (callback: Callback) => ipcCallback("settingsLoaded", callback),
 
   checkVersion: () => ipcRenderer.send("checkVersion"),
-  updateAvailable: (callback: Function) => ipcCallback("updateAvailable", callback),
+  updateAvailable: (callback: Callback) => ipcCallback("updateAvailable", callback),
 
   getBookData: (book: Book) => ipcRenderer.send("getBookData", book),
-  receiveBookData: (callback: Function) => ipcCallback("receiveBookData", callback),
+  receiveBookData: (callback: Callback) => ipcCallback("receiveBookData", callback),
 
   searchBook: (q: string) => ipcRenderer.send("searchBook", q),
-  searchBookResults: (callback: Function) => ipcCallback("searchBookResults", callback),
+  searchBookResults: (callback: Callback) => ipcCallback("searchBookResults", callback),
 
   readAllBooks: () => ipcRenderer.send("readAllBooks"),
-  receiveAllBooks: (callback: Function) => ipcCallback("receiveAllBooks", callback),
+  receiveAllBooks: (callback: Callback) => ipcCallback("receiveAllBooks", callback),
 
   readBook: (authorDir: string, filename: string) => ipcRenderer.send("readBook", authorDir, filename),
-  receiveBook: (callback: Function) => ipcCallback("receiveBook", callback),
+  receiveBook: (callback: Callback) => ipcCallback("receiveBook", callback),
 
   saveBook: (book: Book) => ipcRenderer.send("saveBook", book),
-  bookSaved: (callback: Function) => ipcCallback("bookSaved", callback),
+  bookSaved: (callback: Callback) => ipcCallback("bookSaved", callback),
   editBook: (book: Book, authorDir: string, filename: string) =>
     ipcRenderer.send("editBook", book, authorDir, filename),
 
   selectDataDir: () => ipcRenderer.send("selectDataDir"),
-  dirSelected: (callback: Function) => ipcCallback("dirSelected", callback),
+  dirSelected: (callback: Callback) => ipcCallback("dirSelected", callback),
 
   imageSearch: (author: string, title: string, page: number) => ipcRenderer.send("imageSearch", author, title, page),
-  imageSearchResults: (callback: Function) => ipcCallback("imageSearchResults", callback),
+  imageSearchResults: (callback: Callback) => ipcCallback("imageSearchResults", callback),
 
   addBookImage: (book: Book, url: string) => ipcRenderer.send("addBookImage", book, url),
-  bookImageAdded: (callback: Function) => ipcCallback("bookImageAdded", callback),
+  bookImageAdded: (callback: Callback) => ipcCallback("bookImageAdded", callback),
   addBookImageBase64: (book: Book, base64: string) => ipcRenderer.send("addBookImageBase64", book, base64),
-  bookImageBase64Added: (callback: Function) => ipcCallback("bookImageBase64Added", callback),
+  bookImageBase64Added: (callback: Callback) => ipcCallback("bookImageBase64Added", callback),
 
   deleteBook: (book: Book) => ipcRenderer.send("deleteBook", book),
-  bookDeleted: (callback: Function) => ipcCallback("bookDeleted", callback),
+  bookDeleted: (callback: Callback) => ipcCallback("bookDeleted", callback),
 
   getPlatform: () => ipcRenderer.send("getPlatform"),
-  platform: (callback: Function) => ipcCallback("platform", callback),
+  platform: (callback: Callback) => ipcCallback("platform", callback),
 
   openSettingsDir: () => ipcRenderer.send("openSettingsDir"),
   openBooksDir: () => ipcRenderer.send("openBooksDir"),

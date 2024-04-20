@@ -38,8 +38,10 @@ class Bridge {
 
     protocol.handle("localfile", (request) => {
       let url = request.url.slice("localfile://".length).replace(/\\/g, "/").replace(/ /g, "%20");
-      if (url.charAt(0) !== "/") url = "/" + url;
-      return net.fetch("file://" + url);
+      if (url.charAt(0) !== "/") {
+        url = `/${url}`;
+      }
+      return net.fetch(`file://${url}`);
     });
 
     protocol.handle("bookimage", (request) => {
@@ -47,8 +49,10 @@ class Bridge {
         .join(this.currentSettings.booksDir, request.url.slice("bookimage://".length))
         .replace(/\\/g, "/")
         .replace(/ /g, "%20");
-      if (url.charAt(0) !== "/") url = "/" + url;
-      return net.fetch("file://" + url);
+      if (url.charAt(0) !== "/") {
+        url = `/${url}`;
+      }
+      return net.fetch(`file://${url}`);
     });
 
     // Event handlers
@@ -70,12 +74,13 @@ class Bridge {
         } catch (e) {
           event.reply("error", parseErr(e));
         }
-      }
-      // If just using Google Books, fetch full data.
-      else if (this.currentSettings.searchEngines.includes("googleBooks")) {
+      } else if (this.currentSettings.searchEngines.includes("googleBooks")) {
+        // If just using Google Books, fetch full data.
         getGoogleBook(book.ids.googleBooksId)
           .then((updatedBook) => {
-            if (updatedBook) book = updatedBook;
+            if (updatedBook) {
+              book = updatedBook;
+            }
           })
           .catch((e) => event.reply("error", parseErr(e)));
       }

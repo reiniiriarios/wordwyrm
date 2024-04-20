@@ -172,7 +172,9 @@ export async function getOpenLibraryEditions(olid: string): Promise<OpenLibraryE
     })
       .then((res) => res.json())
       .then((json: OpenLibraryEditions) => {
-        if (!json.size) return [];
+        if (!json.size) {
+          return [];
+        }
         return json.entries;
       })
       .catch((e) => {
@@ -205,7 +207,9 @@ export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLi
     })
       .then((res) => res.json())
       .then((json: OpenLibraryEditions) => {
-        if (!json.size) return [];
+        if (!json.size) {
+          return [];
+        }
         return json.entries;
       })
       .catch((e) => {
@@ -241,13 +245,17 @@ export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | 
         return res.json();
       })
       .then((json: OpenLibrarySearchResponse) => {
-        if (!json.numFound || !json.docs?.[0] || !json.docs?.[0]?.key) return null;
+        if (!json.numFound || !json.docs?.[0] || !json.docs?.[0]?.key) {
+          return null;
+        }
         return json.docs[0];
       })
       .catch((e) => {
         throw e;
       });
-    if (!work?.key) return null;
+    if (!work?.key) {
+      return null;
+    }
     return conformOpenLibrarySearchResult(work, isbn);
   } catch (e) {
     log.error("searchOpenLibraryWorkByISBN", e);
@@ -273,7 +281,9 @@ export async function searchOpenLibrary(search: string): Promise<Book[]> {
     })
       .then((res) => res.json())
       .then((json: OpenLibrarySearchResponse) => {
-        if (!json.numFound) return [];
+        if (!json.numFound) {
+          return [];
+        }
         return json.docs;
       })
       .catch((e) => {
@@ -313,8 +323,8 @@ function setFirstId(ids: string[] | undefined | null, callback: (id: string) => 
  * @returns Book
  */
 function conformOpenLibrarySearchResult(work: OpenLibrarySearchResult, isbn?: string): Book {
-  let authors: Author[] = [];
-  let names = new Set<string>();
+  const authors: Author[] = [];
+  const names = new Set<string>();
   for (let i = 0; i < work.author_name?.length; i++) {
     if (!names.has(work.author_name[i])) {
       names.add(work.author_name[i]);
@@ -352,9 +362,9 @@ function conformOpenLibrarySearchResult(work: OpenLibrarySearchResult, isbn?: st
   };
   if (work.cover_edition_key || work.cover_i) {
     book.images.hasImage = true;
-    let imageUrl = imgEndpoint + (work.cover_edition_key ? "olid/" + work.cover_edition_key : "id/" + work.cover_i);
-    book.cache.image = imageUrl + "-L.jpg";
-    book.cache.thumbnail = imageUrl + "-M.jpg";
+    const imageUrl = imgEndpoint + (work.cover_edition_key ? `olid/${work.cover_edition_key}` : `id/${work.cover_i}`);
+    book.cache.image = `${imageUrl}-L.jpg`;
+    book.cache.thumbnail = `${imageUrl}-M.jpg`;
   }
   if (isbn) {
     book.ids.isbn = isbn;

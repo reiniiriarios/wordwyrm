@@ -8,18 +8,16 @@ import WyrmError from "../error";
 // Get platform-idiomatic user data directory.
 let dataPath: string;
 let dataDir: string;
-// Windows
 if (process.env.APPDATA) {
+  // Windows
   dataPath = process.env.APPDATA;
   dataDir = "WordwyrmData"; // "Wordwyrm" is used for app data.
-}
-// macOS
-else if (process.platform === "darwin") {
+} else if (process.platform === "darwin") {
+  // macOS
   dataPath = path.join(process.env.HOME ?? "~", "/Library/Preferences");
   dataDir = "me.reinii.wordwyrm";
-}
-// Linux
-else {
+} else {
+  // Linux
   dataPath = path.join(process.env.HOME ?? "~", "/.local/share");
   dataDir = "wordwyrm";
 }
@@ -84,8 +82,10 @@ export function readYaml(filename: string): any {
  */
 export function saveYaml(filename: string, data: any) {
   try {
-    let toWrite = structuredClone(data);
-    if (toWrite.cache) delete toWrite.cache;
+    const toWrite = structuredClone(data);
+    if (toWrite.cache) {
+      delete toWrite.cache;
+    }
     const doc = yaml.dump(toWrite);
     fs.writeFileSync(filename, doc, { flag: "w", encoding: "utf8" });
   } catch (e) {
@@ -108,7 +108,7 @@ export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
       saveYaml(sf, {});
       return {} as UserSettings;
     }
-    let settings: UserSettings = readYaml(sf);
+    const settings: UserSettings = readYaml(sf);
 
     // Defaults
     if (!settings.searchEngines) {
@@ -160,9 +160,13 @@ export function saveSettings(
 ) {
   log.debug("Saving settings");
   saveYaml(path.join(DATA_PATH, "settings.yaml"), settings);
-  if (!options.moveData) return callback();
+  if (!options.moveData) {
+    return callback();
+  }
   moveDirectory(options.oldDir, settings.booksDir, (err) => {
-    if (err) return callback(err);
+    if (err) {
+      return callback(err);
+    }
     callback();
   });
 }
@@ -178,7 +182,7 @@ function moveDirectory(oldDir: string, newDir: string, callback: (error?: WyrmEr
   // Read each author directory
   fs.readdir(oldDir, { withFileTypes: true })
     .then((files) => {
-      for (let file of files) {
+      for (const file of files) {
         if (file.isDirectory()) {
           // Move each directory
           const od = path.join(oldDir, file.name);

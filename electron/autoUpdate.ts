@@ -44,11 +44,8 @@ class AppUpdater {
     autoUpdater.on("error", (err) => {
       log.error("Error in auto-updater:", err);
     });
-    autoUpdater.on("download-progress", (progressObj) => {
-      let log_message = "Download speed: " + progressObj.bytesPerSecond;
-      log_message = log_message + " - Downloaded " + progressObj.percent + "%";
-      log_message = log_message + " (" + progressObj.transferred + "/" + progressObj.total + ")";
-      log.info(log_message);
+    autoUpdater.on("download-progress", (progress) => {
+      log.info(`speed: ${progress.bytesPerSecond}, (${progress.transferred}/${progress.total}) ${progress.percent}%`);
     });
     autoUpdater.on("update-downloaded", (info) => {
       log.info("Update downloaded:", info.version);

@@ -160,7 +160,7 @@ async function getVolume(v: string, lite: boolean = false): Promise<Volume> {
  * @returns {Book} Book
  */
 function conformBook(v: Volume): Book {
-  let book: Book = {
+  const book: Book = {
     version: "2",
     title: v.volumeInfo?.title ?? "",
     authors: v.volumeInfo?.authors?.map((a) => ({ name: a })) ?? [],
@@ -258,8 +258,10 @@ function conformBook(v: Volume): Book {
  */
 export async function searchGoogleBooks(q: string): Promise<Book[]> {
   return searchVolume(q).then((volumeSearch) => {
-    if (!volumeSearch) return [];
-    let books: Book[] = [];
+    if (!volumeSearch) {
+      return [];
+    }
+    const books: Book[] = [];
     volumeSearch.items?.forEach((v) => {
       books.push(conformBook(v));
     });

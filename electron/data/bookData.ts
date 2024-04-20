@@ -37,7 +37,9 @@ export function authorsToDir(authors: Author[]): string {
         .replace(/(?:_ | _)/g, " "),
     )
     .join(", ");
-  if (!dir) dir = "__unknown__";
+  if (!dir) {
+    dir = "__unknown__";
+  }
   return dir;
 }
 
@@ -52,7 +54,9 @@ export function titleToFilename(title: string): string {
     .replace(/[\/\\\:\^\*\{\}\[\]\?`\|\"]/g, "_")
     .replace(/_+/g, "_")
     .replace(/(?:_ | _)/g, " ");
-  if (!filename) filename = "__unknown__";
+  if (!filename) {
+    filename = "__unknown__";
+  }
   return filename;
 }
 
@@ -72,13 +76,13 @@ async function saveBookImage(booksDir: string, book: Book, url: string) {
     if (!book.cache.authorDir) {
       book.cache.authorDir = authorsToDir(book.authors);
     }
-    let filepath = path.join(booksDir, book.cache.authorDir, `${book.cache.filename}.jpg`);
+    const filepath = path.join(booksDir, book.cache.authorDir, `${book.cache.filename}.jpg`);
     url = url.replace(/\\/g, "/");
     // If a remote file, fetch and use buffer in sharp instead.
     if (url.startsWith("http") || url.startsWith("file:")) {
       url = url.replace(/^http:/, "https:");
-      let res = await fetch(url);
-      let buf = await res.buffer();
+      const res = await fetch(url);
+      const buf = await res.buffer();
       await sharpImage(buf, filepath);
     } else {
       // sharp needs windows files to NOT start with a /
@@ -141,9 +145,9 @@ export async function addBookImageBase64(booksDir: string, book: Book, base64: s
     if (!book.cache.authorDir || !book.cache.filepath) {
       book.cache.authorDir = authorsToDir(book.authors);
       book.cache.filename = titleToFilename(book.title);
-      book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
+      book.cache.filepath = `${book.cache.authorDir}/${book.cache.filename}`;
     }
-    fs.writeFileSync(path.join(booksDir, book.cache.filepath + ".jpg"), Buffer.from(base64, "base64"), { flag: "w" });
+    fs.writeFileSync(path.join(booksDir, `${book.cache.filepath}.jpg`), Buffer.from(base64, "base64"), { flag: "w" });
     book.images.imageUpdated = new Date().getTime();
     saveYaml(path.join(booksDir, book.cache.authorDir, `${book.cache.filename}.yaml`), book);
   } catch (e) {
@@ -176,7 +180,9 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
     book.datePublished = book.datePublished?.trim() ?? "";
     book.dateRead = book.dateRead?.trim() ?? "";
     book.notes = book.notes?.trim() ?? "";
-    if (!book.cache) book.cache = {};
+    if (!book.cache) {
+      book.cache = {};
+    }
     if (!book.images) {
       book.images = {
         hasImage: false,
@@ -193,7 +199,7 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
     if (book.cache.filename != newFilename) {
       book.cache.filename = newFilename;
     }
-    book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
+    book.cache.filepath = `${book.cache.authorDir}/${book.cache.filename}`;
     book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
 
     const changedAuthor = !!oAuthorDir && oAuthorDir !== book.cache.authorDir;
@@ -203,7 +209,7 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
 
     // Use the image variable to save the image, then delete the variable.
     let newImage = false;
-    let oldImage = book.images.hasImage;
+    const oldImage = book.images.hasImage;
     // [sic], not checking the hasImage variable, checking if there's a new image
     if (book.cache.image) {
       await saveBookImage(booksDir, book, book.cache.image);
@@ -212,8 +218,11 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
       book.images.imageUpdated = new Date().getTime();
     }
 
-    if (!book.tags) book.tags = [];
-    else book.tags = book.tags.filter((t) => t.trim().length);
+    if (!book.tags) {
+      book.tags = [];
+    } else {
+      book.tags = book.tags.filter((t) => t.trim().length);
+    }
 
     const filepath = path.join(booksDir, `${book.cache.filepath}.yaml`);
     if (!book.timestampAdded && !fs.existsSync(filepath)) {
@@ -224,19 +233,19 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
 
     // Handle old data
 
-    if (oldImage && (changedAuthor || changedTitle) && fs.existsSync(oFilepath + ".jpg")) {
+    if (oldImage && (changedAuthor || changedTitle) && fs.existsSync(`${oFilepath}.jpg`)) {
       if (newImage) {
         log.debug("Deleting old image");
-        fs.rmSync(oFilepath + ".jpg", { force: true });
+        fs.rmSync(`${oFilepath}.jpg`, { force: true });
       } else {
         log.debug("Moving image");
-        fs.renameSync(oFilepath + ".jpg", path.join(authorPath, newFilename + ".jpg"));
+        fs.renameSync(`${oFilepath}.jpg`, path.join(authorPath, `${newFilename}.jpg`));
       }
     }
 
-    if ((changedAuthor || changedTitle) && fs.existsSync(oFilepath + ".yaml")) {
+    if ((changedAuthor || changedTitle) && fs.existsSync(`${oFilepath}.yaml`)) {
       log.debug("Deleting old yaml");
-      fs.rmSync(oFilepath + ".yaml", { force: true });
+      fs.rmSync(`${oFilepath}.yaml`, { force: true });
     }
 
     if (changedAuthor && fs.existsSync(oAuthorPath)) {
@@ -270,7 +279,7 @@ export async function deleteBook(booksDir: string, book: Book) {
     if (!book.cache.authorDir || !book.cache.filepath) {
       book.cache.authorDir = authorsToDir(book.authors);
       book.cache.filename = titleToFilename(book.title);
-      book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
+      book.cache.filepath = `${book.cache.authorDir}/${book.cache.filename}`;
     }
     const authorpath = path.join(booksDir, book.cache.authorDir);
     const fullpath = path.join(booksDir, book.cache.filepath);
@@ -302,7 +311,7 @@ export async function readAllBooks(booksDir: string): Promise<Book[]> {
       throw new Error("Books directory not specified.");
     }
     initBookDirs(booksDir);
-    let books: Book[] = [];
+    const books: Book[] = [];
     // Read author dirs
     fs.readdirSync(booksDir, { withFileTypes: true }).forEach((file) => {
       if (file.isDirectory()) {
@@ -313,15 +322,19 @@ export async function readAllBooks(booksDir: string): Promise<Book[]> {
             const pathname = path.join(subFile.path, subFile.name);
             // Import
             let book: BookImport = readYaml(pathname);
-            if (!book.version || book.version === "1") book = transformV1(book as Book_v1);
-            else if (book.version !== "2") return; // Unrecognized version, unable to parse.
+            if (!book.version || book.version === "1") {
+              book = transformV1(book as Book_v1);
+            } else if (book.version !== "2") {
+              // Unrecognized version, unable to parse.
+              return;
+            }
             // Build cache data
-            book.images.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
+            book.images.hasImage = fs.existsSync(`${pathname.slice(0, -5)}.jpg`);
             book.cache = {
               authorDir: file.name,
               filename: subFile.name.slice(0, -5),
             };
-            book.cache.filepath = book.cache.authorDir + "/" + book.cache.filename;
+            book.cache.filepath = `${book.cache.authorDir}/${book.cache.filename}`;
             book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
             books.push(book);
           }
@@ -346,15 +359,20 @@ export async function readBook(booksDir: string, authorDir: string, filename: st
   if (!booksDir) {
     throw new WyrmError("Books directory not specified.");
   }
-  const pathname = path.join(booksDir, authorDir, filename + ".yaml");
-  if (!fs.existsSync(pathname)) throw new WyrmError("Book data not found.", pathname);
+  const pathname = path.join(booksDir, authorDir, `${filename}.yaml`);
+  if (!fs.existsSync(pathname)) {
+    throw new WyrmError("Book data not found.", pathname);
+  }
   // Import
   let book: BookImport = readYaml(pathname);
-  if (!book.version || book.version === "1") book = transformV1(book as Book_v1);
-  else if (book.version !== "2") throw new WyrmError("Unrecognized data.", "book.version != 2");
+  if (!book.version || book.version === "1") {
+    book = transformV1(book as Book_v1);
+  } else if (book.version !== "2") {
+    throw new WyrmError("Unrecognized data.", "book.version != 2");
+  }
   // Build cache data
-  book.images.hasImage = fs.existsSync(pathname.slice(0, -5) + ".jpg");
-  let filepath = authorDir + "/" + filename;
+  book.images.hasImage = fs.existsSync(`${pathname.slice(0, -5)}.jpg`);
+  const filepath = `${authorDir}/${filename}`;
   book.cache = {
     authorDir,
     filename,
@@ -378,20 +396,36 @@ export async function addGooglePlusOpenLibraryData(book: Book): Promise<Book> {
 
   try {
     // Run both queries.
-    if (book.ids.googleBooksId) googleBookP = getGoogleBook(book.ids.googleBooksId);
-    if (book.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(book.ids.isbn);
+    if (book.ids.googleBooksId) {
+      googleBookP = getGoogleBook(book.ids.googleBooksId);
+    }
+    if (book.ids.isbn) {
+      olBookP = searchOpenLibraryWorkByISBN(book.ids.isbn);
+    }
 
     // Wait for data.
-    if (book.ids.googleBooksId) googleBook = await googleBookP;
-    if (book.ids.isbn) olBook = await olBookP;
+    if (book.ids.googleBooksId) {
+      googleBook = await googleBookP;
+    }
+    if (book.ids.isbn) {
+      olBook = await olBookP;
+    }
 
     // If we didn't have either of the necessary ids at first, run those again.
-    if (!olBook && googleBook.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(googleBook.ids.isbn);
-    if (!googleBook && olBook.ids.googleBooksId) googleBookP = getGoogleBook(olBook.ids.googleBooksId);
+    if (!olBook && googleBook.ids.isbn) {
+      olBookP = searchOpenLibraryWorkByISBN(googleBook.ids.isbn);
+    }
+    if (!googleBook && olBook.ids.googleBooksId) {
+      googleBookP = getGoogleBook(olBook.ids.googleBooksId);
+    }
 
     // Wait on secondary data if any.
-    if (!olBook && googleBook.ids.isbn) olBook = await olBookP;
-    if (!googleBook && olBook.ids.googleBooksId) googleBook = await googleBookP;
+    if (!olBook && googleBook.ids.isbn) {
+      olBook = await olBookP;
+    }
+    if (!googleBook && olBook.ids.googleBooksId) {
+      googleBook = await googleBookP;
+    }
 
     // Sort out data
     if (googleBook) {
@@ -414,13 +448,17 @@ export async function addGooglePlusOpenLibraryData(book: Book): Promise<Book> {
  * @returns {Book} Combined data
  */
 export function combineGooglePlusOpenLibrary(googleBook: Book, olBook: Book): Book {
-  let book: Book = structuredClone(googleBook);
+  const book: Book = structuredClone(googleBook);
   // OpenLibrary author data also has IDs
   book.authors = olBook.authors;
   // OpenLibrary accurate to original publish date
-  if (olBook.datePublished) book.datePublished = olBook.datePublished;
+  if (olBook.datePublished) {
+    book.datePublished = olBook.datePublished;
+  }
   // Ids
-  if (!book.ids.googleBooksId && olBook.ids.googleBooksId) book.ids.googleBooksId = olBook.ids.googleBooksId;
+  if (!book.ids.googleBooksId && olBook.ids.googleBooksId) {
+    book.ids.googleBooksId = olBook.ids.googleBooksId;
+  }
   book.ids.openLibraryId = olBook.ids.openLibraryId;
   book.ids.amazonId = olBook.ids.amazonId;
   book.ids.goodreadsId = olBook.ids.goodreadsId;
@@ -462,7 +500,7 @@ function transformV1(book: Book_v1): Book {
     cache: {
       authorDir: book.authorDir,
       filename: book.filename,
-      filepath: book.authorDir + "/" + book.filename,
+      filepath: `${book.authorDir}/${book.filename}`,
       image: book.image,
       thumbnail: book.thumbnail,
     },

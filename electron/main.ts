@@ -24,7 +24,7 @@ app.on("ready", () => {
   log.transports.file.level = DEV_MODE ? "debug" : "info";
   log.transports.file.format = "{h}:{i}:{s}.{ms} [{level}] {text}";
   log.transports.console.level = DEV_MODE ? "debug" : "info";
-  log.transports.console.format = ({ message }: { message: LogMessage }): any[] => {
+  log.transports.console.format = ({ message }: { message: LogMessage }): unknown[] => {
     const d = message.date || new Date();
     const h = d.getHours().toString(10).padStart(2, "0");
     const i = d.getMinutes().toString(10).padStart(2, "0");
@@ -46,8 +46,8 @@ app.on("ready", () => {
   }
 
   // Create user data directories if not already present.
-  let migrateData = initUserDirs();
-  let settings = loadSettings({ migrateData });
+  const migrateData = initUserDirs();
+  const settings = loadSettings({ migrateData });
   settings.appVersion = packageJson.version;
   bridge.setWindowTheme(settings.theme);
 
@@ -111,8 +111,10 @@ function createWindow(settings: UserSettings) {
     // use default size for screenshot mode
     if (bridge.currentSettings && !SCREENSHOT_MODE) {
       bridge.currentSettings.bounds = mainWindow.getBounds();
-      saveSettings(bridge.currentSettings, {}, (err) => {
-        if (err) log.error(err);
+      saveSettings(bridge.currentSettings, {}, (err: Error) => {
+        if (err) {
+          log.error(err);
+        }
       });
     }
   });

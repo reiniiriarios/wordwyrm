@@ -173,14 +173,14 @@ export async function googleImageSearch(
   author: string,
   page: number = 0,
 ): Promise<SearchResult[]> {
-  let keywords = `"${title}" by ${author} book cover`;
-  let results: SearchResult[] = [];
+  const keywords = `"${title}" by ${author} book cover`;
+  const results: SearchResult[] = [];
 
   log.info(`Searching Google Images for: ${keywords}`);
 
   try {
     // https://developers.google.com/custom-search/v1/reference/rest/v1/cse/list?apix=true
-    var params = new URLSearchParams({
+    const params = new URLSearchParams({
       key: apiKey,
       cx: engineId,
       filter: "0", // do not filter duplicate content
@@ -190,7 +190,7 @@ export async function googleImageSearch(
       q: keywords,
     }).toString();
 
-    let response: GoogleSearchResponse = await fetch(`${endpoint}?${params}`)
+    const response: GoogleSearchResponse = await fetch(`${endpoint}?${params}`)
       .then((res) => res.json())
       .catch((e) => {
         throw e;
