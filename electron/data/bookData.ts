@@ -5,6 +5,8 @@ import fetch from "electron-fetch";
 import sharp from "sharp";
 import { readYaml, saveYaml } from "./userData";
 import WyrmError from "../error";
+import { getGoogleBook } from "../api/googleBooks";
+import { searchOpenLibraryWorkByISBN } from "../api/openLibrary";
 
 /**
  * Create full path to user books directory.
@@ -359,6 +361,73 @@ export async function readBook(booksDir: string, authorDir: string, filename: st
     filepath,
     urlpath: filepath.replace(/ /g, "%20"),
   };
+  return book;
+}
+
+/**
+ * Add additional data from both Google Books and Open Library to existing Book.
+ *
+ * @param {Book} book Book with minimal/less data
+ * @returns {Book} Book with supplemental data from Google Books and/or Open Library
+ */
+export async function addGooglePlusOpenLibraryData(book: Book): Promise<Book> {
+  let googleBookP: Promise<Book>;
+  let olBookP: Promise<Book>;
+  let googleBook: Book | null = null;
+  let olBook: Book | null = null;
+
+  try {
+    // Run both queries.
+    if (book.ids.googleBooksId) googleBookP = getGoogleBook(book.ids.googleBooksId);
+    if (book.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(book.ids.isbn);
+
+    // Wait for data.
+    if (book.ids.googleBooksId) googleBook = await googleBookP;
+    if (book.ids.isbn) olBook = await olBookP;
+
+    // If we didn't have either of the necessary ids at first, run those again.
+    if (!olBook && googleBook.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(googleBook.ids.isbn);
+    if (!googleBook && olBook.ids.googleBooksId) googleBookP = getGoogleBook(olBook.ids.googleBooksId);
+
+    // Wait on secondary data if any.
+    if (!olBook && googleBook.ids.isbn) olBook = await olBookP;
+    if (!googleBook && olBook.ids.googleBooksId) googleBook = await googleBookP;
+
+    // Sort out data
+    if (googleBook) {
+      book = { ...book, ...googleBook };
+    }
+    if (olBook) {
+      book = combineGooglePlusOpenLibrary(book, olBook);
+    }
+    return book;
+  } catch (e) {
+    throw new WyrmError("Error supplementing book data", e);
+  }
+}
+
+/**
+ * Add Open Library data to Google Books data.
+ *
+ * @param {Book} googleBook Book parsed from Google Books Volume
+ * @param {Book} olBook Book parsed from Open Library Work
+ * @returns {Book} Combined data
+ */
+export function combineGooglePlusOpenLibrary(googleBook: Book, olBook: Book): Book {
+  let book: Book = structuredClone(googleBook);
+  // OpenLibrary author data also has IDs
+  book.authors = olBook.authors;
+  // OpenLibrary accurate to original publish date
+  if (olBook.datePublished) book.datePublished = olBook.datePublished;
+  // Ids
+  if (!book.ids.googleBooksId && olBook.ids.googleBooksId) book.ids.googleBooksId = olBook.ids.googleBooksId;
+  book.ids.openLibraryId = olBook.ids.openLibraryId;
+  book.ids.amazonId = olBook.ids.amazonId;
+  book.ids.goodreadsId = olBook.ids.goodreadsId;
+  book.ids.internetArchiveId = olBook.ids.internetArchiveId;
+  book.ids.libraryThingId = olBook.ids.libraryThingId;
+  book.ids.oclcId = olBook.ids.oclcId;
+  book.ids.wikidataId = olBook.ids.wikidataId;
   return book;
 }
 

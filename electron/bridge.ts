@@ -7,7 +7,15 @@ import BUILD from "./build";
 import { UserSettings } from "../types/global";
 import { parseErr } from "./error";
 
-import { addBookImage, addBookImageBase64, deleteBook, readAllBooks, readBook, saveBook } from "./data/bookData";
+import {
+  addBookImage,
+  addBookImageBase64,
+  addGooglePlusOpenLibraryData,
+  deleteBook,
+  readAllBooks,
+  readBook,
+  saveBook,
+} from "./data/bookData";
 import { loadSettings, saveSettings } from "./data/userData";
 import autoUpdate from "./autoUpdate";
 
@@ -57,46 +65,10 @@ class Bridge {
         this.currentSettings.searchEngines.includes("googleBooks") &&
         this.currentSettings.searchEngines.includes("openLibrary")
       ) {
-        let googleBookP: Promise<Book>;
-        let olBookP: Promise<Book>;
-        let googleBook: Book | null = null;
-        let olBook: Book | null = null;
-
         try {
-          // Run first two queries async.
-          if (book.ids.googleBooksId) googleBookP = getGoogleBook(book.ids.googleBooksId);
-          if (book.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(book.ids.isbn);
-
-          // Wait for data.
-          if (book.ids.googleBooksId) googleBook = await googleBookP;
-          if (book.ids.isbn) olBook = await olBookP;
-
-          // If we didn't have either of the necessary ids, run those async.
-          if (!olBook && googleBook.ids.isbn) olBookP = searchOpenLibraryWorkByISBN(googleBook.ids.isbn);
-          if (!googleBook && olBook.ids.googleBooksId) googleBookP = getGoogleBook(olBook.ids.googleBooksId);
+          book = await addGooglePlusOpenLibraryData(book);
         } catch (e) {
           event.reply("error", parseErr(e));
-        }
-
-        // Wait on secondary data if any.
-        if (!olBook && googleBook.ids.isbn) olBook = await olBookP;
-        if (!googleBook && olBook.ids.googleBooksId) googleBook = await googleBookP;
-
-        if (googleBook) book = googleBook;
-        if (olBook) {
-          // OpenLibrary author data also has IDs
-          book.authors = olBook.authors;
-          // OpenLibrary accurate to original publish date
-          if (olBook.datePublished) book.datePublished = olBook.datePublished;
-          // Ids
-          if (!book.ids.googleBooksId && olBook.ids.googleBooksId) book.ids.googleBooksId = olBook.ids.googleBooksId;
-          book.ids.openLibraryId = olBook.ids.openLibraryId;
-          book.ids.amazonId = olBook.ids.amazonId;
-          book.ids.goodreadsId = olBook.ids.goodreadsId;
-          book.ids.internetArchiveId = olBook.ids.internetArchiveId;
-          book.ids.libraryThingId = olBook.ids.libraryThingId;
-          book.ids.oclcId = olBook.ids.oclcId;
-          book.ids.wikidataId = olBook.ids.wikidataId;
         }
       }
       // If just using Google Books, fetch full data.
