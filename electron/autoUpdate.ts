@@ -77,7 +77,11 @@ class AppUpdater {
     fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/releases?per_page=1`)
       .then((res) => res.json())
       .then((releases) => {
-        const tag = releases[0].tag_name;
+        if (!releases?.[0]) {
+          log.debug(releases?.message || releases);
+          return;
+        }
+        const tag = releases[0]?.tag_name;
         if (!tag.match(/^v\d+\.\d+\.\d+/)) {
           throw "Invalid tag";
         }
