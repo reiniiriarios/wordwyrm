@@ -31,7 +31,7 @@
     "start": "sirv dist",
     "start:electron": "electron ./dist/electron/electron/main.js",
     "clean": "ts-node scripts/rmdist.ts",
-    "set:build": "ts-node build-env/set.ts",
+    "set:build": "ts-node scripts/setBuildEnv.ts",
     "build:icons": "npx png2icons assets/icons/512x512.png assets/icons/icon -allwe -hm",
     "build:client": "ts-node scripts/rmdist.ts && cross-env WYRM_ENV=prod rollup -c",
     "build:electron": "cross-env WYRM_ENV=prod tsc -p ./electron/tsconfig.json",
