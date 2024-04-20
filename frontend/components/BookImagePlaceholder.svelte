@@ -5,8 +5,12 @@
 </script>
 
 <svg class="bookPlaceholder" class:pageHeight viewBox="0 0 20 30" xmlns="http://www.w3.org/2000/svg">
+  <filter id="noise" x="0" y="0">
+    <feTurbulence type="fractalNoise" baseFrequency="20.75" stitchTiles="stitch" />
+  </filter>
   <rect x="0" width="20" height="30" />
   <path d="M2 2 18 2 18 28 2 28 2 2M3 3 3 27 17 27 17 3 3 3Z" />
+  <rect width="20" height="30" filter="url(#noise)" opacity="0.08" />
 </svg>
 <div class="bookPlaceholder__text" class:pageHeight>
   <span class="bookPlaceholder__title" class:xs={size === "xs"} class:s={size === "s"} class:l={size === "l"}
