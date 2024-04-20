@@ -333,7 +333,7 @@ function conformOpenLibrarySearchResult(work: OpenLibrarySearchResult, isbn?: st
     authors,
     datePublished: (work.first_publish_year ?? work.publish_year?.sort()[0] ?? "").toString(),
     dateRead: "",
-    timestampAdded: 0,
+    timestampAdded: new Date().getTime(),
     rating: 0,
     description: "",
     notes: "",

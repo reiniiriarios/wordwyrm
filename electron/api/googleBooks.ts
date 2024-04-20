@@ -169,7 +169,7 @@ function conformBook(v: Volume): Book {
     tags: [],
     series: "",
     seriesNumber: "",
-    timestampAdded: 0,
+    timestampAdded: new Date().getTime(),
     rating: 0,
     description: v.volumeInfo?.description?.length ? NodeHtmlMarkdown.translate(v.volumeInfo.description) : "",
     notes: "",
