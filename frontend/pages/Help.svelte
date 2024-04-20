@@ -1,3 +1,8 @@
+<script lang="ts">
+  import ArrowSquareOut from "phosphor-svelte/lib/ArrowSquareOut";
+  import { platform, settings } from "@stores/settings";
+</script>
+
 <div class="pageNav">
   <h2 class="pageNav__header">Help</h2>
 </div>
@@ -15,6 +20,15 @@
         To share your data across devices, you can choose a directory in a cloud drive, such as OneDrive, Google Drive,
         or Dropbox.
       </p>
+      <p>
+        <button class="btn" on:click={window.electronAPI.openBooksDir}>
+          Open Data in {$platform.fileBrowser}
+        </button>
+        &nbsp;
+        <button class="btn" on:click={window.electronAPI.openSettingsDir}>
+          Open Settings in {$platform.fileBrowser}
+        </button>
+      </p>
     </dd>
     <dt>API Keys</dt>
     <dd>
@@ -30,25 +44,37 @@
         to keep the app free.
       </p>
     </dd>
-    <dt>More Info</dt>
-    <dd>
-      You can find more information on the <a href="https://github.com/reiniiriarios/wordwyrm#readme" target="_blank"
-        >GitHub Repo</a
-      > for this app.
-    </dd>
     <dt>Reporting Bugs</dt>
     <dd>
-      If you encounter a bug or need help, you can <a
-        href="https://github.com/reiniiriarios/wordwyrm/issues"
-        target="_blank">post an issue</a
-      >.
+      <p>
+        If you encounter a bug or need help, you can <a
+          href="https://github.com/reiniiriarios/wordwyrm/issues"
+          target="_blank">post an issue</a
+        >.
+      </p>
+      <p>
+        <button class="btn" on:click={window.electronAPI.openLogsDir}>Open Logs in {$platform.fileBrowser}</button>
+      </p>
     </dd>
   </dl>
 </div>
 
+<div class="footer">
+  {#if $settings.appVersion}
+    <div>Version: {$settings.appVersion}</div>
+  {/if}
+  <div>
+    <a class="hideme" href="https://github.com/reiniiriarios/wordwyrm" target="_blank">GitHub <ArrowSquareOut /></a>
+  </div>
+</div>
+
 <style lang="scss">
+  :root {
+    --help-footer-height: 3rem;
+  }
+
   .help {
-    height: calc(100vh - var(--page-nav-height));
+    height: calc(100vh - var(--page-nav-height) - var(--help-footer-height));
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--c-subtle) transparent;
@@ -72,6 +98,32 @@
 
     p {
       margin: 0.75rem 0;
+    }
+  }
+
+  .footer {
+    height: var(--help-footer-height);
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: var(--c-text-muted);
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+
+    > div:not(:first-child) {
+      &::before {
+        content: "·";
+        position: relative;
+        left: -0.375rem;
+        opacity: 0.3;
+      }
+    }
+
+    a.hideme {
+      color: var(--c-text-muted);
     }
   }
 </style>

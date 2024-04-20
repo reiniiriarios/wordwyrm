@@ -56,6 +56,7 @@ export const api = {
 
   openSettingsDir: () => ipcRenderer.send("openSettingsDir"),
   openBooksDir: () => ipcRenderer.send("openBooksDir"),
+  openLogsDir: () => ipcRenderer.send("openLogsDir"),
 };
 
 contextBridge.exposeInMainWorld("electronAPI", api);

@@ -211,6 +211,10 @@ class Bridge {
       shell.openPath(DATA_PATH);
     });
 
+    ipcMain.on("openLogsDir", (_event) => {
+      shell.openPath(path.join(DATA_PATH, "logs"));
+    });
+
     ipcMain.on("getPlatform", (event) => {
       event.reply("platform", {
         platform: process.platform,
