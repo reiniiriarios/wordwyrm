@@ -1,26 +1,39 @@
 import log from "electron-log/renderer";
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 import { UserSettings } from "types/global";
 
+const UPDATE_EVERY = 86400000000; // 1d in ms
+
+export const version = writable({
+  current: "",
+  updateAvailable: false,
+  latestVersion: "",
+});
+
 function createSettings() {
-  const { subscribe, set } = writable({} as UserSettings);
+  const { subscribe, set, update } = writable({} as UserSettings);
 
   const rmListenerSettings = window.electronAPI.settingsLoaded((newSettings: UserSettings) => {
-    // ensure default values where necessary
-    if (!newSettings.searchEngines.length) {
-      newSettings.searchEngines = ["openLibrary"];
-    }
-    if (!newSettings.chartStartYear) {
-      newSettings.chartStartYear = 2020;
-    }
     set(newSettings);
     currentTheme.set(newSettings.theme);
+    // Only check version after settings are fully loaded.
+    // Only set the interval once, before the current version is immediately set after.
+    if (!get(version).current) {
+      settings.checkVersion();
+      setInterval(settings.checkVersion, 4500000); // every 1.25hrs
+    }
+    version.update((v) => ({ ...v, current: newSettings.appVersion }));
+  });
+
+  const rmListenerUpdate = window.electronAPI.updateAvailable((latestVersion: string) => {
+    version.update((v) => ({ ...v, latestVersion, updateAvailable: v.current !== latestVersion }));
   });
 
   return {
     subscribe,
     destroy: () => {
       rmListenerSettings();
+      rmListenerUpdate();
     },
     fetch: () => {
       window.electronAPI.loadSettings();
@@ -29,11 +42,24 @@ function createSettings() {
       set(newSettings);
       window.electronAPI.saveSettings(newSettings, moveData);
     },
+    checkVersion: () => {
+      const now = new Date().getTime();
+      const currentSettings = get(settings);
+      if (currentSettings && +(currentSettings.lastUpdateCheck ?? 0) + UPDATE_EVERY < now) {
+        update((s) => {
+          log.debug("Checking for update");
+          window.electronAPI.checkVersion();
+          s.lastUpdateCheck = now;
+          window.electronAPI.saveSettings(s, false);
+          return s;
+        });
+      }
+    },
   };
 }
 export const settings = createSettings();
 
-export const currentTheme = writable("");
+export const currentTheme = writable(""); // not derived, need separate
 
 type PlatformInfo = {
   platform: string;
@@ -56,7 +82,7 @@ function createPlatform() {
   const removeListener = window.electronAPI.platform((p: PlatformInfo) => {
     p.fileBrowser = p.platform === "darwin" ? "Finder" : p.platform === "win32" ? "File Explorer" : "File Manager";
     set(p);
-    log.info(`platform: ${p.platform}, arch: ${p.arch}, buildPlatform:${p.buildPlatform}, package: ${p.pkg}`);
+    log.info(`platform: ${p.platform}, arch: ${p.arch}, buildPlatform: ${p.buildPlatform}, package: ${p.pkg}`);
   });
 
   return {

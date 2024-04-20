@@ -196,7 +196,7 @@ export async function googleImageSearch(
         throw e;
       });
 
-    if (response.items?.length) {
+    if (response?.items?.length) {
       response.items.forEach((item) => {
         results.push({
           image: item.link ?? "",

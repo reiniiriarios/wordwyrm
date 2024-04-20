@@ -6,7 +6,7 @@
   import Select from "@components/Select.svelte";
   import HoverInfo from "@components/HoverInfo.svelte";
   import Modal from "@components/Modal.svelte";
-  import { currentTheme, platform, settings } from "@stores/settings";
+  import { currentTheme, platform, settings, version } from "@stores/settings";
   import { books } from "@stores/books";
   import { formatDate } from "@scripts/formatDate";
 
@@ -15,7 +15,6 @@
   let saving: boolean = false;
   let seOpenLibrary: boolean;
   let seGoogleBooks: boolean;
-  let updateAvailable: string = "";
   $: seOpenLibrary = $settings.searchEngines?.includes("openLibrary");
   $: seGoogleBooks = $settings.searchEngines?.includes("googleBooks");
 
@@ -35,24 +34,18 @@
     // when loading, load the actual current theme
     $currentTheme = editSettings.theme;
 
-    window.electronAPI.checkVersion();
-    const removeUpdateListener = window.electronAPI.updateAvailable((latestVersion: string) => {
-      updateAvailable = latestVersion;
-    });
-
     const removeSettingsListener = window.electronAPI.settingsLoaded((loadedSettings: UserSettings) => {
       editSettings = loadedSettings;
-      if (!loadedSettings.searchEngines?.length) {
-        editSettings.searchEngines = ["openLibrary"];
-      }
-      seOpenLibrary = loadedSettings.searchEngines.includes("openLibrary");
-      seGoogleBooks = loadedSettings.searchEngines.includes("googleBooks");
+      seOpenLibrary = loadedSettings.searchEngines?.includes("openLibrary");
+      seGoogleBooks = loadedSettings.searchEngines?.includes("googleBooks");
       booksDir.showModal = false;
-      setTimeout(() => {
-        saving = false;
-        saved = true;
-      }, 150);
-      setTimeout(() => (saved = false), 1500);
+      if (saving) {
+        setTimeout(() => {
+          saving = false;
+          saved = true;
+        }, 150);
+        setTimeout(() => (saved = false), 1500);
+      }
     });
 
     const removeDirListener = window.electronAPI.dirSelected((path: string) => {
@@ -65,7 +58,6 @@
     return () => {
       removeSettingsListener();
       removeDirListener();
-      removeUpdateListener();
       // when unloading, set the theme to the currently saved theme
       $currentTheme = $settings.theme;
     };
@@ -253,7 +245,7 @@
       />
       <input type="text" bind:value={editSettings.googleApiKey} disabled={googleApiFieldsDisabled} />
     </label>
-    <label class="field field">
+    <label class="field" class:disabled={googleApiFieldsDisabled}>
       Google Custom Search Engine ID <HoverInfo
         details="Optional. Along with API Key, enables Google Image Search in-app."
         position="top"
@@ -271,16 +263,16 @@
   </fieldset>
 
   <div class="footer">
-    {#if $settings.appVersion}
-      <div>Version: {$settings.appVersion}</div>
+    {#if $version.current}
+      <div>Version: {$version.current}</div>
     {/if}
     <div>
       <a class="hideme" href="https://github.com/reiniiriarios/wordwyrm" target="_blank">GitHub <ArrowSquareOut /></a>
     </div>
-    {#if updateAvailable}
+    {#if $version.updateAvailable}
       <div>
         Update Available: <a href="https://github.com/reiniiriarios/wordwyrm/releases/latest" target="_blank">
-          Download v{updateAvailable}
+          Download v{$version.latestVersion}
         </a>
       </div>
     {/if}

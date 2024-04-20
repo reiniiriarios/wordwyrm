@@ -64,6 +64,9 @@ export function titleToFilename(title: string): string {
  */
 async function saveBookImage(booksDir: string, book: Book, url: string) {
   try {
+    if (!booksDir) {
+      throw new Error("Books directory not specified.");
+    }
     if (!book.cache.authorDir) {
       book.cache.authorDir = authorsToDir(book.authors);
     }
@@ -108,6 +111,9 @@ async function sharpImage(img: Buffer | string, filepath: string) {
  * @throws WyrmError
  */
 export async function addBookImage(booksDir: string, book: Book, url: string) {
+  if (!booksDir) {
+    throw new WyrmError("Books directory not specified.");
+  }
   if (!book.cache.authorDir) {
     book.cache.authorDir = authorsToDir(book.authors);
   }
@@ -127,6 +133,9 @@ export async function addBookImage(booksDir: string, book: Book, url: string) {
  */
 export async function addBookImageBase64(booksDir: string, book: Book, base64: string) {
   try {
+    if (!booksDir) {
+      throw new Error("Books directory not specified.");
+    }
     if (!book.cache.authorDir || !book.cache.filepath) {
       book.cache.authorDir = authorsToDir(book.authors);
       book.cache.filename = titleToFilename(book.title);
@@ -152,23 +161,26 @@ export async function addBookImageBase64(booksDir: string, book: Book, base64: s
  * @throws WyrmError
  */
 export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string, oFilename?: string): Promise<Book> {
-  initBookDirs(booksDir);
-
-  // Trim, default values.
-  book.title = book.title.trim();
-  book.series = book.series?.trim() ?? "";
-  book.seriesNumber = book.seriesNumber?.trim() ?? "";
-  book.datePublished = book.datePublished?.trim() ?? "";
-  book.dateRead = book.dateRead?.trim() ?? "";
-  book.notes = book.notes?.trim() ?? "";
-  if (!book.cache) book.cache = {};
-  if (!book.images) {
-    book.images = {
-      hasImage: false,
-    };
-  }
-
   try {
+    if (!booksDir) {
+      throw new Error("Books directory not specified.");
+    }
+    initBookDirs(booksDir);
+
+    // Trim, default values.
+    book.title = book.title.trim();
+    book.series = book.series?.trim() ?? "";
+    book.seriesNumber = book.seriesNumber?.trim() ?? "";
+    book.datePublished = book.datePublished?.trim() ?? "";
+    book.dateRead = book.dateRead?.trim() ?? "";
+    book.notes = book.notes?.trim() ?? "";
+    if (!book.cache) book.cache = {};
+    if (!book.images) {
+      book.images = {
+        hasImage: false,
+      };
+    }
+
     // Paths
     book.cache.authorDir = authorsToDir(book.authors);
     const authorPath = path.join(booksDir, book.cache.authorDir);
@@ -249,6 +261,10 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
  */
 export async function deleteBook(booksDir: string, book: Book) {
   try {
+    if (!booksDir) {
+      throw new Error("Books directory not specified.");
+      1;
+    }
     if (!book.cache.authorDir || !book.cache.filepath) {
       book.cache.authorDir = authorsToDir(book.authors);
       book.cache.filename = titleToFilename(book.title);
@@ -263,7 +279,7 @@ export async function deleteBook(booksDir: string, book: Book) {
       fs.rmSync(`${fullpath}.jpg`, { force: true });
     }
     const ad = fs.readdirSync(authorpath);
-    if (!ad.length) {
+    if (!ad?.length) {
       fs.rmSync(authorpath, { recursive: true, force: true });
     }
   } catch (e) {
@@ -279,10 +295,13 @@ export async function deleteBook(booksDir: string, book: Book) {
  * @throws WyrmError
  */
 export async function readAllBooks(booksDir: string): Promise<Book[]> {
-  initBookDirs(booksDir);
-  let books: Book[] = [];
-  // Read author dirs
   try {
+    if (!booksDir) {
+      throw new Error("Books directory not specified.");
+    }
+    initBookDirs(booksDir);
+    let books: Book[] = [];
+    // Read author dirs
     fs.readdirSync(booksDir, { withFileTypes: true }).forEach((file) => {
       if (file.isDirectory()) {
         // Read yaml in author dirs
@@ -307,10 +326,10 @@ export async function readAllBooks(booksDir: string): Promise<Book[]> {
         });
       }
     });
+    return books;
   } catch (e) {
     throw new WyrmError("Error reading book data.", e);
   }
-  return books;
 }
 
 /**
@@ -322,6 +341,9 @@ export async function readAllBooks(booksDir: string): Promise<Book[]> {
  * @throws WyrmError
  */
 export async function readBook(booksDir: string, authorDir: string, filename: string): Promise<Book | null> {
+  if (!booksDir) {
+    throw new WyrmError("Books directory not specified.");
+  }
   const pathname = path.join(booksDir, authorDir, filename + ".yaml");
   if (!fs.existsSync(pathname)) throw new WyrmError("Book data not found.", pathname);
   // Import

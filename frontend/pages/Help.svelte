@@ -1,6 +1,6 @@
 <script lang="ts">
   import ArrowSquareOut from "phosphor-svelte/lib/ArrowSquareOut";
-  import { platform, settings } from "@stores/settings";
+  import { platform, version } from "@stores/settings";
 </script>
 
 <div class="pageNav">
@@ -60,8 +60,8 @@
 </div>
 
 <div class="footer">
-  {#if $settings.appVersion}
-    <div>Version: {$settings.appVersion}</div>
+  {#if $version.current}
+    <div>Version: {$version.current}</div>
   {/if}
   <div>
     <a class="hideme" href="https://github.com/reiniiriarios/wordwyrm" target="_blank">GitHub <ArrowSquareOut /></a>

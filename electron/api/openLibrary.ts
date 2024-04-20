@@ -279,7 +279,7 @@ export async function searchOpenLibrary(search: string): Promise<Book[]> {
       .catch((e) => {
         throw e;
       });
-    if (works.length > 0) {
+    if (works?.length > 0) {
       return works.map((work) => conformOpenLibrarySearchResult(work));
     }
   } catch (e) {

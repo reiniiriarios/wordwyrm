@@ -17,8 +17,6 @@ const PORT = 5000;
 const DEV_MODE = process.env.WYRM_ENV === "dev";
 const SCREENSHOT_MODE = process.env.WYRM_PREV === "true";
 
-let settings: UserSettings;
-
 /**
  * Startup.
  */
@@ -50,15 +48,15 @@ app.on("ready", () => {
 
   // Create user data directories if not already present.
   let migrateData = initUserDirs();
-  settings = loadSettings({ migrateData });
+  let settings = loadSettings({ migrateData });
   settings.appVersion = packageJson.version;
   bridge.setWindowTheme(settings.theme);
 
   // Create window
-  createWindow();
+  createWindow(settings);
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
+      createWindow(bridge.currentSettings || settings);
     }
   });
 
@@ -81,7 +79,7 @@ app.on("window-all-closed", () => {
 /**
  * Create a new (main) window.
  */
-function createWindow() {
+function createWindow(settings: UserSettings) {
   const mainWindow = new BrowserWindow({
     width: 1445,
     height: 815,
@@ -112,9 +110,9 @@ function createWindow() {
   mainWindow.on("close", function () {
     // only if already loaded, thx
     // use default size for screenshot mode
-    if (settings && !SCREENSHOT_MODE) {
-      settings.bounds = mainWindow.getBounds();
-      saveSettings(settings, {}, (err) => {
+    if (bridge.currentSettings && !SCREENSHOT_MODE) {
+      bridge.currentSettings.bounds = mainWindow.getBounds();
+      saveSettings(bridge.currentSettings, {}, (err) => {
         if (err) log.error(err);
       });
     }

@@ -15,12 +15,12 @@ if (process.env.APPDATA) {
 }
 // macOS
 else if (process.platform === "darwin") {
-  dataPath = path.join(process.env.HOME, "/Library/Preferences");
+  dataPath = path.join(process.env.HOME ?? "~", "/Library/Preferences");
   dataDir = "me.reinii.wordwyrm";
 }
 // Linux
 else {
-  dataPath = path.join(process.env.HOME, "/.local/share");
+  dataPath = path.join(process.env.HOME ?? "~", "/.local/share");
   dataDir = "wordwyrm";
 }
 export const DATA_PATH = path.join(dataPath, dataDir);
@@ -124,7 +124,9 @@ export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
     if (!settings.theme) {
       settings.theme = "default";
     }
-
+    if (!settings.chartStartYear) {
+      settings.chartStartYear = 2020;
+    }
     if (!settings.booksDir) {
       settings.booksDir = path.join(DATA_PATH, "books");
     } else if (SCREENSHOT_MODE) {

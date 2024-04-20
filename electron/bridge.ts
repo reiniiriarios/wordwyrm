@@ -17,6 +17,8 @@ import { searchOpenLibrary, searchOpenLibraryWorkByISBN } from "./api/openLibrar
 
 import { DATA_PATH } from "./data/userData";
 
+const UPDATE_EVERY = 86400000000; // 1d in ms
+
 class Bridge {
   public currentWindow: BrowserWindow;
   public currentSettings: UserSettings;
@@ -31,9 +33,10 @@ class Bridge {
       if (url.charAt(0) !== "/") url = "/" + url;
       return net.fetch("file://" + url);
     });
+
     protocol.handle("bookimage", (request) => {
       let url = path
-        .join(settings.booksDir, request.url.slice("bookimage://".length))
+        .join(this.currentSettings.booksDir, request.url.slice("bookimage://".length))
         .replace(/\\/g, "/")
         .replace(/ /g, "%20");
       if (url.charAt(0) !== "/") url = "/" + url;
@@ -43,12 +46,17 @@ class Bridge {
     // Event handlers
 
     ipcMain.on("checkVersion", (_event) => {
-      autoUpdate.check();
+      if (+(this.currentSettings.lastUpdateCheck ?? 0) + UPDATE_EVERY < new Date().getTime()) {
+        autoUpdate.check();
+      }
     });
 
     ipcMain.on("getBookData", async (event, book: Book) => {
       // If using both search engines, get the Google Books data, then supplement with OpenLibrary.
-      if (settings.searchEngines.includes("googleBooks") && settings.searchEngines.includes("openLibrary")) {
+      if (
+        this.currentSettings.searchEngines.includes("googleBooks") &&
+        this.currentSettings.searchEngines.includes("openLibrary")
+      ) {
         let googleBookP: Promise<Book>;
         let olBookP: Promise<Book>;
         let googleBook: Book | null = null;
@@ -92,7 +100,7 @@ class Bridge {
         }
       }
       // If just using Google Books, fetch full data.
-      else if (settings.searchEngines.includes("googleBooks")) {
+      else if (this.currentSettings.searchEngines.includes("googleBooks")) {
         getGoogleBook(book.ids.googleBooksId)
           .then((updatedBook) => {
             if (updatedBook) book = updatedBook;
@@ -104,7 +112,7 @@ class Bridge {
     });
 
     ipcMain.on("searchBook", (event, q: string) => {
-      if (settings.searchEngines.includes("googleBooks")) {
+      if (this.currentSettings.searchEngines.includes("googleBooks")) {
         searchGoogleBooks(q)
           .then((res) => event.reply("searchBookResults", res))
           .catch((e) => event.reply("error", parseErr(e)));
@@ -116,25 +124,27 @@ class Bridge {
     });
 
     ipcMain.on("readAllBooks", (event) => {
-      readAllBooks(settings.booksDir)
-        .then((res) => event.reply("receiveAllBooks", res))
-        .catch((e) => event.reply("error", parseErr(e)));
+      if (this.currentSettings.booksDir) {
+        readAllBooks(this.currentSettings.booksDir)
+          .then((res) => event.reply("receiveAllBooks", res))
+          .catch((e) => event.reply("error", parseErr(e)));
+      }
     });
 
     ipcMain.on("readBook", (event, authorDir: string, filename: string) => {
-      readBook(settings.booksDir, authorDir, filename)
+      readBook(this.currentSettings.booksDir, authorDir, filename)
         .then((res) => event.reply("receiveBook", res))
         .catch((e) => event.reply("error", parseErr(e)));
     });
 
     ipcMain.on("saveBook", (event, book: Book) => {
-      saveBook(settings.booksDir, book)
+      saveBook(this.currentSettings.booksDir, book)
         .then((res) => event.reply("bookSaved", res))
         .catch((e) => event.reply("error", parseErr(e)));
     });
 
     ipcMain.on("editBook", (event, book: Book, authorDir: string, filename: string) => {
-      saveBook(settings.booksDir, book, authorDir, filename)
+      saveBook(this.currentSettings.booksDir, book, authorDir, filename)
         .then((res) => event.reply("bookSaved", res))
         .catch((e) => event.reply("error", parseErr(e)));
     });
@@ -142,7 +152,7 @@ class Bridge {
     ipcMain.on("selectDataDir", async (event) => {
       dialog
         .showOpenDialog(this.currentWindow, {
-          defaultPath: settings?.booksDir ?? "",
+          defaultPath: this.currentSettings.booksDir ?? "",
           properties: ["openDirectory"],
           buttonLabel: "Choose",
         })
@@ -155,55 +165,61 @@ class Bridge {
 
     ipcMain.on("loadSettings", (event) => {
       try {
-        settings = loadSettings();
-        settings.appVersion = packageJson.version;
-        event.reply("settingsLoaded", settings);
+        this.currentSettings = loadSettings();
+        this.currentSettings.appVersion = packageJson.version;
+        event.reply("settingsLoaded", this.currentSettings);
       } catch (e) {
         event.reply("error", parseErr(e));
       }
     });
 
     ipcMain.on("saveSettings", (event, newSettings: UserSettings, moveData: boolean) => {
-      saveSettings(newSettings, { moveData, oldDir: settings.booksDir }, (err) => {
+      saveSettings(newSettings, { moveData, oldDir: this.currentSettings.booksDir }, (err) => {
         if (err) {
           event.reply("error", parseErr(err));
         }
         // Update local settings even if error saving them
-        settings = newSettings;
-        this.setWindowTheme(settings.theme);
-        event.reply("settingsLoaded", settings);
+        this.currentSettings = newSettings;
+        this.setWindowTheme(this.currentSettings.theme);
+        event.reply("settingsLoaded", this.currentSettings);
       });
     });
 
     ipcMain.on("imageSearch", (event, author: string, title: string, page: number) => {
-      if (settings.googleApiKey && settings.googleSearchEngineId) {
-        googleImageSearch(settings.googleApiKey, settings.googleSearchEngineId, author, title, page)
+      if (this.currentSettings.googleApiKey && this.currentSettings.googleSearchEngineId) {
+        googleImageSearch(
+          this.currentSettings.googleApiKey,
+          this.currentSettings.googleSearchEngineId,
+          author,
+          title,
+          page,
+        )
           .then((res) => event.reply("imageSearchResults", res))
           .catch((e) => event.reply("error", parseErr(e)));
       }
     });
 
     ipcMain.on("addBookImage", (event, book: Book, url: string) => {
-      addBookImage(settings.booksDir, book, url)
+      addBookImage(this.currentSettings.booksDir, book, url)
         .then(() => event.reply("bookImageAdded"))
         .catch((e) => event.reply("error", parseErr(e)));
     });
 
     ipcMain.on("addBookImageBase64", (event, book: Book, base64: string) => {
-      addBookImageBase64(settings.booksDir, book, base64)
+      addBookImageBase64(this.currentSettings.booksDir, book, base64)
         .then(() => event.reply("bookImageBase64Added"))
         .catch((e) => event.reply("error", parseErr(e)));
     });
 
     ipcMain.on("deleteBook", (event, book: Book) => {
-      deleteBook(settings.booksDir, book)
+      deleteBook(this.currentSettings.booksDir, book)
         .then(() => event.reply("bookDeleted"))
         .catch((e) => event.reply("error", parseErr(e)));
     });
 
     ipcMain.on("openBooksDir", (_event) => {
-      if (settings.booksDir) {
-        shell.openPath(settings.booksDir);
+      if (this.currentSettings.booksDir) {
+        shell.openPath(this.currentSettings.booksDir);
       }
     });
 
