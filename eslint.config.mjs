@@ -5,7 +5,7 @@ import tseslint from "typescript-eslint";
 import eslintPluginSvelte from "eslint-plugin-svelte";
 import eslintConfigPrettier from "eslint-config-prettier";
 import svelteParser from "svelte-eslint-parser";
-import customRules from "./eslint.rules.js";
+import customRules from "./eslint.rules.mjs";
 
 export default tseslint.config(
   {

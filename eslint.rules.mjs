@@ -1,4 +1,5 @@
-module.exports = {
+export default {
+  /** @type {import('@typescript-eslint/utils').TSESLint.SharedConfig.RulesRecord} */
   tsRules: {
     "@typescript-eslint/no-unused-vars": [
       "error",
