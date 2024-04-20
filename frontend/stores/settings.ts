@@ -13,14 +13,16 @@ export const version = writable({
 function createSettings() {
   const { subscribe, set, update } = writable({} as UserSettings);
 
+  let autoUpdateInterval: NodeJS.Timeout;
+
   const rmListenerSettings = window.electronAPI.settingsLoaded((newSettings: UserSettings) => {
     set(newSettings);
     currentTheme.set(newSettings.theme);
     // Only check version after settings are fully loaded.
     // Only set the interval once, before the current version is immediately set after.
     if (!get(version).current) {
-      settings.checkVersion();
-      setInterval(settings.checkVersion, 4500000); // every 1.25hrs
+      // TODO: && newSettings.autoUpdate
+      settings.enableAutoUpdate();
     }
     version.update((v) => ({ ...v, current: newSettings.appVersion }));
   });
@@ -41,6 +43,13 @@ function createSettings() {
     save: async (newSettings: UserSettings, moveData: boolean = false) => {
       set(newSettings);
       window.electronAPI.saveSettings(newSettings, moveData);
+    },
+    enableAutoUpdate: () => {
+      settings.checkVersion();
+      autoUpdateInterval = setInterval(settings.checkVersion, 4500000); // every 1.25hrs
+    },
+    disableAutoUpdate: () => {
+      clearInterval(autoUpdateInterval);
     },
     checkVersion: () => {
       const now = new Date().getTime();

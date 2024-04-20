@@ -22,6 +22,7 @@ type UserSettings = {
     height: number;
   };
   lastUpdateCheck: number;
+  autoUpdate: boolean;
 };
 
 type WyrmErrorDetails = {
