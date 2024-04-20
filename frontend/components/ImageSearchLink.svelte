@@ -21,6 +21,3 @@
 <a class="btn" target="_blank" href={link + query}>
   Search for Image <span class="icon"><ImageSquare /></span>
 </a>
-
-<style lang="scss">
-</style>

@@ -11,10 +11,12 @@
     from {
       transform: rotate(0deg);
     }
+
     to {
       transform: rotate(360deg);
     }
   }
+
   .spinner {
     animation: rotating 2s linear infinite;
     display: inline-block;

@@ -26,7 +26,7 @@
   .bookPlaceholder {
     width: var(--book-width, 100%);
     display: block;
-    box-shadow: rgb(0, 0, 0, 0.3) 0.14rem 0.14rem 0.6rem 0.2rem;
+    box-shadow: rgb(0 0 0 / 30%) 0.14rem 0.14rem 0.6rem 0.2rem;
     border-radius: 2px;
 
     rect {
@@ -45,7 +45,7 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      padding: 20% 20% 25% 20%;
+      padding: 20% 20% 25%;
       justify-content: center;
       align-items: center;
       color: var(--c-book-text);
@@ -117,7 +117,7 @@
       width: 30vw;
       max-height: 85vh;
 
-      @media (min-aspect-ratio: 7/4) {
+      @media (aspect-ratio > 7 / 4) {
         width: 50vh;
         height: 75vh;
       }
@@ -135,7 +135,7 @@
       font-size: 2vw;
     }
 
-    @media (min-aspect-ratio: 7/4) {
+    @media (aspect-ratio > 7 / 4) {
       .bookPlaceholder__title {
         font-size: 3.5vh;
       }

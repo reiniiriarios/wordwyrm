@@ -184,12 +184,12 @@
 
       &__top {
         top: 0;
-        background: radial-gradient(55% 1rem at top center, rgba(0, 0, 0, 67%) 0%, transparent 100%);
+        background: radial-gradient(55% 1rem at top center, rgba(0 0 0 / 67%) 0%, transparent 100%);
       }
 
       &__bottom {
         top: calc(100% - 1.25rem);
-        background: radial-gradient(55% 1rem at bottom center, rgba(0, 0, 0, 67%) 0%, transparent 100%);
+        background: radial-gradient(55% 1rem at bottom center, rgba(0 0 0 / 67%) 0%, transparent 100%);
       }
     }
 

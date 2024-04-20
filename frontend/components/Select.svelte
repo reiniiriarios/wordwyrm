@@ -54,7 +54,7 @@
     &__dropdown {
       display: none;
       position: absolute;
-      box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0.5rem 1rem 0 rgba(0 0 0 / 40%);
       z-index: 1;
     }
 
@@ -86,6 +86,18 @@
       }
     }
 
+    &--small {
+      .select__selected,
+      .select__opt {
+        padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .select__arrow {
+        top: 0.33rem;
+      }
+    }
+
     &:hover,
     &:focus-visible,
     &:focus-within {
@@ -93,6 +105,7 @@
         &--down {
           display: none;
         }
+
         &--up {
           display: block;
         }
@@ -105,18 +118,6 @@
 
       .select__dropdown {
         display: block;
-      }
-    }
-
-    &--small {
-      .select__selected,
-      .select__opt {
-        padding: 0.25rem 1.5rem 0.25rem 0.5rem;
-        font-size: 0.9rem;
-      }
-
-      .select__arrow {
-        top: 0.33rem;
       }
     }
   }

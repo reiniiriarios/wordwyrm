@@ -35,5 +35,5 @@
 </div>
 
 <style lang="scss" global>
-  @import "../style/main.scss";
+  @import "../style/main";
 </style>

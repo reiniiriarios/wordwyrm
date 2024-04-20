@@ -40,11 +40,10 @@
     .details {
       display: none;
       background-color: var(--c-overlay);
-      box-shadow: 0.125rem 0.125rem 0.4rem 0 rgba(0, 0, 0, 0.5);
+      box-shadow: 0.125rem 0.125rem 0.4rem 0 rgba(0 0 0 / 50%);
       padding: 1rem 1.25rem 1rem 2.5rem;
       position: absolute;
-      top: -0.85rem;
-      left: 1.5rem;
+      inset: -0.85rem auto auto 1.5rem;
       width: 20rem;
       overflow: hidden;
       contain: paint;
@@ -69,37 +68,25 @@
 
     &--top {
       .details {
-        top: auto;
-        right: auto;
-        bottom: 1.25rem;
-        left: -9.5rem;
+        inset: auto auto 1.25rem -9.5rem;
       }
     }
 
     &--right {
       .details {
-        top: -0.85rem;
-        right: auto;
-        bottom: auto;
-        left: 1.5rem;
+        inset: -0.85rem auto auto 1.5rem;
       }
     }
 
     &--bottom {
       .details {
-        top: 1.25rem;
-        right: auto;
-        bottom: auto;
-        left: -9.5rem;
+        inset: 1.25rem auto auto -9.5rem;
       }
     }
 
     &--left {
       .details {
-        top: -0.85rem;
-        right: 1.5rem;
-        bottom: auto;
-        left: auto;
+        inset: -0.85rem 1.5rem auto auto;
       }
     }
   }

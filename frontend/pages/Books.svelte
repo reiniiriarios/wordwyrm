@@ -85,7 +85,7 @@
   .listFilter {
     position: relative;
     z-index: 9;
-    box-shadow: 0 1rem 1rem -1rem rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1rem 1rem -1rem rgba(0 0 0 / 25%);
   }
 
   .zoom {
@@ -182,7 +182,7 @@
       bottom: -0.5rem;
       right: -0.75rem;
       z-index: 20;
-      filter: drop-shadow(0.05rem 0.05rem 0.25rem rgba(0, 0, 0, 0.33));
+      filter: drop-shadow(0.05rem 0.05rem 0.25rem rgba(0 0 0 / 33%));
     }
   }
 </style>

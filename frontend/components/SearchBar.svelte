@@ -39,7 +39,6 @@
 
     .x {
       cursor: pointer;
-
       right: 0.5rem;
       color: var(--c-text-dark);
 

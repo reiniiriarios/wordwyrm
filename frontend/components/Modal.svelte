@@ -105,7 +105,7 @@
       flex-direction: column;
       justify-content: space-between;
       z-index: 110;
-      box-shadow: rgba(0, 0, 0, 0.2) 0.1rem 0.1rem 0.4rem 0.2rem;
+      box-shadow: rgba(0 0 0 / 20%) 0.1rem 0.1rem 0.4rem 0.2rem;
     }
 
     &.small {

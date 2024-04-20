@@ -81,7 +81,7 @@
     display: flex;
     flex-direction: column;
     align-items: start;
-    box-shadow: -2rem 0 1rem 2rem rgba(0, 0, 0, 0.25);
+    box-shadow: -2rem 0 1rem 2rem rgba(0 0 0 / 25%);
     z-index: 10;
 
     ul {

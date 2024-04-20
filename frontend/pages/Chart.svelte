@@ -183,6 +183,7 @@
   .chart {
     padding: 1rem;
   }
+
   .btn.selected {
     background-color: var(--c-button-hover);
   }

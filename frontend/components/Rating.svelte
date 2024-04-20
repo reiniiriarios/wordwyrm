@@ -77,7 +77,7 @@
       height: 2rem;
       width: 2rem;
       background-color: var(--c-muted);
-      mask-image: url(star.svg);
+      mask-image: url("star.svg");
       mask-mode: alpha;
       mask-size: 2rem 2rem;
 

@@ -38,7 +38,7 @@
       max-height: var(--book-height, 100%);
       max-width: 100%;
       display: block;
-      box-shadow: rgb(0, 0, 0, 0.3) 0.14rem 0.14rem 0.6rem 0.2rem;
+      box-shadow: rgb(0 0 0 / 30%) 0.14rem 0.14rem 0.6rem 0.2rem;
       border-radius: 2px;
     }
 
@@ -61,16 +61,16 @@
       border-radius: 2px;
       background: linear-gradient(
           90deg,
-          rgba(255, 255, 255, 0) 0%,
-          rgba(255, 255, 255, 0.1) 2%,
-          rgba(0, 0, 0, 0.1) 4%,
-          rgba(255, 255, 255, 0) 8%
+          rgba(255 255 255 / 0%) 0%,
+          rgba(255 255 255 / 10%) 2%,
+          rgba(0 0 0 / 10%) 4%,
+          rgba(255 255 255 / 0%) 8%
         ),
-        radial-gradient(circle at 55% 35%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%),
-        radial-gradient(circle at 55% 25%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50%);
+        radial-gradient(circle at 55% 35%, rgba(0 0 0 / 0%) 0%, rgba(0 0 0 / 20%) 100%),
+        radial-gradient(circle at 55% 25%, rgba(255 255 255 / 10%) 0%, rgba(255 255 255 / 0%) 50%);
       box-shadow:
-        inset rgba(255, 255, 255, 0.6) -0.25rem 0.25rem 0.4rem -0.4rem,
-        inset rgba(0, 0, 0, 1) 0.15rem -0.15rem 0.6rem -0.3rem;
+        inset rgba(255 255 255 / 60%) -0.25rem 0.25rem 0.4rem -0.4rem,
+        inset rgba(0 0 0 / 100%) 0.15rem -0.15rem 0.6rem -0.3rem;
     }
   }
 </style>

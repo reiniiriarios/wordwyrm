@@ -82,7 +82,7 @@
   dt {
     font-size: 1.25rem;
     font-weight: bold;
-    margin: 2rem 0 1rem 0;
+    margin: 2rem 0 1rem;
   }
 
   dd {
