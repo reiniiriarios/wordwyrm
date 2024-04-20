@@ -119,7 +119,7 @@
   </div>
 </div>
 {#if book}
-  <div class="bookPage">
+  <div class="pageWrapper bookPage">
     <div class="bookPage__image">
       <div class="field">
         Cover Image
@@ -233,7 +233,6 @@
 <style lang="scss">
   .bookPage {
     display: flex;
-    height: calc(100vh - var(--page-nav-height));
 
     &__image {
       height: 100%;

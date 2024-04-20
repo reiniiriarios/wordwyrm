@@ -50,18 +50,20 @@
   <div class="list">
     <table>
       <thead>
-        {#each ["title", "author", "series", "tags", "published", "read", "added"] as h}
-          <th on:click={() => sortFilter(h)} class:selected={$books.filters.sort === h}
-            >{h.charAt(0).toUpperCase()}{h.slice(1)}
-            {#if $books.filters.sort === h}
-              {#if $books.filters.reverse}
-                <CaretDown size={12} />
-              {:else}
-                <CaretUp size={12} />
+        <tr>
+          {#each ["title", "author", "series", "tags", "published", "read", "added"] as h}
+            <th on:click={() => sortFilter(h)} class:selected={$books.filters.sort === h}
+              >{h.charAt(0).toUpperCase()}{h.slice(1)}
+              {#if $books.filters.sort === h}
+                {#if $books.filters.reverse}
+                  <CaretDown size={12} />
+                {:else}
+                  <CaretUp size={12} />
+                {/if}
               {/if}
-            {/if}
-          </th>
-        {/each}
+            </th>
+          {/each}
+        </tr>
       </thead>
       <tbody>
         {#each $books.sortedBooks as book}
@@ -91,12 +93,10 @@
 <style lang="scss">
   .list {
     margin: 1rem 0;
-    padding: 0 1rem;
-    width: 100%;
     height: calc(100vh - var(--page-nav-height) - 2rem);
+    overflow: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--c-subtle) transparent;
-    overflow: auto;
   }
 
   table {
@@ -131,6 +131,16 @@
 
   tr {
     cursor: pointer;
+
+    th:first-child,
+    td:first-child {
+      padding-left: 2rem;
+    }
+
+    th:last-child,
+    td:last-child {
+      padding-right: 2rem;
+    }
 
     &:nth-child(odd) {
       background-color: var(--c-surface);

@@ -81,6 +81,8 @@
     display: flex;
     flex-direction: column;
     align-items: start;
+    box-shadow: -2rem 0 1rem 2rem rgba(0, 0, 0, 0.25);
+    z-index: 10;
 
     ul {
       list-style: none;
@@ -92,13 +94,14 @@
       a {
         display: flex;
         justify-content: left;
-        padding: 0 0.25rem;
+        padding: 0 0.25rem 0 0.235rem;
         align-items: center;
         width: var(--tab-width);
         height: var(--tab-height);
         color: var(--c-text-dark);
         text-decoration: none;
         white-space: nowrap;
+        border-left: 0.15rem solid transparent;
 
         span {
           font-size: 0.9rem;
@@ -113,6 +116,7 @@
 
       &.active a {
         color: var(--c-text);
+        border-color: var(--c-text-muted);
       }
     }
   }

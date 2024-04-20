@@ -138,7 +138,7 @@
   <h2 class="pageNav__header">Settings</h2>
   <div class="pageNav__actions"></div>
 </div>
-<div class="settingsPage">
+<div class="pageWrapper settingsPage">
   <fieldset class="settings">
     <label class="field field--fullwidth">
       <div class="dataDir">
@@ -306,15 +306,7 @@
 
 <style lang="scss">
   .settingsPage {
-    --settings-footer-height: 3rem;
-
-    .settings {
-      height: calc(100vh - var(--page-nav-height) - var(--settings-footer-height));
-      padding: 0.5rem 1rem;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--c-subtle) transparent;
-    }
+    --footer-height: 3rem;
 
     .selectField {
       margin-top: 0.2rem;
@@ -345,7 +337,7 @@
     }
 
     .footer {
-      height: var(--settings-footer-height);
+      height: var(--footer-height);
       position: absolute;
       bottom: 0;
       right: 0;

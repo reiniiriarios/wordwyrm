@@ -91,6 +91,12 @@
 {/if}
 
 <style lang="scss">
+  .listFilter {
+    position: relative;
+    z-index: 9;
+    box-shadow: 0 1rem 1rem -1rem rgba(0, 0, 0, 0.25);
+  }
+
   .zoom {
     display: flex;
     align-items: center;
@@ -120,12 +126,13 @@
   }
 
   .bookList {
+    background-color: var(--c-sub);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    padding: 0.5rem 1rem 1.25rem;
+    padding: 0.75rem 1rem 1.25rem;
     overflow-y: auto;
     width: 100%;
     height: calc(100vh - var(--page-nav-height) - var(--filter-height));

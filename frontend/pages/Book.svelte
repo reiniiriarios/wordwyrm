@@ -61,7 +61,7 @@
   </div>
 </div>
 {#if book}
-  <div class="bookPage">
+  <div class="pageWrapper bookPage">
     {#if book.images.hasImage}
       <div class="bookPage__image">
         <BookImage {book} overlay pageHeight />
@@ -147,7 +147,6 @@
 <style lang="scss">
   .bookPage {
     display: flex;
-    height: calc(100vh - var(--page-nav-height));
     padding: 0 1rem;
 
     &__image {
@@ -163,6 +162,8 @@
     &__info {
       padding: 1rem;
       overflow-y: auto;
+      width: 100%;
+      max-width: 60rem;
       scrollbar-width: thin;
       scrollbar-color: var(--c-subtle) transparent;
 

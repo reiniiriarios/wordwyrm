@@ -171,7 +171,7 @@
     <button class="btn btn--round" class:selected={view === "year"} on:click={() => setView("year")}>Years</button>
   </div>
 </div>
-<div class="chart">
+<div class="pageWrapper chart">
   <canvas bind:this={chartCanvas} />
 </div>
 

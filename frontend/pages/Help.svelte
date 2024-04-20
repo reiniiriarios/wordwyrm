@@ -7,7 +7,7 @@
   <h2 class="pageNav__header">Help</h2>
 </div>
 
-<div class="help">
+<div class="pageWrapper help">
   <dl>
     <dt>Managing Data</dt>
     <dd>
@@ -69,15 +69,8 @@
 </div>
 
 <style lang="scss">
-  :root {
-    --help-footer-height: 3rem;
-  }
-
   .help {
-    height: calc(100vh - var(--page-nav-height) - var(--help-footer-height));
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--c-subtle) transparent;
+    --footer-height: 3rem;
   }
 
   dl {
@@ -102,7 +95,7 @@
   }
 
   .footer {
-    height: var(--help-footer-height);
+    height: 3rem;
     position: absolute;
     bottom: 0;
     right: 0;

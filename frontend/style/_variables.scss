@@ -2,13 +2,15 @@
   --tab-width: 2.5rem;
   --tab-width-open: 7.5rem;
   --tab-height: 2.5rem;
-  --page-nav-height: 3rem;
+  --page-nav-height: 3.25rem;
+  --footer-height: 0rem;
   --filter-height: 3rem;
 
   @media screen and (max-width: 1150px) {
     --filter-height: 6rem;
   }
 
+  --c-sub: #1a1a1a;
   --c-base: #222;
   --c-surface: #262626;
   --c-overlay: #333;
@@ -51,6 +53,7 @@
 // Rosé Pine
 // https://rosepinergba(102, 76, 90, 0.102)/palette
 #appContainer[data-theme="rosepine"] {
+  --c-sub: #100f14;
   --c-base: #191724;
   --c-surface: #1f1d2e;
   --c-overlay: #26233a;
@@ -123,8 +126,9 @@
 // Rosé Pine Dawn
 // https://rosepinetheme.com/palette
 #appContainer[data-theme="rosepineDawn"] {
-  --c-base: #faf4ed;
-  --c-surface: #fffaf3;
+  --c-sub: #faf4ed;
+  --c-base: #fffaf3;
+  --c-surface: #faf4ed;
   --c-overlay: #f2e9e1;
   --c-muted: #9893a5;
   --c-subtle: #797593;
@@ -196,6 +200,7 @@
   --c-nord14: #a3be8c;
   --c-nord15: #b48ead;
 
+  --c-sub: #252a33;
   --c-base: var(--c-nord0);
   --c-surface: var(--c-nord1);
   --c-overlay: var(--c-nord2);
@@ -259,6 +264,7 @@
   --c-nord14: #a3be8c;
   --c-nord15: #b48ead;
 
+  --c-sub: var(--c-nord5);
   --c-base: var(--c-nord6);
   --c-surface: var(--c-nord5);
   --c-overlay: var(--c-nord4);
@@ -305,6 +311,7 @@
   --c-red: #e84a5f;
   --c-slate: #2a363b;
 
+  --c-sub: #171d1f;
   --c-base: #1f282c;
   --c-surface: var(--c-slate);
   --c-overlay: #333f44;
@@ -366,6 +373,7 @@
   --c-lettuce: #578f32;
   --c-tomato: #ad2313;
 
+  --c-sub: var(--c-sky0);
   --c-base: var(--c-sky1);
   --c-surface: var(--c-nebula0);
   --c-overlay: var(--c-nebula1);
@@ -435,6 +443,7 @@
   --c-bone2: #c6bcb3;
   --c-bone3: #a59a98;
 
+  --c-sub: var(--c-cloaki0);
   --c-base: var(--c-cloaki1);
   --c-surface: var(--c-cloaki2);
   --c-overlay: var(--c-ice1);
@@ -475,7 +484,7 @@
 }
 
 #appContainer[data-theme="gideon"] {
-  --c-dust0: #0e0a0b;
+  --c-dust0: #100c0d;
   --c-dust1: #201718;
   --c-dust2: #312725;
   --c-dust3: #372d2e;
@@ -503,6 +512,7 @@
   --c-blood1: #3d1515;
   --c-blood2: #531818;
 
+  --c-sub: #050505;
   --c-base: var(--c-dust0);
   --c-surface: var(--c-dust1);
   --c-overlay: var(--c-dust2);
