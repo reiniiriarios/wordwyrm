@@ -78,7 +78,7 @@ function createBooks() {
       books.applyFilter();
     },
     deleteBook: (removeBook: Book) => {
-      log.debug("Books store: deleteing book", removeBook.title);
+      log.debug("Books store: deleting book", removeBook.title);
       update((s) => {
         s.allBooks = s.allBooks.filter((b) => b.cache.filepath !== removeBook.cache.filepath);
         return s;

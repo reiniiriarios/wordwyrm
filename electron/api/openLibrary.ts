@@ -14,6 +14,7 @@ const imgEndpoint = "https://covers.openlibrary.org/b/";
 type OpenLibrarySearchResult = {
   key: string;
   title: string;
+  type: string; // "work" | "edition" | ??
   author_alternative_name: string[];
   author_key: string[];
   author_name: string[];
@@ -63,6 +64,9 @@ type OpenLibrarySearchResponse = {
  * @see https://openlibrary.org/dev/docs/api/search
  */
 type OpenLibraryWork = {
+  type: {
+    key: "/type/work";
+  };
   title: string;
   key: string;
   authors: {
@@ -84,6 +88,9 @@ type OpenLibraryWork = {
  * @see https://openlibrary.org/dev/docs/api/search
  */
 type OpenLibraryEdition = {
+  type: {
+    key: "/type/edition";
+  };
   key: string;
   title: string;
   full_title: string;
@@ -95,9 +102,6 @@ type OpenLibraryEdition = {
   publish_date: string;
   identifiers: {
     [name: string]: string[];
-    // goodreads
-    // librarything
-    // ..?
   };
   source_records: string[]; // "name:id", e.g. "amazon:1234"
   works: {
@@ -123,6 +127,58 @@ type OpenLibraryEditions = {
 };
 
 /**
+ * Type guard for Open Library Work.
+ *
+ * @param {unknown} obj Response data
+ * @returns is OpenLibraryWork
+ */
+function isTypeOpenLibraryWork(obj: unknown): obj is OpenLibraryWork {
+  return (
+    typeof obj === "object" &&
+    "type" in obj &&
+    typeof obj.type === "object" &&
+    "key" in obj.type &&
+    obj.type.key === "/type/work"
+  );
+}
+
+/**
+ * Type guard for Open Library Edition.
+ *
+ * @param {unknown} obj Response data
+ * @returns is OpenLibraryEdition
+ */
+function isTypeOpenLibraryEdition(obj: unknown): obj is OpenLibraryEdition {
+  return (
+    typeof obj === "object" &&
+    "type" in obj &&
+    typeof obj.type === "object" &&
+    "key" in obj.type &&
+    obj.type.key === "/type/edition"
+  );
+}
+
+/**
+ * Type guard for Open Library Editions Response.
+ *
+ * @param {unknown} obj Response data
+ * @returns is OpenLibraryEditions
+ */
+function isTypeOpenLibraryEditions(obj: unknown): obj is OpenLibraryEditions {
+  return typeof obj === "object" && "size" in obj && "entries" in obj && Array.isArray(obj.entries);
+}
+
+/**
+ * Type guard for Open Library Search Response.
+ *
+ * @param {unknown} obj Response data
+ * @returns is OpenLibrarySearchResponse
+ */
+function isTypeOpenLibrarySearchResponse(obj: unknown): obj is OpenLibrarySearchResponse {
+  return typeof obj === "object" && "numFound" in obj && "docs" in obj && Array.isArray(obj.docs);
+}
+
+/**
  * Get specific Work from Open Library
  *
  * @param olid Open Library Work ID
@@ -134,18 +190,58 @@ type OpenLibraryEditions = {
 export async function getOpenLibraryWork(olid: string): Promise<OpenLibraryWork> {
   try {
     log.info(`Fetching Open Library Work: ${olid}`);
-    const work: OpenLibraryWork = await fetch(`${endpoint}/works/${olid}.json`, {
+    return await fetch(`${endpoint}/works/${olid}.json`, {
       method: "GET",
       headers: {
         accept: "application/json",
       },
     })
       .then((res) => res.json())
-      .then((json: OpenLibraryWork) => json)
+      .then((res) => {
+        if (!isTypeOpenLibraryWork(res)) {
+          log.error(res);
+          throw new Error("Unrecognized response data.");
+        }
+        return res;
+      })
       .catch((e) => {
         throw e;
       });
-    return work;
+  } catch (e) {
+    log.error("getOpenLibraryWork", e);
+    throw new WyrmError("Error fetching Work data from Open Library.", e);
+  }
+}
+
+/**
+ * Get specific Edition from Open Library
+ *
+ * @param olid Open Library Work ID
+ * @returns Work
+ * @throws WyrmError
+ *
+ * @todo Conform data
+ */
+export async function getOpenLibraryEdition(olid: string): Promise<OpenLibraryEdition> {
+  try {
+    log.info(`Fetching Open Library Work: ${olid}`);
+    return await fetch(`${endpoint}/books/${olid}.json`, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (!isTypeOpenLibraryEdition(res)) {
+          log.error(res);
+          throw new Error("Unrecognized response data.");
+        }
+        return res;
+      })
+      .catch((e) => {
+        throw e;
+      });
   } catch (e) {
     log.error("getOpenLibraryWork", e);
     throw new WyrmError("Error fetching Work data from Open Library.", e);
@@ -164,23 +260,26 @@ export async function getOpenLibraryWork(olid: string): Promise<OpenLibraryWork>
 export async function getOpenLibraryEditions(olid: string): Promise<OpenLibraryEdition[]> {
   try {
     log.info(`Searching Open Library Editions for Work: ${olid}`);
-    const editions: OpenLibraryEdition[] = await fetch(`${endpoint}/works/${olid}/editions.json`, {
+    return await fetch(`${endpoint}/works/${olid}/editions.json`, {
       method: "GET",
       headers: {
         accept: "application/json",
       },
     })
       .then((res) => res.json())
-      .then((json: OpenLibraryEditions) => {
-        if (!json.size) {
+      .then((res) => {
+        if (!isTypeOpenLibraryEditions(res)) {
+          log.error(res);
+          throw new Error("Unrecognized response data.");
+        }
+        if (!res.size) {
           return [];
         }
-        return json.entries;
+        return res.entries;
       })
       .catch((e) => {
         throw e;
       });
-    return editions;
   } catch (e) {
     log.error("getOpenLibraryEditions", e);
     throw new WyrmError("Error fetching Edition data from Open Library.", e);
@@ -199,23 +298,26 @@ export async function getOpenLibraryEditions(olid: string): Promise<OpenLibraryE
 export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLibraryEdition[]> {
   try {
     log.info(`Searching Open Library Editions for ISBN: ${isbn}`);
-    const editions: OpenLibraryEdition[] = await fetch(`${endpoint}/isbn/${isbn}.json`, {
+    return await fetch(`${endpoint}/isbn/${isbn}.json`, {
       method: "GET",
       headers: {
         accept: "application/json",
       },
     })
       .then((res) => res.json())
-      .then((json: OpenLibraryEditions) => {
-        if (!json.size) {
+      .then((res) => {
+        if (!isTypeOpenLibraryEditions(res)) {
+          log.error(res);
+          throw new Error("Unrecognized response data.");
+        }
+        if (!res.size) {
           return [];
         }
-        return json.entries;
+        return res.entries;
       })
       .catch((e) => {
         throw e;
       });
-    return editions;
   } catch (e) {
     log.error("getOpenLibraryEditionsByISBN", e);
     throw new WyrmError("Error fetching Edition data from Open Library.", e);
@@ -232,7 +334,7 @@ export async function getOpenLibraryEditionsByISBN(isbn: string): Promise<OpenLi
 export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | null> {
   try {
     log.info(`Searching Open Library Works for ISBN: ${isbn}`);
-    const work: OpenLibrarySearchResult = await fetch(`${endpoint}/search.json?isbn=${isbn}`, {
+    const work = await fetch(`${endpoint}/search.json?isbn=${isbn}`, {
       method: "GET",
       headers: {
         accept: "application/json",
@@ -244,18 +346,19 @@ export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | 
         }
         return res.json();
       })
-      .then((json: OpenLibrarySearchResponse) => {
-        if (!json.numFound || !json.docs?.[0] || !json.docs?.[0]?.key) {
+      .then((res) => {
+        if (!isTypeOpenLibrarySearchResponse(res)) {
+          log.error(res);
+          throw new Error("Unrecognized response data.");
+        }
+        if (!res.numFound || !res.docs?.[0] || !res.docs?.[0]?.key) {
           return null;
         }
-        return json.docs[0];
+        return res.docs[0];
       })
       .catch((e) => {
         throw e;
       });
-    if (!work?.key) {
-      return null;
-    }
     return conformOpenLibrarySearchResult(work, isbn);
   } catch (e) {
     log.error("searchOpenLibraryWorkByISBN", e);
@@ -273,30 +376,31 @@ export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | 
 export async function searchOpenLibrary(search: string): Promise<Book[]> {
   try {
     log.info(`Searching Open Library Works for: ${search}`);
-    const works: OpenLibrarySearchResult[] = await fetch(`${endpoint}/search.json?q=${search}`, {
+    const works = await fetch(`${endpoint}/search.json?q=${search}`, {
       method: "GET",
       headers: {
         accept: "application/json",
       },
     })
       .then((res) => res.json())
-      .then((json: OpenLibrarySearchResponse) => {
-        if (!json.numFound) {
+      .then((res) => {
+        if (!isTypeOpenLibrarySearchResponse(res)) {
+          log.error(res);
+          throw new Error("Unrecognized response data.");
+        }
+        if (!res.numFound) {
           return [];
         }
-        return json.docs;
+        return res.docs;
       })
       .catch((e) => {
         throw e;
       });
-    if (works?.length > 0) {
-      return works.map((work) => conformOpenLibrarySearchResult(work));
-    }
+    return works.map((work) => conformOpenLibrarySearchResult(work));
   } catch (e) {
     log.error("searchOpenLibrary", e);
     throw new WyrmError("Error searching Open Library.", e);
   }
-  return [];
 }
 
 /**

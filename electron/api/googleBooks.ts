@@ -109,6 +109,26 @@ export type VolumeSearch = {
 };
 
 /**
+ * Type guard for Google Volumes.
+ *
+ * @param {unknown} obj Response data
+ * @returns is Volume
+ */
+function isTypeGoogleVolume(obj: unknown): obj is Volume {
+  return typeof obj === "object" && "kind" in obj && obj.kind === "books#volume";
+}
+
+/**
+ * Type guard for Google Volume Search Results.
+ *
+ * @param {unknown} obj Response data
+ * @returns is VolumeSearch
+ */
+function isTypeGoogleVolumeSearch(obj: unknown): obj is VolumeSearch {
+  return typeof obj === "object" && "kind" in obj && obj.kind === "books#volumes";
+}
+
+/**
  * Search Google Books for a volume.
  *
  * @param q Query
@@ -117,10 +137,16 @@ export type VolumeSearch = {
  */
 async function searchVolume(q: string): Promise<VolumeSearch> {
   try {
-    log.debug(`Searching for Google Volume: ${q}`);
+    log.info(`Searching for Google Volume: ${q}`);
     return fetch(`${ENDPOINT}/volumes?q=${q}`)
       .then((res) => res.json())
-      .then((res) => res as VolumeSearch)
+      .then((res) => {
+        if (!isTypeGoogleVolumeSearch(res)) {
+          log.error(res);
+          throw new Error("Unrecognized response.");
+        }
+        return res;
+      })
       .catch((e) => {
         throw e;
       });
@@ -140,10 +166,16 @@ async function searchVolume(q: string): Promise<VolumeSearch> {
  */
 async function getVolume(v: string, lite: boolean = false): Promise<Volume> {
   try {
-    log.debug(`Fetching Google Volume ${v}`);
+    log.info(`Fetching Google Volume ${v}`);
     return fetch(`${ENDPOINT}/volumes/${v}?projection=${lite ? "lite" : "full"}`)
       .then((res) => res.json())
-      .then((res) => res as Volume)
+      .then((res) => {
+        if (!isTypeGoogleVolume(res)) {
+          log.error(res);
+          throw new Error("Unrecognized response.");
+        }
+        return res;
+      })
       .catch((e) => {
         throw e;
       });

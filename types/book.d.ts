@@ -72,4 +72,4 @@ type Book_v1 = {
   oclcId?: string;
 };
 
-type BookImport = Book | Book_v1;
+type BookGeneric = Book | Book_v1;

@@ -63,7 +63,7 @@ export function initUserDirs(): boolean {
  *
  * @todo Use `unknown` and type guarding.
  */
-export function readYaml(filename: string): any {
+export function readYaml(filename: string): unknown {
   try {
     const doc = yaml.load(fs.readFileSync(filename, "utf8"));
     return doc;
@@ -80,10 +80,10 @@ export function readYaml(filename: string): any {
  *
  * @todo Use `unknown` and type guarding.
  */
-export function saveYaml(filename: string, data: any) {
+export function saveYaml(filename: string, data: unknown) {
   try {
     const toWrite = structuredClone(data);
-    if (toWrite.cache) {
+    if (isTypeBook(toWrite) && toWrite.cache) {
       delete toWrite.cache;
     }
     const doc = yaml.dump(toWrite);
@@ -91,6 +91,39 @@ export function saveYaml(filename: string, data: any) {
   } catch (e) {
     log.error(e);
   }
+}
+
+/**
+ * Type guard for User Settings.
+ *
+ * @param {unknown} obj
+ * @returns is UserSettings
+ */
+function isTypeUserSettings(obj: unknown): obj is UserSettings {
+  return typeof obj === "object" && "booksDir" in obj;
+}
+
+/**
+ * Type guard for Books.
+ *
+ * @param {unknown} obj Data from yaml
+ * @returns is Book
+ */
+function isTypeBook(obj: unknown): obj is Book {
+  if (isTypeBookGeneric(obj)) {
+    return obj.version === "2";
+  }
+  return false;
+}
+
+/**
+ * Type guard for Books.
+ *
+ * @param {unknown} obj object
+ * @returns is BookGeneric
+ */
+export function isTypeBookGeneric(obj: unknown): obj is BookGeneric {
+  return typeof obj === "object" && "title" in obj && "authors" in obj;
 }
 
 /**
@@ -108,7 +141,10 @@ export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
       saveYaml(sf, {});
       return {} as UserSettings;
     }
-    const settings: UserSettings = readYaml(sf);
+    const settings = readYaml(sf);
+    if (!isTypeUserSettings(settings)) {
+      throw new Error("Settings data invalid");
+    }
 
     // Defaults
     if (!settings.searchEngines) {

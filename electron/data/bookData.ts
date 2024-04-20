@@ -3,7 +3,7 @@ import * as path from "path";
 import log from "electron-log/main";
 import fetch from "electron-fetch";
 import sharp from "sharp";
-import { readYaml, saveYaml } from "./userData";
+import { isTypeBookGeneric, readYaml, saveYaml } from "./userData";
 import WyrmError from "../error";
 import { getGoogleBook } from "../api/googleBooks";
 import { searchOpenLibraryWorkByISBN } from "../api/openLibrary";
@@ -173,6 +173,10 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
     }
     initBookDirs(booksDir);
 
+    log.info(
+      `${!oAuthorDir && !oFilename ? "Adding" : "Saving"} book: ${book.title} by ${book.authors.map((a) => a.name).join(", ")}`,
+    );
+
     // Trim, default values.
     book.title = book.title.trim();
     book.series = book.series?.trim() ?? "";
@@ -321,13 +325,11 @@ export async function readAllBooks(booksDir: string): Promise<Book[]> {
             // Get data for book
             const pathname = path.join(subFile.path, subFile.name);
             // Import
-            let book: BookImport = readYaml(pathname);
-            if (!book.version || book.version === "1") {
-              book = transformV1(book as Book_v1);
-            } else if (book.version !== "2") {
-              // Unrecognized version, unable to parse.
-              return;
+            const yaml = readYaml(pathname);
+            if (!isTypeBookGeneric(yaml)) {
+              throw new Error(`Invalid book data in file ${pathname}.`);
             }
+            const book = isTypeBookV1(yaml) ? transformV1(yaml) : yaml;
             // Build cache data
             book.images.hasImage = fs.existsSync(`${pathname.slice(0, -5)}.jpg`);
             book.cache = {
@@ -361,15 +363,14 @@ export async function readBook(booksDir: string, authorDir: string, filename: st
   }
   const pathname = path.join(booksDir, authorDir, `${filename}.yaml`);
   if (!fs.existsSync(pathname)) {
-    throw new WyrmError("Book data not found.", pathname);
+    throw new WyrmError("Book data not found.", `File: ${pathname}`);
   }
   // Import
-  let book: BookImport = readYaml(pathname);
-  if (!book.version || book.version === "1") {
-    book = transformV1(book as Book_v1);
-  } else if (book.version !== "2") {
-    throw new WyrmError("Unrecognized data.", "book.version != 2");
+  const yaml = readYaml(pathname);
+  if (!isTypeBookGeneric(yaml)) {
+    throw new WyrmError("Invalid book data.", `File: ${pathname}`);
   }
+  const book = isTypeBookV1(yaml) ? transformV1(yaml) : yaml;
   // Build cache data
   book.images.hasImage = fs.existsSync(`${pathname.slice(0, -5)}.jpg`);
   const filepath = `${authorDir}/${filename}`;
@@ -467,6 +468,26 @@ export function combineGooglePlusOpenLibrary(googleBook: Book, olBook: Book): Bo
   book.ids.oclcId = olBook.ids.oclcId;
   book.ids.wikidataId = olBook.ids.wikidataId;
   return book;
+}
+
+/**
+ * Type guard for Books version 2.
+ *
+ * @param {BookGeneric} book Data from yaml
+ * @returns is Book
+ */
+export function isTypeBookV2(book: BookGeneric): book is Book {
+  return book.version === "2";
+}
+
+/**
+ * Type guard for Books version 1.
+ *
+ * @param {BookGeneric} book Data from yaml
+ * @returns is Book
+ */
+export function isTypeBookV1(book: BookGeneric): book is Book_v1 {
+  return !book.version || book.version === "1";
 }
 
 /**
