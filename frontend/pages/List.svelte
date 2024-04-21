@@ -49,7 +49,7 @@
     <ScrollTable>
       <svelte:fragment slot="thead">
         {#each ["title", "author", "series", "tags", "published", "read", "added"] as h}
-          <th on:click={() => sortFilter(h)} class:selected={$books.filters.sort === h}
+          <th on:click={() => sortFilter(h)} class:selected={$books.filters.sort === h} class={`col--${h}`}
             >{h.charAt(0).toUpperCase()}{h.slice(1)}
             {#if $books.filters.sort === h}
               {#if $books.filters.reverse}
@@ -64,19 +64,19 @@
       <svelte:fragment slot="tbody">
         {#each $books.sortedBooks as book}
           <tr on:click={() => push(`#/book/${book.cache.filepath}`)}>
-            <td>{book.title}</td>
-            <td>{book.authors.map((a) => a.name).join(", ")}</td>
-            <td>{book.series ?? ""}{book.seriesNumber ? ` #${book.seriesNumber}` : ""}</td>
-            <td>
+            <td class="col--title">{book.title}</td>
+            <td class="col--author">{book.authors.map((a) => a.name).join(", ")}</td>
+            <td class="col--series">{book.series ?? ""}{book.seriesNumber ? ` #${book.seriesNumber}` : ""}</td>
+            <td class="col--tags">
               <div class="tags">
                 {#each book.tags as tag}
                   <span class="tag">{tag}</span>
                 {/each}
               </div>
             </td>
-            <td class="date">{formatDate(book.datePublished)}</td>
-            <td class="date">{formatDate(book.dateRead)}</td>
-            <td class="date">{formatDate(book.timestampAdded)}</td>
+            <td class="col--published date">{formatDate(book.datePublished)}</td>
+            <td class="col--read date">{formatDate(book.dateRead)}</td>
+            <td class="col--added date">{formatDate(book.timestampAdded)}</td>
           </tr>
         {/each}
       </svelte:fragment>
@@ -100,5 +100,11 @@
     flex-wrap: wrap;
     gap: 0.25rem;
     justify-content: left;
+  }
+
+  @media (width <= 1400px) {
+    .col--tags {
+      display: none;
+    }
   }
 </style>
