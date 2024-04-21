@@ -33,7 +33,7 @@ class AppUpdater {
     //   Windows: nsis
     autoUpdater.logger = log;
     autoUpdater.on("checking-for-update", () => {
-      log.info("Checking for update...");
+      log.info("Checking for available auto-update.");
     });
     autoUpdater.on("update-available", (info) => {
       log.info(`Update available: ${info.version}, released ${info.releaseDate}; running ${packageJson.version}`);
@@ -57,12 +57,12 @@ class AppUpdater {
    */
   public check(): void {
     if (CAN_AUTO_UPDATE) {
-      log.debug("Checking for updates.");
+      log.info("Checking for updates.");
       autoUpdater.checkForUpdatesAndNotify();
     } else if (USES_APP_STORE) {
-      log.debug("This build uses an app store to update.");
+      log.info("This build uses an app store to update.");
     } else {
-      log.debug("Checking for manual updates.");
+      log.info("Checking for manual updates.");
       this.checkForUpdate();
     }
   }
