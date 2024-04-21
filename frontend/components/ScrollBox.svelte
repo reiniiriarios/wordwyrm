@@ -54,12 +54,12 @@
 
       &--top {
         top: 0;
-        background: radial-gradient(55% 1rem at top center, rgba(0 0 0 / 67%) 0%, transparent 100%);
+        background: radial-gradient(55% 1rem at top center, var(--shadow-5) 0%, transparent 100%);
       }
 
       &--bottom {
         top: calc(100% - var(--shadow-height));
-        background: radial-gradient(55% 1rem at bottom center, rgba(0 0 0 / 67%) 0%, transparent 100%);
+        background: radial-gradient(55% 1rem at bottom center, var(--shadow-5) 0%, transparent 100%);
       }
     }
 

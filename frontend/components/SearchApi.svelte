@@ -195,7 +195,7 @@
             img {
               height: 4rem;
               max-width: 3rem;
-              box-shadow: 0.05rem 0.05rem 0.25rem -0.1rem rgb(0 0 0 / 25%);
+              box-shadow: 0.05rem 0.05rem 0.25rem -0.1rem var(--shadow-1);
             }
           }
 

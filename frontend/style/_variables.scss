@@ -58,6 +58,12 @@
 
   --c-chart-bar: #ff008888;
   --c-chart-bar-border: #ff0088;
+
+  --shadow-1: rgb(0 0 0 / 25%);
+  --shadow-2: rgb(0 0 0 / 30%);
+  --shadow-3: rgb(0 0 0 / 40%);
+  --shadow-4: rgb(0 0 0 / 50%);
+  --shadow-5: rgb(0 0 0 / 65%);
 }
 
 // Rosé Pine
@@ -192,6 +198,12 @@
 
   --c-chart-bar: #56949f88;
   --c-chart-bar-border: #56949f;
+
+  --shadow-1: rgb(0 0 0 / 10%);
+  --shadow-2: rgb(0 0 0 / 22%);
+  --shadow-3: rgb(0 0 0 / 30%);
+  --shadow-4: rgb(0 0 0 / 35%);
+  --shadow-5: rgb(0 0 0 / 40%);
 }
 
 // Nord
@@ -328,6 +340,12 @@
 
   --c-chart-bar: #88c0d088;
   --c-chart-bar-border: #88c0d0;
+
+  --shadow-1: rgb(0 0 0 / 10%);
+  --shadow-2: rgb(0 0 0 / 22%);
+  --shadow-3: rgb(0 0 0 / 30%);
+  --shadow-4: rgb(0 0 0 / 35%);
+  --shadow-5: rgb(0 0 0 / 40%);
 }
 
 #appContainer[data-theme="slate"] {

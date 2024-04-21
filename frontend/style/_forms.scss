@@ -81,7 +81,7 @@ fieldset {
   width: 100%;
   min-height: 22rem;
   margin-top: 0.1rem;
-  box-shadow: 0.25rem 0.25rem 1.5rem 0rem rgba(0, 0, 0, 0.2) inset;
+  box-shadow: 0.25rem 0.25rem 1.5rem 0rem var(--shadow-1) inset;
   background-color: var(--c-overlay) !important;
   border: 3px dashed var(--c-overlay-border) !important;
   color: var(--c-text) !important;
@@ -100,7 +100,7 @@ fieldset {
   }
 
   img {
-    box-shadow: 0.25rem 0.25rem 1.5rem 0rem rgba(0, 0, 0, 0.2);
+    box-shadow: 0.25rem 0.25rem 1.5rem 0rem var(--shadow-1);
     margin: 0 auto;
     max-height: 18rem;
     width: auto;

@@ -38,7 +38,7 @@
       max-height: var(--book-height, 100%);
       max-width: 100%;
       display: block;
-      box-shadow: rgb(0 0 0 / 30%) 0.14rem 0.14rem 0.6rem 0.2rem;
+      box-shadow: var(--shadow-2) 0.14rem 0.14rem 0.6rem 0.2rem;
       border-radius: 2px;
     }
 

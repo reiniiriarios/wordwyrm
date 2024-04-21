@@ -54,7 +54,7 @@
     &__dropdown {
       display: none;
       position: absolute;
-      box-shadow: 0 0.5rem 1rem 0 rgba(0 0 0 / 40%);
+      box-shadow: 0 0.5rem 1rem 0 var(--shadow-3);
       z-index: 1;
     }
 
