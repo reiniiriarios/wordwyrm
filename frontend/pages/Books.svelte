@@ -13,6 +13,7 @@
   import AddBook from "@components/AddBook.svelte";
   import SearchApi from "@components/SearchApi.svelte";
   import { books } from "@stores/books";
+  import ScrollBox from "@components/ScrollBox.svelte";
 
   onMount(() => {
     if (!$books.allBooks.length) {
@@ -59,23 +60,27 @@
     </div>
   </div>
 
-  <div class="bookList">
-    {#each $books.sortedBooks as book}
-      <div class="book" class:zoomSmall={$books.view.zoom === "s"} class:zoomLarge={$books.view.zoom === "l"}>
-        <a href={`#/book/${book.cache.filepath}`} class="book__inner">
-          <BookImage {book} overlay size={$books.view.zoom} />
-          {#if $books.filters.sort === "rating"}
-            {#if book.rating}
-              <span class="book__rating">
-                <Rating rating={book.rating} />
-              </span>
-            {/if}
-          {:else if !book.dateRead}
-            <span class="unread">Unread</span>
-          {/if}
-        </a>
+  <div class="bookListContainer">
+    <ScrollBox>
+      <div class="bookList">
+        {#each $books.sortedBooks as book}
+          <div class="book" class:zoomSmall={$books.view.zoom === "s"} class:zoomLarge={$books.view.zoom === "l"}>
+            <a href={`#/book/${book.cache.filepath}`} class="book__inner">
+              <BookImage {book} overlay size={$books.view.zoom} />
+              {#if $books.filters.sort === "rating"}
+                {#if book.rating}
+                  <span class="book__rating">
+                    <Rating rating={book.rating} />
+                  </span>
+                {/if}
+              {:else if !book.dateRead}
+                <span class="unread">Unread</span>
+              {/if}
+            </a>
+          </div>
+        {/each}
       </div>
-    {/each}
+    </ScrollBox>
   </div>
 {:else}
   <GettingStarted arrows />
@@ -116,6 +121,10 @@
     }
   }
 
+  .bookListContainer {
+    height: calc(100vh - var(--page-nav-height) - var(--filter-height));
+  }
+
   .bookList {
     background-color: var(--c-sub);
     display: flex;
@@ -124,11 +133,7 @@
     justify-content: center;
     gap: 1rem;
     padding: 0.75rem 1rem 1.25rem;
-    overflow-y: auto;
     width: 100%;
-    height: calc(100vh - var(--page-nav-height) - var(--filter-height));
-    scrollbar-width: thin;
-    scrollbar-color: var(--c-subtle) transparent;
   }
 
   .book {
