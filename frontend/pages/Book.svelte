@@ -2,13 +2,13 @@
   import { onMount } from "svelte";
   import PencilSimple from "phosphor-svelte/lib/PencilSimple";
 
+  import ScrollBox from "@components/ScrollBox.svelte";
   import BookImage from "@components/BookImage.svelte";
   import Rating from "@components/Rating.svelte";
   import MoreInfo from "@components/MoreInfo.svelte";
   import { books } from "@stores/books";
   import { sortFilters } from "@scripts/sortBooks";
   import { formatDate } from "@scripts/formatDate";
-  import ScrollBox from "@components/ScrollBox.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;

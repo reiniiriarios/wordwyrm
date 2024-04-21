@@ -82,7 +82,7 @@ fieldset {
   min-height: 22rem;
   margin-top: 0.1rem;
   box-shadow: 0.25rem 0.25rem 1.5rem 0rem rgba(0, 0, 0, 0.2) inset;
-  background-color: transparent !important;
+  background-color: var(--c-overlay) !important;
   border: 3px dashed var(--c-overlay-border) !important;
   color: var(--c-text) !important;
   cursor: pointer;
@@ -90,6 +90,10 @@ fieldset {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &.above {
+    box-shadow: none;
+  }
 
   &:focus-visible {
     border-color: var(--c-focus) !important;

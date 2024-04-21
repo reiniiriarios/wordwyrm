@@ -4,6 +4,7 @@
   import Dropzone from "svelte-file-dropzone";
   import { push } from "svelte-spa-router";
 
+  import ScrollBox from "@components/ScrollBox.svelte";
   import HoverInfo from "@components/HoverInfo.svelte";
   import Rating from "@components/Rating.svelte";
   import ImageSearch from "@components/ImageSearch.svelte";
@@ -133,7 +134,7 @@
     <div class="bookPage__image">
       <div class="field">
         Cover Image
-        <Dropzone accept="image/*" on:drop={handleBookImageDropped}>
+        <Dropzone accept="image/*" on:drop={handleBookImageDropped} containerClasses="above">
           {#if imagePath}
             <img src={`localfile://${imagePath}`} alt="" />
             <div class="dropzone__info">Drag or click here to replace image.</div>
@@ -153,90 +154,92 @@
         {/if}
       </div>
     </div>
-    <div class="bookPage__info">
-      <fieldset>
-        <label class="field field--fullwidth">
-          Title
-          <input type="text" bind:value={book.title} required />
-        </label>
-        <label class="field field--fullwidth">
-          Author(s) <HoverInfo details="Authors should be comma-separated." />
-          <input type="text" bind:value={authors} on:change={setAuthors} required />
-        </label>
-        <!-- svelte-ignore a11y-label-has-associated-control -->
-        <label class="field">
-          Date Published
-          <FlexibleDate bind:value={book.datePublished} />
-        </label>
-        <label class="field">
-          Date Read
-          <input type="date" bind:value={book.dateRead} />
-        </label>
+    <ScrollBox>
+      <div class="bookPage__info">
+        <fieldset>
+          <label class="field field--fullwidth">
+            Title
+            <input type="text" bind:value={book.title} required />
+          </label>
+          <label class="field field--fullwidth">
+            Author(s) <HoverInfo details="Authors should be comma-separated." />
+            <input type="text" bind:value={authors} on:change={setAuthors} required />
+          </label>
+          <!-- svelte-ignore a11y-label-has-associated-control -->
+          <label class="field">
+            Date Published
+            <FlexibleDate bind:value={book.datePublished} />
+          </label>
+          <label class="field">
+            Date Read
+            <input type="date" bind:value={book.dateRead} />
+          </label>
 
-        <label class="field">
-          Series
-          <input type="text" bind:value={book.series} />
-        </label>
-        <label class="field">
-          Series Number
-          <input type="text" bind:value={book.seriesNumber} />
-        </label>
+          <label class="field">
+            Series
+            <input type="text" bind:value={book.series} />
+          </label>
+          <label class="field">
+            Series Number
+            <input type="text" bind:value={book.seriesNumber} />
+          </label>
 
-        <label class="field field--fullwidth">
-          Description
-          <textarea rows="4" bind:value={book.description} />
-        </label>
+          <label class="field field--fullwidth">
+            Description
+            <textarea rows="4" bind:value={book.description} />
+          </label>
 
-        <div class="field field--fullwidth">
-          Rating
-          <Rating bind:rating={book.rating} editable />
-        </div>
-
-        <label class="field field--fullwidth">
-          Tag(s) <HoverInfo details="Tags should be comma-separated." />
-          <input type="text" bind:value={tags} on:change={setTags} />
-        </label>
-        <div class="field field--fullwidth commonTags">
-          <div class="commonTags__title">
-            Common Tags <HoverInfo details="Click to add. Change tags displayed in Settings." />
+          <div class="field field--fullwidth">
+            Rating
+            <Rating bind:rating={book.rating} editable />
           </div>
-          <div class="commonTags__tags">
-            {#each commonTags as tag}
-              <button class="tag" on:click={() => addCommonTag(tag)}>{tag}</button>
-            {/each}
+
+          <label class="field field--fullwidth">
+            Tag(s) <HoverInfo details="Tags should be comma-separated." />
+            <input type="text" bind:value={tags} on:change={setTags} />
+          </label>
+          <div class="field field--fullwidth commonTags">
+            <div class="commonTags__title">
+              Common Tags <HoverInfo details="Click to add. Change tags displayed in Settings." />
+            </div>
+            <div class="commonTags__tags">
+              {#each commonTags as tag}
+                <button class="tag" on:click={() => addCommonTag(tag)}>{tag}</button>
+              {/each}
+            </div>
           </div>
-        </div>
 
-        <label class="field field--fullwidth">
-          Notes
-          <textarea rows="4" bind:value={book.notes} />
-        </label>
+          <label class="field field--fullwidth">
+            Notes
+            <textarea rows="4" bind:value={book.notes} />
+          </label>
 
-        <label class="field field">
-          ISBN
-          <input type="text" bind:value={book.ids.isbn} />
-        </label>
-        <label class="field field">
-          Google Books ID <HoverInfo position="left" details="Format is alphanumeric plus _ and -." />
-          <input type="text" bind:value={book.ids.googleBooksId} />
-        </label>
-        <label class="field field">
-          OpenLibrary ID <HoverInfo details="Format should be /works/id or /books/id, where id is alphanumeric." />
-          <input type="text" bind:value={book.ids.openLibraryId} />
-        </label>
-        <label class="field field">
-          Goodreads ID <HoverInfo position="left" details="Format is numeric." />
-          <input type="text" bind:value={book.ids.goodreadsId} />
-        </label>
-      </fieldset>
-      <div class="bookPage__actions">
-        <div class="left">
-          <DeleteBook {book} />
+          <label class="field field">
+            ISBN
+            <input type="text" bind:value={book.ids.isbn} />
+          </label>
+          <label class="field field">
+            Google Books ID <HoverInfo position="left" details="Format is alphanumeric plus _ and -." />
+            <input type="text" bind:value={book.ids.googleBooksId} />
+          </label>
+          <label class="field field">
+            OpenLibrary ID <HoverInfo details="Format should be /works/id or /books/id, where id is alphanumeric." />
+            <input type="text" bind:value={book.ids.openLibraryId} />
+          </label>
+          <label class="field field">
+            Goodreads ID <HoverInfo position="left" details="Format is numeric." />
+            <input type="text" bind:value={book.ids.goodreadsId} />
+          </label>
+        </fieldset>
+        <div class="bookPage__actions">
+          <div class="left">
+            <DeleteBook {book} />
+          </div>
+          <a class="btn" href={`#/book/${params.author}/${params.book}`}>Cancel</a>
+          <button class="btn" disabled={saving} on:click={saveBook}>Save</button>
         </div>
-        <a class="btn" href={`#/book/${params.author}/${params.book}`}>Cancel</a>
-        <button class="btn" disabled={saving} on:click={saveBook}>Save</button>
       </div>
-    </div>
+    </ScrollBox>
   </div>
 {/if}
 
@@ -258,12 +261,7 @@
     }
 
     &__info {
-      border: 1px solid var(--c-sub);
-      box-shadow: 0.25rem 0.25rem 1.5rem 0rem rgba(0 0 0 / 20%) inset;
-      padding: 1rem;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--c-subtle) transparent;
+      padding: 0 0.5rem;
     }
 
     &__actions {
