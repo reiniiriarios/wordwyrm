@@ -10,6 +10,8 @@
   import GettingStarted from "@components/GettingStarted.svelte";
   import { books } from "@stores/books";
   import { formatDate } from "@scripts/formatDate";
+  import ScrollBox from "@components/ScrollBox.svelte";
+  import ScrollTable from "@components/ScrollTable.svelte";
 
   onMount(() => {
     if (!$books.allBooks.length) {
@@ -43,25 +45,23 @@
 </div>
 
 {#if $books.allBooks.length}
-  <div class="list">
-    <table>
-      <thead>
-        <tr>
-          {#each ["title", "author", "series", "tags", "published", "read", "added"] as h}
-            <th on:click={() => sortFilter(h)} class:selected={$books.filters.sort === h}
-              >{h.charAt(0).toUpperCase()}{h.slice(1)}
-              {#if $books.filters.sort === h}
-                {#if $books.filters.reverse}
-                  <CaretDown size={12} />
-                {:else}
-                  <CaretUp size={12} />
-                {/if}
+  <div class="listContainer">
+    <ScrollTable>
+      <svelte:fragment slot="thead">
+        {#each ["title", "author", "series", "tags", "published", "read", "added"] as h}
+          <th on:click={() => sortFilter(h)} class:selected={$books.filters.sort === h}
+            >{h.charAt(0).toUpperCase()}{h.slice(1)}
+            {#if $books.filters.sort === h}
+              {#if $books.filters.reverse}
+                <CaretDown size={12} />
+              {:else}
+                <CaretUp size={12} />
               {/if}
-            </th>
-          {/each}
-        </tr>
-      </thead>
-      <tbody>
+            {/if}
+          </th>
+        {/each}
+      </svelte:fragment>
+      <svelte:fragment slot="tbody">
         {#each $books.sortedBooks as book}
           <tr on:click={() => push(`#/book/${book.cache.filepath}`)}>
             <td>{book.title}</td>
@@ -79,77 +79,16 @@
             <td class="date">{formatDate(book.timestampAdded)}</td>
           </tr>
         {/each}
-      </tbody>
-    </table>
+      </svelte:fragment>
+    </ScrollTable>
   </div>
 {:else}
   <GettingStarted />
 {/if}
 
 <style lang="scss">
-  .list {
-    margin: 1rem 0;
-    height: calc(100vh - var(--page-nav-height) - 2rem);
-    overflow: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--c-subtle) transparent;
-  }
-
-  table {
-    width: 100%;
-    border-spacing: 0;
-  }
-
-  th,
-  td {
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-  }
-
-  th {
-    text-align: left;
-    background-color: var(--c-base);
-    position: sticky;
-    top: 0;
-    cursor: pointer;
-    color: var(--c-text-muted);
-    vertical-align: bottom;
-    white-space: nowrap;
-
-    &:hover {
-      color: var(--c-text);
-    }
-
-    &.selected {
-      color: var(--c-text);
-    }
-  }
-
-  tr {
-    cursor: pointer;
-    background-color: var(--c-table2-row);
-
-    th:first-child,
-    td:first-child {
-      padding-left: 2rem;
-    }
-
-    th:last-child,
-    td:last-child {
-      padding-right: 2rem;
-    }
-
-    &:nth-child(odd) {
-      background-color: var(--c-table2-row-alt);
-    }
-
-    &:hover td {
-      background-color: var(--c-table2-hover);
-
-      .tag {
-        background-color: var(--c-table2-hover2);
-      }
-    }
+  .listContainer {
+    height: calc(100vh - var(--page-nav-height));
   }
 
   .date {
