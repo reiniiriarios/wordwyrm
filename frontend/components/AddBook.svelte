@@ -54,8 +54,10 @@
       log.error("rejected files", fileRejections);
     }
     if (acceptedFiles.length) {
-      log.debug(acceptedFiles);
-      addImagePath = acceptedFiles[0].path;
+      addImagePath = acceptedFiles[0].path.replace(/\\/g, "/").replace(/ /g, "%20");
+      if (addImagePath.charAt(0) !== "/") {
+        addImagePath = `/${addImagePath}`;
+      }
       book.cache.image = addImagePath;
     }
   }
