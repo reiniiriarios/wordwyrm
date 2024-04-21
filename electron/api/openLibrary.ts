@@ -359,6 +359,7 @@ export async function searchOpenLibraryWorkByISBN(isbn: string): Promise<Book | 
       .catch((e) => {
         throw e;
       });
+    if (!work) return null;
     return conformOpenLibrarySearchResult(work, isbn);
   } catch (e) {
     log.error("searchOpenLibraryWorkByISBN", e);
@@ -396,6 +397,7 @@ export async function searchOpenLibrary(search: string): Promise<Book[]> {
       .catch((e) => {
         throw e;
       });
+    if (!works?.length) return [];
     return works.map((work) => conformOpenLibrarySearchResult(work));
   } catch (e) {
     log.error("searchOpenLibrary", e);
