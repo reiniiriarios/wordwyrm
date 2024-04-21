@@ -4,6 +4,7 @@
   let box: HTMLDivElement;
   let shadowTopOpacity: number = 0;
   let shadowBottomOpacity: number = 0;
+  let shadowScalingFactor: number = 1;
 
   onMount(() => {
     tick().then(updateScroll);
@@ -13,14 +14,23 @@
     };
   });
 
+  /**
+   * Amplify shadows at low percentages.
+   *
+   * @param {number} n [0-1] Value to scale
+   * @param {number} x [0-1] Scaling factor (less is more)
+   */
+  const logScale = (n: number, x: number = 0.5) => n * ((x - Math.log10(n)) / x);
+
   export function updateScroll(): void {
     if (box.offsetHeight >= box.scrollHeight) {
       shadowTopOpacity = 0;
       shadowBottomOpacity = 0;
     } else {
-      const currentScroll = box.scrollTop / (box.scrollHeight - box.offsetHeight);
-      shadowTopOpacity = currentScroll;
-      shadowBottomOpacity = 1 - currentScroll;
+      shadowScalingFactor = Math.min(1, Math.max(0.5, (35000 - box.scrollHeight) / 35000));
+      const percentScroll = box.scrollTop / (box.scrollHeight - box.offsetHeight);
+      shadowTopOpacity = logScale(percentScroll, shadowScalingFactor);
+      shadowBottomOpacity = logScale(1 - percentScroll, shadowScalingFactor);
     }
   }
 </script>
