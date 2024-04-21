@@ -1,6 +1,7 @@
 <script lang="ts">
   import ArrowSquareOut from "phosphor-svelte/lib/ArrowSquareOut";
   import { platform, version } from "@stores/settings";
+  import ScrollBox from "@components/ScrollBox.svelte";
 </script>
 
 <div class="pageNav">
@@ -8,55 +9,57 @@
 </div>
 
 <div class="pageWrapper help">
-  <dl>
-    <dt>Managing Data</dt>
-    <dd>
-      <p>
-        Data is stored in YAML files and JPGs, sorted into author directories. You can change where your data is stored
-        in Settings. <a href="https://en.wikipedia.org/wiki/YAML" target="_blank">YAML</a> files are easily editable in any
-        plain text editor.
-      </p>
-      <p>
-        To share your data across devices, you can choose a directory in a cloud drive, such as OneDrive, Google Drive,
-        or Dropbox.
-      </p>
-      <p>
-        <button class="btn" on:click={window.electronAPI.openBooksDir}>
-          Open Data in {$platform.fileBrowser}
-        </button>
-        &nbsp;
-        <button class="btn" on:click={window.electronAPI.openSettingsDir}>
-          Open Settings in {$platform.fileBrowser}
-        </button>
-      </p>
-    </dd>
-    <dt>API Keys</dt>
-    <dd>
-      <p>
-        You can add a <a href="https://cloud.google.com/" target="_blank">Google Cloud</a> API Key and
-        <a
-          href="https://developers.google.com/custom-search/v1/introduction#create_programmable_search_engine"
-          target="_blank">Google Programmable Search Engine ID</a
-        > to enable Google Image Search for book covers.
-      </p>
-      <p>
-        As Google Cloud has a cost (albeit a small one per user), this functionality is not enabled by default in order
-        to keep the app free.
-      </p>
-    </dd>
-    <dt>Reporting Bugs</dt>
-    <dd>
-      <p>
-        If you encounter a bug or need help, you can <a
-          href="https://github.com/reiniiriarios/wordwyrm/issues"
-          target="_blank">post an issue</a
-        >.
-      </p>
-      <p>
-        <button class="btn" on:click={window.electronAPI.openLogsDir}>Open Logs in {$platform.fileBrowser}</button>
-      </p>
-    </dd>
-  </dl>
+  <ScrollBox>
+    <dl>
+      <dt>Managing Data</dt>
+      <dd>
+        <p>
+          Data is stored in YAML files and JPGs, sorted into author directories. You can change where your data is
+          stored in Settings. <a href="https://en.wikipedia.org/wiki/YAML" target="_blank">YAML</a> files are easily editable
+          in any plain text editor.
+        </p>
+        <p>
+          To share your data across devices, you can choose a directory in a cloud drive, such as OneDrive, Google
+          Drive, or Dropbox.
+        </p>
+        <p>
+          <button class="btn" on:click={window.electronAPI.openBooksDir}>
+            Open Data in {$platform.fileBrowser}
+          </button>
+          &nbsp;
+          <button class="btn" on:click={window.electronAPI.openSettingsDir}>
+            Open Settings in {$platform.fileBrowser}
+          </button>
+        </p>
+      </dd>
+      <dt>API Keys</dt>
+      <dd>
+        <p>
+          You can add a <a href="https://cloud.google.com/" target="_blank">Google Cloud</a> API Key and
+          <a
+            href="https://developers.google.com/custom-search/v1/introduction#create_programmable_search_engine"
+            target="_blank">Google Programmable Search Engine ID</a
+          > to enable Google Image Search for book covers.
+        </p>
+        <p>
+          As Google Cloud has a cost (albeit a small one per user), this functionality is not enabled by default in
+          order to keep the app free.
+        </p>
+      </dd>
+      <dt>Reporting Bugs</dt>
+      <dd>
+        <p>
+          If you encounter a bug or need help, you can <a
+            href="https://github.com/reiniiriarios/wordwyrm/issues"
+            target="_blank">post an issue</a
+          >.
+        </p>
+        <p>
+          <button class="btn" on:click={window.electronAPI.openLogsDir}>Open Logs in {$platform.fileBrowser}</button>
+        </p>
+      </dd>
+    </dl>
+  </ScrollBox>
 </div>
 
 <div class="footer">

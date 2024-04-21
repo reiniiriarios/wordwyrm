@@ -9,6 +9,7 @@
   import { currentTheme, platform, settings, version } from "@stores/settings";
   import { books } from "@stores/books";
   import { formatDate } from "@scripts/formatDate";
+  import ScrollBox from "@components/ScrollBox.svelte";
 
   let editSettings: UserSettings = {} as UserSettings;
   let saved: boolean = false;
@@ -133,136 +134,138 @@
   <div class="pageNav__actions"></div>
 </div>
 <div class="pageWrapper settingsPage">
-  <fieldset class="settings">
-    <label class="field field--fullwidth">
-      <div class="dataDir">
-        <div class="dataDir__input">
-          Book Data Directory <HoverInfo
-            details="Select a directory in a cloud drive to share your data between devices."
-          />
-          <div class="fileSelect">
-            <input type="text" readonly on:click={selectDataDir} bind:value={editSettings.booksDir} />
-            <button class="btn btn--light" on:click={selectDataDir}>Select</button>
+  <ScrollBox>
+    <fieldset class="settings">
+      <label class="field field--fullwidth">
+        <div class="dataDir">
+          <div class="dataDir__input">
+            Book Data Directory <HoverInfo
+              details="Select a directory in a cloud drive to share your data between devices."
+            />
+            <div class="fileSelect">
+              <input type="text" readonly on:click={selectDataDir} bind:value={editSettings.booksDir} />
+              <button class="btn btn--light" on:click={selectDataDir}>Select</button>
+            </div>
+          </div>
+          <div class="dataDir__open">
+            <button class="btn" on:click={openBooksDir}>Open in {$platform.fileBrowser}</button>
           </div>
         </div>
-        <div class="dataDir__open">
-          <button class="btn" on:click={openBooksDir}>Open in {$platform.fileBrowser}</button>
+      </label>
+
+      <div class="field">
+        App Theme
+        <div class="selectField">
+          <Select
+            width="14rem"
+            bind:value={editSettings.theme}
+            options={{
+              default: "Default",
+              harrow: "Harrow",
+              gideon: "Gideon",
+              nona: "Nona",
+              slate: "Slate",
+              rosepine: "Rosé Pine",
+              rosepineDawn: "Rosé Pine Dawn",
+              nord: "Nord",
+              nordLight: "Nord Bright",
+            }}
+            on:change={previewTheme}
+          />
         </div>
       </div>
-    </label>
 
-    <div class="field">
-      App Theme
-      <div class="selectField">
-        <Select
-          width="14rem"
-          bind:value={editSettings.theme}
-          options={{
-            default: "Default",
-            harrow: "Harrow",
-            gideon: "Gideon",
-            nona: "Nona",
-            slate: "Slate",
-            rosepine: "Rosé Pine",
-            rosepineDawn: "Rosé Pine Dawn",
-            nord: "Nord",
-            nordLight: "Nord Bright",
-          }}
-          on:change={previewTheme}
+      <div class="field">
+        Date Format <HoverInfo details="Based on device locale settings." />
+        <div class="selectField">
+          <Select
+            width="14rem"
+            bind:value={editSettings.dateFormat}
+            options={{
+              "local-long": formatDate(new Date(), "local-long"),
+              "local-medium": formatDate(new Date(), "local-medium"),
+              "local-short": formatDate(new Date(), "local-short"),
+              "yyyy-mm-dd": formatDate(new Date(), "yyyy-mm-dd"),
+            }}
+          />
+        </div>
+      </div>
+
+      <label class="field field--fullwidth">
+        Tags for Filtering <HoverInfo details="Tags should be comma-separated." />
+        <input type="text" bind:value={editSettings.filterTags} maxlength="255" />
+      </label>
+      <label class="field field--fullwidth">
+        Common Tags for Editing <HoverInfo details="Tags should be comma-separated." />
+        <input type="text" bind:value={editSettings.commonTags} maxlength="1024" />
+      </label>
+
+      <label class="field">
+        Chart Default Start Year <HoverInfo details="Sets the default start year for the chart page." />
+        <input type="text" bind:value={editSettings.chartStartYear} />
+      </label>
+
+      <div class="field"></div>
+
+      <div class="field">
+        Book Search Engines <HoverInfo
+          details="If both are selected, Google Books data will be supplemented with OpenLibrary data."
         />
+        <div class="btnOptions">
+          <button
+            class="btn btn--option"
+            class:selected={seOpenLibrary}
+            on:click={() => toggleSearchEngine("openLibrary")}>OpenLibrary</button
+          >
+          <button
+            class="btn btn--option"
+            class:selected={seGoogleBooks}
+            on:click={() => toggleSearchEngine("googleBooks")}>Google Books</button
+          >
+        </div>
       </div>
-    </div>
 
-    <div class="field">
-      Date Format <HoverInfo details="Based on device locale settings." />
-      <div class="selectField">
-        <Select
-          width="14rem"
-          bind:value={editSettings.dateFormat}
-          options={{
-            "local-long": formatDate(new Date(), "local-long"),
-            "local-medium": formatDate(new Date(), "local-medium"),
-            "local-short": formatDate(new Date(), "local-short"),
-            "yyyy-mm-dd": formatDate(new Date(), "yyyy-mm-dd"),
-          }}
+      <div class="field">
+        Image Search Engine
+        <div class="selectField">
+          <Select
+            width="14rem"
+            bind:value={editSettings.imageSearchEngine}
+            on:change={imageSearchEngineChanged}
+            options={{
+              google: "Google",
+              duckduckgo: "DuckDuckGo",
+              bing: "Bing",
+              ecosia: "Ecosia",
+            }}
+          />
+        </div>
+      </div>
+
+      <label class="field" class:disabled={googleApiFieldsDisabled}>
+        Google Cloud API Key <HoverInfo
+          details="Optional. Along with Engine ID, enables Google Image Search in-app."
+          position="top"
         />
-      </div>
-    </div>
-
-    <label class="field field--fullwidth">
-      Tags for Filtering <HoverInfo details="Tags should be comma-separated." />
-      <input type="text" bind:value={editSettings.filterTags} maxlength="255" />
-    </label>
-    <label class="field field--fullwidth">
-      Common Tags for Editing <HoverInfo details="Tags should be comma-separated." />
-      <input type="text" bind:value={editSettings.commonTags} maxlength="1024" />
-    </label>
-
-    <label class="field">
-      Chart Default Start Year <HoverInfo details="Sets the default start year for the chart page." />
-      <input type="text" bind:value={editSettings.chartStartYear} />
-    </label>
-
-    <div class="field"></div>
-
-    <div class="field">
-      Book Search Engines <HoverInfo
-        details="If both are selected, Google Books data will be supplemented with OpenLibrary data."
-      />
-      <div class="btnOptions">
-        <button
-          class="btn btn--option"
-          class:selected={seOpenLibrary}
-          on:click={() => toggleSearchEngine("openLibrary")}>OpenLibrary</button
-        >
-        <button
-          class="btn btn--option"
-          class:selected={seGoogleBooks}
-          on:click={() => toggleSearchEngine("googleBooks")}>Google Books</button
-        >
-      </div>
-    </div>
-
-    <div class="field">
-      Image Search Engine
-      <div class="selectField">
-        <Select
-          width="14rem"
-          bind:value={editSettings.imageSearchEngine}
-          on:change={imageSearchEngineChanged}
-          options={{
-            google: "Google",
-            duckduckgo: "DuckDuckGo",
-            bing: "Bing",
-            ecosia: "Ecosia",
-          }}
+        <input type="text" bind:value={editSettings.googleApiKey} disabled={googleApiFieldsDisabled} />
+      </label>
+      <label class="field" class:disabled={googleApiFieldsDisabled}>
+        Google Custom Search Engine ID <HoverInfo
+          details="Optional. Along with API Key, enables Google Image Search in-app."
+          position="top"
         />
+        <input type="text" bind:value={editSettings.googleSearchEngineId} disabled={googleApiFieldsDisabled} />
+      </label>
+      <div class="actions">
+        <button class="btn" on:click={save}>Save</button>
+        {#if saving}
+          <div>Saving...</div>
+        {:else if saved}
+          <div>Saved!</div>
+        {/if}
       </div>
-    </div>
-
-    <label class="field" class:disabled={googleApiFieldsDisabled}>
-      Google Cloud API Key <HoverInfo
-        details="Optional. Along with Engine ID, enables Google Image Search in-app."
-        position="top"
-      />
-      <input type="text" bind:value={editSettings.googleApiKey} disabled={googleApiFieldsDisabled} />
-    </label>
-    <label class="field" class:disabled={googleApiFieldsDisabled}>
-      Google Custom Search Engine ID <HoverInfo
-        details="Optional. Along with API Key, enables Google Image Search in-app."
-        position="top"
-      />
-      <input type="text" bind:value={editSettings.googleSearchEngineId} disabled={googleApiFieldsDisabled} />
-    </label>
-    <div class="actions">
-      <button class="btn" on:click={save}>Save</button>
-      {#if saving}
-        <div>Saving...</div>
-      {:else if saved}
-        <div>Saved!</div>
-      {/if}
-    </div>
-  </fieldset>
+    </fieldset>
+  </ScrollBox>
 
   <div class="footer">
     {#if $version.current}
