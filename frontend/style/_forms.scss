@@ -79,26 +79,37 @@ fieldset {
 
 .dropzone {
   width: 100%;
-  background-color: var(--c-overlay) !important;
-  border-color: var(--c-overlay-border) !important;
+  min-height: 22rem;
+  margin-top: 0.1rem;
+  box-shadow: 0.25rem 0.25rem 1.5rem 0rem rgba(0, 0, 0, 0.2) inset;
+  background-color: transparent !important;
+  border: 3px dashed var(--c-overlay-border) !important;
   color: var(--c-text) !important;
   cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:focus-visible {
     border-color: var(--c-focus) !important;
   }
 
   img {
+    box-shadow: 0.25rem 0.25rem 1.5rem 0rem rgba(0, 0, 0, 0.2);
     margin: 0 auto;
-    max-height: 10rem;
+    max-height: 18rem;
     width: auto;
     max-width: 100%;
+    transform: rotate(-1.5deg);
   }
 
   &__info {
     font-size: 0.9rem;
     color: var(--c-text-muted);
     padding: 1rem;
+    text-align: center;
+    line-height: 1.25;
 
     img + & {
       padding-bottom: 0.1rem;

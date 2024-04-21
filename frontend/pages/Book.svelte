@@ -131,7 +131,7 @@
 <style lang="scss">
   .bookPage {
     display: flex;
-    padding: 0 1rem;
+    padding: 0 1rem 1.25rem;
 
     &__image {
       height: 95%;

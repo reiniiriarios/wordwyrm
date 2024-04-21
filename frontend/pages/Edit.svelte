@@ -243,20 +243,23 @@
 <style lang="scss">
   .bookPage {
     display: flex;
+    padding: 1rem 1.5rem 1.5rem;
+    gap: 2rem;
 
     &__image {
       height: 100%;
-      width: 50vw;
-      padding: 1rem;
+      width: 45vw;
 
       .dropzone {
         img {
-          max-height: 50vh;
+          max-height: 55vh;
         }
       }
     }
 
     &__info {
+      border: 1px solid var(--c-sub);
+      box-shadow: 0.25rem 0.25rem 1.5rem 0rem rgba(0 0 0 / 20%) inset;
       padding: 1rem;
       overflow-y: auto;
       scrollbar-width: thin;
