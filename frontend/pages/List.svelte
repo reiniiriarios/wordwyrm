@@ -127,6 +127,7 @@
 
   tr {
     cursor: pointer;
+    background-color: var(--c-table2-row);
 
     th:first-child,
     td:first-child {
@@ -139,14 +140,14 @@
     }
 
     &:nth-child(odd) {
-      background-color: var(--c-surface);
+      background-color: var(--c-table2-row-alt);
     }
 
     &:hover td {
-      background-color: var(--c-table-hover);
+      background-color: var(--c-table2-hover);
 
       .tag {
-        background-color: var(--c-table-hover);
+        background-color: var(--c-table2-hover2);
       }
     }
   }

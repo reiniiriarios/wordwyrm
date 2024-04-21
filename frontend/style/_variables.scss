@@ -32,10 +32,14 @@
   --c-focus: #ff0088;
   --c-selection: #94004f;
 
-  --c-table-hover: #ff00881a;
-  --c-table-row-selected: #672347;
-  --c-table-row: #333;
+  --c-table-row: var(--c-overlay);
   --c-table-row-alt: #383838;
+  --c-table-hover: var(--c-muted);
+  --c-table-row-selected: #672347;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: var(--c-muted);
 
   --c-button: var(--c-overlay);
   --c-button-hover: var(--c-muted);
@@ -96,9 +100,17 @@
   --c-link-hover: var(--c-iris);
   --c-menu-hover: var(--c-rose);
   --c-image-select: var(--c-rose);
-  --c-table-hover: #ebbcba1a;
   --c-focus: var(--c-foam);
   --c-selection: var(--c-pine);
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: #302c47;
+  --c-table-hover: #3c3757;
+  --c-table-row-selected: #31748f;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: #3c3757;
 
   --c-button: var(--c-overlay);
   --c-button-hover: var(--c-highlight-med);
@@ -173,9 +185,17 @@
   --c-link-hover: var(--c-iris);
   --c-menu-hover: var(--c-rose);
   --c-image-select: var(--c-rose);
-  --c-table-hover: #d7827e1a;
   --c-focus: var(--c-foam);
   --c-selection: #82b5be;
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: #e0d7ce;
+  --c-table-hover: #cec5bb;
+  --c-table-row-selected: #90c7d1;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: #dad3cb;
 
   --c-button: var(--c-overlay);
   --c-button-hover: var(--c-highlight-med);
@@ -247,9 +267,17 @@
   --c-link-hover: var(--c-nord8);
   --c-menu-hover: var(--c-nord7);
   --c-image-select: var(--c-nord8);
-  --c-table-hover: #5e81ac1a;
   --c-focus: var(--c-nord8);
   --c-selection: var(--c-nord10);
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: var(--c-muted);
+  --c-table-hover: var(--c-subtle);
+  --c-table-row-selected: #916589;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: var(--c-subtle);
 
   --c-button: var(--c-overlay);
   --c-button-hover: var(--c-subtle);
@@ -315,9 +343,17 @@
   --c-link-hover: var(--c-nord8);
   --c-menu-hover: var(--c-nord7);
   --c-image-select: var(--c-nord10);
-  --c-table-hover: #5e81ac1a;
   --c-focus: var(--c-nord8);
   --c-selection: var(--c-nord8);
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: var(--c-muted);
+  --c-table-hover: var(--c-subtle);
+  --c-table-row-selected: #cdacc7;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: #c2c9d6;
 
   --c-button: var(--c-overlay);
   --c-button-hover: var(--c-muted);
@@ -372,9 +408,17 @@
   --c-link-hover: var(--c-orange);
   --c-menu-hover: var(--c-yellow);
   --c-image-select: var(--c-orange);
-  --c-table-hover: #99b8981a;
   --c-focus: var(--c-orange);
   --c-selection: #c2534b;
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: var(--c-muted);
+  --c-table-hover: var(--c-subtle);
+  --c-table-row-selected: #8d3f3a;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: var(--c-subtle);
 
   --c-button: var(--c-overlay);
   --c-button-hover: var(--c-muted);
@@ -438,9 +482,17 @@
   --c-link-hover: var(--c-pink2);
   --c-menu-hover: var(--c-pink2);
   --c-image-select: var(--c-pink2);
-  --c-table-hover: #f08cb51a;
   --c-focus: var(--c-pink2);
   --c-selection: var(--c-pink1);
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: var(--c-muted);
+  --c-table-hover: var(--c-subtle);
+  --c-table-row-selected: #6f3d51;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: var(--c-subtle);
 
   --c-button: var(--c-overlay);
   --c-button-hover: var(--c-muted);
@@ -469,13 +521,13 @@
   --c-cloak0: #0e0e0e;
   --c-cloak1: #1a1a1a;
   --c-cloak2: #282828;
-  --c-cloaki0: #0e0f10;
-  --c-cloaki1: #1a1b1d;
-  --c-cloaki2: #272829;
-  --c-mist0: #323337;
-  --c-mist1: #3f4346;
-  --c-mist2: #474a4f;
-  --c-mist3: #5e6369;
+  --c-cloaki0: hsl(210, 7%, 6%);
+  --c-cloaki1: hsl(210, 7%, 11%);
+  --c-cloaki2: hsl(210, 7%, 16%);
+  --c-mist0: hsl(210, 7%, 21%);
+  --c-mist1: hsl(210, 7%, 26%);
+  --c-mist2: hsl(210, 7%, 31%);
+  --c-mist3: hsl(210, 7%, 36%);
   --c-armor0: #fcfafb;
   --c-armor1: #eeede9;
   --c-armor2: #c5c6c0;
@@ -498,9 +550,9 @@
   --c-sub: var(--c-cloaki0);
   --c-base: var(--c-cloaki1);
   --c-surface: var(--c-cloaki2);
-  --c-overlay: var(--c-ice1);
-  --c-muted: var(--c-ice2);
-  --c-subtle: var(--c-ice3);
+  --c-overlay: var(--c-mist0);
+  --c-muted: var(--c-mist1);
+  --c-subtle: var(--c-mist2);
 
   --c-menu: var(--c-overlay);
 
@@ -512,9 +564,17 @@
   --c-link-hover: var(--c-blue3);
   --c-menu-hover: var(--c-blue2);
   --c-image-select: var(--c-blue2);
-  --c-table-hover: #8db9fb1a;
   --c-focus: var(--c-blue2);
   --c-selection: var(--c-blue1);
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: var(--c-muted);
+  --c-table-hover: var(--c-subtle);
+  --c-table-row-selected: #24547d;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: var(--c-subtle);
 
   --c-button: var(--c-overlay);
   --c-button-hover: var(--c-muted);
@@ -585,9 +645,17 @@
   --c-link-hover: var(--c-ginger6);
   --c-menu-hover: var(--c-ginger6);
   --c-image-select: var(--c-ginger6);
-  --c-table-hover: #b368551a;
   --c-focus: var(--c-ginger6);
   --c-selection: var(--c-ginger6);
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: var(--c-muted);
+  --c-table-hover: var(--c-subtle);
+  --c-table-row-selected: var(--c-ginger3);
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: var(--c-subtle);
 
   --c-button: var(--c-overlay);
   --c-button-hover: var(--c-muted);

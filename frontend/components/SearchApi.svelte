@@ -200,7 +200,7 @@
           }
 
           &:hover {
-            background-color: var(--c-muted);
+            background-color: var(--c-table-hover);
           }
 
           &[aria-checked="true"] {
