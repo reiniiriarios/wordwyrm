@@ -14,6 +14,7 @@
   export let loading: boolean = false;
   export let small: boolean = false;
   export let large: boolean = false;
+  export let flush: boolean = false;
 
   function confirm(e?: MouseEvent | KeyboardEvent) {
     e?.preventDefault();
@@ -53,7 +54,7 @@
 <div class="modal" class:open class:small class:large on:click|self={close}>
   <div class="modal__window" role="dialog" style:height>
     <div class="modal__header">{heading}</div>
-    <div class="modal__body"><slot /></div>
+    <div class="modal__body" class:flush><slot /></div>
     <div class="modal__actions">
       {#if canCancel}
         <button type="button" class="btn modal__button" on:click={close}>{cancelWord}</button>
@@ -77,9 +78,6 @@
 
 <style lang="scss">
   .modal {
-    --header-height: 2.5rem;
-    --footer-height: 3.25rem;
-
     position: absolute;
     top: 0;
     left: 0;
@@ -131,16 +129,20 @@
     }
 
     &__body {
-      height: calc(100% - var(--header-height) - var(--footer-height));
+      height: calc(100% - var(--modal-header-height) - var(--modal-footer-height));
       font-size: 1rem;
       padding: 0.75rem 0.5rem;
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: var(--c-subtle) transparent;
+
+      &.flush {
+        padding: 0;
+      }
     }
 
     &__actions {
-      height: var(--footer-height);
+      height: var(--modal-footer-height);
       border-top: 1px solid var(--c-overlay-border);
       padding: 0.5rem;
       display: flex;

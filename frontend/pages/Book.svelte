@@ -8,6 +8,7 @@
   import { books } from "@stores/books";
   import { sortFilters } from "@scripts/sortBooks";
   import { formatDate } from "@scripts/formatDate";
+  import ScrollBox from "@components/ScrollBox.svelte";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
@@ -64,66 +65,68 @@
       <BookImage {book} overlay pageHeight />
     </div>
     <div class="bookPage__info">
-      <h2>{book.title}</h2>
-      <h3><span>by</span> {book.authors.map((a) => a.name).join(", ")}</h3>
-      <h4>{book.datePublished ? formatDate(book.datePublished) : "No publish date"}</h4>
-      {#if book.rating}
-        <div class="rating">
-          <Rating rating={book.rating} />
-        </div>
-      {/if}
-      {#if book.series}
-        <div class="series">
-          <div class="dataTitle">Series</div>
-          {book.series}
-          {book.seriesNumber ? `#${book.seriesNumber}` : ""}
-        </div>
-        {#if seriesBooks.length}
-          <div class="seriesList">
-            {#each seriesBooks as sb}
-              <div class="seriesList__book">
-                <a
-                  href={`#/book/${sb.cache.filepath}`}
-                  on:click={() => readBook(sb.cache.authorDir ?? "", sb.cache.filename ?? "")}
-                  class="seriesList__inner"
-                >
-                  <BookImage book={sb} overlay size="xs" />
-                </a>
-              </div>
+      <ScrollBox>
+        <h2>{book.title}</h2>
+        <h3><span>by</span> {book.authors.map((a) => a.name).join(", ")}</h3>
+        <h4>{book.datePublished ? formatDate(book.datePublished) : "No publish date"}</h4>
+        {#if book.rating}
+          <div class="rating">
+            <Rating rating={book.rating} />
+          </div>
+        {/if}
+        {#if book.series}
+          <div class="series">
+            <div class="dataTitle">Series</div>
+            {book.series}
+            {book.seriesNumber ? `#${book.seriesNumber}` : ""}
+          </div>
+          {#if seriesBooks.length}
+            <div class="seriesList">
+              {#each seriesBooks as sb}
+                <div class="seriesList__book">
+                  <a
+                    href={`#/book/${sb.cache.filepath}`}
+                    on:click={() => readBook(sb.cache.authorDir ?? "", sb.cache.filename ?? "")}
+                    class="seriesList__inner"
+                  >
+                    <BookImage book={sb} overlay size="xs" />
+                  </a>
+                </div>
+              {/each}
+            </div>
+          {/if}
+        {/if}
+        {#if book.tags}
+          <div class="tags">
+            {#each book.tags as tag}
+              <span class="tag">{tag}</span>
             {/each}
           </div>
         {/if}
-      {/if}
-      {#if book.tags}
-        <div class="tags">
-          {#each book.tags as tag}
-            <span class="tag">{tag}</span>
-          {/each}
+        <div class="read">
+          {#if book.dateRead}
+            <div class="dataTitle">Read</div>
+            {formatDate(book.dateRead)}
+          {:else}
+            <span class="unread">Unread</span>
+          {/if}
         </div>
-      {/if}
-      <div class="read">
-        {#if book.dateRead}
-          <div class="dataTitle">Read</div>
-          {formatDate(book.dateRead)}
-        {:else}
-          <span class="unread">Unread</span>
+        {#if book.description}
+          <div class="description">
+            <div class="dataTitle">Description</div>
+            {book.description}
+          </div>
         {/if}
-      </div>
-      {#if book.description}
-        <div class="description">
-          <div class="dataTitle">Description</div>
-          {book.description}
+        {#if book.notes}
+          <div class="notes">
+            <div class="dataTitle">Notes</div>
+            {book.notes}
+          </div>
+        {/if}
+        <div class="moreInfo">
+          <MoreInfo {book} />
         </div>
-      {/if}
-      {#if book.notes}
-        <div class="notes">
-          <div class="dataTitle">Notes</div>
-          {book.notes}
-        </div>
-      {/if}
-      <div class="moreInfo">
-        <MoreInfo {book} />
-      </div>
+      </ScrollBox>
     </div>
   </div>
 {/if}
@@ -145,11 +148,8 @@
 
     &__info {
       padding: 1rem;
-      overflow-y: auto;
       width: 100%;
       max-width: 60rem;
-      scrollbar-width: thin;
-      scrollbar-color: var(--c-subtle) transparent;
 
       .dataTitle {
         font-size: 0.9rem;

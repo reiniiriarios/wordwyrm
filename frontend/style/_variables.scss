@@ -5,6 +5,8 @@
   --page-nav-height: 3.25rem;
   --footer-height: 0rem;
   --filter-height: 3rem;
+  --modal-header-height: 2.5rem;
+  --modal-footer-height: 3.25rem;
 
   @media screen and (max-width: 1150px) {
     --filter-height: 6rem;
@@ -27,9 +29,13 @@
   --c-link-hover: #ff0d8e;
   --c-menu-hover: #ff0d8e;
   --c-image-select: #ff0088;
-  --c-table-hover: #ff00881a;
   --c-focus: #ff0088;
   --c-selection: #94004f;
+
+  --c-table-hover: #ff00881a;
+  --c-table-row-selected: #672347;
+  --c-table-row: #333;
+  --c-table-row-alt: #383838;
 
   --c-button: var(--c-overlay);
   --c-button-hover: var(--c-muted);

@@ -32,9 +32,6 @@
 .pageWrapper {
   padding: 0.5rem 1rem;
   height: calc(100vh - var(--page-nav-height) - var(--footer-height));
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--c-subtle) transparent;
   width: 100%;
 }
 

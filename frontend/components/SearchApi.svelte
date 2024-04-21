@@ -4,6 +4,7 @@
   import { onMount, tick } from "svelte";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
   import { books } from "@stores/books";
+  import ScrollBox from "./ScrollBox.svelte";
 
   let addBookOpen: boolean = false;
   let selectedBook: Book = {} as Book;
@@ -14,9 +15,7 @@
   let canAdd: boolean = false;
   let adding: boolean = false;
   let searchInput: HTMLInputElement;
-  let elSearchResults: HTMLDivElement;
-  let shadowTopOpacity: number = 0;
-  let shadowBottomOpacity: number = 0;
+  let updateScroll: () => void;
 
   function openDialog() {
     window.addEventListener("keydown", searchKey);
@@ -27,8 +26,6 @@
     searching = false;
     canAdd = false;
     adding = false;
-    shadowTopOpacity = 0;
-    shadowBottomOpacity = 0;
     tick().then(() => searchInput.focus());
   }
 
@@ -46,18 +43,12 @@
     }
   }
 
-  function resultsScroll() {
-    const currentScroll = elSearchResults.scrollTop / (elSearchResults.scrollHeight - elSearchResults.offsetHeight);
-    shadowTopOpacity = currentScroll;
-    shadowBottomOpacity = 1 - currentScroll;
-  }
-
   onMount(() => {
     const removeSearchListener = window.electronAPI.searchBookResults((books: Book[]) => {
       searchResults = books;
       searching = false;
       searched = true;
-      setTimeout(resultsScroll, 50);
+      setTimeout(updateScroll, 10);
     });
 
     const removeReceiveListener = window.electronAPI.receiveBookData((book: Book) => {
@@ -102,6 +93,7 @@
   >Search for Book <span class="icon"><MagnifyingGlass /></span></button
 >
 <Modal
+  flush
   bind:open={addBookOpen}
   heading="Search for Book"
   confirmWord="Add"
@@ -117,28 +109,36 @@
     </div>
     {#if searched && !searchResults.length}
       <div class="err">Error fetching results</div>
-    {:else}
-      <div class="searchResults" bind:this={elSearchResults} on:scroll={resultsScroll}>
-        <div class="shadow shadow__top" style:opacity={shadowTopOpacity}></div>
-        <div class="shadow shadow__bottom" style:opacity={shadowBottomOpacity}></div>
-        <div class="searchResults__results">
-          {#each searchResults as book}
-            <div class="book" class:selected={selectedBook.cache?.searchId === book.cache.searchId}>
-              {#if book.images.hasImage}
-                <button class="book__inner book__inner--image" on:click={() => selectBook(book)}>
-                  <img src={book.cache.thumbnail?.replace(/^http:/, "https:")} alt="" />
-                </button>
-              {:else}
-                <button class="book__inner book__inner--noimage" on:click={() => selectBook(book)}>
-                  <span>{book.title} by {book.authors.map((a) => a.name).join(", ")}</span>
-                </button>
-              {/if}
-              <div class="book__meta">
-                {book.datePublished}
-              </div>
-            </div>
-          {/each}
-        </div>
+    {:else if searched}
+      <div class="searchHeader">
+        <div class="searchHeader__cover">&nbsp;</div>
+        <div class="searchHeader__title">Title</div>
+        <div class="searchHeader__authors">Author(s)</div>
+        <div class="searchHeader__datePublished">Publish Date</div>
+      </div>
+      <div class="searchResults">
+        <ScrollBox bind:updateScroll>
+          <div class="searchResults__results">
+            {#each searchResults as book}
+              <button
+                class="book"
+                tabindex="0"
+                role="radio"
+                on:click={() => selectBook(book)}
+                aria-checked={selectedBook?.cache?.searchId === book.cache?.searchId}
+              >
+                <div class="book__cover">
+                  {#if book.images.hasImage}
+                    <img src={book.cache.thumbnail?.replace(/^http:/, "https:")} alt="" />
+                  {/if}
+                </div>
+                <div class="book__title">{book.title}</div>
+                <div class="book__authors">{book.authors.map((a) => a.name).join(", ")}</div>
+                <div class="book__datePublished">{book.datePublished}</div>
+              </button>
+            {/each}
+          </div>
+        </ScrollBox>
       </div>
     {/if}
   </div>
@@ -146,115 +146,105 @@
 
 <style lang="scss">
   .searchArea {
+    --search-bar-height: 3.25rem;
+    --search-header-height: 3rem;
+
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
     height: 100%;
-  }
 
-  .search {
-    display: flex;
-    width: 100%;
-
-    input[type="text"] {
-      margin-right: 0.5rem;
-      width: 100%;
-    }
-  }
-
-  .err {
-    padding: 2rem;
-  }
-
-  .searchResults {
-    position: relative;
-    margin: 0.5rem 0;
-    width: 100%;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--c-subtle) transparent;
-
-    .shadow {
-      position: sticky;
-      left: 0;
-      z-index: 100;
-      width: 100%;
-      height: 1.25rem;
-
-      &__top {
-        top: 0;
-        background: radial-gradient(55% 1rem at top center, rgba(0 0 0 / 67%) 0%, transparent 100%);
-      }
-
-      &__bottom {
-        top: calc(100% - 1.25rem);
-        background: radial-gradient(55% 1rem at bottom center, rgba(0 0 0 / 67%) 0%, transparent 100%);
-      }
-    }
-
-    &__results {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap: 0.5rem;
-    }
-  }
-
-  .book {
-    height: 14rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    &__inner {
-      height: 14rem;
+    .search {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      background-color: transparent;
-      border: none;
-      padding: 0;
-      margin: 0;
+      width: 100%;
+      height: var(--search-bar-height);
+      padding: 0.5rem;
+      // border-bottom: 1px solid var(--c-overlay-border);
 
-      &--image {
-        max-width: 9rem;
-
-        img {
-          max-height: 100%;
-          max-width: 9rem;
-          border: 3px solid transparent;
-        }
-
-        &:hover img {
-          border-color: var(--c-image-select);
-        }
-      }
-
-      &--noimage {
-        width: 9rem;
-        background-color: var(--c-subtle);
-        border: 3px solid transparent;
-
-        &:hover {
-          border-color: var(--c-image-select);
-        }
+      input[type="text"] {
+        margin-right: 0.5rem;
+        width: 100%;
       }
     }
 
-    &__meta {
-      font-size: 0.9rem;
-      color: var(--c-text-muted);
+    .err {
+      padding: 2rem;
     }
 
-    &.selected {
-      .book__inner {
-        &--image img,
-        &--noimage {
-          border-color: var(--c-image-select);
+    .searchResults {
+      height: calc(100% - var(--search-bar-height) - var(--search-header-height));
+      width: 100%;
+
+      &__results {
+        .book {
+          height: 5rem;
+          cursor: pointer;
+          background: none;
+          border: 0;
+          color: var(--c-text);
+          background-color: var(--c-table-row);
+
+          &:nth-child(odd) {
+            background-color: var(--c-table-row-alt);
+          }
+
+          &__cover {
+            text-align: center;
+
+            img {
+              height: 4rem;
+              max-width: 3rem;
+              box-shadow: 0.05rem 0.05rem 0.25rem -0.1rem rgb(0 0 0 / 25%);
+            }
+          }
+
+          &:hover {
+            background-color: var(--c-muted);
+          }
+
+          &[aria-checked="true"] {
+            background-color: var(--c-table-row-selected);
+          }
         }
       }
     }
+  }
+
+  .book,
+  .searchHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    user-select: none;
+    text-align: left;
+    padding: 0;
+
+    &__cover {
+      padding-left: 0.5rem;
+      width: 6rem;
+    }
+
+    &__title {
+      width: 24vw;
+      max-width: 22rem;
+    }
+
+    &__authors {
+      width: 22vw;
+      max-width: 20rem;
+    }
+
+    &__datePublished {
+      white-space: nowrap;
+      padding-right: 1rem;
+      min-width: 7rem;
+    }
+  }
+
+  .searchHeader {
+    height: var(--search-header-height);
+    border-bottom: 1px solid var(--c-overlay-border);
   }
 </style>
