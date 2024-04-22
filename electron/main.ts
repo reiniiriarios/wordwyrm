@@ -7,23 +7,22 @@ import packageJson from "../package.json";
 
 import { UserSettings } from "../types/global";
 
+import ENV from "../env.cjs";
 import bridge from "./bridge";
 import autoUpdate from "./autoUpdate";
 
 import { DATA_PATH, initUserDirs, loadSettings, saveSettings } from "./data/userData";
 
 const PORT = 5000;
-const DEV_MODE = process.env.WYRM_ENV === "dev";
-const SCREENSHOT_MODE = process.env.WYRM_PREV === "true";
 
 /**
  * Startup.
  */
 app.on("ready", () => {
   // Setup logging
-  log.transports.file.level = DEV_MODE ? "debug" : "info";
+  log.transports.file.level = ENV === "prod" ? "info" : "debug";
   log.transports.file.format = "{h}:{i}:{s}.{ms} [{level}] {text}";
-  log.transports.console.level = DEV_MODE ? "debug" : "info";
+  log.transports.console.level = ENV === "prod" ? "info" : "debug";
   log.transports.console.format = ({ message }: { message: LogMessage }): unknown[] => {
     const d = message.date || new Date();
     const h = d.getHours().toString(10).padStart(2, "0");
@@ -40,10 +39,7 @@ app.on("ready", () => {
   log.initialize();
 
   // Start
-  log.info(`Starting in ${DEV_MODE ? "DEV" : "PRODUCTION"} mode`);
-  if (SCREENSHOT_MODE) {
-    log.info("SCREENSHOT mode active");
-  }
+  log.info(`Starting: env=${ENV}`);
 
   // Create user data directories if not already present.
   const migrateData = initUserDirs();
@@ -92,9 +88,9 @@ function createWindow(settings: UserSettings) {
   });
   mainWindow.removeMenu();
 
-  if (DEV_MODE) {
+  if (ENV !== "prod") {
     mainWindow.loadURL(`http://localhost:${PORT}`);
-    if (!SCREENSHOT_MODE) {
+    if (ENV !== "screenshot") {
       log.info("Opening dev tools");
       mainWindow.webContents.openDevTools();
     }
@@ -102,15 +98,17 @@ function createWindow(settings: UserSettings) {
     mainWindow.loadFile(path.join(__dirname, "../../index.html"));
   }
 
-  if (!SCREENSHOT_MODE) {
+  if (ENV !== "screenshot") {
     mainWindow.setBounds(settings.bounds);
   }
 
   mainWindow.on("close", function () {
     // only if already loaded, thx
-    // use default size for screenshot mode
-    if (bridge.currentSettings && !SCREENSHOT_MODE) {
-      bridge.currentSettings.bounds = mainWindow.getBounds();
+    if (bridge.currentSettings) {
+      // don't change screenshot bounds
+      if (ENV !== "screenshot") {
+        bridge.currentSettings.bounds = mainWindow.getBounds();
+      }
       saveSettings(bridge.currentSettings, {}, (err: Error) => {
         if (err) {
           log.error(err);

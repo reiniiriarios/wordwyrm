@@ -14,9 +14,9 @@ import url from "url";
 import { spawn } from "child_process";
 
 import tsconfig from "./tsconfig.json" assert { type: "json" };
+import ENV from "./env.cjs";
 
 const PORT = 5000;
-const production = process.env.WYRM_ENV === "prod" ? true : false;
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -88,12 +88,12 @@ export default {
     nodePolyfills(),
     svelte({
       preprocess: sveltePreprocess({
-        sourceMap: !production,
+        sourceMap: ENV !== "prod",
         scss: { includePaths: ["app/**/*.scss"] },
       }),
       compilerOptions: {
         // enable run-time checks when not in production
-        dev: !production,
+        dev: ENV !== "prod",
       },
     }),
 
@@ -112,7 +112,7 @@ export default {
     commonjs(),
     typescript({
       sourceMap: true,
-      inlineSources: !production,
+      inlineSources: ENV !== "prod",
     }),
     // we'll extract any component CSS out into
     // a separate file - better for performance
@@ -120,11 +120,11 @@ export default {
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated
-    !production && serve(),
+    ENV !== "prod" && serve(),
 
     // Watch the `public` directory and refresh the
     // browser on changes when not in production
-    !production && livereload({ watch: "dist", delay: 200 }),
+    ENV !== "prod" && livereload({ watch: "dist", delay: 200 }),
   ],
 
   watch: {

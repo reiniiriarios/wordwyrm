@@ -4,8 +4,7 @@ import log from "electron-log/main";
 import packageJson from "../package.json";
 import WyrmError from "./error";
 import BUILD from "./build";
-
-const DEV = process.env.WYRM_ENV === "dev";
+import ENV from "../env.cjs";
 
 const GH_USER = "reiniiriarios";
 const GH_REPO = "wordwyrm";
@@ -88,7 +87,7 @@ class AppUpdater {
           log.info(`Up to date, running ${latestVersion}`);
           return;
         }
-        if (DEV) {
+        if (ENV !== "prod") {
           log.info(`Version mismatch: latest is ${latestVersion}, running ${packageJson.version}`);
         } else {
           log.info(`Update available: ${latestVersion}, running ${packageJson.version}`);

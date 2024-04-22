@@ -4,6 +4,7 @@ import * as path from "path";
 import log from "electron-log/main";
 import { UserSettings } from "../../types/global";
 import WyrmError from "../error";
+import ENV from "../../env.cjs";
 
 // Get platform-idiomatic user data directory.
 let dataPath: string;
@@ -23,7 +24,7 @@ if (process.env.APPDATA) {
 }
 export const DATA_PATH = path.join(dataPath, dataDir);
 
-const SCREENSHOT_MODE = process.env.WYRM_PREV === "true";
+const settingsFile = `settings${ENV ? `-${ENV}` : ""}.yaml`;
 
 /**
  * Create user data directories if not already present.
@@ -136,14 +137,28 @@ export function isTypeBookGeneric(obj: unknown): obj is BookGeneric {
 export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
   try {
     log.debug("Loading settings");
-    const sf = path.join(DATA_PATH, "settings.yaml");
+    const sf = path.join(DATA_PATH, settingsFile);
+    let settings: UserSettings;
     if (!fs.existsSync(sf)) {
-      saveYaml(sf, {});
-      return {} as UserSettings;
-    }
-    const settings = readYaml(sf);
-    if (!isTypeUserSettings(settings)) {
-      throw new Error("Settings data invalid");
+      // No settings file, set minimum defaults.
+      log.warn("No settings file found, creating.");
+      settings = {
+        booksDir: path.join(DATA_PATH, "books"),
+      } as UserSettings;
+      saveYaml(sf, settings);
+    } else {
+      // Read settings.
+      const yaml = readYaml(sf);
+      if (isTypeUserSettings(yaml)) {
+        settings = yaml;
+      } else {
+        // Reset settings.
+        log.error("Settings invalid. Backing up and setting defaults.");
+        fs.copyFileSync(sf, `${sf}.bak`);
+        settings = {
+          booksDir: path.join(DATA_PATH, "books"),
+        } as UserSettings;
+      }
     }
 
     // Defaults
@@ -165,8 +180,6 @@ export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
     }
     if (!settings.booksDir) {
       settings.booksDir = path.join(DATA_PATH, "books");
-    } else if (SCREENSHOT_MODE) {
-      settings.booksDir = path.join(DATA_PATH, "DEV-screenshot-mode");
     } else if (args?.migrateData) {
       // -- upgrade from 1.24.0 --
       if (settings.booksDir.startsWith(path.join(dataPath, "me.reinii.wordwyrm"))) {
@@ -195,7 +208,7 @@ export function saveSettings(
   callback: (error?: WyrmError) => void = () => {},
 ) {
   log.debug("Saving settings");
-  saveYaml(path.join(DATA_PATH, "settings.yaml"), settings);
+  saveYaml(path.join(DATA_PATH, settingsFile), settings);
   if (!options.moveData) {
     return callback();
   }
