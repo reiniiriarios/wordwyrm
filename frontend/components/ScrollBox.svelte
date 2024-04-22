@@ -57,7 +57,7 @@
     &__shadow {
       position: sticky;
       left: 0;
-      z-index: 100;
+      z-index: 50;
       width: 100%;
       height: var(--shadow-height);
       transition: opacity 0.05s linear;

@@ -43,7 +43,7 @@
 .dropdownFilter {
   position: relative;
   display: inline-block;
-  z-index: 15;
+  z-index: 55;
 
   &__selected {
     min-width: 7rem;
@@ -54,7 +54,7 @@
     position: absolute;
     min-width: 7rem;
     box-shadow: 0 0.5rem 1rem 0 var(--shadow-3);
-    z-index: 20;
+    z-index: 60;
   }
 
   &__opt {

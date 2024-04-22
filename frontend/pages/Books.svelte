@@ -89,7 +89,7 @@
 <style lang="scss">
   .listFilter {
     position: relative;
-    z-index: 9;
+    z-index: 51;
     box-shadow: 0 1rem 1rem -1rem var(--shadow-1);
   }
 
