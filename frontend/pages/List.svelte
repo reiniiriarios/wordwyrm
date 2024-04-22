@@ -10,7 +10,6 @@
   import GettingStarted from "@components/GettingStarted.svelte";
   import { books } from "@stores/books";
   import { formatDate } from "@scripts/formatDate";
-  import ScrollBox from "@components/ScrollBox.svelte";
   import ScrollTable from "@components/ScrollTable.svelte";
 
   onMount(() => {
