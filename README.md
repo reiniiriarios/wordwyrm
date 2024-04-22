@@ -10,7 +10,7 @@ control of your data.
 
 ![](docs/screenshot-14-linux.png)
 
-## Download ⬇
+## Download
 
 <p>
 <a href="https://apps.microsoft.com/detail/Wordwyrm/9PD0SF19CNLJ?cid=github&mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" height="60"/></a>
@@ -26,7 +26,7 @@ control of your data.
 [![Static Badge](https://img.shields.io/badge/Red_%20_Hat_%20_Package-Get-blue?style=for-the-badge&logo=redhat&logoColor=%23fff&color=%23cc0000)](https://github.com/reiniiriarios/wordwyrm/releases/latest) &nbsp;
 [![Static Badge](https://img.shields.io/badge/AppImage-Get-blue?style=for-the-badge&logo=linux&logoColor=%23fff&color=%23FCC624)](https://github.com/reiniiriarios/wordwyrm/releases/latest)
 
-## Data :open_file_folder:
+## Data
 
 When first using, set a directory under :gear: settings to store book data. Data is stored in
 easy-to-parse yaml files, with cover images stored alongside them, within author directories. To
@@ -60,9 +60,9 @@ ids:
   internetArchiveId: gideonninth0000muir
 ```
 
-## Google Cloud for Book Cover Images :cloud:
+## Google Cloud for Book Cover Images
 
-In order to enable Google Image Search for book covers in-app, you will need a Google Cloud account.
+In order to enable Google Image Search for book covers **in-app**, you will need a Google Cloud account.
 [Create an API key](https://console.cloud.google.com/apis/credentials) that has permissions to
 use the **Custom Search API**. You will also need a
 [Programmable Search Engine](https://programmablesearchengine.google.com/) id. Enable
