@@ -1,10 +1,30 @@
 # <img src="assets/icons/32x32.png" alt="" /> Wordwyrm
 
+<!-- [![GitHub Release](https://img.shields.io/github/v/release/reiniiriarios/wordwyrm?label=Latest%20Release&logo=github&logoColor=%23fff)](https://github.com/reiniiriarios/wordwyrm/releases/latest)
+[![Download on Snapcraft](https://snapcraft.io/wordwyrm/badge.svg)](https://snapcraft.io/wordwyrm)
+![Build Status](https://github.com/reiniiriarios/wordwyrm/actions/workflows/release.yaml/badge.svg) -->
+
 A cross-platform desktop app for tracking what books you've read and when. The data is stored as
 YAML files and JPGs in author directories in a location of your choosing, so you're always in
 control of your data.
 
 ![](docs/screenshot-14-linux.png)
+
+## Download ⬇
+
+<p>
+<a href="https://apps.microsoft.com/detail/Wordwyrm/9PD0SF19CNLJ?cid=github&mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" height="60"/></a>
+&nbsp;
+<a href="https://snapcraft.io/wordwyrm"><img alt="Get it from the Snap Store" src="https://snapcraft.io/static/images/badges/en/snap-store-black.svg" height="60" /></a>
+</p>
+
+[![Get Windows Installer](https://img.shields.io/badge/Windows_Installer-Get-blue?style=for-the-badge&logo=windows&logoColor=%23fff&color=%230078D4)](https://github.com/reiniiriarios/wordwyrm/releases/latest) &nbsp;
+[![Static Badge](https://img.shields.io/badge/Windows_Portable-Get-blue?style=for-the-badge&logo=windows&logoColor=%23fff&color=%2362ac06)](https://github.com/reiniiriarios/wordwyrm/releases/latest) &nbsp;
+[![Static Badge](https://img.shields.io/badge/macOS-Get-blue?style=for-the-badge&logo=apple&logoColor=%23fff&color=%23222)](https://github.com/reiniiriarios/wordwyrm/releases/latest)
+
+[![Static Badge](https://img.shields.io/badge/Debian_%20_Package-Get-blue?style=for-the-badge&logo=debian&logoColor=%23fff&color=%23A81D33)](https://github.com/reiniiriarios/wordwyrm/releases/latest) &nbsp;
+[![Static Badge](https://img.shields.io/badge/Red_%20_Hat_%20_Package-Get-blue?style=for-the-badge&logo=redhat&logoColor=%23fff&color=%23cc0000)](https://github.com/reiniiriarios/wordwyrm/releases/latest) &nbsp;
+[![Static Badge](https://img.shields.io/badge/AppImage-Get-blue?style=for-the-badge&logo=linux&logoColor=%23fff&color=%23FCC624)](https://github.com/reiniiriarios/wordwyrm/releases/latest)
 
 ## Data :open_file_folder:
 
