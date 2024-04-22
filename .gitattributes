@@ -1,0 +1,12 @@
+* text=auto
+
+*.js      eol=lf
+*.cjs     eol=lf
+*.mjs     eol=lf
+*.ts      eol=lf
+*.json    eol=lf
+*.svelte  eol=lf
+*.scss    eol=lf
+*.html    eol=lf
+*.md      eol=lf
+*.yaml    eol=lf
