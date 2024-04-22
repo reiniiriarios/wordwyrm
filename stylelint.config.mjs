@@ -4,9 +4,16 @@ export default {
   customSyntax: "postcss-html",
   rules: {
     "selector-class-pattern": [
-      "^[a-z](?:[_A-Za-z0-9]*[A-Za-z0-9]+)?$",
+      "^(?:[a-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)*(?:__[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)?(?:--[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)?)?(?:\\[.+\\])?$",
       {
-        message: "Expected class selector to be camelCase with underscore",
+        message: "Expected property name to be in BEM format",
+        resolveNestedSelectors: true,
+      },
+    ],
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        ignorePseudoClasses: ["global", "export"],
       },
     ],
   },

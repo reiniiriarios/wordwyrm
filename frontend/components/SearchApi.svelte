@@ -145,6 +145,43 @@
 </Modal>
 
 <style lang="scss">
+  .book,
+  .searchHeader {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    user-select: none;
+    text-align: left;
+    padding: 0;
+
+    &__cover {
+      padding-left: 0.5rem;
+      width: 6rem;
+    }
+
+    &__title {
+      width: 24vw;
+      max-width: 22rem;
+    }
+
+    &__authors {
+      width: 22vw;
+      max-width: 20rem;
+    }
+
+    &__datePublished {
+      white-space: nowrap;
+      padding-right: 1rem;
+      min-width: 7rem;
+    }
+  }
+
+  .searchHeader {
+    height: var(--search-header-height);
+    border-bottom: 1px solid var(--c-overlay-border);
+  }
+
   .searchArea {
     --search-bar-height: 3.25rem;
     --search-header-height: 3rem;
@@ -160,7 +197,6 @@
       width: 100%;
       height: var(--search-bar-height);
       padding: 0.5rem 0.75rem;
-      // border-bottom: 1px solid var(--c-overlay-border);
 
       input[type="text"] {
         margin-right: 0.75rem;
@@ -209,42 +245,5 @@
         }
       }
     }
-  }
-
-  .book,
-  .searchHeader {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    user-select: none;
-    text-align: left;
-    padding: 0;
-
-    &__cover {
-      padding-left: 0.5rem;
-      width: 6rem;
-    }
-
-    &__title {
-      width: 24vw;
-      max-width: 22rem;
-    }
-
-    &__authors {
-      width: 22vw;
-      max-width: 20rem;
-    }
-
-    &__datePublished {
-      white-space: nowrap;
-      padding-right: 1rem;
-      min-width: 7rem;
-    }
-  }
-
-  .searchHeader {
-    height: var(--search-header-height);
-    border-bottom: 1px solid var(--c-overlay-border);
   }
 </style>

@@ -48,7 +48,7 @@
   </table>
 </div>
 
-<style global lang="scss">
+<style lang="scss">
   .scrollTable {
     --shadow-height: 1.25rem;
     --head-height: 3rem;
@@ -95,7 +95,9 @@
       z-index: 5;
       height: var(--head-height);
 
-      th {
+      :global(th) {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
         text-align: left;
         background-color: var(--c-base);
         position: sticky;
@@ -109,16 +111,16 @@
           color: var(--c-text);
         }
 
-        &.selected {
-          color: var(--c-text);
-        }
-
         &:first-child {
           padding-left: 2rem;
         }
 
         &:last-child {
           padding-right: 2rem;
+        }
+
+        :global(&.selected) {
+          color: var(--c-text);
         }
       }
     }
@@ -127,36 +129,35 @@
       position: relative;
       z-index: 3;
 
-      tr {
+      :global(tr) {
         cursor: pointer;
         background-color: var(--c-table2-row);
 
-        td:first-child {
-          padding-left: 2rem;
-        }
+        :global(td) {
+          font-size: 1rem;
+          padding: 0.5rem 1rem;
 
-        td:last-child {
-          padding-right: 2rem;
+          &:first-child {
+            padding-left: 2rem;
+          }
+
+          &:last-child {
+            padding-right: 2rem;
+          }
         }
 
         &:nth-child(odd) {
           background-color: var(--c-table2-row-alt);
         }
 
-        &:hover td {
+        &:hover :global(td) {
           background-color: var(--c-table2-hover);
 
-          .tag {
+          :global(.tag) {
             background-color: var(--c-table2-hover2);
           }
         }
       }
-    }
-
-    th,
-    td {
-      font-size: 1rem;
-      padding: 0.5rem 1rem;
     }
   }
 </style>
