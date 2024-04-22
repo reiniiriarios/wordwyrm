@@ -17,7 +17,11 @@
 
   function openDialog() {
     addBookOpen = true;
-    book = {} as Book;
+    book = {
+      images: {},
+      ids: {},
+      cache: {},
+    } as Book;
     authors = "";
     tags = "";
     addImagePath = "";

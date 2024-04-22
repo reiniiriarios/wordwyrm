@@ -73,6 +73,7 @@ async function saveBookImage(booksDir: string, book: Book, url: string) {
     if (!booksDir) {
       throw new Error("Books directory not specified.");
     }
+    log.debug(`Saving image: ${url}`);
     if (!book.cache.authorDir) {
       book.cache.authorDir = authorsToDir(book.authors);
     }
