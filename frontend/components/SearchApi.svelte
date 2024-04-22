@@ -89,9 +89,9 @@
   }
 </script>
 
-<button type="button" class="btn" on:click={openDialog}
-  >Search for Book <span class="icon"><MagnifyingGlass /></span></button
->
+<button type="button" class="btn" on:click={openDialog}>
+  Add Book by Search<span class="icon"><MagnifyingGlass /></span>
+</button>
 <Modal
   flush
   bind:open={addBookOpen}
