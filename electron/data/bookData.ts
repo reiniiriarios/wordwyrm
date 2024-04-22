@@ -18,6 +18,7 @@ import { searchOpenLibraryWorkByISBN } from "../api/openLibrary";
  */
 export function initBookDirs(dir: string) {
   if (!fs.existsSync(dir)) {
+    log.warn(`Books directory missing, creating '${dir}'`);
     fs.mkdirSync(dir, { recursive: true });
   }
 }
