@@ -31,6 +31,7 @@ class AppUpdater {
     //   macOS:   dmg
     //   Linux:   appImage, deb, rpm
     //   Windows: nsis
+    autoUpdater.disableWebInstaller = true;
     autoUpdater.logger = log;
     autoUpdater.on("checking-for-update", () => {
       log.info("Checking for available auto-update.");
