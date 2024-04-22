@@ -4,6 +4,7 @@
   import ImageSquare from "phosphor-svelte/lib/ImageSquare";
   import { books } from "@stores/books";
   import Modal from "@components/Modal.svelte";
+  import ScrollBox from "./ScrollBox.svelte";
 
   export let book: Book = {} as Book;
   export let selectedImageUrl: string = "";
@@ -103,95 +104,113 @@
 </button>
 <Modal
   bind:open={isOpen}
-  heading="Search for Book"
+  heading="Search for Cover Image"
   confirmWord="Save"
   on:confirm={addImage}
   bind:canConfirm={canAdd}
   loading={saving}
+  maxHeight="38rem"
 >
-  <div class="results">
+  <div class="imageSearchResults">
     {#if err}
       <div class="err">{err}</div>
     {/if}
     {#if searching}
       <div class="searching">Searching...</div>
     {:else}
-      {#each results as res}
-        <button class="result" class:selected={res.image === selectedImageUrl} on:click={() => selectImage(res.image)}>
-          <div class="image">
-            <img src={res.thumbnail} alt="" />
+      <div class="resultsContainer">
+        <ScrollBox>
+          <div class="results">
+            {#each results as res}
+              <button
+                class="result"
+                class:selected={res.image === selectedImageUrl}
+                on:click={() => selectImage(res.image)}
+              >
+                <div class="image">
+                  <img src={res.thumbnail} alt="" />
+                </div>
+                <div class="details">
+                  {res.width} x {res.height}
+                </div>
+              </button>
+            {/each}
           </div>
-          <div class="details">
-            {res.width} x {res.height}
-          </div>
-        </button>
-      {/each}
+        </ScrollBox>
+      </div>
+    {/if}
+    {#if !searching}
+      <div class="nextPage">
+        <button class="btn btn--light" disabled={page === 0} on:click={prevPage}>Previous Page</button>
+        <button class="btn btn--light" disabled={page === 9 || results?.length < 10} on:click={nextPage}
+          >Next Page</button
+        >
+      </div>
     {/if}
   </div>
-  {#if !searching}
-    <div class="nextPage">
-      {#if page > 0}
-        <button class="btn btn--light" on:click={prevPage}>Previous Page</button>
-      {/if}
-      {#if page < 9 && results?.length >= 10}
-        <button class="btn btn--light" on:click={nextPage}>Next Page</button>
-      {/if}
-    </div>
-  {/if}
 </Modal>
 
 <style lang="scss">
-  .results {
-    padding: 0.5rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    gap: 0.5rem;
-    overflow-y: auto;
-    height: 90%;
-    scrollbar-width: thin;
-    scrollbar-color: var(--c-subtle) transparent;
-  }
+  .imageSearchResults {
+    --results-nav-height: 4rem;
 
-  .result {
-    height: 14rem;
-    cursor: pointer;
-    background-color: transparent;
-    color: var(--c-text);
-    border: 0;
-    padding: 0;
-    margin: 0;
+    height: 100%;
 
-    .image {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      img {
-        max-width: 100%;
-        max-height: 100%;
-        border: 3px solid transparent;
-      }
+    .resultsContainer {
+      height: calc(100% - var(--results-nav-height));
+      max-height: 27rem;
     }
 
-    .details {
-      padding: 0.25rem;
-      text-align: center;
+    .results {
+      padding: 0.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      gap: 0.5rem;
     }
 
-    &.selected {
+    .result {
+      height: 12rem;
+      cursor: pointer;
+      background-color: transparent;
+      color: var(--c-text);
+      border: 0;
+      padding: 0;
+      margin: 0;
+
       .image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-height: 10rem;
+
         img {
-          border-color: var(--c-image-select);
+          max-width: 100%;
+          max-height: 10rem;
+          box-shadow: 0.25rem 0.25rem 0.5rem 0 var(--shadow-1);
+        }
+      }
+
+      .details {
+        padding: 0.5rem;
+        text-align: center;
+      }
+
+      &.selected {
+        .image {
+          img {
+            outline: 0.25rem solid var(--c-image-select);
+          }
         }
       }
     }
-  }
 
-  .nextPage {
-    margin: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
+    .nextPage {
+      height: var(--results-nav-height);
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
   }
 </style>

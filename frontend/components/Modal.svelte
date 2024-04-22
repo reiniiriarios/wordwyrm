@@ -10,6 +10,7 @@
   export let cancelWord: string = "Cancel";
   export let heading: string;
   export let height: string = "";
+  export let maxHeight: string = "";
   export let warning: boolean = false;
   export let loading: boolean = false;
   export let small: boolean = false;
@@ -52,7 +53,7 @@
 <!-- keyboard interaction handled above -->
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
 <div class="modal" class:open class:small class:large on:click|self={close}>
-  <div class="modal__window" role="dialog" style:height>
+  <div class="modal__window" role="dialog" style:height style:max-height={maxHeight}>
     <div class="modal__header">{heading}</div>
     <div class="modal__body" class:flush><slot /></div>
     <div class="modal__actions">
