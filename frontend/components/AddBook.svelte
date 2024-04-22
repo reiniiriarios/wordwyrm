@@ -70,7 +70,7 @@
 <button type="button" class="btn" on:click={openDialog}>Add Book <span class="icon"><Plus /></span></button>
 <Modal
   large
-  height="32rem"
+  height="33rem"
   bind:open={addBookOpen}
   heading="Add Book"
   confirmWord="Add"

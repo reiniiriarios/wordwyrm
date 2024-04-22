@@ -125,14 +125,14 @@
     &__header {
       height: var(--header-height);
       font-size: 1.125rem;
-      padding: 0.5rem;
+      padding: 0.75rem;
       border-bottom: 1px solid var(--c-overlay-border);
     }
 
     &__body {
       height: calc(100% - var(--modal-header-height) - var(--modal-footer-height));
       font-size: 1rem;
-      padding: 0.75rem 0.5rem;
+      padding: 1rem 0.75rem;
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: var(--c-subtle) transparent;
@@ -145,7 +145,7 @@
     &__actions {
       height: var(--modal-footer-height);
       border-top: 1px solid var(--c-overlay-border);
-      padding: 0.5rem;
+      padding: 0.5rem 0.75rem;
       display: flex;
       justify-content: right;
       align-items: center;

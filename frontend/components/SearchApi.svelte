@@ -159,11 +159,11 @@
       display: flex;
       width: 100%;
       height: var(--search-bar-height);
-      padding: 0.5rem;
+      padding: 0.5rem 0.75rem;
       // border-bottom: 1px solid var(--c-overlay-border);
 
       input[type="text"] {
-        margin-right: 0.5rem;
+        margin-right: 0.75rem;
         width: 100%;
       }
     }
