@@ -1,6 +1,10 @@
+import * as path from "path";
+import * as fs from "fs";
 import { describe, it } from "mocha";
 import { browser, $, $$ } from "@wdio/globals";
 import testData from "../testData";
+
+const settingsFile = path.join(path.resolve("."), "test", "data", "settings-test.yaml");
 
 const bookOrder: Record<string, [string, string][]> = {
   read: [
@@ -41,6 +45,8 @@ const bookOrder: Record<string, [string, string][]> = {
   ],
 };
 
+const NUM_TEST_BOOKS = 4;
+
 async function waitTillBooksLoad(): Promise<WebdriverIO.ElementArray> {
   const bookLinks = await $$(".bookList .book > a");
   await browser.waitUntil(
@@ -52,16 +58,21 @@ async function waitTillBooksLoad(): Promise<WebdriverIO.ElementArray> {
       timeoutMsg: "expected book list to load",
     },
   );
+  expect(bookLinks.length).toBe(NUM_TEST_BOOKS);
   return bookLinks;
 }
 
-const NUM_TEST_BOOKS = 4;
-
 describe("books list", () => {
+  before(() => {
+    // Clear settings
+    if (fs.existsSync(settingsFile)) {
+      fs.rmSync(settingsFile);
+    }
+  });
+
   it("should load all books in test data in order", async () => {
     // Get book links
     const bookLinks = await waitTillBooksLoad();
-    expect(bookLinks.length).toBe(NUM_TEST_BOOKS);
     let i = 0;
     for await (const bookLink of bookLinks) {
       // Check href
@@ -93,7 +104,6 @@ describe("books list", () => {
   it("should sort books correctly", async () => {
     // Get books
     let bookLinks = await waitTillBooksLoad();
-    expect(bookLinks.length).toBe(NUM_TEST_BOOKS);
     // Get buttons
     const sortButtons = await $$(".filter--sort .filter__btn");
     const directionButton = await $(".filter--sort .filter__direction");
