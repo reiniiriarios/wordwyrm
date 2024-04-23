@@ -24,7 +24,7 @@ if (process.env.APPDATA) {
 }
 export const DATA_PATH = path.join(dataPath, dataDir);
 
-const settingsFile = `settings${ENV ? `-${ENV}` : ""}.yaml`;
+const settingsFile = ENV === "prod" ? "settings.yaml" : `settings-${ENV}.yaml`;
 
 /**
  * Create user data directories if not already present.
