@@ -1,17 +1,21 @@
-# App #
+# App
 /dist
 /build
 /electron/build.ts
 
-# NodeJS #
+# Test
+/test/data/logs
+/test/data/settings*.yaml
+
+# NodeJS
 npm-debug.log
 /node_modules
 
-# Logs #
+# Logs
 *.log
 *.lock
 
-# OS generated files #
+# OS generated files
 .DS_Store
 .DS_Store?
 ._*
@@ -20,13 +24,13 @@ npm-debug.log
 ehthumbs.db
 Thumbs.db
 
-# Backup generated files #
+# Backup generated files
 *~
 *.swp
 *.bak
 *#
 
-# Runtime data #
+# Runtime data
 pids
 *.pid
 *.seed

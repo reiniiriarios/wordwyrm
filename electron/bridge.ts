@@ -2,8 +2,6 @@ import path from "path";
 import { BrowserWindow, dialog, ipcMain, nativeTheme, net, protocol, shell } from "electron";
 
 import packageJson from "../package.json";
-import BUILD from "./build";
-import ENV from "../env.cjs";
 
 import { UserSettings } from "../types/global";
 import { parseErr } from "./error";

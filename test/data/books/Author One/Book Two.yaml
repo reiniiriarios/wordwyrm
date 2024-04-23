@@ -1,0 +1,19 @@
+version: "2"
+title: Book Two
+authors:
+  - name: Author One
+datePublished: "2000-01-01"
+tags:
+  - Fiction
+  - General
+series: "Some Series"
+seriesNumber: "2"
+timestampAdded: 1700000000020
+rating: 4
+description: ""
+notes: ""
+images:
+  hasImage: true
+  imageUpdated: 1700000000001
+ids:
+  isbn: X

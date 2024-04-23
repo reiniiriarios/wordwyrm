@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
-    "types": ["node", "mocha", "@wdio/globals/types", "@wdio/mocha-framework"]
+    "target": "ES2022",
+    "downlevelIteration": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "types": ["node", "mocha", "@wdio/globals/types", "@wdio/mocha-framework", "js-yaml"]
   }
 }

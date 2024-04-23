@@ -84,7 +84,7 @@ export default tseslint.config(
     },
     rules: {
       ...customRules.tsRules,
-      "no-console": "off",
+      "no-console": "warn",
     },
   },
   {

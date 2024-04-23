@@ -1,0 +1,33 @@
+version: "2"
+title: Book One
+authors:
+  - name: Author One
+    ids:
+      openLibraryId: ABC
+datePublished: "2001-01-01"
+dateRead: "2023-04-23"
+tags:
+  - Fiction
+  - General
+series: "Some Series"
+seriesNumber: "1"
+timestampAdded: 1700000000010
+rating: 3
+description: >-
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+  eiusmod tempor incididunt ut labore et dolore magna aliqua.
+notes: >-
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco
+  laboris nisi ut aliquip ex ea commodo consequat.
+images:
+  hasImage: true
+  imageUpdated: 1700000000001
+ids:
+  googleBooksId: ABCD
+  isbn: "123"
+  openLibraryId: /works/ABCD
+  amazonId: "456"
+  goodreadsId: "789"
+  internetArchiveId: bookoneabcd
+  libraryThingId: "101112"
+  oclcId: "131415"

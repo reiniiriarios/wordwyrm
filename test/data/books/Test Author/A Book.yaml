@@ -1,0 +1,18 @@
+version: "2"
+title: A Book
+authors:
+  - name: Test Author
+datePublished: "2002-01-01"
+dateRead: "2024-04-22"
+tags:
+  - Fiction
+  - General
+timestampAdded: 1700000000005
+rating: 4
+description: ""
+notes: ""
+images:
+  hasImage: true
+  imageUpdated: 1700000000001
+ids:
+  googleBooksId: X
