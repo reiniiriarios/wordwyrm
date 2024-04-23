@@ -13,7 +13,6 @@ rating: 4
 description: ""
 notes: ""
 images:
-  hasImage: true
-  imageUpdated: 1700000000001
+  hasImage: false
 ids:
   isbn: X

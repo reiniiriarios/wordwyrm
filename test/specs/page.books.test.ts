@@ -59,49 +59,72 @@ const NUM_TEST_BOOKS = 4;
 
 describe("books list", () => {
   it("should load all books in test data in order", async () => {
+    // Get book links
     const bookLinks = await waitTillBooksLoad();
     expect(bookLinks.length).toBe(NUM_TEST_BOOKS);
     let i = 0;
     for await (const bookLink of bookLinks) {
+      // Check href
       const href = await bookLink.getAttribute("href");
       expect(href).toMatch(/^#\/book\/[^/]+\/[^/]+$/);
       const [_hash, _page, a, b] = href.split("/");
+      // Against test data
       expect(testData[a]?.[b]?.authors?.[0]?.name).toBe(a);
       expect(testData[a]?.[b]?.title).toBe(b);
+      // Against default order
       expect(bookOrder.read[i][0]).toBe(a);
       expect(bookOrder.read[i][1]).toBe(b);
+      // Check images
+      if (testData[a]?.[b]?.images?.hasImage) {
+        const imgSrc = await bookLink.$("img").getAttribute("src");
+        expect(imgSrc).toBe(
+          `bookimage://${a.replace(/ /g, "%20")}/${b.replace(/ /g, "%20")}.jpg?t=${testData[a]?.[b]?.images?.imageUpdated ?? 0}`,
+        );
+      } else {
+        const title = await (await bookLink.$(".bookPlaceholder__title")).getText();
+        const author = await (await bookLink.$(".bookPlaceholder__author")).getText();
+        expect(title).toBe(b);
+        expect(author).toBe(a);
+      }
       i++;
     }
   });
 
   it("should sort books correctly", async () => {
+    // Get books
     let bookLinks = await waitTillBooksLoad();
     expect(bookLinks.length).toBe(NUM_TEST_BOOKS);
+    // Get buttons
     const sortButtons = await $$(".filter--sort .filter__btn");
     const directionButton = await $(".filter--sort .filter__direction");
     expect(sortButtons.length).toBe(Object.keys(bookOrder).length);
+    // Check data
     for await (const sortButton of sortButtons) {
       await sortButton.click();
       const order = await sortButton.getAttribute("data-val");
       bookLinks = await $$(".bookList .book > a");
       let n = 0;
+      // Check order
       for await (const bookLink of bookLinks) {
         const href = await bookLink.getAttribute("href");
-        const [_hash, _page, a, b] = href.split("/");
+        const [a, b] = href.split("/").slice(2);
         expect(bookOrder[order][n][0]).toBe(a);
         expect(bookOrder[order][n][1]).toBe(b);
         n++;
       }
+      // Flip asc/desc
       await directionButton.click();
       bookLinks = await $$(".bookList .book > a");
       n = NUM_TEST_BOOKS - 1;
+      // Check reverse order
       for await (const bookLink of bookLinks) {
         const href = await bookLink.getAttribute("href");
-        const [_hash, _page, a, b] = href.split("/");
+        const [a, b] = href.split("/").slice(2);
         expect(bookOrder[order][n][0]).toBe(a);
         expect(bookOrder[order][n][1]).toBe(b);
         n--;
       }
+      // Flip back
       await directionButton.click();
     }
   });

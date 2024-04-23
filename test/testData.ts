@@ -100,8 +100,7 @@ const data: { [author: string]: { [book: string]: Partial<Book> } } = {
       description: "",
       notes: "",
       images: {
-        hasImage: true,
-        imageUpdated: 1700000000001,
+        hasImage: false,
       },
     },
   },
@@ -122,8 +121,7 @@ const data: { [author: string]: { [book: string]: Partial<Book> } } = {
       description: "",
       notes: "",
       images: {
-        hasImage: true,
-        imageUpdated: 1700000000001,
+        hasImage: false,
       },
     },
     "Test Book": {
