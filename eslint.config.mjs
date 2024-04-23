@@ -68,6 +68,26 @@ export default tseslint.config(
     rules: customRules.tsRules,
   },
   {
+    files: ["test/**/*.ts"],
+    extends: [eslint.configs.recommended, ...tseslint.configs.recommended, eslintConfigPrettier],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
+      parser: tseslint.parser,
+      parserOptions: {
+        project: "test/tsconfig.json",
+      },
+    },
+    rules: {
+      ...customRules.tsRules,
+      "no-console": "off",
+    },
+  },
+  {
     ignores: ["build/", "dist/", "rollup.config.mjs"],
   },
 );
