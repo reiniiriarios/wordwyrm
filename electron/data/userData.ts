@@ -9,7 +9,10 @@ import ENV from "../../env.cjs";
 // Get platform-idiomatic user data directory.
 let dataPath: string;
 let dataDir: string;
-if (process.env.APPDATA) {
+if (ENV === "test") {
+  dataPath = path.resolve("./test");
+  dataDir = "data";
+} else if (process.env.APPDATA) {
   // Windows
   dataPath = process.env.APPDATA;
   dataDir = "WordwyrmData"; // "Wordwyrm" is used for app data.
@@ -33,14 +36,14 @@ const settingsFile = ENV === "prod" ? "settings.yaml" : `settings-${ENV}.yaml`;
  */
 export function initUserDirs(): boolean {
   if (!fs.existsSync(DATA_PATH)) {
-    log.debug("Data directory not found.");
+    log.warn("Data directory not found.");
     // -- upgrade from 1.24.0 --
     // move data dir on window and linux
     if (process.platform !== "darwin") {
       const oldDir = path.join(dataPath, "me.reinii.wordwyrm");
       if (fs.existsSync(oldDir)) {
-        log.debug("Migrating old data directory (>1.24.0)");
-        log.debug(`${oldDir} >> ${DATA_PATH}`);
+        log.warn("Migrating old data directory (>1.24.0)");
+        log.info(`${oldDir} >> ${DATA_PATH}`);
         try {
           fs.moveSync(oldDir, DATA_PATH);
           return true;
@@ -50,7 +53,7 @@ export function initUserDirs(): boolean {
       }
     }
     // -- end --
-    log.debug(`Creating: ${DATA_PATH}`);
+    log.info(`Creating: ${DATA_PATH}`);
     fs.mkdirSync(DATA_PATH, { recursive: true });
   }
   return false;
@@ -178,7 +181,11 @@ export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
     if (!settings.chartStartYear) {
       settings.chartStartYear = 2020;
     }
-    if (!settings.booksDir) {
+
+    if (ENV === "test") {
+      // Testing
+      settings.booksDir = path.join(DATA_PATH, "books");
+    } else if (!settings.booksDir) {
       settings.booksDir = path.join(DATA_PATH, "books");
     } else if (args?.migrateData) {
       // -- upgrade from 1.24.0 --
