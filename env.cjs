@@ -1,7 +1,4 @@
 const valid = ["prod", "dev", "screenshot", "test"];
-const ENV = process.env.WYRM_ENV;
-if (!valid.includes(ENV)) {
-  ENV = "prod";
-}
+const ENV = valid.includes(process.env.WYRM_ENV) ? process.env.WYRM_ENV : "prod";
 
 module.exports = ENV;
