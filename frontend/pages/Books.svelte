@@ -122,11 +122,11 @@
   }
 
   .bookListContainer {
+    background-color: var(--c-sub);
     height: calc(100vh - var(--page-nav-height) - var(--filter-height));
   }
 
   .bookList {
-    background-color: var(--c-sub);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
