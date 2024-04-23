@@ -45,6 +45,7 @@
     "build:deb": "npm run set:build deb && npm run build:electron && electron-builder --linux deb",
     "build:linux": "npm run set:build linux && npm run build:electron && electron-builder --linux appImage deb rpm",
     "build:snap": "npm run set:build snap && npm run build:electron && electron-builder --linux snap --publish onTag",
+    "test": "cross-env WYRM_ENV=test wdio run ./wdio.conf.ts",
     "newver": "ts-node scripts/updateVersion.ts",
     "prepare": "ts-patch install -s && npm run set:build dev"
   },
@@ -71,11 +72,16 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/croppie": "^2.6.4",
     "@types/js-yaml": "^4.0.9",
+    "@types/mocha": "^10.0.6",
     "@types/node": "^20.11.30",
     "@types/shelljs": "^0.8.15",
     "@types/yargs": "^17.0.32",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
+    "@wdio/cli": "^8.36.1",
+    "@wdio/local-runner": "^8.36.1",
+    "@wdio/mocha-framework": "^8.36.1",
+    "@wdio/spec-reporter": "^8.36.1",
     "asset-resizer": "^1.1.0",
     "electron": "^29.1.5",
     "electron-builder": "^24.13.3",
@@ -112,7 +118,11 @@
     "ts-patch": "^3.1.2",
     "typescript": "^5.4.3",
     "typescript-eslint": "^7.7.0",
-    "typescript-transform-paths": "^3.4.7"
+    "typescript-transform-paths": "^3.4.7",
+    "wdio-electron-service": "^6.4.1"
+  },
+  "overrides": {
+    "cacheable-request": "^8.3.1"
   },
   "build": {
     "productName": "Wordwyrm",

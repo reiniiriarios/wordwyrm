@@ -69,39 +69,3 @@ function createSettings() {
 export const settings = createSettings();
 
 export const currentTheme = writable(""); // not derived, need separate
-
-type PlatformInfo = {
-  platform: string;
-  arch: string;
-  pkg: string;
-  buildPlatform: string;
-  fileBrowser: string;
-};
-
-function createPlatform() {
-  const def: PlatformInfo = {
-    platform: "",
-    arch: "",
-    pkg: "",
-    buildPlatform: "",
-    fileBrowser: "",
-  };
-  const { subscribe, set } = writable(def);
-
-  const removeListener = window.electronAPI.platform((p: PlatformInfo) => {
-    p.fileBrowser = p.platform === "darwin" ? "Finder" : p.platform === "win32" ? "File Explorer" : "File Manager";
-    set(p);
-    log.info(`platform: ${p.platform}, arch: ${p.arch}, buildPlatform: ${p.buildPlatform}, package: ${p.pkg}`);
-  });
-
-  return {
-    subscribe,
-    destroy: () => {
-      removeListener();
-    },
-    fetch: () => {
-      window.electronAPI.getPlatform();
-    },
-  };
-}
-export const platform = createPlatform();

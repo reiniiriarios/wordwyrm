@@ -1,6 +1,6 @@
 <script lang="ts">
   import ArrowSquareOut from "phosphor-svelte/lib/ArrowSquareOut";
-  import { platform, version } from "@stores/settings";
+  import { version } from "@stores/settings";
   import ScrollBox from "@components/ScrollBox.svelte";
 </script>
 
@@ -24,11 +24,11 @@
         </p>
         <p>
           <button class="btn" on:click={window.electronAPI.openBooksDir}>
-            Open Data in {$platform.fileBrowser}
+            Open Data in {window.electronAPI.fileBrowser}
           </button>
           &nbsp;
           <button class="btn" on:click={window.electronAPI.openSettingsDir}>
-            Open Settings in {$platform.fileBrowser}
+            Open Settings in {window.electronAPI.fileBrowser}
           </button>
         </p>
       </dd>
@@ -55,7 +55,9 @@
           >.
         </p>
         <p>
-          <button class="btn" on:click={window.electronAPI.openLogsDir}>Open Logs in {$platform.fileBrowser}</button>
+          <button class="btn" on:click={window.electronAPI.openLogsDir}
+            >Open Logs in {window.electronAPI.fileBrowser}</button
+          >
         </p>
       </dd>
     </dl>

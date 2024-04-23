@@ -4,6 +4,7 @@ import log from "electron-log/main";
 import * as path from "path";
 
 import packageJson from "../package.json";
+import BUILD from "./build";
 
 import { UserSettings } from "../types/global";
 
@@ -20,9 +21,9 @@ const PORT = 5000;
  */
 app.on("ready", () => {
   // Setup logging
-  log.transports.file.level = ENV === "prod" ? "info" : "debug";
+  log.transports.file.level = ENV === "prod" ? "info" : ENV === "test" ? "warn" : "debug";
   log.transports.file.format = "{h}:{i}:{s}.{ms} [{level}] {text}";
-  log.transports.console.level = ENV === "prod" ? "info" : "debug";
+  log.transports.console.level = ENV === "prod" ? "info" : ENV === "test" ? "error" : "debug";
   log.transports.console.format = ({ message }: { message: LogMessage }): unknown[] => {
     const d = message.date || new Date();
     const h = d.getHours().toString(10).padStart(2, "0");
@@ -39,7 +40,9 @@ app.on("ready", () => {
   log.initialize();
 
   // Start
-  log.info(`Starting: env=${ENV}`);
+  log.info(
+    `Starting: env=${ENV}, platform=${process.platform}, arch=${process.arch}, build=${BUILD.platform}, pkg=${BUILD.package}`,
+  );
 
   // Create user data directories if not already present.
   const migrateData = initUserDirs();
@@ -88,7 +91,7 @@ function createWindow(settings: UserSettings) {
   });
   mainWindow.removeMenu();
 
-  if (ENV !== "prod") {
+  if (!["prod", "test"].includes(ENV)) {
     mainWindow.loadURL(`http://localhost:${PORT}`);
     if (ENV !== "screenshot") {
       log.info("Opening dev tools");

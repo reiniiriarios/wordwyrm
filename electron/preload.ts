@@ -13,6 +13,12 @@ function ipcCallback(channel: string, callback: Callback) {
 }
 
 export const api = {
+  env: process.env.WYRM_ENV || "prod",
+  platform: process.platform,
+  arch: process.arch,
+  fileBrowser:
+    process.platform === "darwin" ? "Finder" : process.platform === "win32" ? "File Explorer" : "File Manager",
+
   error: (callback: Callback) => ipcCallback("error", callback),
 
   loadSettings: () => ipcRenderer.send("loadSettings"),
@@ -53,9 +59,6 @@ export const api = {
 
   deleteBook: (book: Book) => ipcRenderer.send("deleteBook", book),
   bookDeleted: (callback: Callback) => ipcCallback("bookDeleted", callback),
-
-  getPlatform: () => ipcRenderer.send("getPlatform"),
-  platform: (callback: Callback) => ipcCallback("platform", callback),
 
   openSettingsDir: () => ipcRenderer.send("openSettingsDir"),
   openBooksDir: () => ipcRenderer.send("openBooksDir"),

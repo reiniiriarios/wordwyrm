@@ -3,6 +3,7 @@ import { BrowserWindow, dialog, ipcMain, nativeTheme, net, protocol, shell } fro
 
 import packageJson from "../package.json";
 import BUILD from "./build";
+import ENV from "../env.cjs";
 
 import { UserSettings } from "../types/global";
 import { parseErr } from "./error";
@@ -210,6 +211,7 @@ class Bridge {
 
     ipcMain.on("getPlatform", (event) => {
       event.reply("platform", {
+        env: ENV,
         platform: process.platform,
         arch: process.arch,
         pkg: BUILD.package,

@@ -6,7 +6,7 @@
   import Select from "@components/Select.svelte";
   import HoverInfo from "@components/HoverInfo.svelte";
   import Modal from "@components/Modal.svelte";
-  import { currentTheme, platform, settings, version } from "@stores/settings";
+  import { currentTheme, settings, version } from "@stores/settings";
   import { books } from "@stores/books";
   import { formatDate } from "@scripts/formatDate";
   import ScrollBox from "@components/ScrollBox.svelte";
@@ -148,7 +148,7 @@
             </div>
           </div>
           <div class="dataDir__open">
-            <button class="btn" on:click={openBooksDir}>Open in {$platform.fileBrowser}</button>
+            <button class="btn" on:click={openBooksDir}>Open in {window.electronAPI.fileBrowser}</button>
           </div>
         </div>
       </label>

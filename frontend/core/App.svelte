@@ -3,7 +3,7 @@
   import Router from "svelte-spa-router";
   import { WyrmErrorDetails } from "types/global";
   import routes from "@core/routes";
-  import { currentTheme, platform, settings, version } from "@stores/settings";
+  import { currentTheme, settings, version } from "@stores/settings";
   import Menu from "@components/Menu.svelte";
   import UpdateAvailable from "@components/UpdateAvailable.svelte";
   import Error from "@components/Error.svelte";
@@ -12,7 +12,6 @@
 
   onMount(() => {
     settings.fetch();
-    platform.fetch();
 
     const removeErrorListener = window.electronAPI.error((err: WyrmErrorDetails) => (error = err));
 
