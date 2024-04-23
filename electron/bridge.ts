@@ -208,16 +208,6 @@ class Bridge {
     ipcMain.on("openLogsDir", (_event) => {
       shell.openPath(path.join(DATA_PATH, "logs"));
     });
-
-    ipcMain.on("getPlatform", (event) => {
-      event.reply("platform", {
-        env: ENV,
-        platform: process.platform,
-        arch: process.arch,
-        pkg: BUILD.package,
-        buildPlatform: BUILD.platform,
-      });
-    });
   }
 
   public setWindowTheme(theme: string) {
