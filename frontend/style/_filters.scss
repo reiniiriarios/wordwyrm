@@ -20,7 +20,7 @@
     margin-left: auto;
   }
 
-  button {
+  &__btn {
     background-color: var(--c-button);
     color: var(--c-text);
     padding: 0.25rem 0.5rem;
@@ -32,11 +32,17 @@
     &.selected {
       background-color: var(--c-button-hover);
     }
+  }
 
-    &.sortDirection {
-      padding: 0;
-      background: none;
-    }
+  &__direction {
+    background-color: var(--c-button);
+    color: var(--c-text);
+    padding: 0.25rem 0.5rem;
+    border: 0;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    padding: 0;
+    background: none;
   }
 }
 

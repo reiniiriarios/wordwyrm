@@ -10,16 +10,19 @@
   }
 </script>
 
-<div class="filter">
+<div class="filter filter--read">
   <span>Read:</span>
   <div class="dropdownFilter">
-    <button class="dropdownFilter__selected">
+    <button class="filter__btn dropdownFilter__selected">
       {recentFilters[$books.filters.recent].name}
     </button>
     <div class="dropdownFilter__dropdown">
       {#each Object.entries(recentFilters) as [i, f]}
-        <button on:click={filter} data-val={i} class="dropdownFilter__opt" class:selected={i === $books.filters.recent}
-          >{f.name}</button
+        <button
+          on:click={filter}
+          data-val={i}
+          class="filter__btn dropdownFilter__opt"
+          class:selected={i === $books.filters.recent}>{f.name}</button
         >
       {/each}
     </div>

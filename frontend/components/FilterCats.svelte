@@ -19,10 +19,10 @@
   }
 </script>
 
-<div class="filter">
+<div class="filter filter--cats">
   <span>Filter:</span>
   <div class="dropdownFilter">
-    <button class="dropdownFilter__selected">
+    <button class="filter__btn dropdownFilter__selected">
       {#if filterTags && $books.filters.tag}
         {$books.filters.tag}
       {:else}
@@ -35,7 +35,7 @@
           on:click={filter}
           data-val={i}
           data-type="cat"
-          class="dropdownFilter__opt"
+          class="filter__btn dropdownFilter__opt"
           class:selected={$books.filters.filter === i}>{f.name}</button
         >
       {/each}
@@ -45,7 +45,7 @@
             on:click={filter}
             data-val={tag}
             data-type="tag"
-            class="dropdownFilter__opt"
+            class="filter__btn dropdownFilter__opt"
             class:selected={$books.filters.tag === tag}>{tag}</button
           >
         {/each}
