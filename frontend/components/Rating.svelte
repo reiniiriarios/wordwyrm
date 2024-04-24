@@ -29,16 +29,17 @@
   }
 </script>
 
-<div class="rating" class:editable>
+<div class="rating" role={editable ? undefined : "img"} aria-label={`Rating: ${rating} out of 5 stars`} class:editable>
   {#each Array(5) as _, i}
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
       class="star"
       class:full={!hovering && rating > i}
       class:hover={editable && hovering && showRating > i}
-      data-i={i + 1}
-      role={editable ? "button" : ""}
+      role={editable ? "radio" : undefined}
+      aria-label={editable ? `Set rating to ${i} out of 5 stars` : undefined}
       tabindex={editable ? 0 : -1}
+      data-i={i + 1}
       on:mouseenter={hoverStar}
       on:mouseleave={unHoverStar}
       on:focus={hoverStar}
@@ -51,7 +52,9 @@
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
     <div
       class="no"
-      role={editable ? "button" : ""}
+      aria-label={editable ? "Clear rating" : undefined}
+      aria-hidden={!editable}
+      role={editable ? "radio" : undefined}
       tabindex={editable ? 0 : -1}
       data-i="0"
       on:mouseenter={hoverStar}
