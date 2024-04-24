@@ -41,7 +41,7 @@ async function waitTillBooksLoad(): Promise<WebdriverIO.ElementArray> {
   return bookLinks;
 }
 
-describe("books list", () => {
+describe("books page", () => {
   before(() => {
     // Clear settings
     if (fs.existsSync(settingsFile)) {

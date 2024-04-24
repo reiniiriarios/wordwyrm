@@ -30,43 +30,43 @@
   }
 </script>
 
-<nav>
-  <ul>
-    <li class:active={$location === "/"}>
-      <a href="#/">
+<nav class="nav">
+  <ul class="nav__list">
+    <li class="nav__item">
+      <a class="nav__link nav__link--books" href="#/" class:active={$location === "/"}>
         <Books size="2rem" />
-        {#if open}<span>Books</span>{/if}
+        {#if open}<span class="nav__label">Books</span>{/if}
       </a>
     </li>
-    <li class:active={$location === "/list"}>
-      <a href="#/list">
+    <li class="nav__item">
+      <a class="nav__link nav__link--list" href="#/list" class:active={$location === "/list"}>
         <ListDashes size="2rem" />
-        {#if open}<span>Book List</span>{/if}
+        {#if open}<span class="nav__label">Book List</span>{/if}
       </a>
     </li>
-    <li class:active={$location === "/chart"}>
-      <a href="#/chart">
+    <li class="nav__item">
+      <a class="nav__link nav__link--trend" href="#/chart" class:active={$location === "/chart"}>
         <ChartLine size="2rem" />
-        {#if open}<span>Trend</span>{/if}
+        {#if open}<span class="nav__label">Trend</span>{/if}
       </a>
     </li>
-    <li class:active={$location === "/settings"}>
-      <a href="#/settings">
+    <li class="nav__item">
+      <a class="nav__link nav__link--setings" href="#/settings" class:active={$location === "/settings"}>
         <Gear size="2rem" />
-        {#if open}<span>Settings</span>{/if}
+        {#if open}<span class="nav__label">Settings</span>{/if}
       </a>
     </li>
-    <li class:active={$location === "/help"}>
-      <a href="#/help">
+    <li class="nav__item">
+      <a class="nav__link nav__link--help" href="#/help" class:active={$location === "/help"}>
         <Info size="2rem" />
-        {#if open}<span>Help</span>{/if}
+        {#if open}<span class="nav__label">Help</span>{/if}
       </a>
     </li>
   </ul>
-  <div class="toggle" role="button" on:click={toggleOpen} on:keydown={keyToggleOpen} tabindex="0">
+  <div class="nav__toggle" role="button" on:click={toggleOpen} on:keydown={keyToggleOpen} tabindex="0">
     {#if open}
       <CaretLeft size="1.5rem" />
-      <span>Close</span>
+      <span class="nav__label">Close</span>
     {:else}
       <CaretRight size="1.5rem" />
     {/if}
@@ -74,7 +74,7 @@
 </nav>
 
 <style lang="scss">
-  nav {
+  .nav {
     width: var(--tab-width);
     background-color: var(--c-menu);
     height: 100vh;
@@ -84,62 +84,54 @@
     box-shadow: -2rem 0 1rem 2rem var(--shadow-1);
     z-index: 10;
 
-    ul {
+    &__list {
       list-style: none;
       padding: 0;
       margin: 0;
     }
 
-    li {
-      a {
-        display: flex;
-        justify-content: left;
-        padding: 0 0.25rem 0 0.235rem;
-        align-items: center;
-        width: var(--tab-width);
-        height: var(--tab-height);
-        color: var(--c-text-dark);
-        text-decoration: none;
-        white-space: nowrap;
-        border-left: 0.15rem solid transparent;
+    &__link {
+      display: flex;
+      justify-content: left;
+      padding: 0 0.25rem 0 0.235rem;
+      align-items: center;
+      width: var(--tab-width);
+      height: var(--tab-height);
+      color: var(--c-text-dark);
+      text-decoration: none;
+      white-space: nowrap;
+      border-left: 0.15rem solid transparent;
 
-        span {
-          font-size: 0.9rem;
-          padding: 0 0.5rem;
-          white-space: nowrap;
-        }
-
-        &:hover {
-          color: var(--c-menu-hover);
-        }
+      &:hover {
+        color: var(--c-menu-hover);
       }
 
-      &.active a {
+      &.active {
         color: var(--c-text);
         border-color: var(--c-text-muted);
       }
     }
-  }
 
-  .toggle {
-    margin-top: auto;
-    width: var(--tab-width);
-    height: var(--tab-height);
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    cursor: pointer;
-    color: var(--c-text-dark);
-    padding: 0 0.5rem;
-
-    span {
+    &__label {
       font-size: 0.9rem;
       padding: 0 0.5rem;
       white-space: nowrap;
     }
 
-    &:hover {
-      color: var(--c-menu-hover);
+    &__toggle {
+      margin-top: auto;
+      width: var(--tab-width);
+      height: var(--tab-height);
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      cursor: pointer;
+      color: var(--c-text-dark);
+      padding: 0 0.5rem;
+
+      &:hover {
+        color: var(--c-menu-hover);
+      }
     }
   }
 </style>

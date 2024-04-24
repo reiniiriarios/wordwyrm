@@ -10,9 +10,9 @@
 
 <div class="pageWrapper help">
   <ScrollBox>
-    <dl>
-      <dt>Managing Data</dt>
-      <dd>
+    <dl class="help__content">
+      <dt class="help__heading">Managing Data</dt>
+      <dd class="help__info">
         <p>
           Data is stored in YAML files and JPGs, sorted into author directories. You can change where your data is
           stored in Settings. <a href="https://en.wikipedia.org/wiki/YAML" target="_blank">YAML</a> files are easily editable
@@ -32,8 +32,8 @@
           </button>
         </p>
       </dd>
-      <dt>API Keys</dt>
-      <dd>
+      <dt class="help__heading">API Keys</dt>
+      <dd class="help__info">
         <p>
           You can add a <a href="https://cloud.google.com/" target="_blank">Google Cloud</a> API Key and
           <a
@@ -46,8 +46,8 @@
           order to keep the app free.
         </p>
       </dd>
-      <dt>Reporting Bugs</dt>
-      <dd>
+      <dt class="help__heading">Reporting Bugs</dt>
+      <dd class="help__info">
         <p>
           If you encounter a bug or need help, you can <a
             href="https://github.com/reiniiriarios/wordwyrm/issues"
@@ -76,26 +76,26 @@
 <style lang="scss">
   .help {
     --footer-height: 3rem;
-  }
 
-  dl {
-    padding: 1rem 3rem;
-    max-width: 55rem;
-    margin: 0 auto;
-  }
+    &__content {
+      padding: 1rem 3rem;
+      max-width: 55rem;
+      margin: 0 auto;
+    }
 
-  dt {
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin: 2rem 0 1rem;
-  }
+    &__heading {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin: 2rem 0 1rem;
+    }
 
-  dd {
-    font-size: 1rem;
-    margin: 1rem 0;
+    &__info {
+      font-size: 1rem;
+      margin: 1rem 0;
 
-    p {
-      margin: 0.75rem 0;
+      p {
+        margin: 0.75rem 0;
+      }
     }
   }
 
