@@ -21,6 +21,12 @@ textarea {
   }
 }
 
+input[type="text"],
+input[type="number"],
+input[type="date"] {
+  height: 2rem;
+}
+
 .field {
   margin: 0.125rem 0 0.125rem;
   font-size: 0.9rem;

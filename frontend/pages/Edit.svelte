@@ -156,49 +156,40 @@
     </div>
     <ScrollBox>
       <div class="bookPage__info">
-        <fieldset>
-          <label class="field field--fullwidth">
+        <fieldset class="bookPage__form">
+          <label class="field field--title">
             Title
             <input type="text" bind:value={book.title} required />
           </label>
-          <label class="field field--fullwidth">
+          <label class="field field--author">
             Author(s) <HoverInfo details="Authors should be comma-separated." />
             <input type="text" bind:value={authors} on:change={setAuthors} required />
           </label>
+
           <!-- svelte-ignore a11y-label-has-associated-control -->
-          <label class="field">
+          <label class="field field--published">
             Date Published
             <FlexibleDate bind:value={book.datePublished} />
           </label>
-          <label class="field">
+          <label class="field field--read">
             Date Read
             <input type="date" bind:value={book.dateRead} />
           </label>
 
-          <label class="field">
+          <label class="field field--series">
             Series
             <input type="text" bind:value={book.series} />
           </label>
-          <label class="field">
+          <label class="field field--seriesNumber">
             Series Number
             <input type="text" bind:value={book.seriesNumber} />
           </label>
 
-          <label class="field field--fullwidth">
-            Description
-            <textarea rows="4" bind:value={book.description} />
-          </label>
-
-          <div class="field field--fullwidth">
-            Rating
-            <Rating bind:rating={book.rating} editable />
-          </div>
-
-          <label class="field field--fullwidth">
+          <label class="field field--tags">
             Tag(s) <HoverInfo details="Tags should be comma-separated." />
             <input type="text" bind:value={tags} on:change={setTags} />
           </label>
-          <div class="field field--fullwidth commonTags">
+          <div class="field field--commonTags">
             <div class="commonTags__title">
               Common Tags <HoverInfo details="Click to add. Change tags displayed in Settings." />
             </div>
@@ -209,24 +200,37 @@
             </div>
           </div>
 
-          <label class="field field--fullwidth">
-            Notes
-            <textarea rows="4" bind:value={book.notes} />
+          <div class="field field--rating">
+            Rating
+            <Rating bind:rating={book.rating} editable />
+          </div>
+
+          <label class="field field--description">
+            Description
+            <textarea rows="5" bind:value={book.description} />
           </label>
 
-          <label class="field field">
+          <label class="field field--notes">
+            Notes
+            <textarea rows="5" bind:value={book.notes} />
+          </label>
+
+          <label class="field field--isbn">
             ISBN
             <input type="text" bind:value={book.ids.isbn} />
           </label>
-          <label class="field field">
+          <label class="field field--googlebooks">
             Google Books ID <HoverInfo position="left" details="Format is alphanumeric plus _ and -." />
             <input type="text" bind:value={book.ids.googleBooksId} />
           </label>
-          <label class="field field">
-            OpenLibrary ID <HoverInfo details="Format should be /works/id or /books/id, where id is alphanumeric." />
+          <label class="field field--openlibrary">
+            OpenLibrary ID <HoverInfo
+              position="left"
+              details="Format should be /works/id or /books/id, where id is alphanumeric."
+            />
             <input type="text" bind:value={book.ids.openLibraryId} />
           </label>
-          <label class="field field">
+          <label class="field field--goodreads">
             Goodreads ID <HoverInfo position="left" details="Format is numeric." />
             <input type="text" bind:value={book.ids.goodreadsId} />
           </label>
@@ -273,6 +277,75 @@
 
       .left {
         margin-right: auto;
+      }
+    }
+
+    &__form {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.6rem 1rem;
+
+      .field {
+        // row-start, col-start, row-end, col-end
+        &--title {
+          grid-area: 1 / 1 / 2 / 3;
+        }
+
+        &--author {
+          grid-area: 2 / 1 / 3 / 3;
+        }
+
+        &--published {
+          grid-area: 1 / 3 / 2 / 4;
+        }
+
+        &--read {
+          grid-area: 2 / 3 / 3 / 4;
+        }
+
+        &--series {
+          grid-area: 3 / 1 / 4 / 3;
+        }
+
+        &--seriesNumber {
+          grid-area: 3 / 3 / 4 / 4;
+        }
+
+        &--tags {
+          grid-area: 4 / 1 / 5 / 4;
+        }
+
+        &--commonTags {
+          grid-area: 5 / 1 / 6 / 3;
+        }
+
+        &--rating {
+          grid-area: 5 / 3 / 6 / 4;
+        }
+
+        &--description {
+          grid-area: 6 / 1 / 8 / 3;
+        }
+
+        &--notes {
+          grid-area: 8 / 1 / 10 / 3;
+        }
+
+        &--isbn {
+          grid-area: 6 / 3 / 7 / 4;
+        }
+
+        &--googlebooks {
+          grid-area: 7 / 3 / 8 / 4;
+        }
+
+        &--openlibrary {
+          grid-area: 8 / 3 / 9 / 4;
+        }
+
+        &--goodreads {
+          grid-area: 9 / 3 / 10 / 4;
+        }
       }
     }
   }
