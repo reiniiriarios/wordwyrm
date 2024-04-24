@@ -25,7 +25,7 @@ images:
 ids:
   googleBooksId: ABCD
   isbn: "123"
-  openLibraryId: /works/ABCD
+  openLibraryId: /works/DCBA
   amazonId: "456"
   goodreadsId: "789"
   internetArchiveId: bookoneabcd
