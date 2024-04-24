@@ -32,9 +32,12 @@
     position: relative;
 
     .icon {
-      position: relative;
-      top: 0.1rem;
       cursor: help;
+
+      // fix alignment to text
+      display: inline-block;
+      vertical-align: top;
+      margin-bottom: -0.1rem;
     }
 
     .details {
