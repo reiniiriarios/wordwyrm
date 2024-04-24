@@ -29,8 +29,8 @@
     } else {
       shadowScalingFactor = Math.min(1, Math.max(0.5, (35000 - box.scrollHeight) / 35000));
       const percentScroll = box.scrollTop / (box.scrollHeight - box.offsetHeight);
-      shadowTopOpacity = logScale(percentScroll, shadowScalingFactor);
-      shadowBottomOpacity = logScale(1 - percentScroll, shadowScalingFactor);
+      shadowTopOpacity = box.scrollTop === 0 ? 0 : logScale(percentScroll, shadowScalingFactor);
+      shadowBottomOpacity = percentScroll === 1 ? 0 : logScale(1 - percentScroll, shadowScalingFactor);
     }
   }
 </script>
