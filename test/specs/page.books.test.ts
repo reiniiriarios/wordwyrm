@@ -57,7 +57,7 @@ describe("books page", () => {
       // Check href
       const href = await bookLink.getAttribute("href");
       expect(href).toMatch(/^#\/book\/[^/]+\/[^/]+$/);
-      const [_hash, _page, a, b] = href.split("/");
+      const [a, b] = href.split("/").slice(2);
       // Against test data
       expect(testData[a]?.[b]?.authors?.[0]?.name).toBe(a);
       expect(testData[a]?.[b]?.title).toBe(b);
