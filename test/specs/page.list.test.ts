@@ -1,8 +1,8 @@
 import * as path from "path";
 import * as fs from "fs";
 import { describe, it } from "mocha";
+import { Key } from "webdriverio";
 import { browser, $, $$ } from "@wdio/globals";
-import testData from "../testData";
 
 const settingsFile = path.join(path.resolve("."), "test", "data", "settings-test.yaml");
 
@@ -178,5 +178,19 @@ describe("list page", () => {
     expect(await getTitleAuthor(books[1])).toStrictEqual(bookData.tatb);
     expect(await getTitleAuthor(books[2])).toStrictEqual(bookData.taab);
     expect(await getTitleAuthor(books[3])).toStrictEqual(bookData.a1b1);
+  });
+
+  it("should search books", async () => {
+    // Search
+    await (await $(".search input")).click();
+    await browser.keys(["t", "w", "o"]);
+    await browser.keys(Key.Enter);
+    let books = await $$(".scrollTable__body tr");
+    expect(books.length).toBe(1);
+    expect(await getTitleAuthor(books[0])).toStrictEqual(bookData.a1b2);
+    // Clear search
+    await (await $(".search .x")).click();
+    books = await $$(".scrollTable__body tr");
+    expect(books.length).toBe(4);
   });
 });

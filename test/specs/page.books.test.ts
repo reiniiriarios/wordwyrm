@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
 import { describe, it } from "mocha";
+import { Key } from "webdriverio";
 import { browser, $, $$ } from "@wdio/globals";
 import testData from "../testData";
 
@@ -214,5 +215,19 @@ describe("books page", () => {
     expect(books.length).toBe(0);
     books = await $$(".bookList .book.zoomLarge");
     expect(books.length).toBe(0);
+  });
+
+  it("should search books", async () => {
+    // Search
+    await (await $(".search input")).click();
+    await browser.keys(["t", "w", "o"]);
+    await browser.keys(Key.Enter);
+    let bookLinks = await $$(".bookList .book > a");
+    expect(bookLinks.length).toBe(1);
+    expect(await bookLinks[0].getAttribute("href")).toBe(href.a1b2);
+    // Clear search
+    await (await $(".search .x")).click();
+    bookLinks = await $$(".bookList .book > a");
+    expect(bookLinks.length).toBe(4);
   });
 });
