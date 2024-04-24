@@ -2,10 +2,10 @@ version: "2"
 title: Book Two
 authors:
   - name: Author One
-datePublished: "2000-01-01"
+datePublished: "2002-01-01"
 tags:
   - Fiction
-  - General
+  - Art
 series: "Some Series"
 seriesNumber: "2"
 timestampAdded: 1700000000020

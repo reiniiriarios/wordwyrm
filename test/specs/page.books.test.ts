@@ -6,43 +6,22 @@ import testData from "../testData";
 
 const settingsFile = path.join(path.resolve("."), "test", "data", "settings-test.yaml");
 
-const bookOrder: Record<string, [string, string][]> = {
-  read: [
-    ["Author One", "Book Two"],
-    ["Test Author", "Test Book"],
-    ["Test Author", "A Book"],
-    ["Author One", "Book One"],
-  ],
-  added: [
-    ["Author One", "Book Two"],
-    ["Author One", "Book One"],
-    ["Test Author", "A Book"],
-    ["Test Author", "Test Book"],
-  ],
-  author: [
-    ["Author One", "Book Two"],
-    ["Author One", "Book One"],
-    ["Test Author", "A Book"],
-    ["Test Author", "Test Book"],
-  ],
-  title: [
-    ["Test Author", "A Book"],
-    ["Author One", "Book One"],
-    ["Author One", "Book Two"],
-    ["Test Author", "Test Book"],
-  ],
-  published: [
-    ["Author One", "Book Two"],
-    ["Author One", "Book One"],
-    ["Test Author", "A Book"],
-    ["Test Author", "Test Book"],
-  ],
-  rating: [
-    ["Author One", "Book Two"],
-    ["Test Author", "A Book"],
-    ["Author One", "Book One"],
-    ["Test Author", "Test Book"],
-  ],
+// Links for each book in list.
+const href: Record<string, string> = {
+  a1b1: "#/book/Author One/Book One",
+  a1b2: "#/book/Author One/Book Two",
+  taab: "#/book/Test Author/A Book",
+  tatb: "#/book/Test Author/Test Book",
+};
+
+// Expected order of books, by link, by each sort method.
+const bookOrder: Record<string, string[]> = {
+  read: [href.a1b2, href.tatb, href.taab, href.a1b1],
+  added: [href.a1b2, href.a1b1, href.taab, href.tatb],
+  author: [href.a1b1, href.a1b2, href.tatb, href.taab],
+  title: [href.taab, href.a1b1, href.a1b2, href.tatb],
+  published: [href.a1b1, href.tatb, href.a1b2, href.taab],
+  rating: [href.a1b2, href.taab, href.a1b1, href.tatb],
 };
 
 const NUM_TEST_BOOKS = 4;
@@ -70,7 +49,7 @@ describe("books list", () => {
     }
   });
 
-  it("should load all books in test data in order", async () => {
+  it("should load all books in correct order", async () => {
     // Get book links
     const bookLinks = await waitTillBooksLoad();
     let i = 0;
@@ -83,8 +62,7 @@ describe("books list", () => {
       expect(testData[a]?.[b]?.authors?.[0]?.name).toBe(a);
       expect(testData[a]?.[b]?.title).toBe(b);
       // Against default order
-      expect(bookOrder.read[i][0]).toBe(a);
-      expect(bookOrder.read[i][1]).toBe(b);
+      expect(bookOrder.read[i]).toBe(href);
       // Check images
       if (testData[a]?.[b]?.images?.hasImage) {
         const imgSrc = await bookLink.$("img").getAttribute("src");
@@ -101,7 +79,7 @@ describe("books list", () => {
     }
   });
 
-  it("should sort books correctly", async () => {
+  it("should sort books", async () => {
     // Get books
     let bookLinks = await waitTillBooksLoad();
     // Get buttons
@@ -117,9 +95,7 @@ describe("books list", () => {
       // Check order
       for await (const bookLink of bookLinks) {
         const href = await bookLink.getAttribute("href");
-        const [a, b] = href.split("/").slice(2);
-        expect(bookOrder[order][n][0]).toBe(a);
-        expect(bookOrder[order][n][1]).toBe(b);
+        expect(bookOrder[order][n]).toBe(href);
         n++;
       }
       // Flip asc/desc
@@ -129,13 +105,114 @@ describe("books list", () => {
       // Check reverse order
       for await (const bookLink of bookLinks) {
         const href = await bookLink.getAttribute("href");
-        const [a, b] = href.split("/").slice(2);
-        expect(bookOrder[order][n][0]).toBe(a);
-        expect(bookOrder[order][n][1]).toBe(b);
+        expect(bookOrder[order][n]).toBe(href);
         n--;
       }
       // Flip back
       await directionButton.click();
     }
+    // Reset
+    await sortButtons[0].click();
+  });
+
+  it("should filter books by category", async () => {
+    // Get buttons
+    const filterDropdown = await $(".filter--cats");
+    const filterButtons = await $$(".filter--cats .filter__btn");
+    expect(filterButtons.length).toBe(4); // Selected + Default: All, Fiction, Non-Fiction
+    await filterDropdown.moveTo();
+    // Fiction
+    await filterButtons[2].moveTo();
+    await filterButtons[2].click();
+    let bookLinks = await $$(".bookList .book > a");
+    expect(bookLinks.length).toBe(2);
+    expect(await bookLinks[0].getAttribute("href")).toBe(href.a1b2);
+    expect(await bookLinks[1].getAttribute("href")).toBe(href.tatb);
+    // Non-Fiction
+    await filterButtons[3].moveTo();
+    await filterButtons[3].click();
+    bookLinks = await $$(".bookList .book > a");
+    expect(bookLinks.length).toBe(2);
+    expect(await bookLinks[0].getAttribute("href")).toBe(href.taab);
+    expect(await bookLinks[1].getAttribute("href")).toBe(href.a1b1);
+    // All
+    await filterButtons[1].moveTo();
+    await filterButtons[1].click();
+    bookLinks = await $$(".bookList .book > a");
+    expect(bookLinks.length).toBe(4);
+    expect(await bookLinks[0].getAttribute("href")).toBe(href.a1b2);
+    expect(await bookLinks[1].getAttribute("href")).toBe(href.tatb);
+    expect(await bookLinks[2].getAttribute("href")).toBe(href.taab);
+    expect(await bookLinks[3].getAttribute("href")).toBe(href.a1b1);
+  });
+
+  it("should filter books by read date", async () => {
+    // Get buttons
+    const filterDropdown = await $(".filter--read");
+    const filterButtons = await $$(".filter--read .filter__btn");
+    expect(filterButtons.length).toBe(9);
+    await filterDropdown.moveTo();
+    // Read
+    await filterButtons[2].moveTo();
+    await filterButtons[2].click();
+    let bookLinks = await $$(".bookList .book > a");
+    expect(bookLinks.length).toBe(2);
+    expect(await bookLinks[0].getAttribute("href")).toBe(href.taab);
+    expect(await bookLinks[1].getAttribute("href")).toBe(href.a1b1);
+    // Unread
+    await filterButtons[3].moveTo();
+    await filterButtons[3].click();
+    bookLinks = await $$(".bookList .book > a");
+    expect(bookLinks.length).toBe(2);
+    expect(await bookLinks[0].getAttribute("href")).toBe(href.a1b2);
+    expect(await bookLinks[1].getAttribute("href")).toBe(href.tatb);
+    // This Year
+    await filterButtons[4].moveTo();
+    await filterButtons[4].click();
+    bookLinks = await $$(".bookList .book > a");
+    expect(bookLinks.length).toBe(1);
+    expect(await bookLinks[0].getAttribute("href")).toBe(href.taab);
+    // Last 2 Years
+    await filterButtons[6].moveTo();
+    await filterButtons[6].click();
+    bookLinks = await $$(".bookList .book > a");
+    expect(bookLinks.length).toBe(2);
+    expect(await bookLinks[0].getAttribute("href")).toBe(href.taab);
+    expect(await bookLinks[1].getAttribute("href")).toBe(href.a1b1);
+    // > 5 years
+    await filterButtons[8].moveTo();
+    await filterButtons[8].click();
+    bookLinks = await $$(".bookList .book > a");
+    expect(bookLinks.length).toBe(0);
+    // All
+    await filterButtons[1].moveTo();
+    await filterButtons[1].click();
+    bookLinks = await $$(".bookList .book > a");
+    expect(bookLinks.length).toBe(4);
+    expect(await bookLinks[0].getAttribute("href")).toBe(href.a1b2);
+    expect(await bookLinks[1].getAttribute("href")).toBe(href.tatb);
+    expect(await bookLinks[2].getAttribute("href")).toBe(href.taab);
+    expect(await bookLinks[3].getAttribute("href")).toBe(href.a1b1);
+  });
+
+  it("should zoom books", async () => {
+    // Get buttons
+    const zoomButtons = await $$(".zoom .zoom__btn");
+    // S
+    await zoomButtons[0].click();
+    let books = await $$(".bookList .book.zoomSmall");
+    expect(books.length).toBe(4);
+    // L
+    await zoomButtons[2].click();
+    books = await $$(".bookList .book.zoomSmall");
+    expect(books.length).toBe(0);
+    books = await $$(".bookList .book.zoomLarge");
+    expect(books.length).toBe(4);
+    // M
+    await zoomButtons[1].click();
+    books = await $$(".bookList .book.zoomSmall");
+    expect(books.length).toBe(0);
+    books = await $$(".bookList .book.zoomLarge");
+    expect(books.length).toBe(0);
   });
 });

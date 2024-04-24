@@ -39,9 +39,15 @@
         <div class="resizeIcon">
           <FrameCorners size={22} />
         </div>
-        <button on:click={() => zoom("s")} class:selected={$books.view.zoom === "s"}>S</button>
-        <button on:click={() => zoom("m")} class:selected={$books.view.zoom === "m"}>M</button>
-        <button on:click={() => zoom("l")} class:selected={$books.view.zoom === "l"}>L</button>
+        <button class="zoom__btn zoom__btn--s" on:click={() => zoom("s")} class:selected={$books.view.zoom === "s"}>
+          S
+        </button>
+        <button class="zoom__btn zoom__btn--m" on:click={() => zoom("m")} class:selected={$books.view.zoom === "m"}>
+          M
+        </button>
+        <button class="zoom__btn zoom__btn--l" on:click={() => zoom("l")} class:selected={$books.view.zoom === "l"}>
+          L
+        </button>
       </div>
     {/if}
 

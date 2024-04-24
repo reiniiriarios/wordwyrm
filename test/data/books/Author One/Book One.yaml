@@ -7,8 +7,8 @@ authors:
 datePublished: "2001-01-01"
 dateRead: "2023-04-23"
 tags:
-  - Fiction
-  - General
+  - Non-Fiction
+  - Art
 series: "Some Series"
 seriesNumber: "1"
 timestampAdded: 1700000000010
@@ -21,7 +21,7 @@ notes: >-
   laboris nisi ut aliquip ex ea commodo consequat.
 images:
   hasImage: true
-  imageUpdated: 1700000000001
+  imageUpdated: 1700000000003
 ids:
   googleBooksId: ABCD
   isbn: "123"
