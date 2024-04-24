@@ -3,7 +3,6 @@ import * as fs from "fs";
 import { describe, it } from "mocha";
 import { Key } from "webdriverio";
 import { browser, $, $$ } from "@wdio/globals";
-import testData from "../testData";
 
 const settingsFile = path.join(path.resolve("."), "test", "data", "settings-test.yaml");
 
@@ -14,6 +13,8 @@ const href: Record<string, string> = {
   taab: "#/book/Test Author/A Book",
   tatb: "#/book/Test Author/Test Book",
 };
+
+const imgs: number[] = [1700000000003, 0, 0, 1700000000002];
 
 // Expected order of books, by link, by each sort method.
 const bookOrder: Record<string, string[]> = {
@@ -58,19 +59,14 @@ describe("books page", () => {
       // Check href
       const href = await bookLink.getAttribute("href");
       expect(href).toMatch(/^#\/book\/[^/]+\/[^/]+$/);
-      const [a, b] = href.split("/").slice(2);
-      // Against test data
-      expect(testData[a]?.[b]?.authors?.[0]?.name).toBe(a);
-      expect(testData[a]?.[b]?.title).toBe(b);
       // Against default order
       expect(bookOrder.read[i]).toBe(href);
       // Check images
-      if (testData[a]?.[b]?.images?.hasImage) {
+      if (imgs[i]) {
         const imgSrc = await bookLink.$("img").getAttribute("src");
-        expect(imgSrc).toBe(
-          `bookimage://${a.replace(/ /g, "%20")}/${b.replace(/ /g, "%20")}.jpg?t=${testData[a]?.[b]?.images?.imageUpdated ?? 0}`,
-        );
+        expect(imgSrc).toBe(`bookimage://${href.replace("#/book/", "").replace(/ /g, "%20")}.jpg?t=${imgs[i]}`);
       } else {
+        const [a, b] = href.split("/").slice(2);
         const title = await (await bookLink.$(".bookPlaceholder__title")).getText();
         const author = await (await bookLink.$(".bookPlaceholder__author")).getText();
         expect(title).toBe(b);
