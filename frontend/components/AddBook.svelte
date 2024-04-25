@@ -105,7 +105,7 @@
     <!-- svelte-ignore a11y-label-has-associated-control -->
     <label class="field field--datePublished">
       Date Published
-      <FlexibleDate />
+      <FlexibleDate bind:value={book.datePublished} />
     </label>
     <label class="field field--dateRead">
       Date Read
