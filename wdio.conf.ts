@@ -81,6 +81,12 @@ export const config: Options.Testrunner = {
       // Electron service options
       // see https://webdriver.io/docs/desktop-testing/electron/configuration/#service-options
       "wdio:electronServiceOptions": {
+        appBinaryPath: path.join(
+          path.resolve("."),
+          "build",
+          process.platform === "win32" ? "win-unpacked" : `${process.platform}-unpacked`,
+          process.platform === "linux" ? "wordwyrm" : process.platform === "win32" ? "Wordwyrm.exe" : "Wordwyrm",
+        ),
         // custom application args
         appArgs: [],
       },
