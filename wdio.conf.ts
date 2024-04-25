@@ -7,6 +7,7 @@ import * as fs from "fs-extra";
 const dataDir = path.join(path.resolve("."), "test", "data");
 const booksDir = path.join(dataDir, "books");
 const booksSrcDir = path.join(dataDir, "books-src");
+const logsDir = path.join(dataDir, "logs");
 const settingsFile = path.join(dataDir, "settings-test.yaml");
 
 export const config: Options.Testrunner = {
@@ -187,11 +188,16 @@ export const config: Options.Testrunner = {
     if (fs.existsSync(settingsFile)) {
       fs.rmSync(settingsFile);
     }
+    // Clear logs
+    if (fs.existsSync(logsDir)) {
+      fs.emptyDirSync(logsDir);
+    }
     // Reset books data
     if (!fs.existsSync(booksDir)) {
       fs.mkdirSync(booksDir);
+    } else {
+      fs.emptyDirSync(booksDir);
     }
-    fs.emptyDirSync(booksDir);
     fs.cpSync(booksSrcDir, booksDir, { recursive: true });
   },
   /**
