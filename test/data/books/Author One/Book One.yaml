@@ -1,33 +1,31 @@
-version: "2"
+version: '2'
 title: Book One
 authors:
   - name: Author One
-    ids:
-      openLibraryId: ABC
-datePublished: "2001-01-01"
-dateRead: "2023-04-23"
+datePublished: '2001-01-01'
+dateRead: '2023-04-23'
 tags:
   - Non-Fiction
   - Art
-series: "Some Series"
-seriesNumber: "1"
+series: Some Series
+seriesNumber: '1'
 timestampAdded: 1700000000010
 rating: 3
 description: >-
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-  eiusmod tempor incididunt ut labore et dolore magna aliqua.
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+  incididunt ut labore et dolore magna aliqua.
 notes: >-
-  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-  laboris nisi ut aliquip ex ea commodo consequat.
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+  aliquip ex ea commodo consequat.
 images:
   hasImage: true
   imageUpdated: 1700000000003
 ids:
   googleBooksId: ABCD
-  isbn: "123"
+  isbn: '123'
   openLibraryId: /works/DCBA
-  amazonId: "456"
-  goodreadsId: "789"
+  amazonId: '456'
+  goodreadsId: '789'
   internetArchiveId: bookoneabcd
-  libraryThingId: "101112"
-  oclcId: "131415"
+  libraryThingId: '101112'
+  oclcId: '131415'

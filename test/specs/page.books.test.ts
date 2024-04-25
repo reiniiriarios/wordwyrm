@@ -14,7 +14,7 @@ const href: Record<string, string> = {
   tatb: "#/book/Test Author/Test Book",
 };
 
-const imgs: number[] = [1700000000003, 0, 0, 1700000000002];
+const imgs: number[] = [0, 1700000000002, 0, 1700000000003]; // read order
 
 // Expected order of books, by link, by each sort method.
 const bookOrder: Record<string, string[]> = {

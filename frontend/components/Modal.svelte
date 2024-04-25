@@ -58,11 +58,11 @@
     <div class="modal__body" class:flush><slot /></div>
     <div class="modal__actions">
       {#if canCancel}
-        <button type="button" class="btn modal__button" on:click={close}>{cancelWord}</button>
+        <button type="button" class="btn btn--cancel modal__button" on:click={close}>{cancelWord}</button>
       {/if}
       <button
         type="button"
-        class="btn modal__button modal__button--confirm"
+        class="btn btn--confirm modal__button modal__button--confirm"
         class:btn--delete={warning}
         disabled={!canConfirm}
         on:click={confirm}

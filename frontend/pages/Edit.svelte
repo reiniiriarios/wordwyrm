@@ -239,8 +239,8 @@
           <div class="left">
             <DeleteBook {book} />
           </div>
-          <a class="btn" href={`#/book/${params.author}/${params.book}`}>Cancel</a>
-          <button class="btn" disabled={saving} on:click={saveBook}>Save</button>
+          <a class="btn btn--cancel" href={`#/book/${params.author}/${params.book}`}>Cancel</a>
+          <button class="btn btn--save" disabled={saving} on:click={saveBook}>Save</button>
         </div>
       </div>
     </ScrollBox>

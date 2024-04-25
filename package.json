@@ -46,6 +46,8 @@
     "build:linux": "npm run set:build linux && npm run build:electron && electron-builder --linux appImage deb rpm",
     "build:snap": "npm run set:build snap && npm run build:electron && electron-builder --linux snap --publish onTag",
     "test": "cross-env WYRM_ENV=test wdio run ./wdio.conf.ts",
+    "test:pages": "cross-env WYRM_ENV=test wdio run ./wdio.conf.ts --suite pages",
+    "test:editbook": "cross-env WYRM_ENV=test wdio run ./wdio.conf.ts --suite editbook",
     "newver": "ts-node scripts/updateVersion.ts",
     "prepare": "ts-patch install -s && npm run set:build dev"
   },

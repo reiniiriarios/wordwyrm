@@ -30,11 +30,16 @@ export const config: Options.Testrunner = {
   // The path of the spec files will be resolved relative from the directory of
   // of the config file unless it's absolute.
   //
-  specs: ["./test/specs/**/*.test.ts"],
+  specs: ["./test/specs/page.*.test.ts", ["./test/specs/edit.book.test.ts"]],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
   ],
+
+  suites: {
+    pages: ["./test/specs/page.*.test.ts"],
+    editbook: ["./test/specs/edit.book.test.ts"],
+  },
   //
   // ============
   // Capabilities
