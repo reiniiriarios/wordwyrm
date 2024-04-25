@@ -29,15 +29,27 @@ const data2: Record<string, string> = {
   notesText: "メモ",
 };
 
-const dates1: Record<string, string> = {
-  published: "2001\t0101", // in form of keys to type
-  read: "2023\t0423",
-};
+const dates1: Record<string, string> =
+  process.platform === "win32"
+    ? {
+        published: "2001\t0101", // in form of keys to type
+        read: "2023\t0423",
+      }
+    : {
+        published: "01012001",
+        read: "04232023",
+      };
 
-const dates2: Record<string, string> = {
-  published: "2002\t0602",
-  read: "2024\t0124",
-};
+const dates2: Record<string, string> =
+  process.platform === "win32"
+    ? {
+        published: "2002\t0602",
+        read: "2024\t0124",
+      }
+    : {
+        published: "06022002",
+        read: "01242024",
+      };
 
 const tags1 = ["Non-Fiction", "Art"];
 const tags2 = ["フィクション", "芸術"];

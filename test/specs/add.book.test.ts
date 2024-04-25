@@ -13,10 +13,16 @@ const data1: Record<string, string> = {
   descriptionText: "This is not a book.",
 };
 
-const dates1: Record<string, string> = {
-  published: "1987\t0615", // in form of keys to type
-  read: "2024\t0425",
-};
+const dates1: Record<string, string> =
+  process.platform === "win32"
+    ? {
+        published: "1987\t0615", // in form of keys to type
+        read: "2024\t0425",
+      }
+    : {
+        published: "06151987",
+        read: "04252024",
+      };
 
 const tags1 = ["Some", "Tags"];
 
