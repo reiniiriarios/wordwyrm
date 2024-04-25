@@ -21,7 +21,7 @@ const PORT = 5000;
  */
 app.on("ready", () => {
   // Setup logging
-  log.transports.file.level = ENV === "prod" ? "info" : ENV === "test" ? "warn" : "debug";
+  log.transports.file.level = ENV === "prod" ? "info" : "debug";
   log.transports.file.format = "{h}:{i}:{s}.{ms} [{level}] {text}";
   log.transports.console.level = ENV === "prod" ? "info" : ENV === "test" ? "error" : "debug";
   log.transports.console.format = ({ message }: { message: LogMessage }): unknown[] => {

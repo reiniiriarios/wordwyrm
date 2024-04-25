@@ -6,6 +6,7 @@
 # Test
 /test/data/logs
 /test/data/settings*.yaml
+/test/data/books
 
 # NodeJS
 npm-debug.log

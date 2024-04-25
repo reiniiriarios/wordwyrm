@@ -1,10 +1,6 @@
-import * as path from "path";
-import * as fs from "fs";
 import { describe, it } from "mocha";
 import { Key } from "webdriverio";
 import { browser, $, $$ } from "@wdio/globals";
-
-const settingsFile = path.join(path.resolve("."), "test", "data", "settings-test.yaml");
 
 // Each book in list.
 const bookData: Record<string, [string, string]> = {
@@ -47,13 +43,6 @@ async function getTitleAuthor(book: WebdriverIO.Element): Promise<[string, strin
 }
 
 describe("list page", () => {
-  before(() => {
-    // Clear settings
-    if (fs.existsSync(settingsFile)) {
-      fs.rmSync(settingsFile);
-    }
-  });
-
   it("should load all books in correct order", async () => {
     // Navigate
     const menuLink = await $(".nav__link--list");
