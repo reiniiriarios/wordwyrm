@@ -37,7 +37,6 @@
 
     const removeSavedListener = window.electronAPI.bookSaved((savedBook: Book) => {
       addBookOpen = false;
-      console.log(savedBook);
       books.addBook(savedBook);
       removeSavedListener();
     });
