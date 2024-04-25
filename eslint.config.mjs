@@ -88,6 +88,6 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ["build/", "dist/", "rollup.config.mjs"],
+    ignores: ["build/", "dist/", "rollup.config.mjs", "node_modules/"],
   },
 );
