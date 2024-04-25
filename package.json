@@ -203,7 +203,7 @@
       "identityName": "EmmaLitwa-Vulcu.Wordwyrm",
       "publisher": "CN=3A8B45F9-A537-470B-A2BD-654DC9A01BF0",
       "publisherDisplayName": "Emma Litwa-Vulcu",
-      "backgroundColor": "#831c3b",
+      "backgroundColor": "transparent",
       "showNameOnTiles": true
     }
   },

@@ -82,7 +82,7 @@ export default {
         { src: "assets/icons/*", dest: "dist" },
         { src: "assets/images/*", dest: "dist" },
         { src: "assets/nsis/*", dest: "dist" },
-        { src: "assets/appx/*", dest: "build" },
+        { src: "assets/appx/*", dest: "build/appx" },
       ],
     }),
     nodePolyfills(),
