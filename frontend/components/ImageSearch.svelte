@@ -105,6 +105,7 @@
 <Modal
   bind:open={isOpen}
   heading="Search for Cover Image"
+  windowClass="search-for-cover-image"
   confirmWord="Save"
   on:confirm={addImage}
   bind:canConfirm={canAdd}

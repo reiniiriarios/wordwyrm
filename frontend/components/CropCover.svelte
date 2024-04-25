@@ -78,7 +78,14 @@
 </script>
 
 <button type="button" class="btn" on:click={openDialog}>Crop Image <span class="icon"><Crop /></span></button>
-<Modal bind:open={isOpen} heading="Crop Image" confirmWord="Save" on:confirm={saveImage} bind:canConfirm={canSave}>
+<Modal
+  bind:open={isOpen}
+  heading="Crop Image"
+  windowClass="crop-image"
+  confirmWord="Save"
+  on:confirm={saveImage}
+  bind:canConfirm={canSave}
+>
   <div class="croppie" bind:this={croppieDiv}></div>
 </Modal>
 

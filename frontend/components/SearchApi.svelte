@@ -84,11 +84,12 @@
   }
 </script>
 
-<button type="button" class="btn" on:click={openDialog}>
+<button type="button" class="btn btn--searchForBook" on:click={openDialog}>
   Add Book by Search<span class="icon"><MagnifyingGlass /></span>
 </button>
 <Modal
   flush
+  windowClass="search-for-book"
   bind:open={addBookOpen}
   heading="Search for Book"
   confirmWord="Add"

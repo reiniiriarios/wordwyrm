@@ -83,10 +83,12 @@
   }
 </script>
 
-<button type="button" class="btn" on:click={openDialog}>Add Book <span class="icon"><Plus /></span></button>
+<button type="button" class="btn btn--addBook" on:click={openDialog}>Add Book <span class="icon"><Plus /></span></button
+>
 <Modal
   large
   height="33rem"
+  windowClass="add-book"
   bind:open={addBookOpen}
   heading="Add Book"
   confirmWord="Add"

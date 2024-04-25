@@ -30,11 +30,20 @@
 </script>
 
 <button type="button" class="link link--delete" on:click={openDialog}>Delete Book <TrashSimple /></button>
-<Modal bind:open={isOpen} heading="Delete Book" confirmWord="Delete" on:confirm={deleteBook} height="14rem" warning>
-  <div class="text">
+<Modal
+  bind:open={isOpen}
+  heading="Delete Book"
+  confirmWord="Delete"
+  on:confirm={deleteBook}
+  bind:canConfirm={isOpen}
+  height="14rem"
+  windowClass="delete-book"
+  warning
+>
+  <div class="text deleteMsg">
     {#if book}
-      Are you sure you want to delete <strong>{book.title}</strong> by
-      <strong>{book.authors.map((a) => a.name).join(", ")}</strong>?
+      Are you sure you want to delete <strong class="deleteMsg__title">{book.title}</strong> by
+      <strong class="deleteMsg__author">{book.authors.map((a) => a.name).join(", ")}</strong>?
     {/if}
   </div>
 </Modal>

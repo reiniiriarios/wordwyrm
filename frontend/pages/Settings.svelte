@@ -286,6 +286,7 @@
 
 <Modal
   heading="Move Data"
+  windowClass="move-data"
   bind:open={booksDir.showModal}
   loading={saving}
   on:confirm={moveBooksDir}

@@ -16,6 +16,7 @@
   export let small: boolean = false;
   export let large: boolean = false;
   export let flush: boolean = false;
+  export let windowClass: string = "";
 
   function confirm(e?: MouseEvent | KeyboardEvent) {
     e?.preventDefault();
@@ -53,7 +54,7 @@
 <!-- keyboard interaction handled above -->
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
 <div class="modal" class:open class:small class:large on:click|self={close}>
-  <div class="modal__window" role="dialog" style:height style:max-height={maxHeight}>
+  <div class={`modal__window ${windowClass}`} role="dialog" style:height style:max-height={maxHeight}>
     <div class="modal__header">{heading}</div>
     <div class="modal__body" class:flush><slot /></div>
     <div class="modal__actions">

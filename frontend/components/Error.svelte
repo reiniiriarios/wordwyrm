@@ -10,7 +10,15 @@
   }
 </script>
 
-<Modal bind:open heading="Error" canCancel={false} on:confirm={close} height={details ? "20rem" : "13rem"} small>
+<Modal
+  bind:open
+  heading="Error"
+  windowClass="error-msg"
+  canCancel={false}
+  on:confirm={close}
+  height={details ? "20rem" : "13rem"}
+  small
+>
   <div class="error">
     <div class="error__message">{message}</div>
     {#if details}
