@@ -28,6 +28,9 @@ const tags1 = ["Some", "Tags"];
 
 describe("add book", () => {
   it("should add book from dialog", async () => {
+    // Navigate
+    await (await $(".nav__link--books")).click();
+
     // Open Dialog
     await (await $(`.pageNav__actions .btn--addBook`)).click();
 

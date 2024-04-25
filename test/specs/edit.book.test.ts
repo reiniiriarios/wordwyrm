@@ -182,6 +182,7 @@ async function setData(
 describe("book page", () => {
   it("should load correct data", async () => {
     // Navigate
+    await (await $(".nav__link--books")).click();
     await (await $(`.book a[href='#/book/${href1}']`)).click();
 
     // Data
