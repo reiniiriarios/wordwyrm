@@ -93,7 +93,6 @@
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^2.37.0",
-    "pm2": "^5.3.1",
     "png2icons": "^2.0.1",
     "postcss": "^8.4.38",
     "postcss-html": "^1.6.0",
