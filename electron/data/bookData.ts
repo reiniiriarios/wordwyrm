@@ -168,7 +168,12 @@ export async function addBookImageBase64(booksDir: string, book: Book, base64: s
  * @returns Book
  * @throws WyrmError
  */
-export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string, oFilename?: string): Promise<Book> {
+export async function saveBook(
+  booksDir: string,
+  bookPartial: Partial<Book>,
+  oAuthorDir?: string,
+  oFilename?: string,
+): Promise<Book> {
   try {
     if (!booksDir) {
       throw new Error("Books directory not specified.");
@@ -176,24 +181,42 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
     initBookDirs(booksDir);
 
     log.info(
-      `${!oAuthorDir && !oFilename ? "Adding" : "Saving"} book: ${book.title} by ${book.authors.map((a) => a.name).join(", ")}`,
+      `${!oAuthorDir && !oFilename ? "Adding" : "Saving"} book: ${bookPartial.title ?? "?"} by ${bookPartial.authors?.map((a) => a.name).join(", ") ?? "?"}`,
     );
 
-    // Trim, default values.
-    book.title = book.title.trim();
-    book.series = book.series?.trim() ?? "";
-    book.seriesNumber = book.seriesNumber?.trim() ?? "";
-    book.datePublished = book.datePublished?.trim() ?? "";
-    book.dateRead = book.dateRead?.trim() ?? "";
-    book.notes = book.notes?.trim() ?? "";
-    if (!book.cache) {
-      book.cache = {};
-    }
-    if (!book.images) {
-      book.images = {
+    // Defaults + partial
+    const book: Book = {
+      version: "2",
+      title: "",
+      authors: [],
+      tags: [],
+      rating: 0,
+      timestampAdded: 0,
+      series: "",
+      seriesNumber: "",
+      datePublished: "",
+      dateRead: "",
+      description: "",
+      notes: "",
+      cache: {},
+      images: {
         hasImage: false,
-      };
-    }
+      },
+      ids: {},
+      ...bookPartial,
+    };
+
+    // Clean data
+    book.version = "2";
+    book.title = book.title.trim();
+    book.authors = book.authors.map((a) => ({ name: a.name.trim(), ...a })).filter((a) => a.name.length);
+    book.datePublished = book.datePublished.trim();
+    book.dateRead = book.dateRead.trim();
+    book.series = book.series.trim();
+    book.seriesNumber = book.seriesNumber.trim();
+    book.tags = book.tags.map((t) => t.trim()).filter((t) => t.length);
+    book.description = book.description.trim();
+    book.notes = book.notes.trim();
 
     // Paths
     book.cache.authorDir = authorsToDir(book.authors);
@@ -208,36 +231,31 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
     book.cache.filepath = `${book.cache.authorDir}/${book.cache.filename}`;
     book.cache.urlpath = book.cache.filepath.replace(/ /g, "%20");
 
-    const changedAuthor = !!oAuthorDir && oAuthorDir !== book.cache.authorDir;
-    const changedTitle = !!oFilename && oFilename !== newFilename;
-    const oAuthorPath = !!oAuthorDir ? path.join(booksDir, oAuthorDir) : authorPath;
-    const oFilepath = path.join(oAuthorPath, !!oFilename ? oFilename : book.cache.filename);
+    // New?
+    const filepath = path.join(booksDir, `${book.cache.filepath}.yaml`);
+    if (!book.timestampAdded && !fs.existsSync(filepath)) {
+      book.timestampAdded = new Date().getTime();
+    }
 
-    // Use the image variable to save the image, then delete the variable.
+    // Image
     let newImage = false;
     const oldImage = book.images.hasImage;
-    // [sic], not checking the hasImage variable, checking if there's a new image
     if (book.cache.image) {
+      // [sic], not checking the hasImage variable, checking if there's a new image
       await saveBookImage(booksDir, book, book.cache.image);
       newImage = true;
       book.images.hasImage = true;
       book.images.imageUpdated = new Date().getTime();
     }
 
-    if (!book.tags) {
-      book.tags = [];
-    } else {
-      book.tags = book.tags.filter((t) => t.trim().length);
-    }
-
-    const filepath = path.join(booksDir, `${book.cache.filepath}.yaml`);
-    if (!book.timestampAdded && !fs.existsSync(filepath)) {
-      book.timestampAdded = new Date().getTime();
-    }
-
+    // Save!
     saveYaml(filepath, book);
 
     // Handle old data
+    const changedAuthor = !!oAuthorDir && oAuthorDir !== book.cache.authorDir;
+    const changedTitle = !!oFilename && oFilename !== newFilename;
+    const oAuthorPath = !!oAuthorDir ? path.join(booksDir, oAuthorDir) : authorPath;
+    const oFilepath = path.join(oAuthorPath, !!oFilename ? oFilename : book.cache.filename);
 
     if (oldImage && (changedAuthor || changedTitle) && fs.existsSync(`${oFilepath}.jpg`)) {
       if (newImage) {
@@ -248,12 +266,10 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
         fs.renameSync(`${oFilepath}.jpg`, path.join(authorPath, `${newFilename}.jpg`));
       }
     }
-
     if ((changedAuthor || changedTitle) && fs.existsSync(`${oFilepath}.yaml`)) {
       log.debug("Deleting old yaml");
       fs.rmSync(`${oFilepath}.yaml`, { force: true });
     }
-
     if (changedAuthor && fs.existsSync(oAuthorPath)) {
       // If we moved the author dir and the old one is empty, delete it.
       const oldAuthorDir = fs.readdirSync(oAuthorPath);
@@ -262,11 +278,11 @@ export async function saveBook(booksDir: string, book: Book, oAuthorDir?: string
         fs.rmSync(oAuthorPath, { recursive: true, force: true });
       }
     }
+
+    return book;
   } catch (e) {
     throw new WyrmError("Error saving book.", e);
   }
-
-  return book;
 }
 
 /**

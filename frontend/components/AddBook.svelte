@@ -1,13 +1,20 @@
 <script lang="ts">
   import log from "electron-log/renderer";
   import Dropzone from "svelte-file-dropzone";
+  import Plus from "phosphor-svelte/lib/Plus";
   import Modal from "@components/Modal.svelte";
   import HoverInfo from "@components/HoverInfo.svelte";
   import FlexibleDate from "@components/FlexibleDate.svelte";
-  import Plus from "phosphor-svelte/lib/Plus";
+  import { books } from "@stores/books";
 
   let addBookOpen: boolean = false;
-  let book: Book = {} as Book;
+  let book: Partial<Book> = {
+    images: {
+      hasImage: false,
+    },
+    ids: {},
+    cache: {},
+  };
   let authors: string = "";
   let tags: string = "";
   let addImagePath: string = "";
@@ -18,13 +25,22 @@
   function openDialog() {
     addBookOpen = true;
     book = {
-      images: {},
+      images: {
+        hasImage: false,
+      },
       ids: {},
       cache: {},
-    } as Book;
+    };
     authors = "";
     tags = "";
     addImagePath = "";
+
+    const removeSavedListener = window.electronAPI.bookSaved((savedBook: Book) => {
+      addBookOpen = false;
+      console.log(savedBook);
+      books.addBook(savedBook);
+      removeSavedListener();
+    });
   }
 
   function setAuthors() {
@@ -44,9 +60,6 @@
 
   function addBook() {
     window.electronAPI.saveBook(book);
-    addBookOpen = false;
-    // stupid hack to avoid race condition
-    setTimeout(window.electronAPI.readAllBooks, 1000);
   }
 
   function handleBookImage(e: CustomEvent) {
@@ -61,6 +74,9 @@
       addImagePath = acceptedFiles[0].path.replace(/\\/g, "/").replace(/ /g, "%20");
       if (addImagePath.charAt(0) !== "/") {
         addImagePath = `/${addImagePath}`;
+      }
+      if (!book.cache) {
+        book.cache = {};
       }
       book.cache.image = addImagePath;
     }

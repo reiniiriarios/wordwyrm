@@ -41,7 +41,7 @@ export const api = {
   readBook: (authorDir: string, filename: string) => ipcRenderer.send("readBook", authorDir, filename),
   receiveBook: (callback: Callback) => ipcCallback("receiveBook", callback),
 
-  saveBook: (book: Book) => ipcRenderer.send("saveBook", book),
+  saveBook: (book: Partial<Book>) => ipcRenderer.send("saveBook", book),
   bookSaved: (callback: Callback) => ipcCallback("bookSaved", callback),
   editBook: (book: Book, authorDir: string, filename: string) =>
     ipcRenderer.send("editBook", book, authorDir, filename),

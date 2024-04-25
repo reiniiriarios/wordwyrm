@@ -1,7 +1,7 @@
 <script lang="ts">
   import log from "electron-log/renderer";
   import Modal from "@components/Modal.svelte";
-  import { onMount, tick } from "svelte";
+  import { tick } from "svelte";
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
   import { books } from "@stores/books";
   import ScrollBox from "./ScrollBox.svelte";
@@ -27,23 +27,7 @@
     canAdd = false;
     adding = false;
     tick().then(() => searchInput.focus());
-  }
 
-  function search() {
-    if (searchString) {
-      searching = true;
-      window.electronAPI.searchBook(searchString);
-    }
-  }
-
-  function searchKey(e: KeyboardEvent) {
-    if (["\n", "Enter"].includes(e.key) && !canAdd) {
-      log.debug("searching api");
-      search();
-    }
-  }
-
-  onMount(() => {
     const removeSearchListener = window.electronAPI.searchBookResults((books: Book[]) => {
       searchResults = books;
       searching = false;
@@ -59,15 +43,26 @@
       addBookOpen = false;
       adding = false;
       books.addBook(book);
-    });
-
-    return () => {
-      window.removeEventListener("keydown", searchKey);
-      removeSearchListener();
-      removeReceiveListener();
       removeSavedListener();
-    };
-  });
+      removeReceiveListener();
+      removeSearchListener();
+      window.removeEventListener("keydown", searchKey);
+    });
+  }
+
+  function search() {
+    if (searchString) {
+      searching = true;
+      window.electronAPI.searchBook(searchString);
+    }
+  }
+
+  function searchKey(e: KeyboardEvent) {
+    if (["\n", "Enter"].includes(e.key) && !canAdd) {
+      log.debug("searching api");
+      search();
+    }
+  }
 
   function selectBook(book: Book) {
     selectedBook = book;
