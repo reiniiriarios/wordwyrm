@@ -76,8 +76,7 @@ export const config: Options.Testrunner = {
   capabilities: [
     {
       browserName: "electron",
-      // fixes: Chromedriver v122.0.6261.130 don't exist, trying to find known good version...
-      browserVersion: "122.0.6261.128",
+      // browserVersion: "29.1.5",
       // Electron service options
       // see https://webdriver.io/docs/desktop-testing/electron/configuration/#service-options
       "wdio:electronServiceOptions": {
@@ -87,8 +86,28 @@ export const config: Options.Testrunner = {
           process.platform === "win32" ? "win-unpacked" : `${process.platform}-unpacked`,
           process.platform === "linux" ? "wordwyrm" : process.platform === "win32" ? "Wordwyrm.exe" : "Wordwyrm",
         ),
-        // custom application args
-        appArgs: [],
+        // https://peter.sh/experiments/chromium-command-line-switches/
+        appArgs: [
+          "no-sandbox", // disable chrome's sandbox for testing https://stackoverflow.com/a/50725918/1689770
+          "disable-dev-shm-usage", // overcome low resource issues https://stackoverflow.com/a/50725918/1689770
+          "remote-debugging-pipe", // disables DevToolsActivePort
+          "disable-gpu", // possibly fix timeout issues (windows) https://stackoverflow.com/questions/51959986
+          "enable-automation", // possibly fix timeout issues https://stackoverflow.com/a/43840128/1689770
+          "disable-browser-side-navigation", // possibly fix timeout issues https://stackoverflow.com/a/49123152/1689770
+          "disable-extensions",
+          "disable-notifications",
+          "allow-insecure-localhost",
+          "mute-audio",
+        ],
+      },
+      "wdio:chromedriverOptions": {
+        binary: path.join(
+          path.resolve("."),
+          "node_modules",
+          "electron-chromedriver",
+          "bin",
+          process.platform === "win32" ? "chromedriver.exe" : "chromedriver",
+        ),
       },
     },
   ],
