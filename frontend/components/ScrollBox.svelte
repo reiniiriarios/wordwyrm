@@ -8,9 +8,10 @@
 
   onMount(() => {
     tick().then(updateScroll);
-    window.addEventListener("resize", updateScroll);
+    const resizeObserver = new ResizeObserver(updateScroll);
+    resizeObserver.observe(box);
     return () => {
-      window.removeEventListener("resize", updateScroll);
+      resizeObserver.unobserve(box);
     };
   });
 
