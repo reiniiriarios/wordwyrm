@@ -86,8 +86,6 @@ function createBooks() {
       books.applyFilter();
     },
     sort: (method?: string) => {
-      log.debug("Books store: sorting books");
-      // sort what is already filtered, then searched through
       update((s) => {
         if (method && !!sortFilters[method]) {
           s.filters.sort = method;
@@ -99,7 +97,6 @@ function createBooks() {
       });
     },
     sortReverse: () => {
-      log.debug("Books store: reversing books");
       update((s) => {
         s.filters.reverse = !s.filters.reverse;
         s.sortedBooks = s.sortedBooks.reverse();
@@ -107,7 +104,6 @@ function createBooks() {
       });
     },
     search: () => {
-      log.debug("Books store: searching books");
       update((s) => {
         s.searchedBooks = searchBooks(structuredClone(s.filteredBooks), s.filters.search);
         return s;
@@ -115,7 +111,6 @@ function createBooks() {
       books.sort();
     },
     clearSearch: () => {
-      log.debug("Books store: clearing book search");
       update((s) => {
         s.filters.search = "";
         s.searchedBooks = structuredClone(s.filteredBooks);
