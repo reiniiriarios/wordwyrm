@@ -156,6 +156,7 @@
 
           :global(.tag) {
             background-color: var(--c-table2-hover2);
+            border-color: var(--c-table2-hover2);
           }
         }
       }

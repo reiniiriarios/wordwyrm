@@ -113,16 +113,22 @@
 
     button {
       background-color: var(--c-button);
+      border: 1px solid var(--c-button-border, var(--c-button));
       color: var(--c-text);
-      padding: 0.25rem 0.5rem;
-      border: 0;
+      padding: 0.24rem 0.49rem;
       border-radius: 0.25rem;
       cursor: pointer;
       font-size: 0.75rem;
 
-      &:hover,
-      &.selected {
+      &:hover {
         background-color: var(--c-button-hover);
+        border: 1px solid var(--c-button-hover-border, var(--c-button-hover));
+      }
+
+      &.selected {
+        background-color: var(--c-button-active, var(--c-button-hover));
+        border: 1px solid
+          var(--c-button-active-border, var(--c-button-active, var(--c-button-hover-border, var(--c-button-hover))));
       }
     }
   }

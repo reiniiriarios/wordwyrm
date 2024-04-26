@@ -6,6 +6,12 @@
   let filterTags: string[] = [];
   $: filterTags = $settings.filterTags?.split(",").map((t) => t.trim());
 
+  let currentFilter: string = "";
+  let filtered: boolean = false;
+  $: currentFilter =
+    filterTags && $books.filters.tag ? $books.filters.tag : catFilters?.[$books.filters.filter]?.name ?? "";
+  $: filtered = currentFilter !== catFilters[Object.keys(catFilters)[0]]?.name;
+
   function filter(e: MouseEvent | KeyboardEvent) {
     const opt = e.target as HTMLButtonElement;
     const val = opt.dataset.val ?? "";
@@ -22,12 +28,8 @@
 <div class="filter filter--cats">
   <span>Filter:</span>
   <div class="dropdownFilter">
-    <button class="filter__btn dropdownFilter__selected">
-      {#if filterTags && $books.filters.tag}
-        {$books.filters.tag}
-      {:else}
-        {catFilters[$books.filters.filter].name}
-      {/if}
+    <button class="dropdownFilter__selected" class:filtered>
+      {currentFilter}
     </button>
     <div class="dropdownFilter__dropdown">
       {#each Object.entries(catFilters) as [i, f]}
@@ -35,7 +37,7 @@
           on:click={filter}
           data-val={i}
           data-type="cat"
-          class="filter__btn dropdownFilter__opt"
+          class="dropdownFilter__opt"
           class:selected={$books.filters.filter === i}>{f.name}</button
         >
       {/each}
@@ -45,7 +47,7 @@
             on:click={filter}
             data-val={tag}
             data-type="tag"
-            class="filter__btn dropdownFilter__opt"
+            class="dropdownFilter__opt"
             class:selected={$books.filters.tag === tag}>{tag}</button
           >
         {/each}

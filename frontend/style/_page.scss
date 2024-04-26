@@ -36,18 +36,20 @@
 }
 
 .tag {
-  background-color: var(--c-button);
+  background-color: var(--c-tag, var(--c-button));
+  border: 1px solid var(--c-tag-border, var(--c-tag, var(--c-button)));
   color: var(--c-text);
-  padding: 0.25rem 0.5rem;
+  padding: 0.24rem 0.49rem;
   border-radius: 0.25rem;
 }
 
 button.tag {
-  border: 0;
+  border: 1px solid var(--c-tag-border, var(--c-tag, var(--c-button)));
   cursor: pointer;
 
   &:hover {
-    background-color: var(--c-button-hover);
+    background-color: var(--c-tag-hover, var(--c-button-hover));
+    border-color: var(--c-tag-hover-border, var(--c-button-hover-border, var(--c-button-hover)));
   }
 }
 
@@ -55,6 +57,7 @@ button.tag {
   font-size: 0.9rem;
   padding: 0.25rem 0.5rem;
   border-radius: 1rem;
+  color: var(--c-unread-text, var(--c-text));
   background: linear-gradient(0deg, rgba(0 0 0 / 10%), transparent 100%), var(--c-unread);
   box-shadow: var(--shadow-1) 0.05rem 0.05rem 0.5rem 0.2rem;
 }

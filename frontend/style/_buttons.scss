@@ -9,9 +9,9 @@
 
 .btn {
   background-color: var(--c-button);
+  border: 1px solid var(--c-button-border, var(--c-button));
   color: var(--c-text-muted);
-  padding: 0.5rem 0.75rem;
-  border: 0;
+  padding: 0.49rem 0.74rem;
   font-size: 1rem;
   display: inline-flex;
   align-items: center;
@@ -28,6 +28,7 @@
 
   &:hover {
     background-color: var(--c-button-hover);
+    border-color: var(--c-button-hover-border, var(--c-button-border, var(--c-button-hover)));
     color: var(--c-text);
     text-decoration: none;
   }
@@ -49,10 +50,12 @@
 
   &--light {
     background-color: var(--c-button-light);
+    border: 1px solid var(--c-button-border, var(--c-button-light));
     color: var(--c-text-muted);
 
     &:hover {
       background-color: var(--c-button-light-hover);
+      border-color: var(--c-button-hover-border, var(--c-button-light-hover));
       color: var(--c-text);
     }
 
@@ -99,9 +102,11 @@
 
   &--delete {
     background-color: var(--c-error-bg-muted);
+    border-color: var(--c-error-bg-muted-border, var(--c-error-bg-muted));
 
     &:hover {
       background-color: var(--c-error-bg);
+      border-color: var(--c-error-bg-border, var(--c-error-bg));
     }
   }
 }

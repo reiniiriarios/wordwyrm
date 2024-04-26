@@ -185,6 +185,8 @@
   }
 
   .btn.selected {
-    background-color: var(--c-button-hover);
+    background-color: var(--c-button-active, var(--c-button-hover));
+    border: 1px solid
+      var(--c-button-active-border, var(--c-button-active, var(--c-button-hover-border, var(--c-button-hover))));
   }
 </style>

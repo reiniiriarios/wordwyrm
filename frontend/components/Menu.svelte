@@ -107,8 +107,8 @@
       }
 
       &.active {
-        color: var(--c-text);
-        border-color: var(--c-text-muted);
+        color: var(--c-menu-active);
+        border-color: var(--c-menu-active);
       }
     }
 

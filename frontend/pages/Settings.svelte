@@ -161,14 +161,15 @@
             bind:value={editSettings.theme}
             options={{
               default: "Default",
-              harrow: "Harrow",
-              gideon: "Gideon",
-              nona: "Nona",
-              slate: "Slate",
+              ayuLight: "Ayu Light",
               rosepine: "Rosé Pine",
               rosepineDawn: "Rosé Pine Dawn",
               nord: "Nord",
               nordLight: "Nord Bright",
+              slate: "Slate",
+              gideon: "Gideon",
+              harrow: "Harrow",
+              nona: "Nona",
             }}
             on:change={previewTheme}
           />

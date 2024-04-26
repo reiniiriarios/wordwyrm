@@ -209,7 +209,7 @@ class Bridge {
   }
 
   public setWindowTheme(theme: string) {
-    if (["rosepineDawn", "nordLight"].includes(theme)) {
+    if (["rosepineDawn", "nordLight", "ayuLight"].includes(theme)) {
       nativeTheme.themeSource = "light";
     } else {
       nativeTheme.themeSource = "dark";
