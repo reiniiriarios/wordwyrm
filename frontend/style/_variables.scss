@@ -187,6 +187,90 @@
   --shadow-5: rgb(0 0 0 / 28%);
 }
 
+#appContainer[data-theme="ayuDark"] {
+  // syntax
+  --c-stag: #39bae6;
+  --c-func: #ffb454;
+  --c-entity: #59c2ff;
+  --c-string: #aad94c;
+  --c-regexp: #95e6cb;
+  --c-markup: #f07178;
+  --c-keyword: #ff8f40;
+  --c-special: #e6b673;
+  --c-comment: #acb6bf8c;
+  --c-constant: #d2a6ff;
+  --c-operator: #f29668;
+  // vcs
+  --c-added: #7fd962;
+  --c-modified: #73b8ff;
+  --c-removed: #f26d78;
+  // editor
+  --c-edit-fg: #bfbdb6;
+  --c-edit-bg: #0d1017;
+  --c-edit-line: #131721;
+  --c-edit-selection-active: #409fff4d;
+  --c-edit-selection-inactive: #409fff21;
+  --c-find-active: #6c5980;
+  --c-find-inactive: #6c598066;
+  --c-gutter-active: #6c7380e6;
+  --c-gutter-normal: #6c738099;
+  --c-indent-active: #6c738080;
+  --c-indent-normal: #6c738033;
+  // ui
+  --c-fg: #565b66;
+  --c-bg: #0b0e14;
+  --c-line: #11151c;
+  --c-selection-active: #47526640;
+  --c-selection-normal: #47526633;
+  --c-panel-bg: #0f131a;
+  --c-panel-shadow: #00000080;
+  // common
+  --c-common-accent: #e6b450;
+  --c-common-error: #d95757;
+}
+
+#appContainer[data-theme="ayuMirage"] {
+  // syntax
+  --c-stag: #5ccfe6;
+  --c-func: #ffd173;
+  --c-entity: #73d0ff;
+  --c-string: #d5ff80;
+  --c-regexp: #95e6cb;
+  --c-markup: #f28779;
+  --c-keyword: #ffad66;
+  --c-special: #ffdfb3;
+  --c-comment: #b8cfe680;
+  --c-constant: #dfbfff;
+  --c-operator: #ed9366;
+  // vcs
+  --c-added: #87d96c;
+  --c-modified: #80bfff;
+  --c-removed: #f27983;
+  // editor
+  --c-edit-fg: #cccac2;
+  --c-edit-bg: #242936;
+  --c-edit-line: #1a1f29;
+  --c-edit-selection-active: #409fff40;
+  --c-edit-selection-inactive: #409fff21;
+  --c-find-active: #695380;
+  --c-find-inactive: #69538066;
+  --c-gutter-active: #8a9199cc;
+  --c-gutter-normal: #8a919966;
+  --c-indent-active: #8a919959;
+  --c-indent-normal: #8a91992e;
+  // ui
+  --c-fg: #707a8c;
+  --c-bg: #1f2430;
+  --c-line: #171b24;
+  --c-selection-active: #63759926;
+  --c-selection-normal: #69758c1f;
+  --c-panel-bg: #1c212b;
+  --c-panel-shadow: #12151cb3;
+  // common
+  --c-common-accent: #ffcc56;
+  --c-common-error: #ff6666;
+}
+
 // Rosé Pine
 // https://rosepinergba(102, 76, 90, 0.102)/palette
 #appContainer[data-theme="rosepine"] {
