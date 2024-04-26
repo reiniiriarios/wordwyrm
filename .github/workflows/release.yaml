@@ -29,34 +29,22 @@ jobs:
       - name: Build
         run: npm run build:client
 
-      - name: Build macOS Image
+      - name: Build for macOS
         if: matrix.platform == 'macos-latest'
         run: npm run build:mac
 
-      - name: Build Windows Portable
+      - name: Build for Windows
         if: matrix.platform == 'windows-latest'
-        run: npm run build:win
+        run: |
+          npm run build:win
+          npm run build:nsis
 
-      - name: Build for Linux (deb, rpm, appImage)
-        if: matrix.platform == 'ubuntu-latest'
-        run: npm run build:linux
-
-      # Test after building once per platform
-      - name: Test
-        run: npm run test
-
-      # Build additional only after tests pass
-      # These change data from previous builds, so must be built separate
-
-      - name: Build Windows Installer
-        if: matrix.platform == 'windows-latest'
-        run: npm run build:nsis
-
-      - name: Build for Snapcraft
+      - name: Build for Linux
         if: matrix.platform == 'ubuntu-latest'
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
           SNAPCRAFT_BUILD_ENVIRONMENT: host
         run: |
+          npm run build:linux
           sudo snap install snapcraft --classic
           npm run build:snap
