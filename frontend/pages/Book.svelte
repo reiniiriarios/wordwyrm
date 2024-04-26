@@ -9,9 +9,12 @@
   import { books } from "@stores/books";
   import { sortFilters } from "@scripts/sortBooks";
   import { formatDate } from "@scripts/formatDate";
+  import { parseMd } from "@scripts/md";
 
   export let params: { author: string; book: string } = { author: "", book: "" };
   let book: Book;
+  let description: string;
+  let notes: string;
   let seriesBooks: Book[] = [];
 
   onMount(() => {
@@ -19,11 +22,15 @@
 
     const removeReceiveListener = window.electronAPI.receiveBook((b: Book) => {
       book = b;
+      description = parseMd(b.description);
+      notes = parseMd(b.notes);
       filterSeries();
     });
 
     const removeSaveListener = window.electronAPI.bookSaved((b: Book) => {
       book = b;
+      description = parseMd(b.description);
+      notes = parseMd(b.notes);
       filterSeries();
     });
 
@@ -119,13 +126,13 @@
         {#if book.description}
           <div class="bookInfo--description">
             <div class="dataTitle">Description</div>
-            <div class="bookInfo--descriptionText">{book.description}</div>
+            <div class="bookInfo--descriptionText md">{@html description}</div>
           </div>
         {/if}
         {#if book.notes}
           <div class="bookInfo--notes">
             <div class="dataTitle">Notes</div>
-            <div class="bookInfo--notesText">{book.notes}</div>
+            <div class="bookInfo--notesText">{@html notes}</div>
           </div>
         {/if}
         <div class="bookInfo--moreInfo">
