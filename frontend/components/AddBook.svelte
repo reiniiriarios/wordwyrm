@@ -1,10 +1,11 @@
 <script lang="ts">
-  import log from "electron-log/renderer";
-  import Dropzone from "svelte-file-dropzone";
   import Plus from "phosphor-svelte/lib/Plus";
+
   import Modal from "@components/Modal.svelte";
   import HoverInfo from "@components/HoverInfo.svelte";
   import FlexibleDate from "@components/FlexibleDate.svelte";
+  import CoverDropzone from "@components/CoverDropzone.svelte";
+
   import { books } from "@stores/books";
 
   let addBookOpen: boolean = false;
@@ -62,23 +63,10 @@
   }
 
   function handleBookImage(e: CustomEvent) {
-    const { acceptedFiles, fileRejections } = e.detail as {
-      acceptedFiles: (File & { path: string })[];
-      fileRejections: (File & { path: string })[];
-    };
-    if (fileRejections.length) {
-      log.error("rejected files", fileRejections);
+    if (!book.cache) {
+      book.cache = {};
     }
-    if (acceptedFiles.length) {
-      addImagePath = acceptedFiles[0].path.replace(/\\/g, "/").replace(/ /g, "%20");
-      if (addImagePath.charAt(0) !== "/") {
-        addImagePath = `/${addImagePath}`;
-      }
-      if (!book.cache) {
-        book.cache = {};
-      }
-      book.cache.image = addImagePath;
-    }
+    book.cache.image = e.detail;
   }
 </script>
 
@@ -120,15 +108,6 @@
       Series Number
       <input type="text" bind:value={book.seriesNumber} />
     </label>
-    <div class="field field--image">
-      <Dropzone accept="image/*" on:drop={handleBookImage}>
-        {#if addImagePath}
-          <img src={`localfile://${addImagePath}`} alt="" />
-        {:else}
-          <div class="dropzone__info">Drag or click here to add image.</div>
-        {/if}
-      </Dropzone>
-    </div>
     <label class="field field--tags">
       Tag(s) <HoverInfo details="Tags should be comma-separated." />
       <input type="text" bind:value={tags} on:keyup={typeTags} on:change={setTags} />
@@ -137,6 +116,9 @@
       Description
       <textarea rows="4" bind:value={book.description} />
     </label>
+    <div class="field field--image">
+      <CoverDropzone on:change={handleBookImage} />
+    </div>
   </fieldset>
 </Modal>
 

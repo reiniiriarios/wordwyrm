@@ -102,10 +102,6 @@ fieldset {
     box-shadow: none;
   }
 
-  &:focus-visible {
-    border-color: var(--c-focus) !important;
-  }
-
   img {
     box-shadow: 0.25rem 0.25rem 1.5rem 0rem var(--shadow-1);
     margin: 0 auto;
@@ -115,15 +111,79 @@ fieldset {
     transform: rotate(-1.5deg);
   }
 
+  &.tall {
+    img {
+      max-height: 55vh;
+    }
+  }
+
   &__info {
+    position: relative;
+    width: 100%;
     font-size: 0.9rem;
     color: var(--c-text-muted);
-    padding: 1rem;
+    padding: 2rem;
     text-align: center;
     line-height: 1.25;
 
     img + & {
       padding-bottom: 0.1rem;
     }
+  }
+
+  &__msg {
+    position: absolute;
+    top: 1rem;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    transition: opacity 0.2s;
+
+    &--default {
+      opacity: 1;
+    }
+
+    &--dragging {
+      opacity: 0;
+    }
+
+    &--error {
+      color: var(--c-error-light);
+      opacity: 0;
+    }
+  }
+
+  .dragHighlight & {
+    border-color: var(--c-subtle) !important;
+
+    .dropzone__msg {
+      &--default {
+        opacity: 0;
+      }
+
+      &--dragging {
+        opacity: 1;
+      }
+    }
+  }
+
+  .invalidFile & {
+    .dropzone__msg {
+      &--default {
+        opacity: 0;
+      }
+
+      &--error {
+        opacity: 1;
+      }
+    }
+  }
+
+  &:active {
+    border-color: var(--c-subtle) !important;
+  }
+
+  &:focus-visible {
+    border-color: var(--c-focus) !important;
   }
 }

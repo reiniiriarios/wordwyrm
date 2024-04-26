@@ -1,7 +1,5 @@
 <script lang="ts">
-  import log from "electron-log/renderer";
   import { onMount } from "svelte";
-  import Dropzone from "svelte-file-dropzone";
   import { push } from "svelte-spa-router";
 
   import ScrollBox from "@components/ScrollBox.svelte";
@@ -13,6 +11,8 @@
   import CropCover from "@components/CropCover.svelte";
   import DeleteBook from "@components/DeleteBook.svelte";
   import FlexibleDate from "@components/FlexibleDate.svelte";
+  import CoverDropzone from "@components/CoverDropzone.svelte";
+
   import { settings } from "@stores/settings";
   import { books } from "@stores/books";
 
@@ -77,20 +77,7 @@
   }
 
   function handleBookImageDropped(e: CustomEvent) {
-    const { acceptedFiles, fileRejections } = e.detail as {
-      acceptedFiles: (File & { path: string })[];
-      fileRejections: (File & { path: string })[];
-    };
-    if (fileRejections.length) {
-      log.error("rejected files", fileRejections);
-    }
-    if (acceptedFiles.length) {
-      imagePath = acceptedFiles[0].path.replace(/\\/g, "/").replace(/ /g, "%20");
-      if (imagePath.charAt(0) !== "/") {
-        imagePath = `/${imagePath}`;
-      }
-      book.cache.image = imagePath;
-    }
+    book.cache.image = imagePath;
   }
 
   function handleImageSearchAdded(_: CustomEvent) {
@@ -134,14 +121,7 @@
     <div class="bookPage__image">
       <div class="field">
         Cover Image
-        <Dropzone accept="image/*" on:drop={handleBookImageDropped} containerClasses="above">
-          {#if imagePath}
-            <img src={`localfile://${imagePath}`} alt="" />
-            <div class="dropzone__info">Drag or click here to replace image.</div>
-          {:else}
-            <div class="dropzone__info">Drag or click here to add image manually.</div>
-          {/if}
-        </Dropzone>
+        <CoverDropzone on:change={handleBookImageDropped} containerClasses="tall above" bind:imagePath addlMsg />
       </div>
       <div class="imageActions">
         {#if book}
@@ -256,12 +236,6 @@
     &__image {
       height: 100%;
       width: 45vw;
-
-      .dropzone {
-        img {
-          max-height: 55vh;
-        }
-      }
     }
 
     &__info {
