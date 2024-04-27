@@ -76,7 +76,7 @@
               {#if $books.filters.sort === "rating"}
                 {#if book.rating}
                   <span class="book__rating">
-                    <Rating rating={book.rating} />
+                    <Rating rating={book.rating} short />
                   </span>
                 {/if}
               {:else if !book.dateRead}
@@ -194,10 +194,9 @@
 
     &__rating {
       position: absolute;
-      width: 10rem;
       overflow: hidden;
       bottom: -0.5rem;
-      right: -0.75rem;
+      right: -1rem;
       z-index: 20;
       filter: drop-shadow(0.05rem 0.05rem 0.25rem rgba(0 0 0 / 33%));
     }

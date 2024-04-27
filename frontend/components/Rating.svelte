@@ -3,6 +3,7 @@
 
   export let rating: number = 0;
   export let editable: boolean = false;
+  export let short: boolean = false;
 
   let showRating: number = 0;
   let hovering: boolean = false;
@@ -29,24 +30,32 @@
   }
 </script>
 
-<div class="rating" role={editable ? undefined : "img"} aria-label={`Rating: ${rating} out of 5 stars`} class:editable>
+<div
+  class="rating"
+  role={editable ? undefined : "img"}
+  aria-label={`Rating: ${rating} out of 5 stars`}
+  style:width={`${editable ? 14 : short ? rating * 2 : 12}rem`}
+  class:editable
+>
   {#each Array(5) as _, i}
-    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-    <div
-      class="star"
-      class:full={!hovering && rating > i}
-      class:hover={editable && hovering && showRating > i}
-      role={editable ? "radio" : undefined}
-      aria-label={editable ? `Set rating to ${i} out of 5 stars` : undefined}
-      tabindex={editable ? 0 : -1}
-      data-i={i + 1}
-      on:mouseenter={hoverStar}
-      on:mouseleave={unHoverStar}
-      on:focus={hoverStar}
-      on:blur={unHoverStar}
-      on:click={setStars}
-      on:keypress={setStars}
-    ></div>
+    {#if editable || rating > i || !short}
+      <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+      <div
+        class="star"
+        class:full={!hovering && rating > i}
+        class:hover={editable && hovering && showRating > i}
+        role={editable ? "radio" : undefined}
+        aria-label={editable ? `Set rating to ${i} out of 5 stars` : undefined}
+        tabindex={editable ? 0 : -1}
+        data-i={i + 1}
+        on:mouseenter={hoverStar}
+        on:mouseleave={unHoverStar}
+        on:focus={hoverStar}
+        on:blur={unHoverStar}
+        on:click={setStars}
+        on:keypress={setStars}
+      ></div>
+    {/if}
   {/each}
   {#if editable}
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
