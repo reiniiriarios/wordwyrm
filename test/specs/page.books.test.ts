@@ -16,10 +16,10 @@ const imgs: number[] = [0, 1700000000002, 0, 1700000000003]; // read order
 const bookOrder: Record<string, string[]> = {
   read: [href.a1b2, href.tatb, href.taab, href.a1b1],
   added: [href.a1b2, href.a1b1, href.taab, href.tatb],
-  author: [href.a1b1, href.a1b2, href.tatb, href.taab],
+  author: [href.tatb, href.taab, href.a1b1, href.a1b2],
   title: [href.taab, href.a1b1, href.a1b2, href.tatb],
-  published: [href.a1b1, href.tatb, href.a1b2, href.taab],
-  rating: [href.a1b2, href.taab, href.a1b1, href.tatb],
+  published: [href.tatb, href.a1b1, href.taab, href.a1b2],
+  rating: [href.taab, href.a1b2, href.a1b1, href.tatb],
 };
 
 const NUM_TEST_BOOKS = 4;
@@ -76,11 +76,13 @@ describe("books page", () => {
     for await (const sortButton of sortButtons) {
       await sortButton.click();
       const order = await sortButton.getAttribute("data-val");
+      console.log(order);
       bookLinks = await $$(".bookList .book > a");
       let n = 0;
       // Check order
       for await (const bookLink of bookLinks) {
         const href = await bookLink.getAttribute("href");
+        console.log(href);
         expect(bookOrder[order][n]).toBe(href);
         n++;
       }

@@ -14,11 +14,11 @@ const bookData: Record<string, [string, string]> = {
 const bookOrder: Record<string, [string, string][]> = {
   read: [bookData.a1b2, bookData.tatb, bookData.taab, bookData.a1b1],
   added: [bookData.a1b2, bookData.a1b1, bookData.taab, bookData.tatb],
-  author: [bookData.a1b1, bookData.a1b2, bookData.tatb, bookData.taab],
+  author: [bookData.tatb, bookData.taab, bookData.a1b1, bookData.a1b2],
   series: [bookData.a1b1, bookData.a1b2, bookData.tatb, bookData.taab],
   seriesRev: [bookData.tatb, bookData.taab, bookData.a1b1, bookData.a1b2],
   title: [bookData.taab, bookData.a1b1, bookData.a1b2, bookData.tatb],
-  published: [bookData.a1b1, bookData.tatb, bookData.a1b2, bookData.taab],
+  published: [bookData.tatb, bookData.a1b1, bookData.taab, bookData.a1b2],
 };
 
 const NUM_TEST_BOOKS = 4;

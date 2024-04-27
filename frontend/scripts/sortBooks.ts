@@ -285,7 +285,7 @@ function sortValueSeries(x: Book, y: Book, reverse: boolean): number {
 function sortValueAuthors(x: Book, y: Book, reverse: boolean): number {
   const xA = x.authors?.[0].name.split(" ").pop();
   const yA = y.authors?.[0].name.split(" ").pop();
-  return reverse ? (xA ?? "").localeCompare(yA ?? "") : (yA ?? "").localeCompare(xA ?? "");
+  return reverse ? (yA ?? "").localeCompare(xA ?? "") : (xA ?? "").localeCompare(yA ?? "");
 }
 
 function sortValueDatePublished(x: Book, y: Book, reverse: boolean): number {
