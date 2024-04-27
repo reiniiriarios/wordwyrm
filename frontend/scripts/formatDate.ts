@@ -24,7 +24,7 @@ export function formatDate(datetime?: string | number | Date, format?: string): 
   }
   switch (format) {
     case "yyyy-mm-dd":
-      return `${date.getUTCFullYear()}-${date.getUTCMonth().toString().padStart(2, "0")}-${date
+      return `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, "0")}-${date
         .getUTCDate()
         .toString()
         .padStart(2, "0")}`;
