@@ -38,4 +38,59 @@
   // common
   --c-common-accent: #ffcc56;
   --c-common-error: #ff6666;
+
+  --c-sub: var(--c-panel-bg);
+  --c-base: var(--c-bg);
+  --c-surface: var(--c-edit-bg);
+  --c-overlay: #292e3b;
+  --c-muted: #303646;
+  --c-subtle: #373c4d;
+
+  --c-menu: var(--c-surface);
+  --c-menu-hover: var(--c-stag);
+  --c-menu-active: var(--c-string);
+
+  --c-text: var(--c-edit-fg);
+  --c-text-muted: var(--c-fg);
+  --c-text-dark: var(--c-fg);
+
+  --c-link: var(--c-added);
+  --c-link-hover: var(--c-string);
+  --c-image-select: var(--c-string);
+  --c-focus: var(--c-string);
+  --c-selection: var(--c-selection-active);
+
+  --c-table-row: var(--c-bg);
+  --c-table-row-alt: var(--c-edit-bg);
+  --c-table-hover: var(--c-find-inactive);
+  --c-table-row-selected: var(--c-find-active);
+  --c-table2-row: #1c212d;
+  --c-table2-row-alt: var(--c-edit-line);
+  --c-table2-hover: var(--c-find-inactive);
+  --c-table2-hover2: var(--c-find-inactive);
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-muted);
+  --c-button-light: var(--c-muted);
+  --c-button-light-hover: var(--c-subtle);
+  --c-dropdown: var(--c-button);
+
+  --c-error: var(--c-common-error);
+  --c-error-light: var(--c-markup);
+  --c-error-muted: var(--c-removed);
+  --c-error-bg: #992d2d;
+  --c-error-bg-muted: #813333;
+
+  --c-rating: var(--c-func);
+  --c-unread: var(--c-added);
+  --c-unread-text: var(--c-bg);
+
+  --c-book: var(--c-constant);
+  --c-book-border: var(--c-find-inactive);
+  --c-book-text: var(--c-bg);
+
+  --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: var(--c-stag);
+  --c-chart-bar-border: var(--c-entity);
 }

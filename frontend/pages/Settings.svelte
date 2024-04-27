@@ -162,6 +162,7 @@
             options={{
               default: "Default",
               ayuLight: "Ayu Light",
+              ayuMirage: "Ayu Mirage",
               rosepine: "Rosé Pine",
               rosepineDawn: "Rosé Pine Dawn",
               nord: "Nord",
