@@ -30,7 +30,10 @@ const rules = {
   fixHeadings2: (md: string): string => md.replace(/\n\n\n(<h[0-9]>[^<]+<\/h[0-9]>)/gm, "\n\n$1"),
 };
 
-export function parseMd(md: string): string {
-  Object.values(rules).forEach((rule) => (md = rule(md)));
+export function parseMd(md?: string): string {
+  if (!md) {
+    return "";
+  }
+  Object.values(rules).forEach((rule) => (md = rule(md ?? "")));
   return md;
 }
