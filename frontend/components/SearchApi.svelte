@@ -201,6 +201,7 @@
       input[type="text"] {
         margin-right: 0.75rem;
         width: 100%;
+        height: 2.25rem;
       }
     }
 
