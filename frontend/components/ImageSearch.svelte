@@ -5,6 +5,7 @@
   import { books } from "@stores/books";
   import Modal from "@components/Modal.svelte";
   import ScrollBox from "./ScrollBox.svelte";
+  import Spinner from "./Spinner.svelte";
 
   export let book: Book = {} as Book;
   export let selectedImageUrl: string = "";
@@ -117,7 +118,10 @@
       <div class="err">{err}</div>
     {/if}
     {#if searching}
-      <div class="searching">Searching...</div>
+      <div class="searching">
+        <div class="searching__spinner"><Spinner size="6rem" /></div>
+        <div class="searching__msg">Searching...</div>
+      </div>
     {:else}
       <div class="resultsContainer">
         <ScrollBox>
@@ -212,6 +216,24 @@
       justify-content: center;
       align-items: center;
       gap: 1rem;
+    }
+  }
+
+  .searching {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+
+    &__spinner {
+      color: var(--c-text-muted);
+    }
+
+    &__msg {
+      font-size: 1rem;
     }
   }
 </style>
