@@ -30,7 +30,7 @@
     .glass,
     .x {
       position: absolute;
-      top: 0.4rem;
+      top: 0.5rem;
     }
 
     .glass {
