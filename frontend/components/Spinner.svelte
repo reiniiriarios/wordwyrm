@@ -20,5 +20,6 @@
   .spinner {
     animation: rotating 2s linear infinite;
     display: inline-block;
+    pointer-events: none;
   }
 </style>

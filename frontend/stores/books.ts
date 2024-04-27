@@ -2,8 +2,30 @@ import log from "electron-log/renderer";
 import { writable } from "svelte/store";
 import { catFilters, filterByTag, recentFilters, searchBooks, sortFilters } from "@scripts/sortBooks";
 
+type BookStore = {
+  fetched: boolean;
+  fetching: boolean;
+  allBooks: Book[];
+  filteredBooks: Book[];
+  searchedBooks: Book[];
+  sortedBooks: Book[];
+  filters: {
+    sort: string;
+    reverse: boolean;
+    filter: string;
+    tag: string;
+    recent: string;
+    search: string;
+  };
+  view: {
+    zoom: "s" | "m" | "l";
+  };
+};
+
 function createBooks() {
-  const { set, subscribe, update } = writable({
+  const { set, subscribe, update } = writable<BookStore>({
+    fetched: false,
+    fetching: false,
     allBooks: [],
     filteredBooks: [],
     searchedBooks: [],
@@ -19,27 +41,13 @@ function createBooks() {
     view: {
       zoom: "m",
     },
-  } as {
-    allBooks: Book[];
-    filteredBooks: Book[];
-    searchedBooks: Book[];
-    sortedBooks: Book[];
-    filters: {
-      sort: string;
-      reverse: boolean;
-      filter: string;
-      tag: string;
-      recent: string;
-      search: string;
-    };
-    view: {
-      zoom: "s" | "m" | "l";
-    };
   });
 
   const rmListenerBooks = window.electronAPI.receiveAllBooks((b: Book[]) => {
     log.debug("Books store: received books");
     update((s) => {
+      s.fetched = true;
+      s.fetching = false;
       s.allBooks = b;
       return s;
     });
@@ -54,6 +62,10 @@ function createBooks() {
     },
     fetch: () => {
       log.debug("Books store: fetching books");
+      update((s) => {
+        s.fetching = true;
+        return s;
+      });
       window.electronAPI.readAllBooks();
     },
     addBook: (newBook: Book) => {

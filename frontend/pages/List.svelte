@@ -8,9 +8,11 @@
   import FilterCats from "@components/FilterCats.svelte";
   import FilterRead from "@components/FilterRead.svelte";
   import GettingStarted from "@components/GettingStarted.svelte";
+  import ScrollTable from "@components/ScrollTable.svelte";
+  import PageLoader from "@components/PageLoader.svelte";
+
   import { books } from "@stores/books";
   import { formatDate } from "@scripts/formatDate";
-  import ScrollTable from "@components/ScrollTable.svelte";
 
   onMount(() => {
     if (!$books.allBooks.length) {
@@ -43,47 +45,49 @@
   </div>
 </div>
 
-{#if $books.allBooks.length}
-  <div class="listContainer">
-    <ScrollTable>
-      <svelte:fragment slot="thead">
-        {#each ["title", "author", "series", "tags", "published", "read", "added"] as h}
-          <th on:click={() => sortFilter(h)} class:selected={$books.filters.sort === h} class={`col--${h}`}
-            >{h.charAt(0).toUpperCase()}{h.slice(1)}
-            {#if $books.filters.sort === h}
-              {#if $books.filters.reverse}
-                <CaretDown size={12} />
-              {:else}
-                <CaretUp size={12} />
+<PageLoader loading={!$books.fetched}>
+  {#if $books.allBooks.length}
+    <div class="listContainer">
+      <ScrollTable>
+        <svelte:fragment slot="thead">
+          {#each ["title", "author", "series", "tags", "published", "read", "added"] as h}
+            <th on:click={() => sortFilter(h)} class:selected={$books.filters.sort === h} class={`col--${h}`}
+              >{h.charAt(0).toUpperCase()}{h.slice(1)}
+              {#if $books.filters.sort === h}
+                {#if $books.filters.reverse}
+                  <CaretDown size={12} />
+                {:else}
+                  <CaretUp size={12} />
+                {/if}
               {/if}
-            {/if}
-          </th>
-        {/each}
-      </svelte:fragment>
-      <svelte:fragment slot="tbody">
-        {#each $books.sortedBooks as book}
-          <tr on:click={() => push(`#/book/${book.cache.filepath}`)}>
-            <td class="col--title">{book.title}</td>
-            <td class="col--author">{book.authors.map((a) => a.name).join(", ")}</td>
-            <td class="col--series">{book.series ?? ""}{book.seriesNumber ? ` #${book.seriesNumber}` : ""}</td>
-            <td class="col--tags">
-              <div class="tags">
-                {#each book.tags as tag}
-                  <span class="tag">{tag}</span>
-                {/each}
-              </div>
-            </td>
-            <td class="col--published date">{formatDate(book.datePublished)}</td>
-            <td class="col--read date">{formatDate(book.dateRead)}</td>
-            <td class="col--added date">{formatDate(book.timestampAdded)}</td>
-          </tr>
-        {/each}
-      </svelte:fragment>
-    </ScrollTable>
-  </div>
-{:else}
-  <GettingStarted />
-{/if}
+            </th>
+          {/each}
+        </svelte:fragment>
+        <svelte:fragment slot="tbody">
+          {#each $books.sortedBooks as book}
+            <tr on:click={() => push(`#/book/${book.cache.filepath}`)}>
+              <td class="col--title">{book.title}</td>
+              <td class="col--author">{book.authors.map((a) => a.name).join(", ")}</td>
+              <td class="col--series">{book.series ?? ""}{book.seriesNumber ? ` #${book.seriesNumber}` : ""}</td>
+              <td class="col--tags">
+                <div class="tags">
+                  {#each book.tags as tag}
+                    <span class="tag">{tag}</span>
+                  {/each}
+                </div>
+              </td>
+              <td class="col--published date">{formatDate(book.datePublished)}</td>
+              <td class="col--read date">{formatDate(book.dateRead)}</td>
+              <td class="col--added date">{formatDate(book.timestampAdded)}</td>
+            </tr>
+          {/each}
+        </svelte:fragment>
+      </ScrollTable>
+    </div>
+  {:else}
+    <GettingStarted />
+  {/if}
+</PageLoader>
 
 <style lang="scss">
   .listContainer {

@@ -11,8 +11,10 @@
   import GettingStarted from "@components/GettingStarted.svelte";
   import AddBook from "@components/AddBook.svelte";
   import SearchApi from "@components/SearchApi.svelte";
-  import { books } from "@stores/books";
   import ScrollBox from "@components/ScrollBox.svelte";
+  import PageLoader from "@components/PageLoader.svelte";
+
+  import { books } from "@stores/books";
 
   onMount(() => {
     if (!$books.allBooks.length) {
@@ -55,38 +57,39 @@
   </div>
 </div>
 
-{#if $books.allBooks.length}
-  <div class="listFilter">
-    <FilterSort />
-    <FilterCats />
-    <FilterRead />
-    <div class="filter filter--right">
-      <BookCount />
-    </div>
-  </div>
-
-  <div class="bookListContainer">
-    <ScrollBox>
-      <div class="bookList">
-        {#each $books.sortedBooks as book}
-          <div class="book" class:zoomSmall={$books.view.zoom === "s"} class:zoomLarge={$books.view.zoom === "l"}>
-            <a href={`#/book/${book.cache.filepath}`} class="book__inner">
-              <BookImage
-                {book}
-                overlay
-                size={$books.view.zoom}
-                showRating={$books.filters.sort === "rating"}
-                showUnread
-              />
-            </a>
-          </div>
-        {/each}
+<PageLoader loading={!$books.fetched}>
+  {#if $books.allBooks.length}
+    <div class="listFilter">
+      <FilterSort />
+      <FilterCats />
+      <FilterRead />
+      <div class="filter filter--right">
+        <BookCount />
       </div>
-    </ScrollBox>
-  </div>
-{:else}
-  <GettingStarted arrows />
-{/if}
+    </div>
+    <div class="bookListContainer">
+      <ScrollBox>
+        <div class="bookList">
+          {#each $books.sortedBooks as book}
+            <div class="book" class:zoomSmall={$books.view.zoom === "s"} class:zoomLarge={$books.view.zoom === "l"}>
+              <a href={`#/book/${book.cache.filepath}`} class="book__inner">
+                <BookImage
+                  {book}
+                  overlay
+                  size={$books.view.zoom}
+                  showRating={$books.filters.sort === "rating"}
+                  showUnread
+                />
+              </a>
+            </div>
+          {/each}
+        </div>
+      </ScrollBox>
+    </div>
+  {:else}
+    <GettingStarted arrows />
+  {/if}
+</PageLoader>
 
 <style lang="scss">
   .listFilter {
