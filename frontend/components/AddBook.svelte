@@ -23,6 +23,8 @@
 
   $: canConfirm = (book.title?.length ?? 0) > 0 && (book.authors?.length ?? 0) > 0;
 
+  let removeSavedListener: () => void;
+
   function openDialog() {
     addBookOpen = true;
     book = {
@@ -36,11 +38,15 @@
     tags = "";
     imagePath = "";
 
-    const removeSavedListener = window.electronAPI.bookSaved((savedBook: Book) => {
+    removeSavedListener = window.electronAPI.bookSaved((savedBook: Book) => {
       addBookOpen = false;
       books.addBook(savedBook);
       removeSavedListener();
     });
+  }
+
+  function cancel() {
+    removeSavedListener();
   }
 
   function setAuthors() {
@@ -79,6 +85,7 @@
   bind:open={addBookOpen}
   heading="Add Book"
   confirmWord="Add"
+  on:cancel={cancel}
   on:confirm={addBook}
   bind:canConfirm
 >

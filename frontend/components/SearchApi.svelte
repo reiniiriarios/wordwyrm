@@ -16,9 +16,11 @@
   let adding: boolean = false;
   let searchInput: HTMLInputElement;
   let updateScroll: () => void;
+  let removeSearchListener: () => void;
+  let removeReceiveListener: () => void;
+  let removeSavedListener: () => void;
 
   function openDialog() {
-    window.addEventListener("keydown", searchKey);
     addBookOpen = true;
     searchString = "";
     searchResults = [];
@@ -28,26 +30,32 @@
     adding = false;
     tick().then(() => searchInput.focus());
 
-    const removeSearchListener = window.electronAPI.searchBookResults((books: Book[]) => {
+    window.addEventListener("keydown", searchKey);
+
+    removeSearchListener = window.electronAPI.searchBookResults((books: Book[]) => {
       searchResults = books;
       searching = false;
       searched = true;
       setTimeout(updateScroll, 10);
     });
 
-    const removeReceiveListener = window.electronAPI.receiveBookData((book: Book) => {
+    removeReceiveListener = window.electronAPI.receiveBookData((book: Book) => {
       window.electronAPI.saveBook(book);
     });
 
-    const removeSavedListener = window.electronAPI.bookSaved((book: Book) => {
+    removeSavedListener = window.electronAPI.bookSaved((book: Book) => {
       addBookOpen = false;
       adding = false;
       books.addBook(book);
-      removeSavedListener();
-      removeReceiveListener();
-      removeSearchListener();
-      window.removeEventListener("keydown", searchKey);
+      removeListeners();
     });
+  }
+
+  function removeListeners() {
+    removeSavedListener();
+    removeReceiveListener();
+    removeSearchListener();
+    window.removeEventListener("keydown", searchKey);
   }
 
   function search() {
@@ -78,10 +86,6 @@
     window.removeEventListener("keydown", searchKey);
     window.electronAPI.getBookData(selectedBook);
   }
-
-  function closeSearch() {
-    window.removeEventListener("keydown", searchKey);
-  }
 </script>
 
 <button type="button" class="btn btn--searchForBook" on:click={openDialog}>
@@ -95,7 +99,7 @@
   confirmWord="Add"
   loading={adding}
   on:confirm={addBook}
-  on:cancel={closeSearch}
+  on:cancel={removeListeners}
   bind:canConfirm={canAdd}
 >
   <div class="searchArea">
