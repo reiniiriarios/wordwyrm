@@ -69,6 +69,7 @@
       width: 100%;
       height: var(--shadow-height);
       transition: opacity 0.05s linear;
+      pointer-events: none;
 
       &--top {
         top: var(--head-height);
