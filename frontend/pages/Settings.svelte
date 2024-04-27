@@ -163,6 +163,7 @@
               default: "Default",
               ayuLight: "Ayu Light",
               ayuMirage: "Ayu Mirage",
+              ayuDark: "Ayu Dark",
               rosepine: "Rosé Pine",
               rosepineDawn: "Rosé Pine Dawn",
               nord: "Nord",
