@@ -92,26 +92,26 @@ describe("list page", () => {
   it("should filter books by category", async () => {
     // Get buttons
     const filterDropdown = await $(".filter--cats");
-    const filterButtons = await $$(".filter--cats .filter__btn");
-    expect(filterButtons.length).toBe(4); // Selected + Default: All, Fiction, Non-Fiction
+    const filterButtons = await $$(".filter--cats .dropdownFilter__opt");
+    expect(filterButtons.length).toBe(3); // Default: All, Fiction, Non-Fiction
     await filterDropdown.moveTo();
     // Fiction
-    await filterButtons[2].moveTo();
-    await filterButtons[2].click();
+    await filterButtons[1].moveTo();
+    await filterButtons[1].click();
     let books = await $$(".scrollTable__body tr");
     expect(books.length).toBe(2);
     expect(await getTitleAuthor(books[0])).toStrictEqual(bookData.a1b2);
     expect(await getTitleAuthor(books[1])).toStrictEqual(bookData.tatb);
     // Non-Fiction
-    await filterButtons[3].moveTo();
-    await filterButtons[3].click();
+    await filterButtons[2].moveTo();
+    await filterButtons[2].click();
     books = await $$(".scrollTable__body tr");
     expect(books.length).toBe(2);
     expect(await getTitleAuthor(books[0])).toStrictEqual(bookData.taab);
     expect(await getTitleAuthor(books[1])).toStrictEqual(bookData.a1b1);
     // All
-    await filterButtons[1].moveTo();
-    await filterButtons[1].click();
+    await filterButtons[0].moveTo();
+    await filterButtons[0].click();
     books = await $$(".scrollTable__body tr");
     expect(books.length).toBe(4);
     expect(await getTitleAuthor(books[0])).toStrictEqual(bookData.a1b2);
@@ -123,44 +123,44 @@ describe("list page", () => {
   it("should filter books by read date", async () => {
     // Get buttons
     const filterDropdown = await $(".filter--read");
-    const filterButtons = await $$(".filter--read .filter__btn");
-    expect(filterButtons.length).toBe(9);
+    const filterButtons = await $$(".filter--read .dropdownFilter__opt");
+    expect(filterButtons.length).toBe(8);
     await filterDropdown.moveTo();
     // Read
-    await filterButtons[2].moveTo();
-    await filterButtons[2].click();
+    await filterButtons[1].moveTo();
+    await filterButtons[1].click();
     let books = await $$(".scrollTable__body tr");
     expect(books.length).toBe(2);
     expect(await getTitleAuthor(books[0])).toStrictEqual(bookData.taab);
     expect(await getTitleAuthor(books[1])).toStrictEqual(bookData.a1b1);
     // Unread
-    await filterButtons[3].moveTo();
-    await filterButtons[3].click();
+    await filterButtons[2].moveTo();
+    await filterButtons[2].click();
     books = await $$(".scrollTable__body tr");
     expect(books.length).toBe(2);
     expect(await getTitleAuthor(books[0])).toStrictEqual(bookData.a1b2);
     expect(await getTitleAuthor(books[1])).toStrictEqual(bookData.tatb);
     // This Year
-    await filterButtons[4].moveTo();
-    await filterButtons[4].click();
+    await filterButtons[3].moveTo();
+    await filterButtons[3].click();
     books = await $$(".scrollTable__body tr");
     expect(books.length).toBe(1);
     expect(await getTitleAuthor(books[0])).toStrictEqual(bookData.taab);
     // Last 2 Years
-    await filterButtons[6].moveTo();
-    await filterButtons[6].click();
+    await filterButtons[5].moveTo();
+    await filterButtons[5].click();
     books = await $$(".scrollTable__body tr");
     expect(books.length).toBe(2);
     expect(await getTitleAuthor(books[0])).toStrictEqual(bookData.taab);
     expect(await getTitleAuthor(books[1])).toStrictEqual(bookData.a1b1);
     // > 5 years
-    await filterButtons[8].moveTo();
-    await filterButtons[8].click();
+    await filterButtons[7].moveTo();
+    await filterButtons[7].click();
     books = await $$(".scrollTable__body tr");
     expect(books.length).toBe(0);
     // All
-    await filterButtons[1].moveTo();
-    await filterButtons[1].click();
+    await filterButtons[0].moveTo();
+    await filterButtons[0].click();
     books = await $$(".scrollTable__body tr");
     expect(books.length).toBe(4);
     expect(await getTitleAuthor(books[0])).toStrictEqual(bookData.a1b2);

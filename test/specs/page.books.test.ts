@@ -104,26 +104,26 @@ describe("books page", () => {
   it("should filter books by category", async () => {
     // Get buttons
     const filterDropdown = await $(".filter--cats");
-    const filterButtons = await $$(".filter--cats .filter__btn");
-    expect(filterButtons.length).toBe(4); // Selected + Default: All, Fiction, Non-Fiction
+    const filterButtons = await $$(".filter--cats .dropdownFilter__opt");
+    expect(filterButtons.length).toBe(3); // Default: All, Fiction, Non-Fiction
     await filterDropdown.moveTo();
     // Fiction
-    await filterButtons[2].moveTo();
-    await filterButtons[2].click();
+    await filterButtons[1].moveTo();
+    await filterButtons[1].click();
     let bookLinks = await $$(".bookList .book > a");
     expect(bookLinks.length).toBe(2);
     expect(await bookLinks[0].getAttribute("href")).toBe(href.a1b2);
     expect(await bookLinks[1].getAttribute("href")).toBe(href.tatb);
     // Non-Fiction
-    await filterButtons[3].moveTo();
-    await filterButtons[3].click();
+    await filterButtons[2].moveTo();
+    await filterButtons[2].click();
     bookLinks = await $$(".bookList .book > a");
     expect(bookLinks.length).toBe(2);
     expect(await bookLinks[0].getAttribute("href")).toBe(href.taab);
     expect(await bookLinks[1].getAttribute("href")).toBe(href.a1b1);
     // All
-    await filterButtons[1].moveTo();
-    await filterButtons[1].click();
+    await filterButtons[0].moveTo();
+    await filterButtons[0].click();
     bookLinks = await $$(".bookList .book > a");
     expect(bookLinks.length).toBe(4);
     expect(await bookLinks[0].getAttribute("href")).toBe(href.a1b2);
@@ -135,44 +135,44 @@ describe("books page", () => {
   it("should filter books by read date", async () => {
     // Get buttons
     const filterDropdown = await $(".filter--read");
-    const filterButtons = await $$(".filter--read .filter__btn");
-    expect(filterButtons.length).toBe(9);
+    const filterButtons = await $$(".filter--read .dropdownFilter__opt");
+    expect(filterButtons.length).toBe(8);
     await filterDropdown.moveTo();
     // Read
-    await filterButtons[2].moveTo();
-    await filterButtons[2].click();
+    await filterButtons[1].moveTo();
+    await filterButtons[1].click();
     let bookLinks = await $$(".bookList .book > a");
     expect(bookLinks.length).toBe(2);
     expect(await bookLinks[0].getAttribute("href")).toBe(href.taab);
     expect(await bookLinks[1].getAttribute("href")).toBe(href.a1b1);
     // Unread
-    await filterButtons[3].moveTo();
-    await filterButtons[3].click();
+    await filterButtons[2].moveTo();
+    await filterButtons[2].click();
     bookLinks = await $$(".bookList .book > a");
     expect(bookLinks.length).toBe(2);
     expect(await bookLinks[0].getAttribute("href")).toBe(href.a1b2);
     expect(await bookLinks[1].getAttribute("href")).toBe(href.tatb);
     // This Year
-    await filterButtons[4].moveTo();
-    await filterButtons[4].click();
+    await filterButtons[3].moveTo();
+    await filterButtons[3].click();
     bookLinks = await $$(".bookList .book > a");
     expect(bookLinks.length).toBe(1);
     expect(await bookLinks[0].getAttribute("href")).toBe(href.taab);
     // Last 2 Years
-    await filterButtons[6].moveTo();
-    await filterButtons[6].click();
+    await filterButtons[5].moveTo();
+    await filterButtons[5].click();
     bookLinks = await $$(".bookList .book > a");
     expect(bookLinks.length).toBe(2);
     expect(await bookLinks[0].getAttribute("href")).toBe(href.taab);
     expect(await bookLinks[1].getAttribute("href")).toBe(href.a1b1);
     // > 5 years
-    await filterButtons[8].moveTo();
-    await filterButtons[8].click();
+    await filterButtons[7].moveTo();
+    await filterButtons[7].click();
     bookLinks = await $$(".bookList .book > a");
     expect(bookLinks.length).toBe(0);
     // All
-    await filterButtons[1].moveTo();
-    await filterButtons[1].click();
+    await filterButtons[0].moveTo();
+    await filterButtons[0].click();
     bookLinks = await $$(".bookList .book > a");
     expect(bookLinks.length).toBe(4);
     expect(await bookLinks[0].getAttribute("href")).toBe(href.a1b2);
