@@ -5,6 +5,7 @@
   import MagnifyingGlass from "phosphor-svelte/lib/MagnifyingGlass";
   import { books } from "@stores/books";
   import ScrollBox from "./ScrollBox.svelte";
+  import Spinner from "./Spinner.svelte";
 
   let addBookOpen: boolean = false;
   let selectedBook: Book = {} as Book;
@@ -107,40 +108,46 @@
       <input type="text" name="search" bind:this={searchInput} bind:value={searchString} required />
       <button class="btn btn--light" on:click={search} disabled={searching}>Search</button>
     </div>
-    {#if searched && !searchResults.length}
-      <div class="err">Error fetching results</div>
-    {:else if searched}
-      <div class="searchHeader">
-        <div class="searchHeader__cover">&nbsp;</div>
-        <div class="searchHeader__title">Title</div>
-        <div class="searchHeader__authors">Author(s)</div>
-        <div class="searchHeader__datePublished">Publish Date</div>
-      </div>
-      <div class="searchResults">
-        <ScrollBox bind:updateScroll>
-          <div class="searchResults__results">
-            {#each searchResults as book}
-              <button
-                class="book"
-                tabindex="0"
-                role="radio"
-                on:click={() => selectBook(book)}
-                aria-checked={selectedBook?.cache?.searchId === book.cache?.searchId}
-              >
-                <div class="book__cover">
-                  {#if book.images.hasImage}
-                    <img src={book.cache.thumbnail?.replace(/^http:/, "https:")} alt="" />
-                  {/if}
-                </div>
-                <div class="book__title">{book.title}</div>
-                <div class="book__authors">{book.authors.map((a) => a.name).join(", ")}</div>
-                <div class="book__datePublished">{book.datePublished}</div>
-              </button>
-            {/each}
+    <div class="searchHeader" aria-hidden={searching || !searched}>
+      <div class="searchHeader__cover">&nbsp;</div>
+      <div class="searchHeader__title">Title</div>
+      <div class="searchHeader__authors">Author(s)</div>
+      <div class="searchHeader__datePublished">Publish Date</div>
+    </div>
+    <div class="searchResults">
+      <ScrollBox bind:updateScroll>
+        {#if searching}
+          <div class="searchLoading">
+            <Spinner size="6rem" />
           </div>
-        </ScrollBox>
-      </div>
-    {/if}
+        {:else if searched}
+          {#if !searchResults.length}
+            <div class="err">Error fetching results</div>
+          {:else}
+            <div class="searchResults__results">
+              {#each searchResults as book}
+                <button
+                  class="book"
+                  tabindex="0"
+                  role="radio"
+                  on:click={() => selectBook(book)}
+                  aria-checked={selectedBook?.cache?.searchId === book.cache?.searchId}
+                >
+                  <div class="book__cover">
+                    {#if book.images.hasImage}
+                      <img src={book.cache.thumbnail?.replace(/^http:/, "https:")} alt="" />
+                    {/if}
+                  </div>
+                  <div class="book__title">{book.title}</div>
+                  <div class="book__authors">{book.authors.map((a) => a.name).join(", ")}</div>
+                  <div class="book__datePublished">{book.datePublished}</div>
+                </button>
+              {/each}
+            </div>
+          {/if}
+        {/if}
+      </ScrollBox>
+    </div>
   </div>
 </Modal>
 
@@ -180,6 +187,11 @@
   .searchHeader {
     height: var(--search-header-height);
     border-bottom: 1px solid var(--c-overlay-border);
+
+    &[aria-hidden="true"] {
+      opacity: 0;
+      pointer-events: none;
+    }
   }
 
   .searchArea {
@@ -207,6 +219,12 @@
 
     .err {
       padding: 2rem;
+    }
+
+    .searchLoading {
+      padding: 4rem;
+      text-align: center;
+      color: var(--c-text-muted);
     }
 
     .searchResults {
