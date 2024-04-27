@@ -76,13 +76,11 @@ describe("books page", () => {
     for await (const sortButton of sortButtons) {
       await sortButton.click();
       const order = await sortButton.getAttribute("data-val");
-      console.log(order);
       bookLinks = await $$(".bookList .book > a");
       let n = 0;
       // Check order
       for await (const bookLink of bookLinks) {
         const href = await bookLink.getAttribute("href");
-        console.log(href);
         expect(bookOrder[order][n]).toBe(href);
         n++;
       }
