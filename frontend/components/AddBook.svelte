@@ -18,7 +18,7 @@
   };
   let authors: string = "";
   let tags: string = "";
-  let addImagePath: string = "";
+  let imagePath: string = "";
   let canConfirm: boolean = false;
 
   $: canConfirm = (book.title?.length ?? 0) > 0 && (book.authors?.length ?? 0) > 0;
@@ -34,7 +34,7 @@
     };
     authors = "";
     tags = "";
-    addImagePath = "";
+    imagePath = "";
 
     const removeSavedListener = window.electronAPI.bookSaved((savedBook: Book) => {
       addBookOpen = false;
@@ -117,7 +117,7 @@
       <textarea rows="4" bind:value={book.description} />
     </label>
     <div class="field field--image">
-      <CoverDropzone on:change={handleBookImage} />
+      <CoverDropzone on:change={handleBookImage} bind:imagePath />
     </div>
   </fieldset>
 </Modal>
