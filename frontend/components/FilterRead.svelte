@@ -14,7 +14,7 @@
 </script>
 
 <div class="filter filter--read">
-  <span>Read:</span>
+  <span class="filter__label">Read:</span>
   <div class="dropdownFilter">
     <button class="dropdownFilter__selected" class:filtered>
       {recentFilters[$books.filters.recent].name}

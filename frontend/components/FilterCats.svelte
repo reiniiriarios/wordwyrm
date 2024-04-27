@@ -26,7 +26,7 @@
 </script>
 
 <div class="filter filter--cats">
-  <span>Filter:</span>
+  <span class="filter__label">Filter:</span>
   <div class="dropdownFilter">
     <button class="dropdownFilter__selected" class:filtered>
       {currentFilter}

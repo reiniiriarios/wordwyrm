@@ -14,10 +14,12 @@
 </script>
 
 <div class="filter filter--sort">
-  <span>Sort:</span>
+  <span class="filter__label">Sort:</span>
   {#each Object.entries(sortFilters) as [i, s]}
     {#if !s.hidden}
-      <button class="filter__btn" on:click={filter} data-val={i} class:selected={$books.filters.sort === i}>{s.name}</button>
+      <button class="filter__btn" on:click={filter} data-val={i} class:selected={$books.filters.sort === i}
+        >{s.name}</button
+      >
     {/if}
   {/each}
   <button class="filter__direction" on:click={books.sortReverse}>

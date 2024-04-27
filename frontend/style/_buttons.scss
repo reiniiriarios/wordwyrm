@@ -10,7 +10,7 @@
 .btn {
   background-color: var(--c-button);
   border: 1px solid var(--c-button-border, var(--c-button));
-  color: var(--c-text-muted);
+  color: var(--c-text);
   padding: 0.49rem 0.74rem;
   font-size: 1rem;
   display: inline-flex;
@@ -51,7 +51,7 @@
   &--light {
     background-color: var(--c-button-light);
     border: 1px solid var(--c-button-border, var(--c-button-light));
-    color: var(--c-text-muted);
+    color: var(--c-text);
 
     &:hover {
       background-color: var(--c-button-light-hover);

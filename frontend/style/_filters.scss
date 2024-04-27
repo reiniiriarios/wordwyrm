@@ -16,6 +16,10 @@
   justify-content: left;
   gap: 0.25rem;
 
+  &__label {
+    color: var(--c-text-muted);
+  }
+
   &--right {
     margin-left: auto;
   }
