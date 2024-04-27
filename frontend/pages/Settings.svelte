@@ -136,7 +136,7 @@
 <div class="pageWrapper settingsPage">
   <ScrollBox>
     <fieldset class="settings">
-      <label class="field field--fullwidth">
+      <label class="field field--fullwidth settings__opt settings__opt--booksDir">
         <div class="dataDir">
           <div class="dataDir__input">
             Book Data Directory <HoverInfo
@@ -153,7 +153,7 @@
         </div>
       </label>
 
-      <div class="field">
+      <div class="field settings__opt settings__opt--theme">
         App Theme
         <div class="selectField">
           <Select
@@ -178,7 +178,7 @@
         </div>
       </div>
 
-      <div class="field">
+      <div class="field settings__opt settings__opt--dateFormat">
         Date Format <HoverInfo details="Based on device locale settings." />
         <div class="selectField">
           <Select
@@ -194,23 +194,23 @@
         </div>
       </div>
 
-      <label class="field field--fullwidth">
+      <label class="field field--fullwidth settings__opt settings__opt--filterTags">
         Tags for Filtering <HoverInfo details="Tags should be comma-separated." />
         <input type="text" bind:value={editSettings.filterTags} maxlength="255" />
       </label>
-      <label class="field field--fullwidth">
+      <label class="field field--fullwidth settings__opt settings__opt--commonTags">
         Common Tags for Editing <HoverInfo details="Tags should be comma-separated." />
         <input type="text" bind:value={editSettings.commonTags} maxlength="1024" />
       </label>
 
-      <label class="field">
+      <label class="fieldsettings__opt settings__opt--chartYear">
         Chart Default Start Year <HoverInfo details="Sets the default start year for the chart page." />
         <input type="text" bind:value={editSettings.chartStartYear} />
       </label>
 
       <div class="field"></div>
 
-      <div class="field">
+      <div class="fieldsettings__opt settings__opt--searchEngines">
         Book Search Engines <HoverInfo
           details="If both are selected, Google Books data will be supplemented with OpenLibrary data."
         />
@@ -228,7 +228,7 @@
         </div>
       </div>
 
-      <div class="field">
+      <div class="field settings__opt settings__opt--imageSearchEngine">
         Image Search Engine
         <div class="selectField">
           <Select
@@ -245,14 +245,14 @@
         </div>
       </div>
 
-      <label class="field" class:disabled={googleApiFieldsDisabled}>
+      <label class="field settings__opt settings__opt--googleApiKey" class:disabled={googleApiFieldsDisabled}>
         Google Cloud API Key <HoverInfo
           details="Optional. Along with Engine ID, enables Google Image Search in-app."
           position="top"
         />
         <input type="text" bind:value={editSettings.googleApiKey} disabled={googleApiFieldsDisabled} />
       </label>
-      <label class="field" class:disabled={googleApiFieldsDisabled}>
+      <label class="field settings__opt settings__opt--googleEngineId" class:disabled={googleApiFieldsDisabled}>
         Google Custom Search Engine ID <HoverInfo
           details="Optional. Along with API Key, enables Google Image Search in-app."
           position="top"
@@ -260,7 +260,7 @@
         <input type="text" bind:value={editSettings.googleSearchEngineId} disabled={googleApiFieldsDisabled} />
       </label>
       <div class="actions">
-        <button class="btn" on:click={save}>Save</button>
+        <button class="btn btn--save" on:click={save}>Save</button>
         {#if saving}
           <div>Saving...</div>
         {:else if saved}

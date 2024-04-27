@@ -169,7 +169,14 @@
   <h2 class="pageNav__header">Trend</h2>
   <div class="pageNav__actions">
     <div>Start:</div>
-    <input type="number" bind:value={startYear} on:change={setStartYear} min="1900" max={new Date().getFullYear()} />
+    <input
+      class="chartStartYear"
+      type="number"
+      bind:value={startYear}
+      on:change={setStartYear}
+      min="1900"
+      max={new Date().getFullYear()}
+    />
     <button class="btn btn--round" class:selected={view === "day"} on:click={() => setView("day")}>Days</button>
     <button class="btn btn--round" class:selected={view === "month"} on:click={() => setView("month")}>Months</button>
     <button class="btn btn--round" class:selected={view === "year"} on:click={() => setView("year")}>Years</button>

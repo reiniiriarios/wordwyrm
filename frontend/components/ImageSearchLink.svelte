@@ -18,6 +18,6 @@
   );
 </script>
 
-<a class="btn" target="_blank" href={link + query}>
+<a class="btn btn--searchForImage" target="_blank" href={link + query}>
   Search for Image <span class="icon"><ImageSquare /></span>
 </a>

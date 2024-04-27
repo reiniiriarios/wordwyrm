@@ -51,7 +51,7 @@
       </a>
     </li>
     <li class="nav__item">
-      <a class="nav__link nav__link--setings" href="#/settings" class:active={$location === "/settings"}>
+      <a class="nav__link nav__link--settings" href="#/settings" class:active={$location === "/settings"}>
         <Gear size="2rem" />
         {#if open}<span class="nav__label">Settings</span>{/if}
       </a>

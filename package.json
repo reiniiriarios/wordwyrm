@@ -49,6 +49,7 @@
     "test:pages": "cross-env WYRM_ENV=test wdio run ./wdio.conf.ts --suite pages",
     "test:editbook": "cross-env WYRM_ENV=test wdio run ./wdio.conf.ts --suite editbook",
     "test:addbook": "cross-env WYRM_ENV=test wdio run ./wdio.conf.ts --suite addbook",
+    "test:settings": "cross-env WYRM_ENV=test wdio run ./wdio.conf.ts --suite settings",
     "newver": "ts-node scripts/updateVersion.ts",
     "prepare": "ts-patch install -s && npm run set:build dev"
   },
