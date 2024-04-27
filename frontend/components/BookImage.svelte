@@ -1,10 +1,13 @@
 <script lang="ts">
   import BookImagePlaceholder from "@components/BookImagePlaceholder.svelte";
+  import Rating from "@components/Rating.svelte";
 
   export let book: Book;
   export let overlay: boolean = false;
   export let pageHeight: boolean = false;
   export let size: "xs" | "s" | "m" | "l" = "m";
+  export let showRating: boolean = false;
+  export let showUnread: boolean = false;
 
   let src: string;
   $: src = book ? `bookimage://${book.cache.urlpath}.jpg?t=${book.images.imageUpdated ?? 0}` : "";
@@ -18,6 +21,13 @@
           <img {src} alt="" loading="lazy" decoding="async" />
         {:else}
           <BookImagePlaceholder {book} {pageHeight} {size} />
+        {/if}
+        {#if showRating && book.rating}
+          <span class="bookComposite__rating">
+            <Rating rating={book.rating} short />
+          </span>
+        {:else if showUnread && !book.dateRead}
+          <span class="bookComposite__unread unread">Unread</span>
         {/if}
       </div>
     {:else if book.images.hasImage}
@@ -71,6 +81,22 @@
       box-shadow:
         inset rgba(255 255 255 / 60%) -0.25rem 0.25rem 0.4rem -0.4rem,
         inset rgba(0 0 0 / 100%) 0.15rem -0.15rem 0.6rem -0.3rem;
+    }
+
+    &__rating {
+      position: absolute;
+      overflow: hidden;
+      bottom: -0.8rem;
+      right: -1rem;
+      z-index: 20;
+      filter: drop-shadow(0.05rem 0.05rem 0.25rem rgba(0 0 0 / 33%));
+    }
+
+    &__unread {
+      position: absolute;
+      bottom: -0.45rem;
+      right: -0.45rem;
+      z-index: 20;
     }
   }
 </style>

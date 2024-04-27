@@ -8,7 +8,6 @@
   import BookCount from "@components/BookCount.svelte";
   import BookImage from "@components/BookImage.svelte";
   import SearchBar from "@components/SearchBar.svelte";
-  import Rating from "@components/Rating.svelte";
   import GettingStarted from "@components/GettingStarted.svelte";
   import AddBook from "@components/AddBook.svelte";
   import SearchApi from "@components/SearchApi.svelte";
@@ -72,16 +71,13 @@
         {#each $books.sortedBooks as book}
           <div class="book" class:zoomSmall={$books.view.zoom === "s"} class:zoomLarge={$books.view.zoom === "l"}>
             <a href={`#/book/${book.cache.filepath}`} class="book__inner">
-              <BookImage {book} overlay size={$books.view.zoom} />
-              {#if $books.filters.sort === "rating"}
-                {#if book.rating}
-                  <span class="book__rating">
-                    <Rating rating={book.rating} short />
-                  </span>
-                {/if}
-              {:else if !book.dateRead}
-                <span class="unread">Unread</span>
-              {/if}
+              <BookImage
+                {book}
+                overlay
+                size={$books.view.zoom}
+                showRating={$books.filters.sort === "rating"}
+                showUnread
+              />
             </a>
           </div>
         {/each}
@@ -183,22 +179,6 @@
       &:hover {
         transform: scale(1.02);
       }
-
-      .unread {
-        position: absolute;
-        bottom: -0.45rem;
-        right: -0.45rem;
-        z-index: 20;
-      }
-    }
-
-    &__rating {
-      position: absolute;
-      overflow: hidden;
-      bottom: -0.5rem;
-      right: -1rem;
-      z-index: 20;
-      filter: drop-shadow(0.05rem 0.05rem 0.25rem rgba(0 0 0 / 33%));
     }
   }
 </style>
