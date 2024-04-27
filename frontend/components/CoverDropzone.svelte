@@ -61,20 +61,14 @@
   <Dropzone accept="image/*" on:drop={handleBookImage} on:dragenter={dragon} on:dragleave={dragoff} {containerClasses}>
     {#if imagePath}
       <img src={`localfile://${imagePath}`} alt="" />
-      {#if addlMsg}
-        <div class="dropzone__info">
-          <div class="dropzone__msg dropzone__msg--dragging" aria-hidden={!dragHighlight}>Drop to replace image.</div>
-          <div class="dropzone__msg dropzone__msg--default" aria-hidden={dragHighlight || invalidFile}>
-            Drag or click here to replace image.
-          </div>
-          <div class="dropzone__msg dropzone__msg--error" aria-hidden={!invalidFile}>Invalid file.</div>
-        </div>
-      {/if}
-    {:else}
+    {/if}
+    {#if addlMsg || !imagePath}
       <div class="dropzone__info">
-        <div class="dropzone__msg dropzone__msg--dragging" aria-hidden={!dragHighlight}>Drop to add image.</div>
+        <div class="dropzone__msg dropzone__msg--dragging" aria-hidden={!dragHighlight}>
+          Drop to {imagePath ? "replace" : "add"} image.
+        </div>
         <div class="dropzone__msg dropzone__msg--default" aria-hidden={dragHighlight || invalidFile}>
-          Drag or click here to add image.
+          Drag or click here to {imagePath ? "replace" : "add"} image.
         </div>
         <div class="dropzone__msg dropzone__msg--error" aria-hidden={!invalidFile}>Invalid file.</div>
       </div>
