@@ -1,0 +1,61 @@
+:root {
+  --c-sub: #1a1a1a;
+  --c-base: #222;
+  --c-surface: #262626;
+  --c-overlay: #333;
+  --c-muted: #444;
+  --c-subtle: #555;
+
+  --c-menu: var(--c-overlay);
+  --c-menu-hover: #ff0d8e;
+  --c-menu-active: var(--c-text);
+
+  --c-text: #fff;
+  --c-text-muted: #ccc;
+  --c-text-dark: #aaa;
+
+  --c-link: #ff0088;
+  --c-link-hover: #ff0d8e;
+  --c-image-select: #ff0088;
+  --c-focus: #ff0088;
+  --c-selection: #94004f;
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: #383838;
+  --c-table-hover: var(--c-muted);
+  --c-table-row-selected: #672347;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: var(--c-muted);
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-muted);
+  --c-button-light: var(--c-muted);
+  --c-button-light-hover: var(--c-subtle);
+  --c-dropdown: var(--c-button);
+
+  --c-error: #c22424;
+  --c-error-light: #e45151;
+  --c-error-muted: #b23434;
+  --c-error-bg: #6f0000;
+  --c-error-bg-muted: #531c1c;
+
+  --c-rating: #ffc400;
+  --c-unread: #0aa00f;
+
+  --c-book: #75233c;
+  --c-book-border: #431120;
+  --c-book-text: var(--c-text);
+
+  --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: #ff008888;
+  --c-chart-bar-border: #ff0088;
+
+  --shadow-1: rgb(0 0 0 / 25%);
+  --shadow-2: rgb(0 0 0 / 30%);
+  --shadow-3: rgb(0 0 0 / 40%);
+  --shadow-4: rgb(0 0 0 / 50%);
+  --shadow-5: rgb(0 0 0 / 65%);
+}

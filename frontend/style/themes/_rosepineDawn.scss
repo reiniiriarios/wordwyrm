@@ -1,0 +1,73 @@
+// Rosé Pine Dawn
+// https://rosepinetheme.com/palette
+#appContainer[data-theme="rosepineDawn"] {
+  --c-sub: #faf4ed;
+  --c-base: #fffaf3;
+  --c-surface: #faf4ed;
+  --c-overlay: #f2e9e1;
+  --c-muted: #9893a5;
+  --c-subtle: #797593;
+  --c-text: #575279;
+  --c-love: #b4637a;
+  --c-love-d: #eb6f92;
+  --c-gold: #ea9d34;
+  --c-rose: #d7827e;
+  --c-pine: #286983;
+  --c-foam: #56949f;
+  --c-iris: #907aa9;
+  --c-highlight-low: #f4ede8;
+  --c-highlight-med: #dfdad9;
+  --c-highlight-high: #cecacd;
+
+  --c-text-muted: #666185;
+  --c-text-dark: #645f81;
+
+  --c-menu: var(--c-overlay);
+  --c-menu-hover: var(--c-rose);
+  --c-menu-active: var(--c-text);
+
+  --c-link: var(--c-iris);
+  --c-link-hover: var(--c-iris);
+  --c-image-select: var(--c-rose);
+  --c-focus: var(--c-foam);
+  --c-selection: #82b5be;
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: #e0d7ce;
+  --c-table-hover: #cec5bb;
+  --c-table-row-selected: #90c7d1;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: #dad3cb;
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-highlight-med);
+  --c-button-light: var(--c-highlight-med);
+  --c-button-light-hover: var(--c-highlight-high);
+  --c-dropdown: var(--c-button);
+
+  --c-error: var(--c-love);
+  --c-error-light: var(--c-love);
+  --c-error-muted: var(--c-love-d);
+  --c-error-bg: #d6b1bb;
+  --c-error-bg-muted: #dfc8ce;
+
+  --c-rating: var(--c-gold);
+  --c-unread: #adeaf5;
+
+  --c-book: #64527a;
+  --c-book-border: #483a58;
+  --c-book-text: var(--c-sub);
+
+  --c-overlay-border: var(--c-highlight-med);
+
+  --c-chart-bar: #56949f88;
+  --c-chart-bar-border: #56949f;
+
+  --shadow-1: rgb(0 0 0 / 10%);
+  --shadow-2: rgb(0 0 0 / 22%);
+  --shadow-3: rgb(0 0 0 / 30%);
+  --shadow-4: rgb(0 0 0 / 35%);
+  --shadow-5: rgb(0 0 0 / 40%);
+}

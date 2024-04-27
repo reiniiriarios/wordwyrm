@@ -1,0 +1,84 @@
+#appContainer[data-theme="harrow"] {
+  --c-cloak0: #0e0e0e;
+  --c-cloak1: #1a1a1a;
+  --c-cloak2: #282828;
+  --c-cloaki0: hsl(210, 7%, 6%);
+  --c-cloaki1: hsl(210, 7%, 11%);
+  --c-cloaki2: hsl(210, 7%, 16%);
+  --c-mist0: hsl(210, 7%, 21%);
+  --c-mist1: hsl(210, 7%, 26%);
+  --c-mist2: hsl(210, 7%, 31%);
+  --c-mist3: hsl(210, 7%, 36%);
+  --c-armor0: #fcfafb;
+  --c-armor1: #eeede9;
+  --c-armor2: #c5c6c0;
+  --c-armor3: #bcbdb8;
+  --c-ice0: #212c40;
+  --c-ice1: #2a3747;
+  --c-ice2: #3e4f5e;
+  --c-ice3: #495661;
+  --c-ice4: #6d7c83;
+  --c-blue0: #0a357a;
+  --c-blue1: #3074b1;
+  --c-blue2: #58c9f5;
+  --c-blue3: #8ddefb;
+  --c-blue4: #c0f5fc;
+  --c-bone0: #f3eeea;
+  --c-bone1: #e2d9d2;
+  --c-bone2: #c6bcb3;
+  --c-bone3: #a59a98;
+
+  --c-sub: var(--c-cloaki0);
+  --c-base: var(--c-cloaki1);
+  --c-surface: var(--c-cloaki2);
+  --c-overlay: var(--c-mist0);
+  --c-muted: var(--c-mist1);
+  --c-subtle: var(--c-mist2);
+
+  --c-menu: var(--c-overlay);
+  --c-menu-hover: var(--c-blue2);
+  --c-menu-active: var(--c-text);
+
+  --c-text: var(--c-armor0);
+  --c-text-muted: var(--c-armor1);
+  --c-text-dark: var(--c-armor2);
+
+  --c-link: var(--c-blue2);
+  --c-link-hover: var(--c-blue3);
+  --c-image-select: var(--c-blue2);
+  --c-focus: var(--c-blue2);
+  --c-selection: var(--c-blue1);
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: var(--c-muted);
+  --c-table-hover: var(--c-subtle);
+  --c-table-row-selected: #24547d;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: var(--c-subtle);
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-muted);
+  --c-button-light: var(--c-muted);
+  --c-button-light-hover: var(--c-subtle);
+  --c-dropdown: var(--c-button);
+
+  --c-error: var(--c-bone2);
+  --c-error-light: var(--c-bone2);
+  --c-error-muted: var(--c-bone3);
+  --c-error-bg: var(--c-mist3);
+  --c-error-bg-muted: var(--c-mist2);
+
+  --c-rating: var(--c-blue1);
+  --c-unread: var(--c-blue1);
+
+  --c-book: #2a3747;
+  --c-book-border: #1f2b3a;
+  --c-book-text: var(--c-text);
+
+  --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: #58c9f5c4;
+  --c-chart-bar-border: var(--c-blue3);
+}

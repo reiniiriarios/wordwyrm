@@ -1,0 +1,83 @@
+#appContainer[data-theme="gideon"] {
+  --c-dust0: #100c0d;
+  --c-dust1: #201718;
+  --c-dust2: #312725;
+  --c-dust3: #372d2e;
+  --c-dust4: #3d3230;
+  --c-dust5: #4f4544;
+  --c-dust6: #544848;
+  --c-bone0: #fef9f6;
+  --c-bone1: #f8f5f0;
+  --c-bone2: #e4dad0;
+  --c-bone3: #d2cdc7;
+  --c-bone4: #b5b0aa;
+  --c-cloak0: #090909;
+  --c-cloak1: #121212;
+  --c-cloak2: #1e1d1b;
+  --c-cloak3: #222220;
+  --c-cloak4: #30302e;
+  --c-ginger0: #2c150f;
+  --c-ginger1: #491f0f;
+  --c-ginger2: #652911;
+  --c-ginger3: #762e18;
+  --c-ginger4: #974b34;
+  --c-ginger5: #b36855;
+  --c-ginger6: #b64c18;
+  --c-blood0: #2d1010;
+  --c-blood1: #3d1515;
+  --c-blood2: #531818;
+
+  --c-sub: #050505;
+  --c-base: var(--c-dust0);
+  --c-surface: var(--c-dust1);
+  --c-overlay: var(--c-dust2);
+  --c-muted: var(--c-dust3);
+  --c-subtle: var(--c-dust4);
+
+  --c-menu: var(--c-dust1);
+  --c-menu-hover: var(--c-ginger6);
+  --c-menu-active: var(--c-text);
+
+  --c-text: var(--c-bone0);
+  --c-text-muted: var(--c-bone2);
+  --c-text-dark: var(--c-bone4);
+
+  --c-link: var(--c-ginger4);
+  --c-link-hover: var(--c-ginger6);
+  --c-image-select: var(--c-ginger6);
+  --c-focus: var(--c-ginger6);
+  --c-selection: var(--c-ginger6);
+  --c-dropdown: var(--c-button);
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: var(--c-muted);
+  --c-table-hover: var(--c-subtle);
+  --c-table-row-selected: var(--c-ginger3);
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: var(--c-subtle);
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-muted);
+  --c-button-light: var(--c-muted);
+  --c-button-light-hover: var(--c-subtle);
+
+  --c-error: #ad2121;
+  --c-error-light: #cf4c4c;
+  --c-error-muted: #922b2b;
+  --c-error-bg: var(--c-blood2);
+  --c-error-bg-muted: var(--c-blood1);
+
+  --c-rating: var(--c-ginger6);
+  --c-unread: var(--c-ginger5);
+
+  --c-book: #522615;
+  --c-book-border: #412012;
+  --c-book-text: var(--c-text);
+
+  --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: #b64c18c4;
+  --c-chart-bar-border: var(--c-ginger6);
+}

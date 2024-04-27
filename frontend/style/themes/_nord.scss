@@ -1,0 +1,78 @@
+// Nord
+// https://www.nordtheme.com/docs/colors-and-palettes
+#appContainer[data-theme="nord"] {
+  // polar night
+  --c-nord0: #2e3440;
+  --c-nord1: #3b4252;
+  --c-nord2: #434c5e;
+  --c-nord3: #4c566a;
+  // snow storm
+  --c-nord4: #d8dee9;
+  --c-nord5: #e5e9f0;
+  --c-nord6: #eceff4;
+  // frost
+  --c-nord7: #8fbcbb;
+  --c-nord8: #88c0d0;
+  --c-nord9: #81a1c1;
+  --c-nord10: #5e81ac;
+  // aurora
+  --c-nord11: #bf616a;
+  --c-nord12: #d08770;
+  --c-nord13: #ebcb8b;
+  --c-nord14: #a3be8c;
+  --c-nord15: #b48ead;
+
+  --c-sub: #252a33;
+  --c-base: var(--c-nord0);
+  --c-surface: var(--c-nord1);
+  --c-overlay: var(--c-nord2);
+  --c-muted: var(--c-nord3);
+  --c-subtle: #586277;
+
+  --c-menu: var(--c-overlay);
+  --c-menu-hover: var(--c-nord7);
+  --c-menu-active: var(--c-text);
+
+  --c-text: var(--c-nord6);
+  --c-text-muted: var(--c-nord5);
+  --c-text-dark: var(--c-nord4);
+
+  --c-link: var(--c-nord7);
+  --c-link-hover: var(--c-nord8);
+  --c-image-select: var(--c-nord8);
+  --c-focus: var(--c-nord8);
+  --c-selection: var(--c-nord10);
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: var(--c-muted);
+  --c-table-hover: var(--c-subtle);
+  --c-table-row-selected: #916589;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: var(--c-subtle);
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-subtle);
+  --c-button-light: var(--c-subtle);
+  --c-button-light-hover: #646e85;
+  --c-dropdown: var(--c-button);
+
+  --c-error: var(--c-nord11);
+  --c-error-light: #cf7780;
+  --c-error-muted: var(--c-nord15);
+  --c-error-bg: #7c3e44;
+  --c-error-bg-muted: #573d52;
+
+  --c-rating: var(--c-nord13);
+  --c-unread: #729654;
+
+  --c-book: #4d6a8d;
+  --c-book-border: #364b66;
+  --c-book-text: var(--c-text);
+
+  --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: #88c0d088;
+  --c-chart-bar-border: #88c0d0;
+}

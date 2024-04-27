@@ -1,0 +1,76 @@
+#appContainer[data-theme="nona"] {
+  --c-sky0: #0b0a10;
+  --c-sky1: #14141a;
+  --c-nebula0: #151b26;
+  --c-nebula1: #172236;
+  --c-nebula2: #212749;
+  --c-nebula3: #1b2e57;
+  --c-pink0: #7b5061;
+  --c-pink1: #ca7282;
+  --c-pink2: #f2748c;
+  --c-pink3: #f09f8c;
+  --c-pink4: #e2b099;
+  --c-gray0: #343f53;
+  --c-gray1: #415161;
+  --c-gray2: #454753;
+  --c-bone0: #faf1f2;
+  --c-bone1: #e6dbdf;
+  --c-bone2: #c3b9b0;
+  --c-bone3: #afa59f;
+  --c-lettuce: #578f32;
+  --c-tomato: #ad2313;
+
+  --c-sub: var(--c-sky0);
+  --c-base: var(--c-sky1);
+  --c-surface: var(--c-nebula0);
+  --c-overlay: var(--c-nebula1);
+  --c-muted: var(--c-nebula2);
+  --c-subtle: var(--c-nebula3);
+
+  --c-menu: var(--c-surface);
+  --c-menu-hover: var(--c-pink2);
+  --c-menu-active: var(--c-text);
+
+  --c-text: var(--c-bone0);
+  --c-text-muted: var(--c-bone1);
+  --c-text-dark: var(--c-bone2);
+
+  --c-link: var(--c-pink1);
+  --c-link-hover: var(--c-pink2);
+  --c-image-select: var(--c-pink2);
+  --c-focus: var(--c-pink2);
+  --c-selection: var(--c-pink1);
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: var(--c-muted);
+  --c-table-hover: var(--c-subtle);
+  --c-table-row-selected: #6f3d51;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: var(--c-subtle);
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-muted);
+  --c-button-light: var(--c-muted);
+  --c-button-light-hover: var(--c-subtle);
+  --c-dropdown: var(--c-button);
+
+  --c-error: var(--c-tomato);
+  --c-error-light: #eb6d5f;
+  --c-error-muted: #96291d;
+  --c-error-bg: #631a12;
+  --c-error-bg-muted: #411b1b;
+
+  --c-rating: var(--c-pink3);
+  --c-unread: var(--c-lettuce);
+
+  --c-book: #632f46;
+  --c-book-border: #491a2d;
+  --c-book-text: var(--c-text);
+
+  --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: #f2748bc4;
+  --c-chart-bar-border: var(--c-pink2);
+}

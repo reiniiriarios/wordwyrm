@@ -1,0 +1,61 @@
+#appContainer[data-theme="slate"] {
+  --c-green: #99b898;
+  --c-yellow: #feceab;
+  --c-orange: #ff847c;
+  --c-red: #e84a5f;
+  --c-slate: #2a363b;
+
+  --c-sub: #171d1f;
+  --c-base: #1f282c;
+  --c-surface: var(--c-slate);
+  --c-overlay: #333f44;
+  --c-muted: #3e4a50;
+  --c-subtle: #4a565c;
+
+  --c-menu: var(--c-overlay);
+  --c-menu-hover: var(--c-yellow);
+  --c-menu-active: var(--c-text);
+
+  --c-text: #fff;
+  --c-text-muted: #d8e2e7;
+  --c-text-dark: #c2d1d8;
+
+  --c-link: var(--c-green);
+  --c-link-hover: var(--c-orange);
+  --c-image-select: var(--c-orange);
+  --c-focus: var(--c-orange);
+  --c-selection: #c2534b;
+
+  --c-table-row: var(--c-overlay);
+  --c-table-row-alt: var(--c-muted);
+  --c-table-hover: var(--c-subtle);
+  --c-table-row-selected: #8d3f3a;
+  --c-table2-row: var(--c-base);
+  --c-table2-row-alt: var(--c-surface);
+  --c-table2-hover: var(--c-overlay);
+  --c-table2-hover2: var(--c-subtle);
+
+  --c-button: var(--c-overlay);
+  --c-button-hover: var(--c-muted);
+  --c-button-light: var(--c-muted);
+  --c-button-light-hover: var(--c-subtle);
+  --c-dropdown: var(--c-button);
+
+  --c-error: var(--c-red);
+  --c-error-light: #dd5c6d;
+  --c-error-muted: #c54455;
+  --c-error-bg: #a02c3b;
+  --c-error-bg-muted: #772b35;
+
+  --c-rating: var(--c-yellow);
+  --c-unread: #597c58;
+
+  --c-book: #8b4a46;
+  --c-book-border: #643633;
+  --c-book-text: var(--c-text);
+
+  --c-overlay-border: var(--c-muted);
+
+  --c-chart-bar: #ff008888;
+  --c-chart-bar-border: #ff0088;
+}
