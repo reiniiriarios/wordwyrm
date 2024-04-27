@@ -23,8 +23,8 @@
    */
   const logScale = (n: number, x: number = 0.5) => n * ((x - Math.log10(n)) / x);
 
-  export function updateScroll(): void {
-    if (box.offsetHeight >= box.scrollHeight) {
+  export const updateScroll = (): void => {
+    if (!box || box.offsetHeight >= box.scrollHeight) {
       shadowTopOpacity = 0;
       shadowBottomOpacity = 0;
     } else {
@@ -33,7 +33,7 @@
       shadowTopOpacity = box.scrollTop === 0 ? 0 : logScale(percentScroll, shadowScalingFactor);
       shadowBottomOpacity = percentScroll === 1 ? 0 : logScale(1 - percentScroll, shadowScalingFactor);
     }
-  }
+  };
 </script>
 
 <div class="scrollBox" bind:this={box} on:scroll={updateScroll}>
