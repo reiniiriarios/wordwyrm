@@ -76,7 +76,7 @@
     book.tags = tags.split(",").map((t) => t.trim());
   }
 
-  function handleBookImageDropped(e: CustomEvent) {
+  function handleBookImageDropped(_: CustomEvent) {
     book.cache.image = imagePath;
   }
 

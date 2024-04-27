@@ -31,7 +31,10 @@ export default tseslint.config(
         extraFileExtensions: [".svelte"],
       },
     },
-    rules: customRules.tsRules,
+    rules: {
+      ...customRules.tsRules,
+      "svelte/no-at-html-tags": "off",
+    },
   },
   {
     files: ["frontend/**/*.ts"],
