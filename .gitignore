@@ -40,3 +40,4 @@ pids
 *.seed
 *.pid.lock
 *.eslintcache
+*.cpuprofile

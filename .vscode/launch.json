@@ -1,0 +1,56 @@
+// https://code.visualstudio.com/Docs/editor/debugging
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Server",
+      "request": "launch",
+      "runtimeArgs": ["run", "dev"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "outputCapture": "std",
+      "type": "node",
+      "presentation": {
+        "hidden": true,
+        "group": "debug-dev",
+        "order": 1,
+        "panel": "shared"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Electron",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+      },
+      "args": ["."],
+      "outputCapture": "std",
+      "env": { "WYRM_ENV": "dev" },
+      "preLaunchTask": "Build electron",
+      "presentation": {
+        "hidden": true,
+        "group": "debug-dev",
+        "order": 2,
+        "panel": "shared"
+      },
+      "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Dev",
+      "configurations": ["Server", "Electron"],
+      "stopAll": true,
+      "dependsOrder": "parallel",
+      "presentation": {
+        "group": "debug-dev",
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
+}
