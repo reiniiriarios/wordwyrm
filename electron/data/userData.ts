@@ -5,9 +5,11 @@ import log from "electron-log/main";
 import { UserSettings } from "../../types/global";
 import WyrmError from "../error";
 import ENV from "../../env.cjs";
+import BUILD from "../build";
 
 // Get platform-idiomatic user data directory.
 let dataPath: string;
+let settingsPath: string;
 let dataDir: string;
 if (ENV === "test") {
   dataPath = path.resolve("./test");
@@ -15,18 +17,34 @@ if (ENV === "test") {
 } else if (process.env.APPDATA) {
   // Windows
   dataPath = process.env.APPDATA;
-  dataDir = "WordwyrmData"; // "Wordwyrm" is used for app data.
+  dataDir = "WordwyrmData"; // "Wordwyrm" is used by Electron.
 } else if (process.platform === "darwin") {
   // macOS
-  dataPath = path.join(process.env.HOME ?? "~", "/Library/Preferences");
+  dataPath = path.join(process.env.HOME, "Library", "Application Support");
   dataDir = "me.reinii.wordwyrm";
+} else if (BUILD.package === "snap") {
+  // Linux (Snap)
+  dataPath = process.env.SNAP_USER_COMMON ?? process.env.SNAP_COMMON ?? "/var/snap/wordwyrm/common";
+  dataDir = "wordwyrm";
 } else {
-  // Linux
-  dataPath = path.join(process.env.HOME ?? "~", "/.local/share");
+  // Linux (deb, rpm, AppImage)
+  dataPath = path.join(process.env.HOME, ".local", "share");
   dataDir = "wordwyrm";
 }
-export const DATA_PATH = path.join(dataPath, dataDir);
 
+// Get platform-idiomatic user settings/config directory.
+if (process.platform === "darwin" && ENV !== "test") {
+  settingsPath = path.join(process.env.HOME, "Library", "Preferences");
+} else {
+  // $HOME/.config/wordwyrm on Linux is used by Electron.
+  // Windows uses %AppData% for data and settings.
+  settingsPath = dataPath;
+}
+
+export const DATA_PATH = path.join(dataPath, dataDir);
+export const SETTINGS_PATH = path.join(settingsPath, dataDir);
+
+// Different settings files for development ENVs.
 const settingsFile = ENV === "prod" ? "settings.yaml" : `settings-${ENV}.yaml`;
 
 /**
@@ -140,7 +158,7 @@ export function isTypeBookGeneric(obj: unknown): obj is BookGeneric {
 export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
   try {
     log.debug("Loading settings");
-    const sf = path.join(DATA_PATH, settingsFile);
+    const sf = path.join(SETTINGS_PATH, settingsFile);
     let settings: UserSettings;
     if (!fs.existsSync(sf)) {
       // No settings file, set minimum defaults.
@@ -215,7 +233,7 @@ export function saveSettings(
   callback: (error?: WyrmError) => void = () => {},
 ) {
   log.debug("Saving settings");
-  saveYaml(path.join(DATA_PATH, settingsFile), settings);
+  saveYaml(path.join(SETTINGS_PATH, settingsFile), settings);
   if (!options.moveData) {
     return callback();
   }
