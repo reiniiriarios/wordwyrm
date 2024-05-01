@@ -2,7 +2,7 @@
   "name": "wordwyrm",
   "displayName": "Wordwyrm",
   "description": "A cross-platform desktop app for tracking what books you've read and when.",
-  "version": "1.35.3",
+  "version": "1.35.4",
   "main": "dist/electron/electron/main.js",
   "publishConfig": {
     "access": "public"
