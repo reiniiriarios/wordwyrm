@@ -2,6 +2,7 @@
 /dist
 /build
 /electron/build.ts
+/assets/icons
 
 # Test
 /test/data/logs

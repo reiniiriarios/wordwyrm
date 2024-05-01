@@ -2,7 +2,7 @@
 export default {
   baseUrl: ".",
   inputDir: "assets/src",
-  outputDir: "assets/appx",
+  outputDir: "build/appx",
   flatten: true,
   assets: [
     {
