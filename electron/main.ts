@@ -86,7 +86,6 @@ function createWindow(settings: UserSettings) {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
-      webgl: false,
     },
     icon: "assets/icons/512x512.png",
   });
