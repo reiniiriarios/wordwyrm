@@ -60,9 +60,22 @@ class AppUpdater {
       log.info("Checking for updates.");
       autoUpdater.checkForUpdatesAndNotify();
     } else if (USES_APP_STORE) {
-      log.info("This build uses an app store to update.");
+      switch (BUILD.package) {
+        case "snap":
+          log.info("Updates are automatic. To manually update, run `snap refresh wordwyrm`.");
+          break;
+        case "appx":
+          log.info("Updates are automatic through the Microsoft Store.");
+          log.info(
+            "To update manually, open the Microsoft Store app, navigate to Library in the menu, and click Get updates.",
+          );
+          break;
+        // case "mas":
+        default:
+          log.info("This build uses an app store to update.");
+      }
     } else {
-      log.info("Checking for manual updates.");
+      log.info("Checking for updates.");
       this.checkForUpdate();
     }
   }
@@ -91,6 +104,7 @@ class AppUpdater {
           log.info(`Version mismatch: latest is ${latestVersion}, running ${packageJson.version}`);
         } else {
           log.info(`Update available: ${latestVersion}, running ${packageJson.version}`);
+          log.info(`You can get the latest update here: https://github.com/reiniiriarios/wordwyrm/releases/latest`);
         }
         this.currentWindow.webContents.send("updateAvailable", latestVersion);
       })
