@@ -51,7 +51,7 @@
     "test:editbook": "cross-env WYRM_ENV=test wdio run ./wdio.conf.ts --suite editbook",
     "test:addbook": "cross-env WYRM_ENV=test wdio run ./wdio.conf.ts --suite addbook",
     "test:settings": "cross-env WYRM_ENV=test wdio run ./wdio.conf.ts --suite settings",
-    "bump": "newver --commit --tag --prefix=chore(release)",
+    "bump": "newver --commit --tag --prefix=chore\\(release\\)",
     "prepare": "ts-patch install -s && npm run set:build dev"
   },
   "dependencies": {
