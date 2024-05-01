@@ -8,41 +8,43 @@ import ENV from "../../env.cjs";
 import BUILD from "../build";
 
 // Get platform-idiomatic user data directory.
-let dataPath: string;
-let settingsPath: string;
-let dataDir: string;
-if (ENV === "test") {
-  dataPath = path.resolve("./test");
-  dataDir = "data";
-} else if (process.env.APPDATA) {
-  // Windows
-  dataPath = process.env.APPDATA;
-  dataDir = "WordwyrmData"; // "Wordwyrm" is used by Electron.
-} else if (process.platform === "darwin") {
-  // macOS
-  dataPath = path.join(process.env.HOME, "Library", "Application Support");
-  dataDir = "me.reinii.wordwyrm";
-} else if (BUILD.package === "snap") {
-  // Linux (Snap)
-  dataPath = process.env.SNAP_USER_COMMON ?? process.env.SNAP_COMMON ?? "/var/snap/wordwyrm/common";
-  dataDir = "wordwyrm";
-} else {
-  // Linux (deb, rpm, AppImage)
-  dataPath = path.join(process.env.HOME, ".local", "share");
-  dataDir = "wordwyrm";
-}
+function getPaths() {
+  let dataPath: string;
+  let settingsPath: string;
+  let dataDir: string;
+  if (ENV === "test") {
+    dataDir = "data";
+    dataPath = path.join(path.resolve("./test"), dataDir);
+  } else if (process.env.APPDATA) {
+    // Windows
+    dataDir = "WordwyrmData"; // "Wordwyrm" is used by Electron.
+    dataPath = path.join(process.env.APPDATA, dataDir);
+  } else if (process.platform === "darwin") {
+    // macOS
+    dataDir = "me.reinii.wordwyrm";
+    dataPath = path.join(process.env.HOME, "Library", "Application Support", dataDir);
+  } else if (BUILD.package === "snap") {
+    // Linux (Snap)
+    dataDir = "";
+    dataPath = process.env.SNAP_USER_COMMON ?? `/home/${process.env.USER}/snap/wordwyrm/common`;
+  } else {
+    // Linux (deb, rpm, AppImage)
+    dataDir = "wordwyrm";
+    dataPath = path.join(process.env.HOME, ".local", "share", dataDir);
+  }
 
-// Get platform-idiomatic user settings/config directory.
-if (process.platform === "darwin" && ENV !== "test") {
-  settingsPath = path.join(process.env.HOME, "Library", "Preferences");
-} else {
-  // $HOME/.config/wordwyrm on Linux is used by Electron.
-  // Windows uses %AppData% for data and settings.
-  settingsPath = dataPath;
-}
+  // Get platform-idiomatic user settings/config directory.
+  if (process.platform === "darwin" && ENV !== "test") {
+    settingsPath = path.join(process.env.HOME, "Library", "Preferences", dataDir);
+  } else {
+    // $HOME/.config/wordwyrm on Linux is used by Electron.
+    // Windows uses %AppData% for data and settings.
+    settingsPath = dataPath;
+  }
 
-export const DATA_PATH = path.join(dataPath, dataDir);
-export const SETTINGS_PATH = path.join(settingsPath, dataDir);
+  return [dataPath, settingsPath, dataDir];
+}
+export const [DATA_PATH, SETTINGS_PATH, DATA_DIR] = getPaths();
 
 // Different settings files for development ENVs.
 const settingsFile = ENV === "prod" ? "settings.yaml" : `settings-${ENV}.yaml`;
@@ -54,24 +56,7 @@ const settingsFile = ENV === "prod" ? "settings.yaml" : `settings-${ENV}.yaml`;
  */
 export function initUserDirs(): boolean {
   if (!fs.existsSync(DATA_PATH)) {
-    log.warn("Data directory not found.");
-    // -- upgrade from 1.24.0 --
-    // move data dir on window and linux
-    if (process.platform !== "darwin") {
-      const oldDir = path.join(dataPath, "me.reinii.wordwyrm");
-      if (fs.existsSync(oldDir)) {
-        log.warn("Migrating old data directory (>1.24.0)");
-        log.info(`${oldDir} >> ${DATA_PATH}`);
-        try {
-          fs.moveSync(oldDir, DATA_PATH);
-          return true;
-        } catch (err) {
-          log.error(err);
-        }
-      }
-    }
-    // -- end --
-    log.info(`Creating: ${DATA_PATH}`);
+    log.warn(`Data directory not found, creating: ${DATA_PATH}`);
     fs.mkdirSync(DATA_PATH, { recursive: true });
   }
   return false;
@@ -206,11 +191,7 @@ export function loadSettings(args?: { migrateData?: boolean }): UserSettings {
     } else if (!settings.booksDir) {
       settings.booksDir = path.join(DATA_PATH, "books");
     } else if (args?.migrateData) {
-      // -- upgrade from 1.24.0 --
-      if (settings.booksDir.startsWith(path.join(dataPath, "me.reinii.wordwyrm"))) {
-        settings.booksDir = settings.booksDir.replace("me.reinii.wordwyrm", dataDir);
-      }
-      // -- end --
+      // nothing
     }
 
     return settings;
